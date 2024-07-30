@@ -207,7 +207,7 @@ class PromptForgeCore:
     def generate_prompt(self, length: str) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
-            return self.meta_chain.generate_prompt(
+            prompt = self.meta_chain.generate_prompt(
                 length=length,
                 active_subjects=active_subjects,
                 style=self.style_handler.get_full_style(),
@@ -216,6 +216,7 @@ class PromptForgeCore:
                 highlighted_text=self.highlighted_text,
                 full_script=self.script if self.stick_to_script else ""
             )
+            return prompt.encode('utf-8', errors='ignore').decode('utf-8')
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
