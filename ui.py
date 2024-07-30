@@ -190,8 +190,14 @@ class PromptForgeUI:
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
         input_frame.pack(fill="both", expand=True)
 
+        # API Key
+        ttk.Label(input_frame, text="API Key:").grid(column=0, row=0, sticky=tk.W, pady=5)
+        self.api_key_entry = ttk.Entry(input_frame, width=50, show="*")
+        self.api_key_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
+        ttk.Button(input_frame, text="Save API Key", command=self.save_api_key).grid(column=2, row=0, sticky=tk.W, pady=5)
+
         # Style
-        ttk.Label(input_frame, text="Style:").grid(column=0, row=0, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="Style:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.style_entry = ttk.Entry(input_frame, width=50)
         self.style_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
         self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
@@ -339,6 +345,14 @@ class PromptForgeUI:
             self.model_combo.set(self.core.available_models[0])
         else:
             self.model_combo.set("No models available")
+
+    def save_api_key(self):
+        api_key = self.api_key_entry.get()
+        if api_key:
+            os.environ["OPENAI_API_KEY"] = api_key
+            messagebox.showinfo("Success", "API Key saved successfully!")
+        else:
+            messagebox.showerror("Error", "Please enter an API Key")
 
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
