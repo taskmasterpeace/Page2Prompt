@@ -71,7 +71,8 @@ class SubjectFrame(ttk.Frame):
             self.core.toggle_subject(name)
             
             # Update the listbox to reflect the change
-            new_text = f"{subject} ({'Inactive' if 'Inactive' not in subject else 'Active'})"
+            current_status = 'Active' if '(Inactive)' in subject else 'Inactive'
+            new_text = f"{name} ({subject.split(' (')[1].split(')')[0]}) ({current_status})"
             self.subjects_listbox.delete(index)
             self.subjects_listbox.insert(index, new_text)
         except Exception as e:
