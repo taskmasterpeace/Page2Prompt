@@ -12,8 +12,9 @@ import os
 import openai
 
 
-# Ensure you set your OpenAI API key
-os.environ["OPENAI_API_KEY"] = "sk-proj-RFAItw6xxYAWMtkqOI8gT3BlbkFJJJTe3zA6B6L1bnxuJ4aM"
+# Ensure you set your OpenAI API key as an environment variable
+if "OPENAI_API_KEY" not in os.environ:
+    raise ValueError("Please set the OPENAI_API_KEY environment variable")
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
