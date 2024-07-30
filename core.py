@@ -1,8 +1,9 @@
 # core.py
 
 from typing import List, Dict, Optional
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.chains import LLMChain
+from langchain_community.llms import OpenAI as CommunityOpenAI
 from meta_chain import MetaChain
 import logging
 from langchain_core.prompts import PromptTemplate
