@@ -211,24 +211,34 @@ class PromptForgeCore:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
-            # Prepare the messages for the chat completion
-            messages = [
-                {"role": "system", "content": "You are a creative AI assistant that generates detailed visual prompts for image generation."},
-                {"role": "user", "content": f"Generate a {length} visual prompt with the following details:"},
-                {"role": "user", "content": f"Shot Description: {shot_description}"},
-                {"role": "user", "content": f"Style: {style}"},
-                {"role": "user", "content": f"Camera Move: {camera_move}"},
-                {"role": "user", "content": f"Director's Notes: {directors_notes}"},
-                {"role": "user", "content": f"Active Subjects: {', '.join([s['name'] for s in active_subjects])}"},
-            ]
+            # Prepare the base prompt
+            base_prompt = f"""
+**Visual Prompt:**
+
+**Shot Description:** {shot_description}
+
+**Style:** {style}
+
+**Camera Move:** {camera_move}
+
+**Director's Notes:** {directors_notes}
+
+**Active Subjects:** {', '.join([s['name'] for s in active_subjects])}
+"""
             
             if stick_to_script:
-                messages.append({"role": "user", "content": f"Script: {script}"})
+                base_prompt += f"\n**Script:** {script}"
+            
+            # Generate prompts of different lengths
+            messages = [
+                {"role": "system", "content": "You are a creative AI assistant that generates detailed visual prompts for image generation."},
+                {"role": "user", "content": f"Based on the following information, generate short, medium, and long visual prompts:\n\n{base_prompt}\n\nProvide the prompts in the following format:\nShort Prompt: [Your short prompt here]\nMedium Prompt: [Your medium prompt here]\nLong Prompt: [Your long prompt here]"}
+            ]
             
             response = client.chat.completions.create(
                 model=self.meta_chain.model_name,
                 messages=messages,
-                max_tokens=500,
+                max_tokens=1000,
                 n=1,
                 stop=None,
                 temperature=0.7,
