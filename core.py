@@ -185,7 +185,7 @@ class PromptForgeCore:
             return chat_models
         except Exception as e:
             logging.error(f"Error fetching OpenAI models: {str(e)}")
-            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-0314"]  # Fallback to default chat models
+            return ["gpt-3.5-turbo", "gpt-4"]  # Fallback to current default chat models
 
     def set_style(self, style: str):
         self.style_handler.set_prefix(style)
