@@ -9,6 +9,7 @@ import logging
 from langchain_core.prompts import PromptTemplate
 import json
 import os
+import openai
 
 
 # Ensure you set your OpenAI API key
@@ -171,6 +172,16 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects = []
+        self.available_models = self.get_available_models()
+
+    @staticmethod
+    def get_available_models():
+        try:
+            models = openai.Model.list()
+            return [model.id for model in models.data if model.id.startswith("gpt")]
+        except Exception as e:
+            logging.error(f"Error fetching OpenAI models: {str(e)}")
+            return ["gpt-3.5-turbo", "gpt-4"]  # Fallback to default models
 
     def set_style(self, style: str):
         self.style_handler.set_prefix(style)
