@@ -180,9 +180,13 @@ class PromptForgeUI:
         self.copy_button = ttk.Button(main_frame, text="Copy to Clipboard", command=self.copy_prompt_to_clipboard)
         self.copy_button.grid(column=1, row=10, sticky=tk.E, pady=10)
 
+        # Show All Prompts Button
+        self.show_prompts_button = ttk.Button(main_frame, text="Show All Prompts", command=self.show_all_prompts)
+        self.show_prompts_button.grid(column=1, row=11, sticky=tk.E, pady=10)
+
         # Add Subject Frame
         self.subject_frame = SubjectFrame(main_frame, self.core)
-        self.subject_frame.grid(column=0, row=11, columnspan=2, sticky="nsew")
+        self.subject_frame.grid(column=0, row=12, columnspan=2, sticky="nsew")
 
         # Add Automated Analysis Frame
         automated_frame = ttk.LabelFrame(main_frame, text="Automated Script Analysis")
@@ -249,6 +253,29 @@ class PromptForgeUI:
             messagebox.showinfo("Copied", "The prompt has been copied to your clipboard.")
         else:
             messagebox.showwarning("No Prompt", "There's no prompt to copy. Generate a prompt first.")
+
+    def show_all_prompts(self):
+        prompts = self.core.meta_chain.prompt_manager.get_all_prompts()
+        if not prompts:
+            messagebox.showinfo("No Prompts", "There are no saved prompts to display.")
+            return
+        
+        prompt_window = tk.Toplevel(self.master)
+        prompt_window.title("All Saved Prompts")
+        prompt_window.geometry("800x600")
+
+        prompt_text = scrolledtext.ScrolledText(prompt_window, wrap=tk.WORD)
+        prompt_text.pack(expand=True, fill='both', padx=10, pady=10)
+
+        for i, prompt_data in enumerate(prompts, 1):
+            prompt_text.insert(tk.END, f"Prompt {i}:\n")
+            prompt_text.insert(tk.END, f"{prompt_data['prompt']}\n\n")
+            prompt_text.insert(tk.END, "Components:\n")
+            for key, value in prompt_data['components'].items():
+                prompt_text.insert(tk.END, f"{key}: {value}\n")
+            prompt_text.insert(tk.END, "\n" + "-"*50 + "\n\n")
+
+        prompt_text.config(state=tk.DISABLED)
 
 def main():
     root = tk.Tk()
