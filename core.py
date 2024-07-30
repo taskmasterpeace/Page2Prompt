@@ -178,7 +178,10 @@ class PromptForgeCore:
     def get_available_models():
         try:
             models = openai.Model.list()
-            return [model.id for model in models.data if model.id.startswith("gpt")]
+            gpt_models = [model.id for model in models.data if model.id.startswith("gpt")]
+            if not gpt_models:
+                raise ValueError("No GPT models found")
+            return gpt_models
         except Exception as e:
             logging.error(f"Error fetching OpenAI models: {str(e)}")
             return ["gpt-3.5-turbo", "gpt-4"]  # Fallback to default models

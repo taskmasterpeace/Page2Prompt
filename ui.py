@@ -154,6 +154,7 @@ class PromptForgeUI:
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
+        self.update_model_list()
 
     def setup_ui(self):
         self.master.title("PromptForge - Bring Your Script to Life")
@@ -235,9 +236,8 @@ class PromptForgeUI:
         # AI Model Selection
         ttk.Label(input_frame, text="AI Model:").grid(column=0, row=7, sticky=tk.W, pady=5)
         self.model_var = tk.StringVar()
-        self.model_combo = ttk.Combobox(input_frame, textvariable=self.model_var, values=self.core.available_models, width=47)
+        self.model_combo = ttk.Combobox(input_frame, textvariable=self.model_var, width=47)
         self.model_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
-        self.model_combo.set(self.core.available_models[0] if self.core.available_models else "gpt-3.5-turbo")
 
         # Generate Button
         self.generate_button = ttk.Button(input_frame, text="Generate Prompt", command=self.handle_generate_button_click)
@@ -331,6 +331,14 @@ class PromptForgeUI:
             self.all_prompts_text.insert(tk.END, f"Prompt {i}:\n{prompt_data['prompt']}\n\n")
 
         self.all_prompts_window.lift()
+
+    def update_model_list(self):
+        self.core.available_models = self.core.get_available_models()
+        self.model_combo['values'] = self.core.available_models
+        if self.core.available_models:
+            self.model_combo.set(self.core.available_models[0])
+        else:
+            self.model_combo.set("No models available")
 
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
