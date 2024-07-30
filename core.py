@@ -72,7 +72,7 @@ class ElementManager:
 
 class ScriptParser:
     def __init__(self):
-        self.llm = OpenAI(temperature=0.3)
+        self.llm = ChatOpenAI(temperature=0.3)
 
     def parse_script(self, script: str) -> List[Dict]:
         parse_chain = LLMChain(
@@ -94,7 +94,7 @@ class ScriptParser:
 
 class SceneAnalyzer:
     def __init__(self):
-        self.llm = OpenAI(temperature=0.3)
+        self.llm = ChatOpenAI(temperature=0.3)
 
     def analyze_scene(self, scene: Dict) -> Dict:
         analyze_chain = LLMChain(
