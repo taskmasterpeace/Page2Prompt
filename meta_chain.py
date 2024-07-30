@@ -9,6 +9,7 @@ import json
 from typing import List, Dict, Optional
 import logging
 import os
+from prompt_manager import PromptManager
 
 class DirectorStyle:
     def __init__(self, name: str, camera_techniques: List[str], visual_aesthetics: List[str], 
@@ -43,6 +44,7 @@ class MetaChain:
         self.core = core
         self.llm = OpenAI(temperature=0.7)
         self.director_styles = {"Default": {}}  # Add more styles as needed
+        self.prompt_manager = PromptManager()
 
     def generate_prompt(self, length: str = "medium", active_subjects: list = None, 
                         style: str = "", shot_description: str = "", directors_notes: str = "",

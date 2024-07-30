@@ -201,9 +201,7 @@ class PromptForgeCore:
             raise
 
     def save_prompt(self, prompt: str, components: Dict):
-        # In a real implementation, you might want to save this to a file or database
-        print(f"Saving prompt: {prompt}")
-        print(f"Components: {components}")
+        self.meta_chain.prompt_manager.save_prompt(prompt, components)
 
     def add_subject(self, name: str, category: str, description: str):
         self.subjects.append({
