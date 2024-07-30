@@ -111,124 +111,135 @@ class PromptForgeUI:
         self.master = master
         self.core = PromptForgeCore()
         self.setup_ui()
+        self.all_prompts_window = None
+        self.all_prompts_text = None
 
     def setup_ui(self):
         self.master.title("PromptForge - Bring Your Script to Life")
         self.master.geometry("1000x800")
 
+        main_frame = ttk.Frame(self.master, padding="10")
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
         # Create a canvas with scrollbars
-        self.canvas = tk.Canvas(self.master)
-        self.scrollbar = Scrollbar(self.master, orient="vertical", command=self.canvas.yview)
-        self.scrollable_frame = Frame(self.canvas)
+        canvas = tk.Canvas(main_frame)
+        scrollbar = ttk.Scrollbar(main_frame, orient="vertical", command=canvas.yview)
+        self.scrollable_frame = ttk.Frame(canvas)
 
         self.scrollable_frame.bind(
             "<Configure>",
-            lambda e: self.canvas.configure(
-                scrollregion=self.canvas.bbox("all")
-            )
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
 
-        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        self.canvas.pack(side="left", fill="both", expand=True)
-        self.scrollbar.pack(side="right", fill="y")
-
-        main_frame = ttk.Frame(self.scrollable_frame, padding="10")
-        main_frame.grid(column=0, row=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        self.scrollable_frame.columnconfigure(0, weight=1)
-        self.scrollable_frame.rowconfigure(0, weight=1)
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
         # Style
-        ttk.Label(main_frame, text="Style:").grid(column=0, row=0, sticky=tk.W, pady=5)
-        self.style_entry = ttk.Entry(main_frame, width=50)
+        ttk.Label(self.scrollable_frame, text="Style:").grid(column=0, row=0, sticky=tk.W, pady=5)
+        self.style_entry = ttk.Entry(self.scrollable_frame, width=50)
         self.style_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
         self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
 
         # Shot Description
-        ttk.Label(main_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
-        self.shot_text = scrolledtext.ScrolledText(main_frame, height=4, width=50, wrap=tk.WORD)
+        ttk.Label(self.scrollable_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
+        self.shot_text = scrolledtext.ScrolledText(self.scrollable_frame, height=4, width=50, wrap=tk.WORD)
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.shot_text.insert(tk.END, "Describe the shot (e.g., Close-up of a weathered hand holding an antique pocket watch)")
 
         # Camera Move
-        ttk.Label(main_frame, text="Camera Move:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        ttk.Label(self.scrollable_frame, text="Camera Move:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.move_var = tk.StringVar()
-        self.move_combo = ttk.Combobox(main_frame, textvariable=self.move_var, values=["None", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal"], width=47)
+        self.move_combo = ttk.Combobox(self.scrollable_frame, textvariable=self.move_var, values=["None", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal"], width=47)
         self.move_combo.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
         self.move_combo.set("None")
 
         # Director's Notes
-        ttk.Label(main_frame, text="Director's Notes:").grid(column=0, row=3, sticky=tk.W, pady=5)
-        self.notes_text = scrolledtext.ScrolledText(main_frame, height=4, width=50, wrap=tk.WORD)
+        ttk.Label(self.scrollable_frame, text="Director's Notes:").grid(column=0, row=3, sticky=tk.W, pady=5)
+        self.notes_text = scrolledtext.ScrolledText(self.scrollable_frame, height=4, width=50, wrap=tk.WORD)
         self.notes_text.grid(column=1, row=3, sticky=(tk.W, tk.E), pady=5)
         self.notes_text.insert(tk.END, "Enter director's notes (e.g., Focus on the intricate engravings, convey a sense of time passing)")
 
         # Script
-        ttk.Label(main_frame, text="Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
-        self.script_text = scrolledtext.ScrolledText(main_frame, height=10, width=50, wrap=tk.WORD)
+        ttk.Label(self.scrollable_frame, text="Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
+        self.script_text = scrolledtext.ScrolledText(self.scrollable_frame, height=10, width=50, wrap=tk.WORD)
         self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
         self.script_text.insert(tk.END, "Paste your script here. Highlight the relevant section for this shot.")
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
-        self.stick_to_script_check = ttk.Checkbutton(main_frame, text="Stick to Script", variable=self.stick_to_script_var)
+        self.stick_to_script_check = ttk.Checkbutton(self.scrollable_frame, text="Stick to Script", variable=self.stick_to_script_var)
         self.stick_to_script_check.grid(column=1, row=5, sticky=tk.W, pady=5)
 
         # Prompt Length
-        ttk.Label(main_frame, text="Prompt Length:").grid(column=0, row=6, sticky=tk.W, pady=5)
+        ttk.Label(self.scrollable_frame, text="Prompt Length:").grid(column=0, row=6, sticky=tk.W, pady=5)
         self.length_var = tk.StringVar()
-        self.length_combo = ttk.Combobox(main_frame, textvariable=self.length_var, values=["short", "medium", "long"], width=47)
+        self.length_combo = ttk.Combobox(self.scrollable_frame, textvariable=self.length_var, values=["short", "medium", "long"], width=47)
         self.length_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
         self.length_combo.set("medium")
 
         # AI Model Selection
-        ttk.Label(main_frame, text="AI Model:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        ttk.Label(self.scrollable_frame, text="AI Model:").grid(column=0, row=7, sticky=tk.W, pady=5)
         self.model_var = tk.StringVar()
-        self.model_combo = ttk.Combobox(main_frame, textvariable=self.model_var, values=["gpt-3.5-turbo", "gpt-4"], width=47)
+        self.model_combo = ttk.Combobox(self.scrollable_frame, textvariable=self.model_var, values=["gpt-3.5-turbo", "gpt-4"], width=47)
         self.model_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
         self.model_combo.set("gpt-3.5-turbo")
 
         # Generate Button
-        self.generate_button = ttk.Button(main_frame, text="Generate Prompt", command=self.handle_generate_button_click)
+        self.generate_button = ttk.Button(self.scrollable_frame, text="Generate Prompt", command=self.handle_generate_button_click)
         self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
         # Results
-        ttk.Label(main_frame, text="Generated Prompt:").grid(column=0, row=8, sticky=tk.W, pady=5)
-        self.results_text = scrolledtext.ScrolledText(main_frame, height=8, width=50, wrap=tk.WORD)
-        self.results_text.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
+        ttk.Label(self.scrollable_frame, text="Generated Prompt:").grid(column=0, row=9, sticky=tk.W, pady=5)
+        self.results_text = scrolledtext.ScrolledText(self.scrollable_frame, height=8, width=50, wrap=tk.WORD)
+        self.results_text.grid(column=1, row=9, sticky=(tk.W, tk.E), pady=5)
 
         # Save Prompt Button
-        self.save_button = ttk.Button(main_frame, text="Save Prompt", command=self.save_prompt)
-        self.save_button.grid(column=1, row=9, sticky=tk.E, pady=10)
+        self.save_button = ttk.Button(self.scrollable_frame, text="Save Prompt", command=self.save_prompt)
+        self.save_button.grid(column=1, row=10, sticky=tk.E, pady=10)
 
         # Copy to Clipboard Button
-        self.copy_button = ttk.Button(main_frame, text="Copy to Clipboard", command=self.copy_prompt_to_clipboard)
-        self.copy_button.grid(column=1, row=10, sticky=tk.E, pady=10)
+        self.copy_button = ttk.Button(self.scrollable_frame, text="Copy to Clipboard", command=self.copy_prompt_to_clipboard)
+        self.copy_button.grid(column=1, row=11, sticky=tk.E, pady=10)
 
         # Show All Prompts Button
-        self.show_prompts_button = ttk.Button(main_frame, text="Show All Prompts", command=self.show_all_prompts)
-        self.show_prompts_button.grid(column=1, row=11, sticky=tk.E, pady=10)
+        self.show_prompts_button = ttk.Button(self.scrollable_frame, text="Show All Prompts", command=self.show_all_prompts)
+        self.show_prompts_button.grid(column=1, row=12, sticky=tk.E, pady=10)
 
         # Add Subject Frame
-        self.subject_frame = SubjectFrame(main_frame, self.core)
-        self.subject_frame.grid(column=0, row=12, columnspan=2, sticky="nsew")
+        self.subject_frame = SubjectFrame(self.scrollable_frame, self.core)
+        self.subject_frame.grid(column=0, row=13, columnspan=2, sticky="nsew", pady=10)
 
         # Add Automated Analysis Frame
-        automated_frame = ttk.LabelFrame(main_frame, text="Automated Script Analysis")
-        automated_frame.grid(column=0, row=13, columnspan=2, sticky="nsew", pady=10)
+        automated_frame = ttk.LabelFrame(self.scrollable_frame, text="Automated Script Analysis")
+        automated_frame.grid(column=0, row=14, columnspan=2, sticky="nsew", pady=10)
         self.automated_frame = AutomatedAnalysisFrame(automated_frame, self.core)
         self.automated_frame.pack(fill=tk.BOTH, expand=True)
 
-        # Configure scrolling for the entire window
-        self.master.update()
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-
         # Configure grid
-        for child in main_frame.winfo_children():
+        for child in self.scrollable_frame.winfo_children():
             child.grid_configure(padx=5)
-        main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(8, weight=1)
+        self.scrollable_frame.columnconfigure(1, weight=1)
+
+    def handle_generate_button_click(self):
+        self.core.set_model(self.model_var.get())
+        prompt = self.generate_prompt()
+        if prompt:
+            messagebox.showinfo("Generated Prompt", f"Your generated prompt is:\n\n{prompt}")
+            self.update_all_prompts_window(prompt)
+
+    def update_all_prompts_window(self, new_prompt):
+        if self.all_prompts_window is None or not self.all_prompts_window.winfo_exists():
+            self.all_prompts_window = tk.Toplevel(self.master)
+            self.all_prompts_window.title("All Generated Prompts")
+            self.all_prompts_window.geometry("600x400")
+            self.all_prompts_text = scrolledtext.ScrolledText(self.all_prompts_window, wrap=tk.WORD)
+            self.all_prompts_text.pack(expand=True, fill='both')
+
+        self.all_prompts_text.insert(tk.END, f"\n\nNew Prompt:\n{new_prompt}\n{'='*50}")
+        self.all_prompts_text.see(tk.END)
 
     def generate_prompt(self):
         try:

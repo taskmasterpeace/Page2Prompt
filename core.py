@@ -33,20 +33,21 @@ class StyleHandler:
 
     def set_prefix(self, prefix: str):
         self.prefix = prefix
+        self.generate_suffix()
 
     def generate_suffix(self):
         style_chain = LLMChain(
             llm=self.llm,
             prompt=PromptTemplate(
                 input_variables=["style"],
-                template="Given the style '{style}', generate three distinct visual descriptors that characterize this style:"
+                template="Given the style '{style}', generate three distinct visual descriptors that characterize this style. Separate each descriptor with a comma:"
             )
         )
         result = style_chain({"style": self.prefix})
-        self.suffix = result["text"]
+        self.suffix = result["text"].strip()
 
     def get_full_style(self):
-        return f"{self.prefix} {self.suffix}"
+        return f"{self.prefix}: {self.suffix}"
 
 class ElementManager:
     def __init__(self):
@@ -162,7 +163,7 @@ class OutputFormatter:
 class PromptForgeCore:
     def __init__(self, model_name="gpt-3.5-turbo"):
         self.meta_chain = MetaChain(self, model_name)
-        self.style = ""
+        self.style_handler = StyleHandler()
         self.shot_description = ""
         self.directors_notes = ""
         self.script = ""
@@ -171,7 +172,7 @@ class PromptForgeCore:
         self.subjects = []
 
     def set_style(self, style: str):
-        self.style = style
+        self.style_handler.set_prefix(style)
 
     def set_model(self, model_name: str):
         self.meta_chain.set_model(model_name)
@@ -193,7 +194,7 @@ class PromptForgeCore:
             return self.meta_chain.generate_prompt(
                 length=length,
                 active_subjects=active_subjects,
-                style=self.style,
+                style=self.style_handler.get_full_style(),
                 shot_description=self.shot_description,
                 directors_notes=self.directors_notes,
                 highlighted_text=self.highlighted_text,
