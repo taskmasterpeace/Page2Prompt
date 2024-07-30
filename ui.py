@@ -236,6 +236,11 @@ class PromptForgeUI:
         else:
             messagebox.showwarning("Empty Prompt", "There is no prompt to save.")
 
+    def copy_prompt_to_clipboard(self):
+        prompt = self.results_text.get("1.0", tk.END).strip()
+        pyperclip.copy(prompt)
+        messagebox.showinfo("Copied", "Prompt copied to clipboard!")
+
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
         subject_frame.pack(fill="both", expand=True, pady=(10, 0))
