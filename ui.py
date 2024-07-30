@@ -137,6 +137,12 @@ class PromptForgeUI:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+        # Bind mousewheel to scrolling
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
         # Style
         ttk.Label(self.scrollable_frame, text="Style:").grid(column=0, row=0, sticky=tk.W, pady=5)
         self.style_entry = ttk.Entry(self.scrollable_frame, width=50)
