@@ -197,20 +197,20 @@ class PromptForgeUI:
         self.api_key_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
         ttk.Button(input_frame, text="Save API Key", command=self.save_api_key).grid(column=2, row=0, sticky=tk.W, pady=5)
 
-        # Style
-        ttk.Label(input_frame, text="Style:").grid(column=0, row=1, sticky=tk.W, pady=5)
-        self.style_entry = ttk.Entry(input_frame, width=50)
-        self.style_entry.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
-        self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
-
         # Shot Description
-        ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.shot_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.shot_text.insert(tk.END, "Describe the shot (e.g., Close-up of a weathered hand holding an antique pocket watch)")
 
+        # Style
+        ttk.Label(input_frame, text="Style:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        self.style_entry = ttk.Entry(input_frame, width=50)
+        self.style_entry.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
+        self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
+
         # Camera Move
-        ttk.Label(input_frame, text="Camera Move:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
         self.move_var = tk.StringVar()
         self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=["None", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal"], width=47)
         self.move_combo.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
@@ -255,8 +255,8 @@ class PromptForgeUI:
     def handle_generate_button_click(self):
         try:
             # Get input values
-            style = self.style_entry.get()
             shot_description = self.shot_text.get("1.0", tk.END).strip()
+            style = self.style_entry.get()
             camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
@@ -265,14 +265,18 @@ class PromptForgeUI:
             model = self.model_var.get()
 
             # Update core with input values
-            self.core.set_style(style)
-            self.core.process_shot(shot_description)
-            self.core.process_directors_notes(directors_notes)
-            self.core.process_script(script, script, stick_to_script)
             self.core.set_model(model)
-
+            
             # Generate prompt
-            prompt = self.core.generate_prompt(length)
+            prompt = self.core.generate_prompt(
+                length=length,
+                shot_description=shot_description,
+                style=style,
+                camera_move=camera_move,
+                directors_notes=directors_notes,
+                script=script,
+                stick_to_script=stick_to_script
+            )
 
             # Display generated prompt
             self.results_text.delete("1.0", tk.END)

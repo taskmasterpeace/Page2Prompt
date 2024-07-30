@@ -206,7 +206,8 @@ class PromptForgeCore:
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
 
-    def generate_prompt(self, length: str, shot_description: str) -> str:
+    def generate_prompt(self, length: str, shot_description: str, style: str, camera_move: str, 
+                        directors_notes: str, script: str, stick_to_script: bool) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
@@ -214,15 +215,15 @@ class PromptForgeCore:
             messages = [
                 {"role": "system", "content": "You are a creative AI assistant that generates detailed visual prompts for image generation."},
                 {"role": "user", "content": f"Generate a {length} visual prompt with the following details:"},
-                {"role": "user", "content": f"Style: {self.style_handler.get_full_style()}"},
                 {"role": "user", "content": f"Shot Description: {shot_description}"},
-                {"role": "user", "content": f"Director's Notes: {self.directors_notes}"},
+                {"role": "user", "content": f"Style: {style}"},
+                {"role": "user", "content": f"Camera Move: {camera_move}"},
+                {"role": "user", "content": f"Director's Notes: {directors_notes}"},
                 {"role": "user", "content": f"Active Subjects: {', '.join([s['name'] for s in active_subjects])}"},
-                {"role": "user", "content": f"Highlighted Text: {self.highlighted_text}"},
             ]
             
-            if self.stick_to_script:
-                messages.append({"role": "user", "content": f"Full Script: {self.script}"})
+            if stick_to_script:
+                messages.append({"role": "user", "content": f"Script: {script}"})
             
             response = client.chat.completions.create(
                 model=self.meta_chain.model_name,
