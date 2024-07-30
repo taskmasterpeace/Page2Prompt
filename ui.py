@@ -241,6 +241,22 @@ class PromptForgeUI:
         pyperclip.copy(prompt)
         messagebox.showinfo("Copied", "Prompt copied to clipboard!")
 
+    def show_all_prompts(self):
+        if self.all_prompts_window is None or not self.all_prompts_window.winfo_exists():
+            self.all_prompts_window = tk.Toplevel(self.master)
+            self.all_prompts_window.title("All Saved Prompts")
+            self.all_prompts_window.geometry("600x400")
+
+            self.all_prompts_text = scrolledtext.ScrolledText(self.all_prompts_window, wrap=tk.WORD)
+            self.all_prompts_text.pack(expand=True, fill="both", padx=10, pady=10)
+
+        self.all_prompts_text.delete("1.0", tk.END)
+        saved_prompts = self.core.meta_chain.prompt_manager.get_all_prompts()
+        for i, prompt_data in enumerate(saved_prompts, 1):
+            self.all_prompts_text.insert(tk.END, f"Prompt {i}:\n{prompt_data['prompt']}\n\n")
+
+        self.all_prompts_window.lift()
+
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
         subject_frame.pack(fill="both", expand=True, pady=(10, 0))
