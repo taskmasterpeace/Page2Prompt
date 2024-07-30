@@ -149,9 +149,9 @@ class AutomatedAnalysisFrame(ttk.Frame):
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
 class PromptForgeUI:
-    def __init__(self, master):
+    def __init__(self, master, core):
         self.master = master
-        self.core = PromptForgeCore()
+        self.core = core
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
