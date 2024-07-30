@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk, scrolledtext, filedialog, messagebox
+from tkinter.ttk import Frame, Scrollbar
 import pyperclip
 from core import PromptForgeCore
 import logging
@@ -115,10 +116,28 @@ class PromptForgeUI:
         self.master.title("PromptForge - Bring Your Script to Life")
         self.master.geometry("1000x800")
 
-        main_frame = ttk.Frame(self.master, padding="10")
+        # Create a canvas with scrollbars
+        self.canvas = tk.Canvas(self.master)
+        self.scrollbar = Scrollbar(self.master, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = Frame(self.canvas)
+
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
+
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+
+        main_frame = ttk.Frame(self.scrollable_frame, padding="10")
         main_frame.grid(column=0, row=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        self.master.columnconfigure(0, weight=1)
-        self.master.rowconfigure(0, weight=1)
+        self.scrollable_frame.columnconfigure(0, weight=1)
+        self.scrollable_frame.rowconfigure(0, weight=1)
 
         # Style
         ttk.Label(main_frame, text="Style:").grid(column=0, row=0, sticky=tk.W, pady=5)
@@ -190,9 +209,13 @@ class PromptForgeUI:
 
         # Add Automated Analysis Frame
         automated_frame = ttk.LabelFrame(main_frame, text="Automated Script Analysis")
-        automated_frame.grid(column=0, row=12, columnspan=2, sticky="nsew", pady=10)
+        automated_frame.grid(column=0, row=13, columnspan=2, sticky="nsew", pady=10)
         self.automated_frame = AutomatedAnalysisFrame(automated_frame, self.core)
         self.automated_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Configure scrolling for the entire window
+        self.master.update()
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
         # Configure grid
         for child in main_frame.winfo_children():
