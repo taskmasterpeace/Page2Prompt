@@ -289,8 +289,13 @@ class PromptForgeUI:
         output_frame = ttk.LabelFrame(parent, text="Generated Prompt", padding="10")
         output_frame.pack(fill="both", expand=True)
 
-        self.results_text = scrolledtext.ScrolledText(output_frame, height=10, width=50, wrap=tk.WORD)
-        self.results_text.pack(fill="both", expand=True, pady=5)
+        # Create a PanedWindow to allow resizing
+        paned_window = ttk.PanedWindow(output_frame, orient=tk.VERTICAL)
+        paned_window.pack(fill="both", expand=True)
+
+        # Add the ScrolledText widget to the PanedWindow
+        self.results_text = scrolledtext.ScrolledText(paned_window, wrap=tk.WORD)
+        paned_window.add(self.results_text, weight=1)
 
         button_frame = ttk.Frame(output_frame)
         button_frame.pack(fill="x", pady=5)
