@@ -200,7 +200,7 @@ class PromptForgeUI:
         # Style
         ttk.Label(input_frame, text="Style:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.style_entry = ttk.Entry(input_frame, width=50)
-        self.style_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
+        self.style_entry.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
 
         # Shot Description
