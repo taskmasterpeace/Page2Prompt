@@ -227,6 +227,7 @@ class PromptForgeUI:
         self.script_text = scrolledtext.ScrolledText(input_frame, height=10, width=50, wrap=tk.WORD)
         self.script_text.grid(column=1, row=5, sticky=(tk.W, tk.E), pady=5)
         self.script_text.insert(tk.END, "")
+        self.script_text.bind("<<Selection>>", self.on_script_selection)
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
@@ -377,6 +378,15 @@ class PromptForgeUI:
         automated_frame.pack(fill="both", expand=True, pady=(10, 0))
         self.automated_frame = AutomatedAnalysisFrame(automated_frame, self.core)
         self.automated_frame.pack(fill="both", expand=True)
+
+    def on_script_selection(self, event):
+        try:
+            selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
+            self.script_text.tag_add(tk.SEL, tk.SEL_FIRST, tk.SEL_LAST)
+            self.script_text.mark_set(tk.INSERT, tk.SEL_LAST)
+        except tk.TclError:
+            # No selection
+            pass
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
