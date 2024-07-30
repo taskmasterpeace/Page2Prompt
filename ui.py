@@ -120,6 +120,12 @@ class AutomatedAnalysisFrame(ttk.Frame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(3, weight=1)
 
+    def browse_script(self):
+        filename = filedialog.askopenfilename(filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+        if filename:
+            self.script_path.delete(0, tk.END)
+            self.script_path.insert(0, filename)
+
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
 class PromptForgeUI:
