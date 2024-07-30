@@ -44,7 +44,57 @@ class SubjectFrame(ttk.Frame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(4, weight=1)
 
-    # ... (rest of the SubjectFrame methods remain unchanged)
+    def add_subject(self):
+        try:
+            name = self.name_entry.get().strip()
+            category = self.category_combo.get()
+            description = self.description_text.get("1.0", tk.END).strip()
+
+            if not name or not category or not description:
+                raise ValueError("All fields must be filled")
+
+            self.core.add_subject(name, category, description)
+            self.subjects_listbox.insert(tk.END, f"{name} ({category})")
+            self.clear_inputs()
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def toggle_subject(self):
+        try:
+            selected = self.subjects_listbox.curselection()
+            if not selected:
+                raise ValueError("No subject selected")
+            
+            index = selected[0]
+            subject = self.subjects_listbox.get(index)
+            name = subject.split(" (")[0]
+            self.core.toggle_subject(name)
+            
+            # Update the listbox to reflect the change
+            new_text = f"{subject} ({'Inactive' if 'Inactive' not in subject else 'Active'})"
+            self.subjects_listbox.delete(index)
+            self.subjects_listbox.insert(index, new_text)
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def remove_subject(self):
+        try:
+            selected = self.subjects_listbox.curselection()
+            if not selected:
+                raise ValueError("No subject selected")
+            
+            index = selected[0]
+            subject = self.subjects_listbox.get(index)
+            name = subject.split(" (")[0]
+            self.core.remove_subject(name)
+            self.subjects_listbox.delete(index)
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def clear_inputs(self):
+        self.name_entry.delete(0, tk.END)
+        self.category_combo.set("")
+        self.description_text.delete("1.0", tk.END)
 
 class AutomatedAnalysisFrame(ttk.Frame):
     def __init__(self, master, core):
