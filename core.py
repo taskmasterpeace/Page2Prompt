@@ -9,15 +9,14 @@ import logging
 from langchain_core.prompts import PromptTemplate
 import json
 import os
-import openai
-from openai import ChatCompletion
+from openai import OpenAI
 
 
 # Ensure you set your OpenAI API key as an environment variable
 if "OPENAI_API_KEY" not in os.environ:
     raise ValueError("Please set the OPENAI_API_KEY environment variable")
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
@@ -181,8 +180,8 @@ class PromptForgeCore:
     @staticmethod
     def get_available_models():
         try:
-            models = openai.Model.list()
-            chat_models = [model.id for model in models.data if model.id.startswith("gpt")]
+            models = client.models.list()
+            chat_models = [model.id for model in models if model.id.startswith("gpt")]
             if not chat_models:
                 raise ValueError("No GPT chat models found")
             return chat_models
@@ -225,7 +224,7 @@ class PromptForgeCore:
             if self.stick_to_script:
                 messages.append({"role": "user", "content": f"Full Script: {self.script}"})
             
-            response = ChatCompletion.create(
+            response = client.chat.completions.create(
                 model=self.meta_chain.model_name,
                 messages=messages,
                 max_tokens=500,
@@ -234,7 +233,7 @@ class PromptForgeCore:
                 temperature=0.7,
             )
             
-            prompt = response.choices[0].message['content'].strip()
+            prompt = response.choices[0].message.content.strip()
             return prompt.encode('utf-8', errors='ignore').decode('utf-8')
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
