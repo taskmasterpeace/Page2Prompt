@@ -40,11 +40,16 @@ class DirectorStyle:
         )
 
 class MetaChain:
-    def __init__(self, core):
+    def __init__(self, core, model_name="gpt-3.5-turbo"):
         self.core = core
-        self.llm = OpenAI(temperature=0.7)
+        self.model_name = model_name
+        self.llm = OpenAI(model_name=self.model_name, temperature=0.7)
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
+
+    def set_model(self, model_name: str):
+        self.model_name = model_name
+        self.llm = OpenAI(model_name=self.model_name, temperature=0.7)
 
     def generate_prompt(self, length: str = "medium", active_subjects: list = None, 
                         style: str = "", shot_description: str = "", directors_notes: str = "",

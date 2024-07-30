@@ -160,8 +160,8 @@ class OutputFormatter:
         return output
 
 class PromptForgeCore:
-    def __init__(self):
-        self.meta_chain = MetaChain(self)
+    def __init__(self, model_name="gpt-3.5-turbo"):
+        self.meta_chain = MetaChain(self, model_name)
         self.style = ""
         self.shot_description = ""
         self.directors_notes = ""
@@ -172,6 +172,9 @@ class PromptForgeCore:
 
     def set_style(self, style: str):
         self.style = style
+
+    def set_model(self, model_name: str):
+        self.meta_chain.set_model(model_name)
 
     def process_shot(self, shot_description: str):
         self.shot_description = shot_description

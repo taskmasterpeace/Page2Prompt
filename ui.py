@@ -182,9 +182,16 @@ class PromptForgeUI:
         self.length_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
         self.length_combo.set("medium")
 
+        # AI Model Selection
+        ttk.Label(main_frame, text="AI Model:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        self.model_var = tk.StringVar()
+        self.model_combo = ttk.Combobox(main_frame, textvariable=self.model_var, values=["gpt-3.5-turbo", "gpt-4"], width=47)
+        self.model_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+        self.model_combo.set("gpt-3.5-turbo")
+
         # Generate Button
         self.generate_button = ttk.Button(main_frame, text="Generate Prompt", command=self.handle_generate_button_click)
-        self.generate_button.grid(column=1, row=7, sticky=tk.E, pady=10)
+        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
         # Results
         ttk.Label(main_frame, text="Generated Prompt:").grid(column=0, row=8, sticky=tk.W, pady=5)
@@ -250,6 +257,7 @@ class PromptForgeUI:
             return None
 
     def handle_generate_button_click(self):
+        self.core.set_model(self.model_var.get())
         prompt = self.generate_prompt()
         if prompt:
             messagebox.showinfo("Generated Prompt", f"Your generated prompt is:\n\n{prompt}")
