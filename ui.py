@@ -126,6 +126,24 @@ class AutomatedAnalysisFrame(ttk.Frame):
             self.script_path.delete(0, tk.END)
             self.script_path.insert(0, filename)
 
+    def analyze_script(self):
+        script_path = self.script_path.get()
+        director_style = self.style_combo.get()
+        
+        if not script_path or not director_style:
+            messagebox.showerror("Error", "Please select a script file and director style.")
+            return
+        
+        try:
+            with open(script_path, 'r') as file:
+                script_content = file.read()
+            
+            result = self.core.analyze_script(script_content, director_style)
+            self.results_text.delete('1.0', tk.END)
+            self.results_text.insert(tk.END, result)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
 class PromptForgeUI:
