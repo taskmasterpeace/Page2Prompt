@@ -10,11 +10,14 @@ from langchain_core.prompts import PromptTemplate
 import json
 import os
 import openai
+from openai import ChatCompletion
 
 
 # Ensure you set your OpenAI API key as an environment variable
 if "OPENAI_API_KEY" not in os.environ:
     raise ValueError("Please set the OPENAI_API_KEY environment variable")
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
@@ -207,15 +210,31 @@ class PromptForgeCore:
     def generate_prompt(self, length: str) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
-            prompt = self.meta_chain.generate_prompt(
-                length=length,
-                active_subjects=active_subjects,
-                style=self.style_handler.get_full_style(),
-                shot_description=self.shot_description,
-                directors_notes=self.directors_notes,
-                highlighted_text=self.highlighted_text,
-                full_script=self.script if self.stick_to_script else ""
+            
+            # Prepare the messages for the chat completion
+            messages = [
+                {"role": "system", "content": "You are a creative AI assistant that generates detailed visual prompts for image generation."},
+                {"role": "user", "content": f"Generate a {length} visual prompt with the following details:"},
+                {"role": "user", "content": f"Style: {self.style_handler.get_full_style()}"},
+                {"role": "user", "content": f"Shot Description: {self.shot_description}"},
+                {"role": "user", "content": f"Director's Notes: {self.directors_notes}"},
+                {"role": "user", "content": f"Active Subjects: {', '.join([s['name'] for s in active_subjects])}"},
+                {"role": "user", "content": f"Highlighted Text: {self.highlighted_text}"},
+            ]
+            
+            if self.stick_to_script:
+                messages.append({"role": "user", "content": f"Full Script: {self.script}"})
+            
+            response = ChatCompletion.create(
+                model=self.meta_chain.model_name,
+                messages=messages,
+                max_tokens=500,
+                n=1,
+                stop=None,
+                temperature=0.7,
             )
+            
+            prompt = response.choices[0].message['content'].strip()
             return prompt.encode('utf-8', errors='ignore').decode('utf-8')
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
