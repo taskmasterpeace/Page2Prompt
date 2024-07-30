@@ -201,54 +201,54 @@ class PromptForgeUI:
         ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.shot_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
-        self.shot_text.insert(tk.END, "Describe the shot (e.g., Close-up of a weathered hand holding an antique pocket watch)")
+        self.shot_text.insert(tk.END, "")
 
         # Style
-        ttk.Label(input_frame, text="Style:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="🎨 Style:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.style_entry = ttk.Entry(input_frame, width=50)
         self.style_entry.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
-        self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
+        self.style_entry.insert(0, "")
 
         # Camera Move
-        ttk.Label(input_frame, text="Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
         self.move_var = tk.StringVar()
         self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=["None", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal"], width=47)
-        self.move_combo.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
+        self.move_combo.grid(column=1, row=3, sticky=(tk.W, tk.E), pady=5)
         self.move_combo.set("None")
 
         # Director's Notes
-        ttk.Label(input_frame, text="Director's Notes:").grid(column=0, row=3, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="📝 Director's Notes:").grid(column=0, row=4, sticky=tk.W, pady=5)
         self.notes_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
-        self.notes_text.grid(column=1, row=3, sticky=(tk.W, tk.E), pady=5)
-        self.notes_text.insert(tk.END, "Enter director's notes (e.g., Focus on the intricate engravings, convey a sense of time passing)")
+        self.notes_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
+        self.notes_text.insert(tk.END, "")
 
         # Script
-        ttk.Label(input_frame, text="Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="📜 Script:").grid(column=0, row=5, sticky=tk.W, pady=5)
         self.script_text = scrolledtext.ScrolledText(input_frame, height=10, width=50, wrap=tk.WORD)
-        self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
-        self.script_text.insert(tk.END, "Paste your script here. Highlight the relevant section for this shot.")
+        self.script_text.grid(column=1, row=5, sticky=(tk.W, tk.E), pady=5)
+        self.script_text.insert(tk.END, "")
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
-        self.stick_to_script_check = ttk.Checkbutton(input_frame, text="Stick to Script", variable=self.stick_to_script_var)
-        self.stick_to_script_check.grid(column=1, row=5, sticky=tk.W, pady=5)
+        self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
+        self.stick_to_script_check.grid(column=1, row=6, sticky=tk.W, pady=5)
 
         # Prompt Length
-        ttk.Label(input_frame, text="Prompt Length:").grid(column=0, row=6, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="📏 Prompt Length:").grid(column=0, row=7, sticky=tk.W, pady=5)
         self.length_var = tk.StringVar()
         self.length_combo = ttk.Combobox(input_frame, textvariable=self.length_var, values=["short", "medium", "long"], width=47)
-        self.length_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
+        self.length_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
         self.length_combo.set("medium")
 
         # AI Model Selection
-        ttk.Label(input_frame, text="AI Model:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="🤖 AI Model:").grid(column=0, row=8, sticky=tk.W, pady=5)
         self.model_var = tk.StringVar()
         self.model_combo = ttk.Combobox(input_frame, textvariable=self.model_var, width=47)
-        self.model_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+        self.model_combo.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
 
         # Generate Button
-        self.generate_button = ttk.Button(input_frame, text="Generate Prompt", command=self.handle_generate_button_click)
-        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
+        self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.handle_generate_button_click)
+        self.generate_button.grid(column=1, row=9, sticky=tk.E, pady=10)
 
         input_frame.columnconfigure(1, weight=1)
 
@@ -346,7 +346,9 @@ class PromptForgeUI:
     def update_model_list(self):
         self.core.available_models = self.core.get_available_models()
         self.model_combo['values'] = self.core.available_models
-        if self.core.available_models:
+        if "gpt-4-1106-preview" in self.core.available_models:
+            self.model_combo.set("gpt-4-1106-preview")
+        elif self.core.available_models:
             self.model_combo.set(self.core.available_models[0])
         else:
             self.model_combo.set("No models available")
