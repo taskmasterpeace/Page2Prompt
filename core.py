@@ -185,7 +185,7 @@ class PromptForgeCore:
             return gpt_models
         except Exception as e:
             logging.error(f"Error fetching OpenAI models: {str(e)}")
-            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-0314"]  # Fallback to default models including GPT-4
+            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4o-mini"]  # Fallback to default models including GPT-4 and GPT-4o-mini
 
     def set_style(self, style: str):
         self.style_handler.set_prefix(style)
