@@ -204,7 +204,7 @@ class PromptForgeUI:
         self.style_entry.insert(0, "Enter visual style (e.g., Noir, Cyberpunk, Magical Realism)")
 
         # Shot Description
-        ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.shot_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.shot_text.insert(tk.END, "Describe the shot (e.g., Close-up of a weathered hand holding an antique pocket watch)")
