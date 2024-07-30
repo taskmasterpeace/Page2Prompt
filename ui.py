@@ -6,6 +6,7 @@ from tkinter.ttk import Frame, Scrollbar
 import pyperclip
 from core import PromptForgeCore
 import logging
+import os
 
 class SubjectFrame(ttk.Frame):
     def __init__(self, master, core):
