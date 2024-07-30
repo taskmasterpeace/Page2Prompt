@@ -218,6 +218,24 @@ class PromptForgeUI:
         self.show_prompts_button = ttk.Button(button_frame, text="Show All Prompts", command=self.show_all_prompts)
         self.show_prompts_button.pack(side="left", padx=2)
 
+    def save_prompt(self):
+        prompt = self.results_text.get("1.0", tk.END).strip()
+        if prompt:
+            components = {
+                "style": self.style_entry.get(),
+                "shot_description": self.shot_text.get("1.0", tk.END).strip(),
+                "camera_move": self.move_var.get(),
+                "directors_notes": self.notes_text.get("1.0", tk.END).strip(),
+                "script": self.script_text.get("1.0", tk.END).strip(),
+                "stick_to_script": self.stick_to_script_var.get(),
+                "length": self.length_var.get(),
+                "model": self.model_var.get()
+            }
+            self.core.save_prompt(prompt, components)
+            messagebox.showinfo("Saved", "Prompt saved successfully!")
+        else:
+            messagebox.showwarning("Empty Prompt", "There is no prompt to save.")
+
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
         subject_frame.pack(fill="both", expand=True, pady=(10, 0))
