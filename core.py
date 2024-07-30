@@ -1,9 +1,9 @@
 # core.py
 
 from typing import List, Dict, Optional
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
-from langchain_community.llms import OpenAI as CommunityOpenAI
+from langchain_community.chat_models import ChatOpenAI as CommunityChatOpenAI
 from meta_chain import MetaChain
 import logging
 from langchain_core.prompts import PromptTemplate
@@ -32,7 +32,7 @@ class StyleHandler:
     def __init__(self):
         self.prefix = ""
         self.suffix = ""
-        self.llm = OpenAI(temperature=0.7)
+        self.llm = ChatOpenAI(temperature=0.7)
 
     def set_prefix(self, prefix: str):
         self.prefix = prefix
@@ -179,13 +179,13 @@ class PromptForgeCore:
     def get_available_models():
         try:
             models = openai.Model.list()
-            gpt_models = [model.id for model in models.data if model.id.startswith("gpt")]
-            if not gpt_models:
-                raise ValueError("No GPT models found")
-            return gpt_models
+            chat_models = [model.id for model in models.data if model.id.startswith("gpt")]
+            if not chat_models:
+                raise ValueError("No GPT chat models found")
+            return chat_models
         except Exception as e:
             logging.error(f"Error fetching OpenAI models: {str(e)}")
-            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4o-mini"]  # Fallback to default models including GPT-4 and GPT-4o-mini
+            return ["gpt-3.5-turbo", "gpt-4", "gpt-4-0314"]  # Fallback to default chat models
 
     def set_style(self, style: str):
         self.style_handler.set_prefix(style)
