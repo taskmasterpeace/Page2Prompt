@@ -170,6 +170,35 @@ class PromptForgeUI:
 
         input_frame.columnconfigure(1, weight=1)
 
+    def handle_generate_button_click(self):
+        try:
+            # Get input values
+            style = self.style_entry.get()
+            shot_description = self.shot_text.get("1.0", tk.END).strip()
+            camera_move = self.move_var.get()
+            directors_notes = self.notes_text.get("1.0", tk.END).strip()
+            script = self.script_text.get("1.0", tk.END).strip()
+            stick_to_script = self.stick_to_script_var.get()
+            length = self.length_var.get()
+            model = self.model_var.get()
+
+            # Update core with input values
+            self.core.set_style(style)
+            self.core.process_shot(shot_description)
+            self.core.process_directors_notes(directors_notes)
+            self.core.process_script(script, script, stick_to_script)
+            self.core.set_model(model)
+
+            # Generate prompt
+            prompt = self.core.generate_prompt(length)
+
+            # Display generated prompt
+            self.results_text.delete("1.0", tk.END)
+            self.results_text.insert(tk.END, prompt)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
     def create_output_area(self, parent):
         output_frame = ttk.LabelFrame(parent, text="Generated Prompt", padding="10")
         output_frame.pack(fill="both", expand=True)
