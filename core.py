@@ -12,6 +12,7 @@ import json
 import os
 from openai import AsyncOpenAI
 from prompt_log import PromptLogger
+from prompt_log import PromptLogger
 
 
 # Ensure you set your OpenAI API key as an environment variable
@@ -19,6 +20,7 @@ if "OPENAI_API_KEY" not in os.environ:
     raise ValueError("Please set the OPENAI_API_KEY environment variable")
 
 client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
+prompt_logger = PromptLogger()
 prompt_logger = PromptLogger()
 
 class Subject:
@@ -250,6 +252,19 @@ class PromptForgeCore:
             
             prompt = response.choices[0].message.content.strip()
             prompt = prompt.encode('utf-8', errors='ignore').decode('utf-8')
+            
+            # Log the inputs and generated prompt
+            inputs = {
+                "length": length,
+                "shot_description": shot_description,
+                "style": style,
+                "camera_move": camera_move,
+                "directors_notes": directors_notes,
+                "script": script,
+                "stick_to_script": stick_to_script,
+                "active_subjects": active_subjects
+            }
+            prompt_logger.log_prompt(inputs, prompt)
             
             # Log the inputs and generated prompt
             inputs = {
