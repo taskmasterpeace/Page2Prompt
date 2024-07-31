@@ -249,6 +249,7 @@ class Page2PromptUI:
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
             stick_to_script = self.stick_to_script_var.get()
+            length = "medium"  # You can add a dropdown for this if you want to let users choose
 
             # Generate prompt
             prompt = await self.core.generate_prompt(
@@ -257,7 +258,8 @@ class Page2PromptUI:
                 camera_move=camera_move,
                 directors_notes=directors_notes,
                 script=script,
-                stick_to_script=stick_to_script
+                stick_to_script=stick_to_script,
+                length=length
             )
 
             # Display generated prompt
