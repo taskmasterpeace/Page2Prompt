@@ -223,7 +223,8 @@ class PromptForgeCore:
 
 **Director's Notes:** {directors_notes}
 
-**Active Subjects:** {', '.join([s['name'] for s in active_subjects])}
+**Active Subjects:**
+{self._format_active_subjects(active_subjects)}
 """
             
             if stick_to_script:
@@ -269,6 +270,9 @@ class PromptForgeCore:
             if subject['name'] == name:
                 subject['active'] = not subject['active']
                 break
+
+    def _format_active_subjects(self, active_subjects: List[Dict]) -> str:
+        return "\n".join([f"- {s['name']} ({s['category']}): {s['description']}" for s in active_subjects])
 
     def get_director_styles(self) -> List[str]:
         return list(self.meta_chain.director_styles.keys())

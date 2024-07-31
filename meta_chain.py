@@ -56,7 +56,7 @@ class MetaChain:
                         highlighted_text: str = "", full_script: str = "") -> str:
         try:
             # Prepare inputs
-            subject_info = "\n".join([f"{s['name']} ({s['category']}): {s['description']}" for s in (active_subjects or [])])
+            subject_info = self._format_subject_info(active_subjects)
             
             # Create prompt template
             template = self._get_prompt_template(length)
@@ -90,9 +90,10 @@ class MetaChain:
         
         Full Script: {full_script}
         
-        Subjects: {subject_info}
+        Subjects:
+        {subject_info}
         
-        Based on the above information, generate a {length} visual prompt that captures the essence of the scene, incorporating the style, script context, and any specific instructions. The prompt should be suitable for AI image generation and enhance the storytelling experience.
+        Based on the above information, generate a {length} visual prompt that captures the essence of the scene, incorporating the style, script context, and any specific instructions. The prompt should be suitable for AI image generation and enhance the storytelling experience. Make sure to incorporate the subjects and their descriptions into the visual prompt.
         
         Visual Prompt:
         """
@@ -101,6 +102,11 @@ class MetaChain:
             input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length"],
             template=base_template
         )
+
+    def _format_subject_info(self, active_subjects: List[Dict]) -> str:
+        if not active_subjects:
+            return "No active subjects"
+        return "\n".join([f"- {s['name']} ({s['category']}): {s['description']}" for s in active_subjects])
 
     def analyze_script(self, script: str, director_style: str) -> List[Dict]:
         scenes = self.core.script_analyzer.analyze_script(script)
