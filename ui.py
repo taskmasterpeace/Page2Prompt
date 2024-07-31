@@ -8,6 +8,8 @@ from core import PromptForgeCore
 import logging
 import os
 import asyncio
+import random
+from styles import predefined_styles
 
 class SubjectFrame(ttk.Frame):
     def __init__(self, master, core):
@@ -204,10 +206,27 @@ class Page2PromptUI:
         self.shot_text.insert(tk.END, "")
 
         # Style
-        ttk.Label(input_frame, text="🎨 Style:").grid(column=0, row=2, sticky=tk.W, pady=5)
-        self.style_entry = ttk.Entry(input_frame, width=50)
-        self.style_entry.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
-        self.style_entry.insert(0, "")
+        style_frame = ttk.Frame(input_frame)
+        style_frame.grid(column=0, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+
+        ttk.Label(style_frame, text="🎨 Style:").grid(column=0, row=0, sticky=tk.W)
+        self.style_combo = ttk.Combobox(style_frame, width=30)
+        self.style_combo.grid(column=1, row=0, sticky=(tk.W, tk.E))
+        self.style_combo['values'] = self.core.style_manager.get_style_names()
+        self.style_combo.bind("<<ComboboxSelected>>", self.on_style_selected)
+
+        ttk.Button(style_frame, text="Generate Style", command=self.generate_random_style).grid(column=2, row=0, sticky=tk.W, padx=5)
+        ttk.Button(style_frame, text="Save Style", command=self.save_current_style).grid(column=3, row=0, sticky=tk.W, padx=5)
+
+        ttk.Label(style_frame, text="Prefix:").grid(column=0, row=1, sticky=tk.W, pady=5)
+        self.style_prefix_entry = ttk.Entry(style_frame, width=50)
+        self.style_prefix_entry.grid(column=1, row=1, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+
+        ttk.Label(style_frame, text="Suffix:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        self.style_suffix_entry = ttk.Entry(style_frame, width=50)
+        self.style_suffix_entry.grid(column=1, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+
+        ttk.Button(style_frame, text="Generate Style Details", command=self.generate_style_details).grid(column=1, row=3, sticky=tk.E, pady=5)
 
         # Camera Move
         ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
@@ -234,9 +253,14 @@ class Page2PromptUI:
         self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
         self.stick_to_script_check.grid(column=1, row=6, sticky=tk.W, pady=5)
 
+        # End Parameters
+        ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        self.end_parameters_entry = ttk.Entry(input_frame, width=50)
+        self.end_parameters_entry.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+
         # Generate Button
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
-        self.generate_button.grid(column=1, row=7, sticky=tk.E, pady=10)
+        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
         input_frame.columnconfigure(1, weight=1)
 
@@ -390,6 +414,41 @@ class Page2PromptUI:
         finally:
             # Schedule the UI update for the next idle moment
             self.master.after_idle(self.master.update_idletasks)
+
+    def on_style_selected(self, event):
+        selected_style = self.style_combo.get()
+        style_data = self.core.style_manager.get_style(selected_style)
+        self.style_prefix_entry.delete(0, tk.END)
+        self.style_prefix_entry.insert(0, style_data["prefix"])
+        self.style_suffix_entry.delete(0, tk.END)
+        self.style_suffix_entry.insert(0, style_data["suffix"])
+
+    def generate_random_style(self):
+        random_style = random.choice(list(predefined_styles.keys()))
+        self.style_combo.set(random_style)
+        self.on_style_selected(None)
+
+    def save_current_style(self):
+        style_name = self.style_combo.get()
+        prefix = self.style_prefix_entry.get()
+        suffix = self.style_suffix_entry.get()
+        if style_name and prefix and suffix:
+            self.core.style_manager.add_style(style_name, prefix, suffix)
+            self.style_combo['values'] = self.core.style_manager.get_style_names()
+            messagebox.showinfo("Style Saved", f"Style '{style_name}' has been saved.")
+        else:
+            messagebox.showerror("Error", "Please enter a style name, prefix, and suffix.")
+
+    def generate_style_details(self):
+        prefix = self.style_prefix_entry.get()
+        if prefix:
+            # Here you would typically call an AI model to generate the suffix
+            # For this example, we'll just append a placeholder suffix
+            suffix = f"with unique visual elements characteristic of {prefix}"
+            self.style_suffix_entry.delete(0, tk.END)
+            self.style_suffix_entry.insert(0, suffix)
+        else:
+            messagebox.showerror("Error", "Please enter a style prefix first.")
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
