@@ -12,6 +12,8 @@ import json
 import os
 from openai import AsyncOpenAI
 from prompt_log import PromptLogger
+from styles import StyleManager
+import random
 from prompt_log import PromptLogger
 
 
@@ -201,13 +203,15 @@ class PromptForgeCore:
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
 
-    async def generate_prompt(self, shot_description: str, style: str, camera_move: str, 
-                        directors_notes: str, script: str, stick_to_script: bool, length: str = "medium") -> str:
+    async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_move: str, 
+                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
-            # Prepare the base prompt without style information
+            # Prepare the base prompt with style information
             base_prompt = f"""
+{style_prefix}
+
 **Content Prompt:**
 
 **Shot Description:** {shot_description}
@@ -224,7 +228,7 @@ class PromptForgeCore:
             # Generate content prompts of different lengths
             messages = [
                 {"role": "system", "content": "You are a creative AI assistant that generates detailed content prompts for image generation. Focus on describing the scene, actions, and subjects without mentioning any visual styles, camera techniques, or cinematography terms."},
-                {"role": "user", "content": f"Based on the following information, generate short, medium, and long content prompts:\n\n{base_prompt}\n\nProvide the prompts in the following format:\nShort Prompt: [Your short prompt here]\nMedium Prompt: [Your medium prompt here]\nLong Prompt: [Your long prompt here]"}
+                {"role": "user", "content": f"Based on the following information, generate a {length} content prompt:\n\n{base_prompt}"}
             ]
             
             response = await client.chat.completions.create(
@@ -239,22 +243,24 @@ class PromptForgeCore:
             content_prompt = response.choices[0].message.content.strip()
             content_prompt = content_prompt.encode('utf-8', errors='ignore').decode('utf-8')
             
-            # Generate a separate style prompt
-            style_prompt = f"Style: {style}\nCamera Move: {camera_move}"
+            # Combine all prompt components
+            full_prompt = f"{style_prefix}\n\n{content_prompt}\n\nCamera Move: {camera_move}\n\n{style_suffix}"
             
-            # Combine content and style prompts
-            full_prompt = f"Content Prompt:\n{content_prompt}\n\nStyle Information:\n{style_prompt}"
+            if end_parameters:
+                full_prompt += f"\n\n{end_parameters}"
             
             # Log the inputs and generated prompt
             inputs = {
                 "length": length,
                 "shot_description": shot_description,
-                "style": style,
+                "style_prefix": style_prefix,
+                "style_suffix": style_suffix,
                 "camera_move": camera_move,
                 "directors_notes": directors_notes,
                 "script": script,
                 "stick_to_script": stick_to_script,
-                "active_subjects": active_subjects
+                "active_subjects": active_subjects,
+                "end_parameters": end_parameters
             }
             prompt_logger.log_prompt(inputs, full_prompt)
             
