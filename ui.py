@@ -250,7 +250,9 @@ class Page2PromptUI:
         ttk.Label(style_frame, text="🎨 Style:").grid(column=0, row=0, sticky=tk.W)
         self.style_combo = ttk.Combobox(style_frame, width=30)
         self.style_combo.grid(column=1, row=0, sticky=(tk.W, tk.E))
-        self.style_combo['values'] = self.core.style_manager.get_style_names()
+        style_names = ["None"] + self.core.style_manager.get_style_names()
+        self.style_combo['values'] = style_names
+        self.style_combo.set("None")
         self.style_combo.bind("<<ComboboxSelected>>", self.on_style_selected)
 
         generate_style_btn = ttk.Button(style_frame, text="Generate Random Style", command=self.generate_random_style)
@@ -291,22 +293,22 @@ class Page2PromptUI:
         ttk.Label(input_frame, text="📷 Camera Shot:").grid(column=0, row=6, sticky=tk.W, pady=5)
         self.shot_var = tk.StringVar()
         self.shot_combo = ttk.Combobox(input_frame, textvariable=self.shot_var, values=[
-            "Wide Shot", "Long Shot", "Full Shot", "Medium Shot", "Close-up", "Extreme Close-up",
+            "None", "Wide Shot", "Long Shot", "Full Shot", "Medium Shot", "Close-up", "Extreme Close-up",
             "Point of View Shot", "Over the Shoulder Shot", "Low Angle Shot", "High Angle Shot",
             "Dutch Angle Shot", "Bird's Eye View", "Worm's Eye View"
         ], width=47)
         self.shot_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
-        self.shot_combo.set("Wide Shot")
+        self.shot_combo.set("None")
 
         # Camera Move
         ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=7, sticky=tk.W, pady=5)
         self.move_var = tk.StringVar()
         self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=[
-            "Static", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal", "Crane Shot",
+            "None", "Static", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal", "Crane Shot",
             "Steadicam", "Handheld", "Tracking Shot", "Pull Focus"
         ], width=47)
         self.move_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
-        self.move_combo.set("Static")
+        self.move_combo.set("None")
 
         # End Parameters
         ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=8, sticky=tk.W, pady=5)
@@ -492,11 +494,15 @@ class Page2PromptUI:
 
     def on_style_selected(self, event):
         selected_style = self.style_combo.get()
-        style_data = self.core.style_manager.get_style(selected_style)
-        self.style_prefix_entry.delete(0, tk.END)
-        self.style_prefix_entry.insert(0, style_data["prefix"])
-        self.style_suffix_entry.delete(0, tk.END)
-        self.style_suffix_entry.insert(0, style_data["suffix"])
+        if selected_style == "None":
+            self.style_prefix_entry.delete(0, tk.END)
+            self.style_suffix_entry.delete(0, tk.END)
+        else:
+            style_data = self.core.style_manager.get_style(selected_style)
+            self.style_prefix_entry.delete(0, tk.END)
+            self.style_prefix_entry.insert(0, style_data["prefix"])
+            self.style_suffix_entry.delete(0, tk.END)
+            self.style_suffix_entry.insert(0, style_data["suffix"])
 
     def generate_random_style(self):
         random_style = random.choice(list(predefined_styles.keys()))
