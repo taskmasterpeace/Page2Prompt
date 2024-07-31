@@ -180,6 +180,10 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
+        self.prompt_logger = PromptLogger()
+
+    def get_logs(self):
+        return self.prompt_logger.get_logs()
 
     def set_style(self, style: str) -> None:
         self.style_handler.set_prefix(style)
