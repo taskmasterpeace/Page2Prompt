@@ -187,6 +187,18 @@ class PromptForgeCore:
         self.end_parameters = ""
         self.history = deque(maxlen=10)  # Store last 10 states
         self.future = deque(maxlen=10)  # Store undone states for redo
+        self.llm = ChatOpenAI(temperature=0.7)
+
+    async def generate_style_details(self, prefix: str) -> str:
+        style_chain = LLMChain(
+            llm=self.llm,
+            prompt=PromptTemplate(
+                input_variables=["style"],
+                template="Given the style '{style}', generate three distinct and detailed visual descriptors that characterize this style. Focus on unique elements, color palettes, lighting, and overall atmosphere. Separate each descriptor with a semicolon:"
+            )
+        )
+        result = await style_chain.arun({"style": prefix})
+        return result.strip()
 
     def get_logs(self):
         return self.prompt_logger.get_logs()
@@ -263,7 +275,7 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_move: str, 
+    async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_shot: str, camera_move: str, 
                         directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
@@ -280,6 +292,9 @@ class PromptForgeCore:
 
 **Active Subjects:**
 {self._format_active_subjects(active_subjects)}
+
+**Camera Shot:** {camera_shot}
+**Camera Move:** {camera_move}
 """
             
             if stick_to_script:
@@ -304,7 +319,7 @@ class PromptForgeCore:
             content_prompt = content_prompt.encode('utf-8', errors='ignore').decode('utf-8')
             
             # Combine all prompt components
-            full_prompt = f"{style_prefix}\n\n{content_prompt}\n\nCamera Move: {camera_move}\n\n{style_suffix}"
+            full_prompt = f"{style_prefix}\n\n{content_prompt}\n\nCamera Shot: {camera_shot}\nCamera Move: {camera_move}\n\n{style_suffix}"
             
             if end_parameters:
                 full_prompt += f"\n\n{end_parameters}"
@@ -319,6 +334,7 @@ class PromptForgeCore:
                 "shot_description": shot_description,
                 "style_prefix": style_prefix,
                 "style_suffix": style_suffix,
+                "camera_shot": camera_shot,
                 "camera_move": camera_move,
                 "directors_notes": directors_notes,
                 "script": script,

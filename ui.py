@@ -237,9 +237,15 @@ class Page2PromptUI:
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.shot_text.insert(tk.END, "")
 
+        # Director's Notes
+        ttk.Label(input_frame, text="📝 Director's Notes:").grid(column=0, row=2, sticky=tk.W, pady=5)
+        self.notes_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
+        self.notes_text.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
+        self.notes_text.insert(tk.END, "")
+
         # Style
         style_frame = ttk.Frame(input_frame)
-        style_frame.grid(column=0, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        style_frame.grid(column=0, row=3, columnspan=3, sticky=(tk.W, tk.E), pady=5)
 
         ttk.Label(style_frame, text="🎨 Style:").grid(column=0, row=0, sticky=tk.W)
         self.style_combo = ttk.Combobox(style_frame, width=30)
@@ -269,43 +275,51 @@ class Page2PromptUI:
         generate_details_btn.grid(column=1, row=3, sticky=tk.E, pady=5)
         ToolTip(generate_details_btn, "Generate a suffix based on the entered prefix")
 
-        # Camera Move
-        ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
-        self.move_var = tk.StringVar()
-        self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=["None", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal"], width=47)
-        self.move_combo.grid(column=1, row=3, sticky=(tk.W, tk.E), pady=5)
-        self.move_combo.set("None")
-
-        # Director's Notes
-        ttk.Label(input_frame, text="📝 Director's Notes:").grid(column=0, row=4, sticky=tk.W, pady=5)
-        self.notes_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
-        self.notes_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
-        self.notes_text.insert(tk.END, "")
-
         # Script
-        ttk.Label(input_frame, text="📜 Script:").grid(column=0, row=5, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="📜 Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
         self.script_text = scrolledtext.ScrolledText(input_frame, height=10, width=50, wrap=tk.WORD)
-        self.script_text.grid(column=1, row=5, sticky=(tk.W, tk.E), pady=5)
+        self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
         self.script_text.insert(tk.END, "")
         self.script_text.bind("<<Selection>>", self.on_script_selection)
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
         self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
-        self.stick_to_script_check.grid(column=1, row=6, sticky=tk.W, pady=5)
+        self.stick_to_script_check.grid(column=1, row=5, sticky=tk.W, pady=5)
+
+        # Camera Shot
+        ttk.Label(input_frame, text="📷 Camera Shot:").grid(column=0, row=6, sticky=tk.W, pady=5)
+        self.shot_var = tk.StringVar()
+        self.shot_combo = ttk.Combobox(input_frame, textvariable=self.shot_var, values=[
+            "Wide Shot", "Long Shot", "Full Shot", "Medium Shot", "Close-up", "Extreme Close-up",
+            "Point of View Shot", "Over the Shoulder Shot", "Low Angle Shot", "High Angle Shot",
+            "Dutch Angle Shot", "Bird's Eye View", "Worm's Eye View"
+        ], width=47)
+        self.shot_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
+        self.shot_combo.set("Wide Shot")
+
+        # Camera Move
+        ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        self.move_var = tk.StringVar()
+        self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=[
+            "Static", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal", "Crane Shot",
+            "Steadicam", "Handheld", "Tracking Shot", "Pull Focus"
+        ], width=47)
+        self.move_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+        self.move_combo.set("Static")
 
         # End Parameters
-        ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=8, sticky=tk.W, pady=5)
         self.end_parameters_entry = ttk.Entry(input_frame, width=50)
-        self.end_parameters_entry.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+        self.end_parameters_entry.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
 
         # Generate Button
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
-        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
+        self.generate_button.grid(column=1, row=9, sticky=tk.E, pady=10)
 
         # Add Undo and Redo buttons
         undo_redo_frame = ttk.Frame(input_frame)
-        undo_redo_frame.grid(column=1, row=9, sticky=tk.E, pady=5)
+        undo_redo_frame.grid(column=1, row=10, sticky=tk.E, pady=5)
 
         self.undo_button = ttk.Button(undo_redo_frame, text="↩ Undo", command=self.undo)
         self.undo_button.pack(side=tk.LEFT, padx=2)
@@ -325,6 +339,7 @@ class Page2PromptUI:
             shot_description = self.shot_text.get("1.0", tk.END).strip()
             style_prefix = self.style_prefix_entry.get()
             style_suffix = self.style_suffix_entry.get()
+            camera_shot = self.shot_var.get()
             camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
@@ -337,6 +352,7 @@ class Page2PromptUI:
                 shot_description=shot_description,
                 style_prefix=style_prefix,
                 style_suffix=style_suffix,
+                camera_shot=camera_shot,
                 camera_move=camera_move,
                 directors_notes=directors_notes,
                 script=script,
@@ -501,9 +517,8 @@ class Page2PromptUI:
     def generate_style_details(self):
         prefix = self.style_prefix_entry.get()
         if prefix:
-            # Here you would typically call an AI model to generate the suffix
-            # For this example, we'll just append a placeholder suffix
-            suffix = f"with unique visual elements characteristic of {prefix}"
+            # Call the AI model to generate detailed visual descriptors
+            suffix = self.core.generate_style_details(prefix)
             self.style_suffix_entry.delete(0, tk.END)
             self.style_suffix_entry.insert(0, suffix)
         else:
