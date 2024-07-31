@@ -234,16 +234,9 @@ class Page2PromptUI:
         self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
         self.stick_to_script_check.grid(column=1, row=6, sticky=tk.W, pady=5)
 
-        # Prompt Length
-        ttk.Label(input_frame, text="📏 Prompt Length:").grid(column=0, row=7, sticky=tk.W, pady=5)
-        self.length_var = tk.StringVar()
-        self.length_combo = ttk.Combobox(input_frame, textvariable=self.length_var, values=["short", "medium", "long"], width=47)
-        self.length_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
-        self.length_combo.set("medium")
-
         # Generate Button
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
-        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
+        self.generate_button.grid(column=1, row=7, sticky=tk.E, pady=10)
 
         input_frame.columnconfigure(1, weight=1)
 
@@ -256,11 +249,9 @@ class Page2PromptUI:
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
             stick_to_script = self.stick_to_script_var.get()
-            length = self.length_var.get()
 
             # Generate prompt
             prompt = await self.core.generate_prompt(
-                length=length,
                 shot_description=shot_description,
                 style=style,
                 camera_move=camera_move,
@@ -315,8 +306,7 @@ class Page2PromptUI:
                 "camera_move": self.move_var.get(),
                 "directors_notes": self.notes_text.get("1.0", tk.END).strip(),
                 "script": self.script_text.get("1.0", tk.END).strip(),
-                "stick_to_script": self.stick_to_script_var.get(),
-                "length": self.length_var.get()
+                "stick_to_script": self.stick_to_script_var.get()
             }
             self.core.save_prompt(prompt, components)
             messagebox.showinfo("Saved", "Prompt saved successfully!")
