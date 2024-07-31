@@ -155,7 +155,6 @@ class PromptForgeUI:
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
-        self.update_model_list()
 
     def setup_ui(self):
         self.master.title("PromptForge - Bring Your Script to Life")
