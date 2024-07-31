@@ -195,7 +195,7 @@ class PromptForgeCore:
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
 
-    def generate_prompt(self, length: str, shot_description: str, style: str, camera_move: str, 
+    async def generate_prompt(self, length: str, shot_description: str, style: str, camera_move: str, 
                         directors_notes: str, script: str, stick_to_script: bool) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
@@ -225,7 +225,7 @@ class PromptForgeCore:
                 {"role": "user", "content": f"Based on the following information, generate short, medium, and long visual prompts:\n\n{base_prompt}\n\nProvide the prompts in the following format:\nShort Prompt: [Your short prompt here]\nMedium Prompt: [Your medium prompt here]\nLong Prompt: [Your long prompt here]"}
             ]
             
-            response = client.chat.completions.create(
+            response = await client.chat.completions.create(
                 model=self.meta_chain.model_name,
                 messages=messages,
                 max_tokens=1000,

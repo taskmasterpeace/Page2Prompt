@@ -7,6 +7,7 @@ import pyperclip
 from core import PromptForgeCore
 import logging
 import os
+import asyncio
 
 class SubjectFrame(ttk.Frame):
     def __init__(self, master, core):
@@ -241,12 +242,12 @@ class PromptForgeUI:
         self.length_combo.set("medium")
 
         # Generate Button
-        self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.handle_generate_button_click)
+        self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
         self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
         input_frame.columnconfigure(1, weight=1)
 
-    def handle_generate_button_click(self):
+    async def handle_generate_button_click(self):
         try:
             # Get input values
             shot_description = self.shot_text.get("1.0", tk.END).strip()
@@ -258,7 +259,7 @@ class PromptForgeUI:
             length = self.length_var.get()
 
             # Generate prompt
-            prompt = self.core.generate_prompt(
+            prompt = await self.core.generate_prompt(
                 length=length,
                 shot_description=shot_description,
                 style=style,
@@ -274,6 +275,9 @@ class PromptForgeUI:
 
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+    def generate_button_click(self):
+        asyncio.run(self.handle_generate_button_click())
 
     def create_output_area(self, parent):
         output_frame = ttk.LabelFrame(parent, text="Generated Prompt", padding="10")
