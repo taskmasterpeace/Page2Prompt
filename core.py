@@ -180,10 +180,14 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
-        self.available_models = []
+        self.available_models = self.get_available_models()
 
-    async def initialize(self):
-        self.available_models = await self.get_available_models()
+    def get_available_models(self) -> List[str]:
+        try:
+            return ["gpt-3.5-turbo", "gpt-4"]  # Default models
+        except Exception as e:
+            logging.error(f"Error fetching OpenAI models: {str(e)}")
+            return ["gpt-3.5-turbo", "gpt-4"]  # Fallback to current default chat models
 
     @staticmethod
     async def get_available_models() -> List[str]:
