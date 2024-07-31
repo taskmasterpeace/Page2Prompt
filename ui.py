@@ -10,6 +10,7 @@ import os
 import asyncio
 import random
 from styles import predefined_styles
+from tkinter import messagebox
 
 class SubjectFrame(ttk.Frame):
     def __init__(self, master, core):
@@ -262,7 +263,21 @@ class Page2PromptUI:
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
         self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
+        # Add Undo and Redo buttons
+        undo_redo_frame = ttk.Frame(input_frame)
+        undo_redo_frame.grid(column=1, row=9, sticky=tk.E, pady=5)
+
+        self.undo_button = ttk.Button(undo_redo_frame, text="↩ Undo", command=self.undo)
+        self.undo_button.pack(side=tk.LEFT, padx=2)
+
+        self.redo_button = ttk.Button(undo_redo_frame, text="Redo ↪", command=self.redo)
+        self.redo_button.pack(side=tk.LEFT, padx=2)
+
         input_frame.columnconfigure(1, weight=1)
+
+        # Bind keyboard shortcuts
+        self.master.bind('<Control-z>', lambda event: self.undo())
+        self.master.bind('<Control-y>', lambda event: self.redo())
 
     async def handle_generate_button_click(self):
         try:
@@ -449,6 +464,36 @@ class Page2PromptUI:
             self.style_suffix_entry.insert(0, suffix)
         else:
             messagebox.showerror("Error", "Please enter a style prefix first.")
+
+    def undo(self):
+        self.core.undo()
+        self._update_ui_from_core()
+
+    def redo(self):
+        self.core.redo()
+        self._update_ui_from_core()
+
+    def _update_ui_from_core(self):
+        # Update UI elements with the current state from the core
+        self.shot_text.delete("1.0", tk.END)
+        self.shot_text.insert(tk.END, self.core.shot_description)
+
+        self.notes_text.delete("1.0", tk.END)
+        self.notes_text.insert(tk.END, self.core.directors_notes)
+
+        self.script_text.delete("1.0", tk.END)
+        self.script_text.insert(tk.END, self.core.script)
+
+        self.stick_to_script_var.set(self.core.stick_to_script)
+
+        self.style_prefix_entry.delete(0, tk.END)
+        self.style_prefix_entry.insert(0, self.core.style_prefix)
+
+        self.style_suffix_entry.delete(0, tk.END)
+        self.style_suffix_entry.insert(0, self.core.style_suffix)
+
+        self.end_parameters_entry.delete(0, tk.END)
+        self.end_parameters_entry.insert(0, self.core.end_parameters)
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
