@@ -189,7 +189,7 @@ class PromptForgeCore:
         self.future = deque(maxlen=10)  # Store undone states for redo
         self.llm = ChatOpenAI(temperature=0.7)
 
-    async def generate_style_details(self, prefix: str) -> str:
+    def generate_style_details(self, prefix: str) -> str:
         style_chain = LLMChain(
             llm=self.llm,
             prompt=PromptTemplate(
@@ -197,7 +197,7 @@ class PromptForgeCore:
                 template="Given the style '{style}', generate three distinct and detailed visual descriptors that characterize this style. Focus on unique elements, color palettes, lighting, and overall atmosphere. Separate each descriptor with a semicolon:"
             )
         )
-        result = await style_chain.arun({"style": prefix})
+        result = style_chain.run({"style": prefix})
         return result.strip()
 
     def get_logs(self):
