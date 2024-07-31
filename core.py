@@ -180,13 +180,16 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
-        self.available_models = self.get_available_models()
+        self.available_models = []
+
+    async def initialize(self):
+        self.available_models = await self.get_available_models()
 
     @staticmethod
     async def get_available_models() -> List[str]:
         try:
             models = await client.models.list()
-            chat_models = [model.id for model in models if model.id.startswith("gpt")]
+            chat_models = [model.id for model in models.data if model.id.startswith("gpt")]
             if not chat_models:
                 raise ValueError("No GPT chat models found")
             return chat_models
@@ -316,6 +319,7 @@ class PromptForgeCore:
 # Example usage
 async def main():
     core = PromptForgeCore()
+    await core.initialize()
     
     # Manual prompt generation
     core.set_style("Noir detective")
