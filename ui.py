@@ -313,8 +313,7 @@ class PromptForgeUI:
                 "directors_notes": self.notes_text.get("1.0", tk.END).strip(),
                 "script": self.script_text.get("1.0", tk.END).strip(),
                 "stick_to_script": self.stick_to_script_var.get(),
-                "length": self.length_var.get(),
-                "model": self.model_var.get()
+                "length": self.length_var.get()
             }
             self.core.save_prompt(prompt, components)
             messagebox.showinfo("Saved", "Prompt saved successfully!")
