@@ -1,7 +1,7 @@
 # core.py
 
 import asyncio
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Any
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain_community.chat_models import ChatOpenAI as CommunityChatOpenAI
