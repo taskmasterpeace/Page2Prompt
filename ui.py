@@ -241,15 +241,9 @@ class PromptForgeUI:
         self.length_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
         self.length_combo.set("medium")
 
-        # AI Model Selection
-        ttk.Label(input_frame, text="🤖 AI Model:").grid(column=0, row=8, sticky=tk.W, pady=5)
-        self.model_var = tk.StringVar()
-        self.model_combo = ttk.Combobox(input_frame, textvariable=self.model_var, width=47)
-        self.model_combo.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
-
         # Generate Button
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.handle_generate_button_click)
-        self.generate_button.grid(column=1, row=9, sticky=tk.E, pady=10)
+        self.generate_button.grid(column=1, row=8, sticky=tk.E, pady=10)
 
         input_frame.columnconfigure(1, weight=1)
 
@@ -263,11 +257,7 @@ class PromptForgeUI:
             script = self.script_text.get("1.0", tk.END).strip()
             stick_to_script = self.stick_to_script_var.get()
             length = self.length_var.get()
-            model = self.model_var.get()
 
-            # Update core with input values
-            self.core.set_model(model)
-            
             # Generate prompt
             prompt = self.core.generate_prompt(
                 length=length,
@@ -349,15 +339,7 @@ class PromptForgeUI:
 
         self.all_prompts_window.lift()
 
-    def update_model_list(self):
-        available_models = self.core.available_models
-        self.model_combo['values'] = available_models
-        if "gpt-4-1106-preview" in available_models:
-            self.model_combo.set("gpt-4-1106-preview")
-        elif available_models:
-            self.model_combo.set(available_models[0])
-        else:
-            self.model_combo.set("No models available")
+    # Removed update_model_list method as it's no longer needed
 
     def save_api_key(self):
         api_key = self.api_key_entry.get()

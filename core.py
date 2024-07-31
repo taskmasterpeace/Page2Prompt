@@ -171,8 +171,8 @@ class OutputFormatter:
         return output
 
 class PromptForgeCore:
-    def __init__(self, model_name: str = "gpt-4-0125-preview"):
-        self.meta_chain = MetaChain(self, model_name)
+    def __init__(self):
+        self.meta_chain = MetaChain(self)
         self.style_handler = StyleHandler()
         self.shot_description = ""
         self.directors_notes = ""
@@ -180,25 +180,9 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
-        self.available_models = ["gpt-4-0125-preview", "gpt-3.5-turbo"]
-
-    @staticmethod
-    async def get_available_models() -> List[str]:
-        try:
-            models = await client.models.list()
-            chat_models = [model.id for model in models.data if model.id.startswith("gpt")]
-            if not chat_models:
-                raise ValueError("No GPT chat models found")
-            return chat_models
-        except Exception as e:
-            logging.error(f"Error fetching OpenAI models: {str(e)}")
-            return ["gpt-3.5-turbo", "gpt-4"]  # Fallback to current default chat models
 
     def set_style(self, style: str) -> None:
         self.style_handler.set_prefix(style)
-
-    def set_model(self, model_name: str) -> None:
-        self.meta_chain.set_model(model_name)
 
     def process_shot(self, shot_description: str) -> None:
         self.shot_description = shot_description
