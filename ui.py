@@ -388,20 +388,16 @@ class PromptForgeUI:
 
     def on_script_selection(self, event):
         try:
-            selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
-            self.script_text.tag_add(tk.SEL, tk.SEL_FIRST, tk.SEL_LAST)
-            self.script_text.mark_set(tk.INSERT, tk.SEL_LAST)
-            logging.info(f"Selected text: {selected_text}")
-        except tk.TclError:
-            # No selection
-            logging.info("No text selected")
-        except AttributeError:
-            logging.error("AttributeError in on_script_selection")
+            if self.script_text.tag_ranges(tk.SEL):
+                selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
+                logging.info(f"Selected text: {selected_text}")
+            else:
+                logging.info("No text selected")
         except Exception as e:
-            logging.error(f"Unexpected error in on_script_selection: {str(e)}")
+            logging.error(f"Error in on_script_selection: {str(e)}")
         finally:
-            # Ensure the UI remains responsive
-            self.master.update_idletasks()
+            # Schedule the UI update for the next idle moment
+            self.master.after_idle(self.master.update_idletasks)
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
