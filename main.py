@@ -1,7 +1,7 @@
 # main.py
 import logging
 import tkinter as tk
-from ui import PromptForgeUI
+from ui import Page2PromptUI
 from core import PromptForgeCore
 
 def main():
@@ -12,7 +12,7 @@ def main():
     core = PromptForgeCore()
     
     # Pass the core instance to PromptForgeUI
-    app = PromptForgeUI(root, core)
+    app = Page2PromptUI(root, core)
     
     root.mainloop()
 
