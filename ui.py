@@ -303,6 +303,9 @@ class PromptForgeUI:
         self.show_prompts_button = ttk.Button(button_frame, text="Show All Prompts", command=self.show_all_prompts)
         self.show_prompts_button.pack(side="left", padx=2)
 
+        self.show_logs_button = ttk.Button(button_frame, text="Show Logs", command=self.show_logs)
+        self.show_logs_button.pack(side="left", padx=2)
+
     def save_prompt(self):
         prompt = self.results_text.get("1.0", tk.END).strip()
         if prompt:
@@ -341,6 +344,26 @@ class PromptForgeUI:
 
         self.all_prompts_window.lift()
 
+    def show_logs(self):
+        log_window = tk.Toplevel(self.master)
+        log_window.title("Application Logs")
+        log_window.geometry("800x600")
+
+        log_text = scrolledtext.ScrolledText(log_window, wrap=tk.WORD)
+        log_text.pack(expand=True, fill="both", padx=10, pady=10)
+
+        # Read the log file and display its contents
+        try:
+            with open("promptforge.log", "r") as log_file:
+                log_content = log_file.read()
+                log_text.insert(tk.END, log_content)
+        except FileNotFoundError:
+            log_text.insert(tk.END, "Log file not found.")
+        except Exception as e:
+            log_text.insert(tk.END, f"Error reading log file: {str(e)}")
+
+        log_window.lift()
+
     # Removed update_model_list method as it's no longer needed
 
     def save_api_key(self):
@@ -368,11 +391,17 @@ class PromptForgeUI:
             selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
             self.script_text.tag_add(tk.SEL, tk.SEL_FIRST, tk.SEL_LAST)
             self.script_text.mark_set(tk.INSERT, tk.SEL_LAST)
-        except (tk.TclError, AttributeError):
-            # No selection or other error
-            pass
+            logging.info(f"Selected text: {selected_text}")
+        except tk.TclError:
+            # No selection
+            logging.info("No text selected")
+        except AttributeError:
+            logging.error("AttributeError in on_script_selection")
         except Exception as e:
-            logging.error(f"Error in on_script_selection: {str(e)}")
+            logging.error(f"Unexpected error in on_script_selection: {str(e)}")
+        finally:
+            # Ensure the UI remains responsive
+            self.master.update_idletasks()
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
