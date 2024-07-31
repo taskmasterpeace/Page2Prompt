@@ -14,7 +14,7 @@ from openai import AsyncOpenAI
 from prompt_log import PromptLogger
 from styles import StyleManager
 import random
-from prompt_log import PromptLogger
+from collections import deque
 
 
 # Ensure you set your OpenAI API key as an environment variable
