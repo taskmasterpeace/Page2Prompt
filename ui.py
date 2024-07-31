@@ -12,6 +12,31 @@ import random
 from styles import predefined_styles
 from tkinter import messagebox
 
+class ToolTip:
+    def __init__(self, widget, text):
+        self.widget = widget
+        self.text = text
+        self.tooltip = None
+        self.widget.bind("<Enter>", self.show_tooltip)
+        self.widget.bind("<Leave>", self.hide_tooltip)
+
+    def show_tooltip(self, event=None):
+        x, y, _, _ = self.widget.bbox("insert")
+        x += self.widget.winfo_rootx() + 25
+        y += self.widget.winfo_rooty() + 25
+
+        self.tooltip = tk.Toplevel(self.widget)
+        self.tooltip.wm_overrideredirect(True)
+        self.tooltip.wm_geometry(f"+{x}+{y}")
+
+        label = tk.Label(self.tooltip, text=self.text, background="#ffffe0", relief="solid", borderwidth=1)
+        label.pack()
+
+    def hide_tooltip(self, event=None):
+        if self.tooltip:
+            self.tooltip.destroy()
+            self.tooltip = None
+
 class SubjectFrame(ttk.Frame):
     def __init__(self, master, core):
         super().__init__(master)
@@ -222,18 +247,27 @@ class Page2PromptUI:
         self.style_combo['values'] = self.core.style_manager.get_style_names()
         self.style_combo.bind("<<ComboboxSelected>>", self.on_style_selected)
 
-        ttk.Button(style_frame, text="Generate Style", command=self.generate_random_style).grid(column=2, row=0, sticky=tk.W, padx=5)
-        ttk.Button(style_frame, text="Save Style", command=self.save_current_style).grid(column=3, row=0, sticky=tk.W, padx=5)
+        generate_style_btn = ttk.Button(style_frame, text="Generate Random Style", command=self.generate_random_style)
+        generate_style_btn.grid(column=2, row=0, sticky=tk.W, padx=5)
+        ToolTip(generate_style_btn, "Generate a random predefined style")
+
+        save_style_btn = ttk.Button(style_frame, text="Save Style", command=self.save_current_style)
+        save_style_btn.grid(column=3, row=0, sticky=tk.W, padx=5)
+        ToolTip(save_style_btn, "Save the current style settings")
 
         ttk.Label(style_frame, text="Prefix:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.style_prefix_entry = ttk.Entry(style_frame, width=50)
         self.style_prefix_entry.grid(column=1, row=1, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        ToolTip(self.style_prefix_entry, "Enter the style prefix")
 
         ttk.Label(style_frame, text="Suffix:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.style_suffix_entry = ttk.Entry(style_frame, width=50)
         self.style_suffix_entry.grid(column=1, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        ToolTip(self.style_suffix_entry, "Enter the style suffix")
 
-        ttk.Button(style_frame, text="Generate Style Details", command=self.generate_style_details).grid(column=1, row=3, sticky=tk.E, pady=5)
+        generate_details_btn = ttk.Button(style_frame, text="Generate Style Details", command=self.generate_style_details)
+        generate_details_btn.grid(column=1, row=3, sticky=tk.E, pady=5)
+        ToolTip(generate_details_btn, "Generate a suffix based on the entered prefix")
 
         # Camera Move
         ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=3, sticky=tk.W, pady=5)
@@ -289,21 +323,25 @@ class Page2PromptUI:
         try:
             # Get input values
             shot_description = self.shot_text.get("1.0", tk.END).strip()
-            style = self.style_entry.get()
+            style_prefix = self.style_prefix_entry.get()
+            style_suffix = self.style_suffix_entry.get()
             camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
             stick_to_script = self.stick_to_script_var.get()
+            end_parameters = self.end_parameters_entry.get()
             length = "medium"  # You can add a dropdown for this if you want to let users choose
 
             # Generate prompt
             prompt = await self.core.generate_prompt(
                 shot_description=shot_description,
-                style=style,
+                style_prefix=style_prefix,
+                style_suffix=style_suffix,
                 camera_move=camera_move,
                 directors_notes=directors_notes,
                 script=script,
                 stick_to_script=stick_to_script,
+                end_parameters=end_parameters,
                 length=length
             )
 
