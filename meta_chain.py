@@ -76,8 +76,6 @@ class MetaChain:
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
-        Style: {style}
-        
         Shot Description: {shot_description}
         
         Director's Notes: {directors_notes}
@@ -89,13 +87,13 @@ class MetaChain:
         Subjects:
         {subject_info}
         
-        Based on the above information, generate a {length} visual prompt that captures the essence of the scene, incorporating the style, script context, and any specific instructions. The prompt should be suitable for AI image generation and enhance the storytelling experience. Make sure to incorporate the subjects and their descriptions into the visual prompt.
+        Based on the above information, generate a {length} content prompt that captures the essence of the scene, incorporating the script context, and any specific instructions. The prompt should describe the content, actions, and setting without mentioning any specific visual styles or camera techniques. Make sure to incorporate the subjects and their descriptions into the content prompt.
         
-        Visual Prompt:
+        Content Prompt:
         """
 
         return PromptTemplate(
-            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length"],
+            input_variables=["shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length"],
             template=base_template
         )
 
