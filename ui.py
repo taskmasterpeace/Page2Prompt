@@ -403,7 +403,7 @@ class Page2PromptUI:
 
 def main():
     root = tk.Tk()
-    app = PromptForgeUI(root)
+    app = Page2PromptUI(root)
     root.mainloop()
 
 if __name__ == "__main__":
