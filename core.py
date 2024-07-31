@@ -185,23 +185,65 @@ class PromptForgeCore:
         self.style_prefix = ""
         self.style_suffix = ""
         self.end_parameters = ""
+        self.history = deque(maxlen=10)  # Store last 10 states
+        self.future = deque(maxlen=10)  # Store undone states for redo
 
     def get_logs(self):
         return self.prompt_logger.get_logs()
 
     def set_style(self, style: str) -> None:
+        self._save_state()
         self.style_handler.set_prefix(style)
 
     def process_shot(self, shot_description: str) -> None:
+        self._save_state()
         self.shot_description = shot_description
 
     def process_directors_notes(self, notes: str) -> None:
+        self._save_state()
         self.directors_notes = notes
 
     def process_script(self, highlighted_text: str, full_script: str, stick_to_script: bool) -> None:
+        self._save_state()
         self.highlighted_text = highlighted_text.strip() if highlighted_text else full_script
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
+
+    def _save_state(self):
+        state = {
+            'shot_description': self.shot_description,
+            'directors_notes': self.directors_notes,
+            'script': self.script,
+            'highlighted_text': self.highlighted_text,
+            'stick_to_script': self.stick_to_script,
+            'style_prefix': self.style_prefix,
+            'style_suffix': self.style_suffix,
+            'end_parameters': self.end_parameters
+        }
+        self.history.append(state)
+        self.future.clear()  # Clear redo stack when a new action is performed
+
+    def undo(self):
+        if len(self.history) > 1:  # Keep at least one state in history
+            self.future.appendleft(self.history.pop())
+            previous_state = self.history[-1]
+            self._restore_state(previous_state)
+
+    def redo(self):
+        if self.future:
+            next_state = self.future.popleft()
+            self._save_state()
+            self._restore_state(next_state)
+
+    def _restore_state(self, state):
+        self.shot_description = state['shot_description']
+        self.directors_notes = state['directors_notes']
+        self.script = state['script']
+        self.highlighted_text = state['highlighted_text']
+        self.stick_to_script = state['stick_to_script']
+        self.style_prefix = state['style_prefix']
+        self.style_suffix = state['style_suffix']
+        self.end_parameters = state['end_parameters']
 
     async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_move: str, 
                         directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
