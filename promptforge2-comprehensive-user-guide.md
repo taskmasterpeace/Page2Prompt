@@ -168,3 +168,133 @@ Functions:
 
 Remember to maintain the existing method signatures when modifying classes to ensure compatibility with the rest of the system.
 
+# Page 2 Prompt: Comprehensive User Guide
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Getting Started](#getting-started)
+3. [Main Interface](#main-interface)
+4. [Input Fields](#input-fields)
+5. [Subject Management](#subject-management)
+6. [Generating Prompts](#generating-prompts)
+7. [Output and Prompt Management](#output-and-prompt-management)
+8. [Automated Script Analysis](#automated-script-analysis)
+9. [Advanced Features](#advanced-features)
+10. [Troubleshooting](#troubleshooting)
+
+## 1. Introduction <a name="introduction"></a>
+
+Page 2 Prompt is a powerful tool designed to assist screenwriters, directors, and visual artists in transforming written scripts into detailed visual prompts. This application bridges the gap between the written word and visual conceptualization, making it an invaluable asset for pre-production and storyboarding processes.
+
+## 2. Getting Started <a name="getting-started"></a>
+
+### System Requirements
+- Windows 10 or later, macOS 10.14 or later, or a modern Linux distribution
+- Python 3.7 or later
+- 4GB RAM (8GB recommended)
+- 500MB free disk space
+
+### Installation
+1. Clone the repository or download the application files.
+2. Install required dependencies by running `pip install -r requirements.txt` in your terminal.
+3. Launch the application by running `python main.py`.
+
+### First-time Setup
+1. Upon first launch, you'll be prompted to enter your OpenAI API key.
+2. Click on "Save API Key" to store it securely.
+
+## 3. Main Interface <a name="main-interface"></a>
+
+The Page 2 Prompt interface is divided into several sections:
+- Left panel: Input fields for script details and prompt generation settings
+- Right panel (top): Generated prompt output area
+- Right panel (middle): Subject management
+- Right panel (bottom): Automated script analysis
+
+## 4. Input Fields <a name="input-fields"></a>
+
+### Shot Description
+Enter a brief description of the shot you want to visualize. Be as specific as possible about the action, setting, and mood.
+
+### Style
+Input the visual style you want to achieve. This could be a film genre, a specific director's style, or a particular visual aesthetic.
+
+### Camera Move
+Select the camera movement for the shot from the dropdown menu. Options include None, Pan, Tilt, Zoom, Dolly, Truck, and Pedestal.
+
+### Director's Notes
+Add any additional notes or specific instructions from the director that should be considered in the prompt generation.
+
+### Script
+Paste the relevant portion of your script here. You can highlight specific parts of the script to focus the prompt generation on those elements.
+
+### Stick to Script
+Check this box if you want the generated prompt to closely adhere to the script content.
+
+### Prompt Length
+Choose between short, medium, or long prompt outputs based on your needs.
+
+## 5. Subject Management <a name="subject-management"></a>
+
+The Subject Management section allows you to create and manage characters, locations, and objects that appear in your script.
+
+### Adding a Subject
+1. Enter the subject's name.
+2. Select a category (Main Character, Supporting Character, Location, or Object).
+3. Provide a brief description.
+4. Click "Add Subject".
+
+### Managing Subjects
+- Use the "Toggle Active" button to include or exclude a subject from prompt generation.
+- Click "Remove Subject" to delete a subject from the list.
+
+## 6. Generating Prompts <a name="generating-prompts"></a>
+
+1. Fill in all relevant input fields.
+2. Ensure desired subjects are set as active.
+3. Click the "🚀 Generate Prompt" button.
+4. The generated prompt will appear in the output area on the right.
+
+## 7. Output and Prompt Management <a name="output-and-prompt-management"></a>
+
+### Saving Prompts
+Click the "Save Prompt" button to store the generated prompt for future reference.
+
+### Copying Prompts
+Use the "Copy to Clipboard" button to easily copy the prompt for use in other applications.
+
+### Viewing All Prompts
+Click "Show All Prompts" to open a new window displaying all previously saved prompts.
+
+### Viewing Logs
+The "Show Logs" button opens a window displaying application logs, useful for troubleshooting.
+
+## 8. Automated Script Analysis <a name="automated-script-analysis"></a>
+
+This feature allows you to analyze entire scripts and generate prompts for each scene automatically.
+
+1. Click "Browse" to select your script file.
+2. Choose a director's style from the dropdown menu.
+3. Click "Analyze Script" to start the process.
+4. Results will be displayed in the text area below.
+
+## 9. Advanced Features <a name="advanced-features"></a>
+
+### Refining Prompts
+You can refine generated prompts by providing feedback. The application will use this feedback to create an improved version of the prompt.
+
+### Generating Variations
+Create multiple variations of a prompt to explore different visual possibilities for the same scene.
+
+## 10. Troubleshooting <a name="troubleshooting"></a>
+
+- If the application freezes, check the logs for any error messages.
+- Ensure your API key is correctly entered and saved.
+- For script analysis issues, make sure your script file is in a readable format (plain text recommended).
+- If prompts are not generating, check your internet connection and API key validity.
+
+For additional support, please refer to our online documentation or contact our support team.
+
+---
+
+This user guide provides a comprehensive overview of Page 2 Prompt's features and functionalities. As you become more familiar with the application, you'll discover how it can significantly enhance your visual storytelling process. Happy prompting!
