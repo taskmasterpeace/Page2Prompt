@@ -21,7 +21,6 @@ if "OPENAI_API_KEY" not in os.environ:
 
 client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
 prompt_logger = PromptLogger()
-prompt_logger = PromptLogger()
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
