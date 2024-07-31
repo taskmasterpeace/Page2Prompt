@@ -368,9 +368,11 @@ class PromptForgeUI:
             selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
             self.script_text.tag_add(tk.SEL, tk.SEL_FIRST, tk.SEL_LAST)
             self.script_text.mark_set(tk.INSERT, tk.SEL_LAST)
-        except tk.TclError:
-            # No selection
+        except (tk.TclError, AttributeError):
+            # No selection or other error
             pass
+        except Exception as e:
+            logging.error(f"Error in on_script_selection: {str(e)}")
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
