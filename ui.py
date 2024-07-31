@@ -350,12 +350,12 @@ class PromptForgeUI:
         self.all_prompts_window.lift()
 
     def update_model_list(self):
-        self.core.available_models = self.core.get_available_models()
-        self.model_combo['values'] = self.core.available_models
-        if "gpt-4-1106-preview" in self.core.available_models:
+        available_models = self.core.available_models
+        self.model_combo['values'] = available_models
+        if "gpt-4-1106-preview" in available_models:
             self.model_combo.set("gpt-4-1106-preview")
-        elif self.core.available_models:
-            self.model_combo.set(self.core.available_models[0])
+        elif available_models:
+            self.model_combo.set(available_models[0])
         else:
             self.model_combo.set("No models available")
 
