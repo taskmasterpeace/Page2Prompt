@@ -172,7 +172,7 @@ class OutputFormatter:
 class PromptForgeCore:
     def __init__(self):
         self.meta_chain = MetaChain(self)
-        self.style_handler = StyleHandler()
+        self.style_manager = StyleManager()
         self.shot_description = ""
         self.directors_notes = ""
         self.script = ""
@@ -180,6 +180,9 @@ class PromptForgeCore:
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
         self.prompt_logger = PromptLogger()
+        self.style_prefix = ""
+        self.style_suffix = ""
+        self.end_parameters = ""
 
     def get_logs(self):
         return self.prompt_logger.get_logs()
