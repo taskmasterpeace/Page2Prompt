@@ -218,22 +218,26 @@ class PromptForgeCore:
             'stick_to_script': self.stick_to_script,
             'style_prefix': self.style_prefix,
             'style_suffix': self.style_suffix,
-            'end_parameters': self.end_parameters
+            'end_parameters': self.end_parameters,
+            'subjects': self.subjects.copy()  # Add subjects to the state
         }
         self.history.append(state)
         self.future.clear()  # Clear redo stack when a new action is performed
 
     def undo(self):
         if len(self.history) > 1:  # Keep at least one state in history
-            self.future.appendleft(self.history.pop())
+            current_state = self.history.pop()
+            self.future.appendleft(current_state)
             previous_state = self.history[-1]
             self._restore_state(previous_state)
+        return self._get_current_state()
 
     def redo(self):
         if self.future:
             next_state = self.future.popleft()
-            self._save_state()
+            self.history.append(next_state)
             self._restore_state(next_state)
+        return self._get_current_state()
 
     def _restore_state(self, state):
         self.shot_description = state['shot_description']
@@ -244,6 +248,20 @@ class PromptForgeCore:
         self.style_prefix = state['style_prefix']
         self.style_suffix = state['style_suffix']
         self.end_parameters = state['end_parameters']
+        self.subjects = state['subjects'].copy()  # Restore subjects
+
+    def _get_current_state(self):
+        return {
+            'shot_description': self.shot_description,
+            'directors_notes': self.directors_notes,
+            'script': self.script,
+            'highlighted_text': self.highlighted_text,
+            'stick_to_script': self.stick_to_script,
+            'style_prefix': self.style_prefix,
+            'style_suffix': self.style_suffix,
+            'end_parameters': self.end_parameters,
+            'subjects': self.subjects
+        }
 
     async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_move: str, 
                         directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:

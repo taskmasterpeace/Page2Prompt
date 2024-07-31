@@ -18,6 +18,12 @@ class SubjectFrame(ttk.Frame):
         self.core = core
         self.setup_ui()
 
+    def update_subjects(self, subjects):
+        self.subjects_listbox.delete(0, tk.END)
+        for subject in subjects:
+            status = 'Active' if subject['active'] else 'Inactive'
+            self.subjects_listbox.insert(tk.END, f"{subject['name']} ({subject['category']}) ({status})")
+
     def setup_ui(self):
         ttk.Label(self, text="Subject Name:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
         self.name_entry = ttk.Entry(self)
@@ -466,34 +472,37 @@ class Page2PromptUI:
             messagebox.showerror("Error", "Please enter a style prefix first.")
 
     def undo(self):
-        self.core.undo()
-        self._update_ui_from_core()
+        current_state = self.core.undo()
+        self._update_ui_from_state(current_state)
 
     def redo(self):
-        self.core.redo()
-        self._update_ui_from_core()
+        current_state = self.core.redo()
+        self._update_ui_from_state(current_state)
 
-    def _update_ui_from_core(self):
-        # Update UI elements with the current state from the core
+    def _update_ui_from_state(self, state):
+        # Update UI elements with the current state
         self.shot_text.delete("1.0", tk.END)
-        self.shot_text.insert(tk.END, self.core.shot_description)
+        self.shot_text.insert(tk.END, state['shot_description'])
 
         self.notes_text.delete("1.0", tk.END)
-        self.notes_text.insert(tk.END, self.core.directors_notes)
+        self.notes_text.insert(tk.END, state['directors_notes'])
 
         self.script_text.delete("1.0", tk.END)
-        self.script_text.insert(tk.END, self.core.script)
+        self.script_text.insert(tk.END, state['script'])
 
-        self.stick_to_script_var.set(self.core.stick_to_script)
+        self.stick_to_script_var.set(state['stick_to_script'])
 
         self.style_prefix_entry.delete(0, tk.END)
-        self.style_prefix_entry.insert(0, self.core.style_prefix)
+        self.style_prefix_entry.insert(0, state['style_prefix'])
 
         self.style_suffix_entry.delete(0, tk.END)
-        self.style_suffix_entry.insert(0, self.core.style_suffix)
+        self.style_suffix_entry.insert(0, state['style_suffix'])
 
         self.end_parameters_entry.delete(0, tk.END)
-        self.end_parameters_entry.insert(0, self.core.end_parameters)
+        self.end_parameters_entry.insert(0, state['end_parameters'])
+
+        # Update subjects
+        self.subject_frame.update_subjects(state['subjects'])
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
