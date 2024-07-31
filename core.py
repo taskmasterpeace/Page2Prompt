@@ -195,8 +195,8 @@ class PromptForgeCore:
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
 
-    async def generate_prompt(self, length: str, shot_description: str, style: str, camera_move: str, 
-                              directors_notes: str, script: str, stick_to_script: bool) -> str:
+    def generate_prompt(self, length: str, shot_description: str, style: str, camera_move: str, 
+                        directors_notes: str, script: str, stick_to_script: bool) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
@@ -225,7 +225,7 @@ class PromptForgeCore:
                 {"role": "user", "content": f"Based on the following information, generate short, medium, and long visual prompts:\n\n{base_prompt}\n\nProvide the prompts in the following format:\nShort Prompt: [Your short prompt here]\nMedium Prompt: [Your medium prompt here]\nLong Prompt: [Your long prompt here]"}
             ]
             
-            response = await client.chat.completions.create(
+            response = client.chat.completions.create(
                 model=self.meta_chain.model_name,
                 messages=messages,
                 max_tokens=1000,
@@ -236,19 +236,6 @@ class PromptForgeCore:
             
             prompt = response.choices[0].message.content.strip()
             prompt = prompt.encode('utf-8', errors='ignore').decode('utf-8')
-            
-            # Log the inputs and generated prompt
-            inputs = {
-                "length": length,
-                "shot_description": shot_description,
-                "style": style,
-                "camera_move": camera_move,
-                "directors_notes": directors_notes,
-                "script": script,
-                "stick_to_script": stick_to_script,
-                "active_subjects": active_subjects
-            }
-            prompt_logger.log_prompt(inputs, prompt)
             
             # Log the inputs and generated prompt
             inputs = {
