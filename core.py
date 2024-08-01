@@ -24,7 +24,6 @@ from config import get_api_key
 api_key = get_api_key()
 
 client = AsyncOpenAI(api_key=api_key)
-prompt_logger = PromptLogger()
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
