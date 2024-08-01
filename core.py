@@ -17,11 +17,12 @@ import random
 from collections import deque
 
 
-# Ensure you set your OpenAI API key as an environment variable
-if "OPENAI_API_KEY" not in os.environ:
-    raise ValueError("Please set the OPENAI_API_KEY environment variable")
+from config import get_api_key
 
-client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
+# Get the API key from the config
+api_key = get_api_key()
+
+client = AsyncOpenAI(api_key=api_key)
 prompt_logger = PromptLogger()
 
 class Subject:
