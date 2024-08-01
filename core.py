@@ -304,24 +304,24 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, shot_description: str, directors_notes: str, style: str, camera_shot: str, camera_move: str, script: str, highlighted_text: str, stick_to_script: bool, end_parameters: str, length: str = "medium", style_prefix: str = "", style_suffix: str = "") -> Tuple[str, str, str]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, camera_shot: str, camera_move: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium", style_prefix: str = "", style_suffix: str = "") -> Tuple[str, str, str]:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
             # Update instance variables
+            self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
+            self.highlighted_text = highlighted_text
             self.shot_description = shot_description
             self.directors_notes = directors_notes
-            if style_prefix or style_suffix:
-                self.style_prefix = style_prefix
-                self.style_suffix = style_suffix
-            else:
-                self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
             self.camera_shot = camera_shot
             self.camera_move = camera_move
             self.script = script
-            self.highlighted_text = highlighted_text
             self.stick_to_script = stick_to_script
             self.end_parameters = end_parameters
+            
+            if style_prefix or style_suffix:
+                self.style_prefix = style_prefix
+                self.style_suffix = style_suffix
 
             # Prepare the base prompt with all information
             base_prompt = f"""
