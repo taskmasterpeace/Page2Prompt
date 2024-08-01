@@ -1,10 +1,11 @@
 # main.py
+import asyncio
 import logging
 import tkinter as tk
 from ui import Page2PromptUI
 from core import PromptForgeCore
 
-def main():
+async def main():
     root = tk.Tk()
     root.title("PromptForge")
     
@@ -14,13 +15,10 @@ def main():
     # Pass the core instance to PromptForgeUI
     app = Page2PromptUI(root, core)
     
-    root.mainloop()
+    while True:
+        root.update()
+        await asyncio.sleep(0.1)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    main()
-import asyncio
-from core import main
-
-if __name__ == "__main__":
     asyncio.run(main())
