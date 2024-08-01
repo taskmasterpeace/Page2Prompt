@@ -525,9 +525,13 @@ class Page2PromptUI:
             self.style_suffix_entry.insert(0, style_data["suffix"])
 
     def generate_random_style(self):
-        random_style = random.choice(list(predefined_styles.keys()))
-        self.style_combo.set(random_style)
-        self.on_style_selected(None)
+        prefix = self.style_prefix_entry.get().strip()
+        if prefix:
+            suffix = self.core.generate_style_details(prefix)
+            self.style_suffix_entry.delete(0, tk.END)
+            self.style_suffix_entry.insert(0, suffix)
+        else:
+            messagebox.showerror("Error", "Please enter a style prefix first.")
 
     def save_current_style(self):
         style_name = self.style_combo.get()
