@@ -187,6 +187,7 @@ class Page2PromptUI:
     def __init__(self, master, core):
         self.master = master
         self.core = core
+        self.loop = asyncio.get_event_loop()
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
@@ -371,7 +372,7 @@ class Page2PromptUI:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
     def generate_button_click(self):
-        asyncio.run(self.handle_generate_button_click())
+        asyncio.create_task(self.handle_generate_button_click())
 
     def create_output_area(self, parent):
         output_frame = ttk.LabelFrame(parent, text="Generated Prompt", padding="10")
