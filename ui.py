@@ -340,24 +340,37 @@ class Page2PromptUI:
         try:
             # Get input values
             shot_description = self.shot_text.get("1.0", tk.END).strip()
-            style_prefix = self.style_prefix_entry.get()
-            style_suffix = self.style_suffix_entry.get()
+            style_prefix = self.style_prefix_entry.get().strip()
+            style_suffix = self.style_suffix_entry.get().strip()
             camera_shot = self.shot_var.get()
             camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             script = self.script_text.get("1.0", tk.END).strip()
+            highlighted_text = self.script_text.get("sel.first", "sel.last") if self.script_text.tag_ranges("sel") else script
             stick_to_script = self.stick_to_script_var.get()
             end_parameters = self.end_parameters_entry.get()
             length = "medium"  # You can add a dropdown for this if you want to let users choose
 
+            # Error checking
+            if not style_prefix:
+                raise ValueError("Style prefix is required.")
+            if not style_suffix:
+                raise ValueError("Style suffix is required.")
+            if not shot_description:
+                raise ValueError("Shot description is required.")
+            if not script:
+                raise ValueError("Script is required.")
+
+            style = f"{style_prefix}: {style_suffix}"
+
             # Generate prompt
             prompt = await self.core.generate_prompt(
+                style=style,
+                highlighted_text=highlighted_text,
                 shot_description=shot_description,
-                style_prefix=style_prefix,
-                style_suffix=style_suffix,
+                directors_notes=directors_notes,
                 camera_shot=camera_shot,
                 camera_move=camera_move,
-                directors_notes=directors_notes,
                 script=script,
                 stick_to_script=stick_to_script,
                 end_parameters=end_parameters,
@@ -368,8 +381,14 @@ class Page2PromptUI:
             self.results_text.delete("1.0", tk.END)
             self.results_text.insert(tk.END, prompt)
 
+        except ValueError as ve:
+            messagebox.showerror("Input Error", str(ve))
+        except AttributeError as ae:
+            messagebox.showerror("Method Error", f"The generate_prompt method seems to be missing or incorrect: {str(ae)}")
+        except TypeError as te:
+            messagebox.showerror("Argument Error", f"Incorrect arguments passed to generate_prompt: {str(te)}")
         except Exception as e:
-            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+            messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {str(e)}\n\nPlease report this to the developer.")
 
     def generate_button_click(self):
         asyncio.create_task(self.handle_generate_button_click())
