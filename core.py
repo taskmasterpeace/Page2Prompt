@@ -11,7 +11,8 @@ from langchain_core.prompts import PromptTemplate
 import json
 import os
 from openai import AsyncOpenAI
-from prompt_log import PromptLogger
+import json
+from datetime import datetime
 from styles import StyleManager
 import random
 from collections import deque
@@ -172,6 +173,20 @@ class OutputFormatter:
             output += f"{scene['description']},{prompt}\n"
         return output
 
+class PromptLogger:
+    def __init__(self, log_file="prompt_log.json"):
+        self.log_file = log_file
+
+    def log_prompt(self, inputs: Dict[str, Any], generated_prompt: str):
+        log_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "inputs": inputs,
+            "generated_prompt": generated_prompt
+        }
+        with open(self.log_file, "a") as f:
+            json.dump(log_entry, f)
+            f.write("\n")
+
 class PromptForgeCore:
     def __init__(self):
         self.meta_chain = MetaChain(self)
@@ -182,7 +197,7 @@ class PromptForgeCore:
         self.highlighted_text = ""
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
-        self.prompt_logger = PromptLogger()
+        self.prompt_logger = PromptLogger("prompt_log.json")
         self.style_prefix = ""
         self.style_suffix = ""
         self.end_parameters = ""
@@ -338,10 +353,11 @@ class PromptForgeCore:
                 "directors_notes": directors_notes,
                 "script": script,
                 "stick_to_script": stick_to_script,
-                "active_subjects": active_subjects,
-                "end_parameters": end_parameters
+                "active_subjects": [s['name'] for s in active_subjects],  # Only log subject names
+                "end_parameters": end_parameters,
+                "length": length
             }
-            prompt_logger.log_prompt(inputs, full_prompt)
+            self.prompt_logger.log_prompt(inputs, full_prompt)
             
             return full_prompt
         except Exception as e:
