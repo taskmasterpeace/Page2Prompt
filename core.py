@@ -343,12 +343,12 @@ Additional Context:
             prompt_chain = LLMChain(
                 llm=self.llm,
                 prompt=PromptTemplate(
-                    input_variables=["messages"],
-                    template="{messages[1]['content']}"
+                    input_variables=["content"],
+                    template="{content}"
                 )
             )
             
-            content_prompt = await prompt_chain.arun({"messages": messages})
+            content_prompt = await prompt_chain.arun({"content": base_prompt})
             content_prompt = content_prompt.strip().encode('utf-8', errors='ignore').decode('utf-8')
             
             # Combine all prompt components
