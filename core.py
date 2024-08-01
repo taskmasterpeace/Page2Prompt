@@ -276,15 +276,13 @@ class PromptForgeCore:
         }
 
     async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_shot: str, camera_move: str, 
-                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
+                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
-            # Prepare the base prompt with style information
+            # Prepare the base prompt with all information
             base_prompt = f"""
 {style_prefix}
-
-**Content Prompt:**
 
 **Shot Description:** {shot_description}
 
@@ -300,10 +298,10 @@ class PromptForgeCore:
             if stick_to_script:
                 base_prompt += f"\n**Script:** {script}"
             
-            # Generate content prompts of different lengths
+            # Generate a comprehensive content prompt
             messages = [
-                {"role": "system", "content": "You are a creative AI assistant that generates detailed content prompts for image generation. Focus on describing the scene, actions, and subjects without mentioning any visual styles, camera techniques, or cinematography terms."},
-                {"role": "user", "content": f"Based on the following information, generate a {length} content prompt:\n\n{base_prompt}"}
+                {"role": "system", "content": "You are a creative AI assistant that generates detailed content prompts for image generation. Provide a comprehensive description of the scene, focusing on visual elements, atmosphere, and subject details. Do not mention camera techniques or cinematography terms."},
+                {"role": "user", "content": f"Based on the following information, generate a detailed and comprehensive content prompt:\n\n{base_prompt}"}
             ]
             
             response = await client.chat.completions.create(
@@ -319,7 +317,7 @@ class PromptForgeCore:
             content_prompt = content_prompt.encode('utf-8', errors='ignore').decode('utf-8')
             
             # Combine all prompt components
-            full_prompt = f"{style_prefix}\n\n{content_prompt}\n\nCamera Shot: {camera_shot}\nCamera Move: {camera_move}\n\n{style_suffix}"
+            full_prompt = f"{content_prompt}\n\n{style_suffix}"
             
             if end_parameters:
                 full_prompt += f"\n\n{end_parameters}"
@@ -330,7 +328,6 @@ class PromptForgeCore:
             
             # Log the inputs and generated prompt
             inputs = {
-                "length": length,
                 "shot_description": shot_description,
                 "style_prefix": style_prefix,
                 "style_suffix": style_suffix,
