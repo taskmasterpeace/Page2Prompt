@@ -399,6 +399,11 @@ class PromptForgeCore:
         return await self.meta_chain.generate_prompt_spreadsheet(script_content, director_style)
 
 # Example usage
+async def initialize(self):
+    # Initialize any necessary components
+    self.style_handler = StyleHandler()
+    # Add any other initialization steps here
+
 async def main():
     core = PromptForgeCore()
     await core.initialize()
@@ -406,7 +411,7 @@ async def main():
     # Manual prompt generation
     core.set_style("Noir detective")
     core.add_subject("John", "Main Character", "A hardboiled detective with a troubled past")
-    prompt = await core.generate_prompt("A dimly lit office, smoke curling from an ashtray", "Classic Noir", core.style_suffix, "Slow pan", "Emphasize the shadows", "", "", False, core.end_parameters)
+    prompt = await core.generate_prompt("A dimly lit office, smoke curling from an ashtray", "Classic Noir", core.style_handler.get_full_style(), "Slow pan", "Emphasize the shadows", "", "", False, core.end_parameters)
     print("Single Prompt:", prompt)
     
     # Automated script processing
@@ -426,5 +431,4 @@ async def main():
     print("\nAutomated Script Processing Output:")
     print(output)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# Remove the if __name__ == "__main__" block from here
