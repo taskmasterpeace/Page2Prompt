@@ -47,9 +47,10 @@ class MetaChain:
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
 
-    def generate_prompt(self, length: str = "medium", active_subjects: list = None, 
-                        style: str = "", shot_description: str = "", directors_notes: str = "",
-                        highlighted_text: str = "", full_script: str = "") -> str:
+    async def generate_prompt(self, length: str = "medium", active_subjects: list = None, 
+                              style: str = "", shot_description: str = "", directors_notes: str = "",
+                              highlighted_text: str = "", full_script: str = "", camera_shot: str = "",
+                              camera_move: str = "", end_parameters: str = "") -> str:
         try:
             # Prepare inputs
             subject_info = self._format_subject_info(active_subjects)
@@ -59,14 +60,17 @@ class MetaChain:
 
             # Create and run chain
             chain = LLMChain(llm=self.llm, prompt=template)
-            result = chain.run({
+            result = await chain.arun({
                 "style": style,
                 "shot_description": shot_description,
                 "directors_notes": directors_notes,
                 "highlighted_text": highlighted_text,
                 "full_script": full_script,
                 "subject_info": subject_info,
-                "length": length
+                "length": length,
+                "camera_shot": camera_shot,
+                "camera_move": camera_move,
+                "end_parameters": end_parameters
             })
 
             return result
@@ -76,6 +80,8 @@ class MetaChain:
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
+        Style: {style}
+        
         Shot Description: {shot_description}
         
         Director's Notes: {directors_notes}
@@ -87,13 +93,19 @@ class MetaChain:
         Subjects:
         {subject_info}
         
-        Based on the above information, generate a {length} content prompt that captures the essence of the scene, incorporating the script context, and any specific instructions. The prompt should describe the content, actions, and setting without mentioning any specific visual styles or camera techniques. Make sure to incorporate the subjects and their descriptions into the content prompt.
+        Camera Shot: {camera_shot}
+        
+        Camera Move: {camera_move}
+        
+        End Parameters: {end_parameters}
+        
+        Based on the above information, generate a {length} content prompt that captures the essence of the scene, incorporating the script context, style, camera techniques, and any specific instructions. The prompt should describe the content, actions, and setting, integrating the specified style and camera techniques. Make sure to incorporate the subjects and their descriptions into the content prompt.
         
         Content Prompt:
         """
 
         return PromptTemplate(
-            input_variables=["shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length"],
+            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length", "camera_shot", "camera_move", "end_parameters"],
             template=base_template
         )
 
