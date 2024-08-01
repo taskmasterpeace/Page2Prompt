@@ -277,7 +277,7 @@ class PromptForgeCore:
         }
 
     async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_shot: str, camera_move: str, 
-                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> str:
+                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
