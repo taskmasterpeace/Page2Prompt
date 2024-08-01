@@ -207,6 +207,8 @@ class PromptForgeCore:
         self.style_prefix = ""
         self.style_suffix = ""
         self.end_parameters = ""
+        self.camera_shot = ""
+        self.camera_move = ""
         self.history = deque(maxlen=10)  # Store last 10 states
         self.future = deque(maxlen=10)  # Store undone states for redo
         
@@ -299,47 +301,36 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, shot_description: str, style_prefix: str, style_suffix: str, camera_shot: str, camera_move: str, 
-                        directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
+    async def generate_prompt(self, length: str = "medium") -> Tuple[str, str, str]:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
             # Prepare the base prompt with all information
             base_prompt = f"""
-Create a detailed, vivid description for an AI image generator based on the following information:
+Create three outputs based on the following information:
 
-Style: {style_prefix}
+1. Shot Description:
+[{self.style_prefix}] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects], [{self.style_suffix}] [{self.end_parameters}]
 
-Shot Description: {shot_description}
+2. Director's Notes:
+{self.directors_notes}
 
-Director's Notes: {directors_notes}
+3. Scene:
+{"Full Script:" if self.stick_to_script else "Highlighted Portion:"}
+{self.script if self.stick_to_script else self.highlighted_text}
 
-Active Subjects:
-{self._format_active_subjects(active_subjects)}
+Additional Information:
+Shot Description: {self.shot_description}
+Camera Shot: {self.camera_shot}
+Camera Move: {self.camera_move}
+Active Subjects: {self._format_active_subjects(active_subjects)}
 
-Camera Shot: {camera_shot}
-Camera Move: {camera_move}
+Desired Output Length: {length}
 
-Desired Prompt Length: {length}
-
-Additional Context:
-- Focus on creating a visually rich and atmospheric scene.
-- Describe the lighting, colors, and textures in detail.
-- Emphasize the mood and emotion of the scene.
-- Include specific details about the characters' appearances and expressions.
-- Describe the environment and any important objects in the scene.
+Generate three distinct outputs as described above, focusing on visual elements and capturing the essence of the scene.
 """
             
-            if stick_to_script:
-                base_prompt += f"\nRelevant Script Excerpt: {script}\n- Ensure the description aligns closely with this script excerpt."
-            
-            # Generate a comprehensive content prompt
-            messages = [
-                {"role": "system", "content": "You are a highly skilled cinematographer and visual artist. Your task is to create detailed, evocative descriptions for AI image generation, focusing on visual elements, atmosphere, and capturing the essence of the scene."},
-                {"role": "user", "content": base_prompt}
-            ]
-            
-            # Use LangChain's LLMChain
+            # Generate outputs using LangChain's LLMChain
             prompt_chain = LLMChain(
                 llm=self.llm,
                 prompt=PromptTemplate(
@@ -348,61 +339,35 @@ Additional Context:
                 )
             )
             
-            content_prompt = await prompt_chain.arun({"content": base_prompt})
-            content_prompt = content_prompt.strip().encode('utf-8', errors='ignore').decode('utf-8')
+            outputs = await prompt_chain.arun({"content": base_prompt})
+            outputs = outputs.strip().encode('utf-8', errors='ignore').decode('utf-8')
             
-            # Combine all prompt components
-            full_prompt = f"{content_prompt}\n\n{style_suffix}"
+            # Split the outputs into three parts
+            parts = outputs.split("\n\n", 2)
+            shot_description, directors_notes, scene = parts if len(parts) == 3 else (outputs, "", "")
             
-            if end_parameters:
-                full_prompt += f"\n\n{end_parameters}"
-            
-            # Generate FileList of needed elements
-            file_list = await self._generate_file_list(active_subjects, shot_description, script)
-            full_prompt += f"\n\nFileList of needed elements:\n{file_list}"
-            
-            # Log the inputs and generated prompt
+            # Log the inputs and generated outputs
             inputs = {
-                "shot_description": shot_description,
-                "style_prefix": style_prefix,
-                "style_suffix": style_suffix,
-                "camera_shot": camera_shot,
-                "camera_move": camera_move,
-                "directors_notes": directors_notes,
-                "script": script,
-                "stick_to_script": stick_to_script,
-                "active_subjects": [s['name'] for s in active_subjects],  # Only log subject names
-                "end_parameters": end_parameters,
+                "shot_description": self.shot_description,
+                "style_prefix": self.style_prefix,
+                "style_suffix": self.style_suffix,
+                "camera_shot": self.camera_shot,
+                "camera_move": self.camera_move,
+                "directors_notes": self.directors_notes,
+                "script": self.script,
+                "stick_to_script": self.stick_to_script,
+                "active_subjects": [s['name'] for s in active_subjects],
+                "end_parameters": self.end_parameters,
                 "length": length
             }
-            self.prompt_logger.log_prompt(inputs, full_prompt)
+            self.prompt_logger.log_prompt(inputs, outputs)
             
-            return full_prompt
+            return shot_description, directors_notes, scene
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
 
-    async def _generate_file_list(self, active_subjects, shot_description, script):
-        # Combine all text to analyze
-        all_text = f"{shot_description}\n{script}\n" + "\n".join([f"{s['name']}: {s['description']}" for s in active_subjects])
-        
-        # Use GPT to generate the file list
-        messages = [
-            {"role": "system", "content": "You are an AI assistant that identifies key elements in a scene description and generates a list of image files that would be needed to create the scene."},
-            {"role": "user", "content": f"Based on the following scene description, generate a list of image files that would be needed to create this scene. Focus on characters, objects, and settings. Format the list as 'element.png' for each item:\n\n{all_text}"}
-        ]
-        
-        response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            max_tokens=200,
-            n=1,
-            stop=None,
-            temperature=0.5,
-        )
-        
-        file_list = response.choices[0].message.content.strip()
-        return file_list
+    # Remove the _generate_file_list method as it's no longer needed
 
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
         self.meta_chain.prompt_manager.save_prompt(prompt, components)
