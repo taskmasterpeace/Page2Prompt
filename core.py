@@ -324,18 +324,18 @@ class PromptForgeCore:
 Create three outputs based on the following information:
 
 1. Shot Description:
-[{self.style_prefix}] {shot_description} [{self.style_suffix}] [{end_parameters}]
+[{self.style_prefix}] {self.shot_description} [{self.style_suffix}] [{self.end_parameters}]
 
 2. Director's Notes:
-{directors_notes}
+{self.directors_notes}
 
 3. Scene:
-{"Full Script:" if stick_to_script else "Highlighted Portion:"}
-{script if stick_to_script else highlighted_text}
+{"Full Script:" if self.stick_to_script else "Highlighted Portion:"}
+{self.script if self.stick_to_script else self.highlighted_text}
 
 Additional Information:
-Camera Shot: {camera_shot}
-Camera Move: {camera_move}
+Camera Shot: {self.camera_shot}
+Camera Move: {self.camera_move}
 Active Subjects: {self._format_active_subjects(active_subjects)}
 
 Desired Output Length: {length}
