@@ -294,6 +294,7 @@ class PromptForgeCore:
 
 **Camera Shot:** {camera_shot}
 **Camera Move:** {camera_move}
+**Prompt Length:** {length}
 """
             
             if stick_to_script:
