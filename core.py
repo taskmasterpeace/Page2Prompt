@@ -18,12 +18,16 @@ import random
 from collections import deque
 
 
-from config import get_api_key
+from config import get_openai_api_key, get_langsmith_api_key
 
-# Get the API key from the config
-api_key = get_api_key()
+# Get the API keys from the config
+openai_api_key = get_openai_api_key()
+langsmith_api_key = get_langsmith_api_key()
 
-client = AsyncOpenAI(api_key=api_key)
+client = AsyncOpenAI(api_key=openai_api_key)
+
+# Set up LangSmith (you'll need to import and use it where needed)
+os.environ["LANGCHAIN_API_KEY"] = langsmith_api_key
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]

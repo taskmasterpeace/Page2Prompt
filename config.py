@@ -4,17 +4,24 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Get the API key from the environment variable
-API_KEY = os.getenv("OPENAI_API_KEY")
+def get_api_key(key_name, prompt_message):
+    api_key = os.getenv(key_name)
+    if not api_key:
+        api_key = input(prompt_message)
+        with open(".env", "a") as env_file:
+            env_file.write(f"\n{key_name}={api_key}")
+    return api_key
 
-# If the API key is not set, prompt the user to enter it
-if not API_KEY:
-    API_KEY = input("Please enter your OpenAI API key: ")
-    
-    # Save the API key to a .env file
-    with open(".env", "w") as env_file:
-        env_file.write(f"OPENAI_API_KEY={API_KEY}")
+# Get the OpenAI API key
+OPENAI_API_KEY = get_api_key("OPENAI_API_KEY", "Please enter your OpenAI API key: ")
 
-# Function to get the API key
-def get_api_key():
-    return API_KEY
+# Get the LangSmith API key
+LANGSMITH_API_KEY = get_api_key("LANGSMITH_API_KEY", "Please enter your LangSmith API key: ")
+
+# Function to get the OpenAI API key
+def get_openai_api_key():
+    return OPENAI_API_KEY
+
+# Function to get the LangSmith API key
+def get_langsmith_api_key():
+    return LANGSMITH_API_KEY
