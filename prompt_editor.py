@@ -3,13 +3,15 @@ from tkinter import ttk, scrolledtext, messagebox, filedialog
 import re
 import json
 import os
+from core import PromptForgeCore
 
 class PromptEditor:
     def __init__(self, master):
         self.master = master
-        self.master.title("Prompt Editor")
-        self.master.geometry("1000x700")
+        self.master.title("Enhanced Prompt Editor")
+        self.master.geometry("1200x800")
 
+        self.core = PromptForgeCore()
         self.prompts = {}
         self.current_file = ""
 
@@ -21,18 +23,20 @@ class PromptEditor:
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 10))
-
-        self.prompt_listbox = tk.Listbox(left_frame, width=40)
-        self.prompt_listbox.pack(fill=tk.Y, expand=True)
-        self.prompt_listbox.bind('<<ListboxSelect>>', self.on_prompt_select)
+        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
 
         right_frame = ttk.Frame(main_frame)
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        self.prompt_text = scrolledtext.ScrolledText(right_frame, wrap=tk.WORD)
-        self.prompt_text.pack(fill=tk.BOTH, expand=True)
+        # Left frame contents
+        self.prompt_listbox = tk.Listbox(left_frame, width=40)
+        self.prompt_listbox.pack(fill=tk.BOTH, expand=True)
+        self.prompt_listbox.bind('<<ListboxSelect>>', self.on_prompt_select)
 
+        # Right frame contents
+        self.setup_editor_area(right_frame)
+
+        # Bottom frame for buttons
         button_frame = ttk.Frame(self.master)
         button_frame.pack(fill=tk.X, padx=10, pady=5)
 
@@ -40,6 +44,33 @@ class PromptEditor:
         ttk.Button(button_frame, text="Reload Prompts", command=self.load_prompts_from_files).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Save to File", command=self.save_to_file).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Load from File", command=self.load_from_file).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Test Prompt", command=self.test_prompt).pack(side=tk.LEFT, padx=5)
+
+    def setup_editor_area(self, parent):
+        editor_frame = ttk.Frame(parent)
+        editor_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Prompt editing area
+        self.prompt_text = scrolledtext.ScrolledText(editor_frame, wrap=tk.WORD, height=20)
+        self.prompt_text.pack(fill=tk.BOTH, expand=True)
+
+        # Input variables area
+        input_frame = ttk.LabelFrame(editor_frame, text="Input Variables")
+        input_frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
+
+        self.input_vars = {}
+        for var in ["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length", "camera_shot", "camera_move", "end_parameters"]:
+            var_frame = ttk.Frame(input_frame)
+            var_frame.pack(fill=tk.X, padx=5, pady=2)
+            ttk.Label(var_frame, text=f"{var}:").pack(side=tk.LEFT)
+            self.input_vars[var] = tk.StringVar()
+            ttk.Entry(var_frame, textvariable=self.input_vars[var]).pack(side=tk.LEFT, expand=True, fill=tk.X)
+
+        # Output area
+        output_frame = ttk.LabelFrame(editor_frame, text="Generated Output")
+        output_frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
+        self.output_text = scrolledtext.ScrolledText(output_frame, wrap=tk.WORD, height=10)
+        self.output_text.pack(fill=tk.BOTH, expand=True)
 
     def load_prompts_from_files(self):
         self.prompts = {}
@@ -67,6 +98,16 @@ class PromptEditor:
             self.current_file = key
             self.prompt_text.delete("1.0", tk.END)
             self.prompt_text.insert(tk.END, self.prompts[key])
+            self.highlight_variables()
+
+    def highlight_variables(self):
+        self.prompt_text.tag_remove("variable", "1.0", tk.END)
+        content = self.prompt_text.get("1.0", tk.END)
+        for match in re.finditer(r'\{(\w+)\}', content):
+            start = f"1.0 + {match.start()} chars"
+            end = f"1.0 + {match.end()} chars"
+            self.prompt_text.tag_add("variable", start, end)
+        self.prompt_text.tag_config("variable", foreground="blue", underline=True)
 
     def save_changes(self):
         if not self.current_file:
@@ -116,6 +157,21 @@ class PromptEditor:
                 messagebox.showinfo("Success", f"Prompts loaded from {filename}")
             except Exception as e:
                 messagebox.showerror("Error", f"Error loading prompts: {str(e)}")
+
+    def test_prompt(self):
+        if not self.current_file:
+            messagebox.showerror("Error", "No prompt selected")
+            return
+
+        prompt_template = self.prompt_text.get("1.0", tk.END).strip()
+        input_values = {var: self.input_vars[var].get() for var in self.input_vars}
+
+        try:
+            result = self.core.meta_chain.generate_prompt(**input_values)
+            self.output_text.delete("1.0", tk.END)
+            self.output_text.insert(tk.END, result)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error testing prompt: {str(e)}")
 
 def main():
     root = tk.Tk()
