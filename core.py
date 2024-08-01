@@ -304,14 +304,17 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, shot_description: str, directors_notes: str, style: str, camera_shot: str, camera_move: str, script: str, highlighted_text: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> Tuple[str, str, str]:
+    async def generate_prompt(self, shot_description: str, directors_notes: str, style: str, camera_shot: str, camera_move: str, script: str, highlighted_text: str, stick_to_script: bool, end_parameters: str, length: str = "medium", style_prefix: str = "", style_suffix: str = "") -> Tuple[str, str, str]:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
             # Update instance variables
             self.shot_description = shot_description
             self.directors_notes = directors_notes
-            self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
+            self.style_prefix = style_prefix
+            self.style_suffix = style_suffix
+            if not style_prefix and not style_suffix:
+                self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
             self.camera_shot = camera_shot
             self.camera_move = camera_move
             self.script = script
