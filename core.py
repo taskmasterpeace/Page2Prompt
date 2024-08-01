@@ -214,6 +214,9 @@ class PromptForgeCore:
         
         # Initialize LLM
         self.llm = ChatOpenAI(temperature=0.7)
+        
+        # Initialize StyleHandler
+        self.style_handler = StyleHandler()
 
     def generate_style_details(self, prefix: str) -> str:
         style_chain = LLMChain(
@@ -301,28 +304,38 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, length: str = "medium") -> Tuple[str, str, str]:
+    async def generate_prompt(self, shot_description: str, directors_notes: str, style: str, camera_shot: str, camera_move: str, script: str, highlighted_text: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> Tuple[str, str, str]:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
+            # Update instance variables
+            self.shot_description = shot_description
+            self.directors_notes = directors_notes
+            self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
+            self.camera_shot = camera_shot
+            self.camera_move = camera_move
+            self.script = script
+            self.highlighted_text = highlighted_text
+            self.stick_to_script = stick_to_script
+            self.end_parameters = end_parameters
+
             # Prepare the base prompt with all information
             base_prompt = f"""
 Create three outputs based on the following information:
 
 1. Shot Description:
-[{self.style_prefix}] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects], [{self.style_suffix}] [{self.end_parameters}]
+[{self.style_prefix}] {shot_description} [{self.style_suffix}] [{end_parameters}]
 
 2. Director's Notes:
-{self.directors_notes}
+{directors_notes}
 
 3. Scene:
-{"Full Script:" if self.stick_to_script else "Highlighted Portion:"}
-{self.script if self.stick_to_script else self.highlighted_text}
+{"Full Script:" if stick_to_script else "Highlighted Portion:"}
+{script if stick_to_script else highlighted_text}
 
 Additional Information:
-Shot Description: {self.shot_description}
-Camera Shot: {self.camera_shot}
-Camera Move: {self.camera_move}
+Camera Shot: {camera_shot}
+Camera Move: {camera_move}
 Active Subjects: {self._format_active_subjects(active_subjects)}
 
 Desired Output Length: {length}
@@ -398,37 +411,4 @@ Generate three distinct outputs as described above, focusing on visual elements 
     async def analyze_script(self, script_content: str, director_style: str) -> str:
         return await self.meta_chain.generate_prompt_spreadsheet(script_content, director_style)
 
-# Example usage
-async def initialize(self):
-    # Initialize any necessary components
-    self.style_handler = StyleHandler()
-    # Add any other initialization steps here
-
-async def main():
-    core = PromptForgeCore()
-    await core.initialize()
-    
-    # Manual prompt generation
-    core.set_style("Noir detective")
-    core.add_subject("John", "Main Character", "A hardboiled detective with a troubled past")
-    prompt = await core.generate_prompt("A dimly lit office, smoke curling from an ashtray", "Classic Noir", core.style_handler.get_full_style(), "Slow pan", "Emphasize the shadows", "", "", False, core.end_parameters)
-    print("Single Prompt:", prompt)
-    
-    # Automated script processing
-    script = """
-    INT. DETECTIVE'S OFFICE - NIGHT
-    
-    JOHN, a grizzled detective, sits at his desk, staring at crime scene photos.
-    A knock at the door startles him.
-    
-    JANE (O.S.)
-    Detective? I need your help.
-    
-    John sighs, reaching for his gun.
-    """
-    
-    output = await core.analyze_script(script, "Classic Noir")
-    print("\nAutomated Script Processing Output:")
-    print(output)
-
-# Remove the if __name__ == "__main__" block from here
+# End of PromptForgeCore class
