@@ -345,28 +345,21 @@ class Page2PromptUI:
             camera_shot = self.shot_var.get()
             camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
-            script = self.script_text.get("1.0", tk.END).strip()
-            highlighted_text = self.script_text.get("sel.first", "sel.last") if self.script_text.tag_ranges("sel") else script
             stick_to_script = self.stick_to_script_var.get()
+            script = self.script_text.get("1.0", tk.END).strip() if stick_to_script else ""
             end_parameters = self.end_parameters_entry.get()
-            length = "medium"  # You can add a dropdown for this if you want to let users choose
+            length = "medium"
 
             # Error checking
-            if not style_prefix:
-                raise ValueError("Style prefix is required.")
-            if not style_suffix:
-                raise ValueError("Style suffix is required.")
             if not shot_description:
                 raise ValueError("Shot description is required.")
-            if not script:
-                raise ValueError("Script is required.")
 
-            style = f"{style_prefix}: {style_suffix}"
+            style = f"{style_prefix}{style_suffix}"
 
             # Generate prompt
             prompt = await self.core.generate_prompt(
                 style=style,
-                highlighted_text=highlighted_text,
+                highlighted_text="",
                 shot_description=shot_description,
                 directors_notes=directors_notes,
                 camera_shot=camera_shot,
@@ -383,10 +376,6 @@ class Page2PromptUI:
 
         except ValueError as ve:
             messagebox.showerror("Input Error", str(ve))
-        except AttributeError as ae:
-            messagebox.showerror("Method Error", f"The generate_prompt method seems to be missing or incorrect: {str(ae)}")
-        except TypeError as te:
-            messagebox.showerror("Argument Error", f"Incorrect arguments passed to generate_prompt: {str(te)}")
         except Exception as e:
             messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {str(e)}\n\nPlease report this to the developer.")
 
