@@ -45,7 +45,7 @@ class PromptEditor:
         self.prompts = {}
         for file in ['core.py', 'ui.py', 'meta_chain.py']:
             try:
-                with open(file, "r") as f:
+                with open(file, "r", encoding="utf-8") as f:
                     content = f.read()
                     prompt_matches = re.findall(r'(?:f|r)"""(.*?)"""', content, re.DOTALL)
                     for i, match in enumerate(prompt_matches):
