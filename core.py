@@ -5,9 +5,6 @@ from typing import List, Dict, Optional, Tuple, Any
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain_community.chat_models import ChatOpenAI as CommunityChatOpenAI
-from langsmith import Client
-from langchain.callbacks.tracers import LangChainTracer
-from langchain.callbacks.manager import CallbackManager
 from meta_chain import MetaChain
 import logging
 from langchain_core.prompts import PromptTemplate
@@ -21,16 +18,12 @@ import random
 from collections import deque
 
 
-from config import get_openai_api_key, get_langsmith_api_key
+from config import get_openai_api_key
 
-# Get the API keys from the config
+# Get the API key from the config
 openai_api_key = get_openai_api_key()
-langsmith_api_key = get_langsmith_api_key()
 
 client = AsyncOpenAI(api_key=openai_api_key)
-
-# Set up LangSmith (you'll need to import and use it where needed)
-os.environ["LANGCHAIN_API_KEY"] = langsmith_api_key
 
 class Subject:
     CATEGORIES = ["Main Character", "Supporting Character", "Location", "Object"]
@@ -217,13 +210,8 @@ class PromptForgeCore:
         self.history = deque(maxlen=10)  # Store last 10 states
         self.future = deque(maxlen=10)  # Store undone states for redo
         
-        # Initialize LangSmith client
-        self.langsmith_client = Client()
-        self.tracer = LangChainTracer(project_name="PromptForge")
-        self.callback_manager = CallbackManager([self.tracer])
-        
-        # Initialize LLM with LangSmith tracing
-        self.llm = ChatOpenAI(temperature=0.7, callback_manager=self.callback_manager)
+        # Initialize LLM
+        self.llm = ChatOpenAI(temperature=0.7)
 
     def generate_style_details(self, prefix: str) -> str:
         style_chain = LLMChain(
@@ -351,14 +339,13 @@ Additional Context:
                 {"role": "user", "content": base_prompt}
             ]
             
-            # Use LangChain's LLMChain with LangSmith tracing
+            # Use LangChain's LLMChain
             prompt_chain = LLMChain(
                 llm=self.llm,
                 prompt=PromptTemplate(
                     input_variables=["messages"],
                     template="{messages[1]['content']}"
-                ),
-                callback_manager=self.callback_manager
+                )
             )
             
             content_prompt = await prompt_chain.arun({"messages": messages})
@@ -389,14 +376,6 @@ Additional Context:
                 "length": length
             }
             self.prompt_logger.log_prompt(inputs, full_prompt)
-            
-            # Log to LangSmith
-            self.langsmith_client.create_run(
-                name="generate_prompt",
-                inputs=inputs,
-                outputs={"full_prompt": full_prompt},
-                tags=["PromptForge", "generate_prompt"]
-            )
             
             return full_prompt
         except Exception as e:
