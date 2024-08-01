@@ -186,6 +186,13 @@ class PromptLogger:
             json.dump(log_entry, f)
             f.write("\n")
 
+    def get_logs(self):
+        logs = []
+        with open(self.log_file, "r") as f:
+            for line in f:
+                logs.append(json.loads(line))
+        return logs
+
 class PromptForgeCore:
     def __init__(self):
         self.meta_chain = MetaChain(self)
