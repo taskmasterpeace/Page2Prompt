@@ -304,27 +304,37 @@ class PromptForgeCore:
             
             # Prepare the base prompt with all information
             base_prompt = f"""
-{style_prefix}
+Create a detailed, vivid description for an AI image generator based on the following information:
 
-**Shot Description:** {shot_description}
+Style: {style_prefix}
 
-**Director's Notes:** {directors_notes}
+Shot Description: {shot_description}
 
-**Active Subjects:**
+Director's Notes: {directors_notes}
+
+Active Subjects:
 {self._format_active_subjects(active_subjects)}
 
-**Camera Shot:** {camera_shot}
-**Camera Move:** {camera_move}
-**Prompt Length:** {length}
+Camera Shot: {camera_shot}
+Camera Move: {camera_move}
+
+Desired Prompt Length: {length}
+
+Additional Context:
+- Focus on creating a visually rich and atmospheric scene.
+- Describe the lighting, colors, and textures in detail.
+- Emphasize the mood and emotion of the scene.
+- Include specific details about the characters' appearances and expressions.
+- Describe the environment and any important objects in the scene.
 """
             
             if stick_to_script:
-                base_prompt += f"\n**Script:** {script}"
+                base_prompt += f"\nRelevant Script Excerpt: {script}\n- Ensure the description aligns closely with this script excerpt."
             
             # Generate a comprehensive content prompt
             messages = [
-                {"role": "system", "content": "You are a creative AI assistant that generates detailed content prompts for image generation. Provide a comprehensive description of the scene, focusing on visual elements, atmosphere, and subject details. Do not mention camera techniques or cinematography terms."},
-                {"role": "user", "content": f"Based on the following information, generate a detailed and comprehensive content prompt:\n\n{base_prompt}"}
+                {"role": "system", "content": "You are a highly skilled cinematographer and visual artist. Your task is to create detailed, evocative descriptions for AI image generation, focusing on visual elements, atmosphere, and capturing the essence of the scene."},
+                {"role": "user", "content": base_prompt}
             ]
             
             response = await client.chat.completions.create(
@@ -333,7 +343,7 @@ class PromptForgeCore:
                 max_tokens=1000,
                 n=1,
                 stop=None,
-                temperature=0.7,
+                temperature=0.8,
             )
             
             content_prompt = response.choices[0].message.content.strip()
