@@ -325,7 +325,7 @@ class PromptForgeCore:
                 full_prompt += f"\n\n{end_parameters}"
             
             # Generate FileList of needed elements
-            file_list = self._generate_file_list(active_subjects, shot_description, script)
+            file_list = await self._generate_file_list(active_subjects, shot_description, script)
             full_prompt += f"\n\nFileList of needed elements:\n{file_list}"
             
             # Log the inputs and generated prompt
@@ -349,7 +349,7 @@ class PromptForgeCore:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
 
-    def _generate_file_list(self, active_subjects, shot_description, script):
+    async def _generate_file_list(self, active_subjects, shot_description, script):
         # Combine all text to analyze
         all_text = f"{shot_description}\n{script}\n" + "\n".join([f"{s['name']}: {s['description']}" for s in active_subjects])
         
@@ -359,7 +359,7 @@ class PromptForgeCore:
             {"role": "user", "content": f"Based on the following scene description, generate a list of image files that would be needed to create this scene. Focus on characters, objects, and settings. Format the list as 'element.png' for each item:\n\n{all_text}"}
         ]
         
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
             max_tokens=200,
