@@ -405,7 +405,7 @@ async def main():
     # Manual prompt generation
     core.set_style("Noir detective")
     core.add_subject("John", "Main Character", "A hardboiled detective with a troubled past")
-    prompt = await core.generate_prompt("medium", "A dimly lit office, smoke curling from an ashtray", "Classic Noir", "Slow pan", "Emphasize the shadows", "", False)
+    prompt = await core.generate_prompt("A dimly lit office, smoke curling from an ashtray", "Classic Noir", core.style_suffix, "Slow pan", "Emphasize the shadows", "", "", False, core.end_parameters)
     print("Single Prompt:", prompt)
     
     # Automated script processing
