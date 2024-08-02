@@ -187,6 +187,89 @@ class AutomatedAnalysisFrame(ttk.Frame):
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
+    def generate_subjects(self):
+        script_content = self.script_path.get()
+        if not script_content:
+            messagebox.showerror("Error", "Please select a script file.")
+            return
+
+        try:
+            with open(script_content, 'r') as file:
+                script_text = file.read()
+
+            subjects = self.core.generate_subjects(script_text)
+            self.show_subject_selection_window(subjects)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+    def show_subject_selection_window(self, subjects):
+        selection_window = tk.Toplevel(self.master)
+        selection_window.title("Generated Subjects")
+        selection_window.geometry("600x400")
+
+        main_frame = ttk.Frame(selection_window)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        canvas = tk.Canvas(main_frame)
+        scrollbar = ttk.Scrollbar(main_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        for subject in subjects:
+            subject_frame = ttk.Frame(scrollable_frame)
+            subject_frame.pack(fill=tk.X, padx=5, pady=5)
+
+            var = tk.BooleanVar(value=True)
+            check = ttk.Checkbutton(subject_frame, text=subject['name'], variable=var)
+            check.grid(row=0, column=0, sticky="w")
+
+            category_var = tk.StringVar(value=subject['category'])
+            category_combo = ttk.Combobox(subject_frame, textvariable=category_var, 
+                                          values=["Main Character", "Supporting Character", "Location", "Object"])
+            category_combo.grid(row=0, column=1, padx=5)
+
+            description_text = scrolledtext.ScrolledText(subject_frame, height=4, width=40, wrap=tk.WORD)
+            description_text.grid(row=1, column=0, columnspan=2, pady=5)
+            description_text.insert(tk.END, subject['description'])
+
+            subject['var'] = var
+            subject['category_var'] = category_var
+            subject['description_text'] = description_text
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        button_frame = ttk.Frame(selection_window)
+        button_frame.pack(fill=tk.X, padx=10, pady=10)
+
+        ttk.Button(button_frame, text="Select All", command=lambda: self.toggle_all_subjects(subjects, True)).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Deselect All", command=lambda: self.toggle_all_subjects(subjects, False)).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Add Selected", command=lambda: self.add_selected_subjects(subjects, selection_window)).pack(side="right", padx=5)
+
+    def toggle_all_subjects(self, subjects, state):
+        for subject in subjects:
+            subject['var'].set(state)
+
+    def add_selected_subjects(self, subjects, window):
+        for subject in subjects:
+            if subject['var'].get():
+                self.core.add_subject(
+                    name=subject['name'],
+                    category=subject['category_var'].get(),
+                    description=subject['description_text'].get("1.0", tk.END).strip()
+                )
+        self.subject_frame.update_subjects(self.core.subjects)
+        window.destroy()
+
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
 class PageToPromptUI:
