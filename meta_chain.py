@@ -5,6 +5,7 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
+from langchain.chains import LLMChain
 import json
 from typing import List, Dict, Optional
 import logging
@@ -158,13 +159,13 @@ class MetaChain:
             """
         )
 
-        refine_chain = LLMChain(llm=self.llm, prompt=refine_template)
-        result = refine_chain({
+        refine_chain = RunnableSequence(refine_template | self.llm)
+        result = refine_chain.invoke({
             "initial_prompt": initial_prompt,
             "feedback": feedback
         })
 
-        return result['text']
+        return result.content
 
     def generate_variations(self, base_prompt: str, num_variations: int = 3) -> List[str]:
         variation_template = PromptTemplate(
@@ -178,13 +179,13 @@ class MetaChain:
             """
         )
 
-        variation_chain = LLMChain(llm=self.llm, prompt=variation_template)
-        result = variation_chain({
+        variation_chain = RunnableSequence(variation_template | self.llm)
+        result = variation_chain.invoke({
             "base_prompt": base_prompt,
             "num_variations": num_variations
         })
 
         # Parse the results into a list of variations
-        variations = result['text'].split('\n')
+        variations = result.content.split('\n')
         variations = [v.strip() for v in variations if v.strip()]
         return variations[:num_variations]  # Ensure we return the correct number of variations
