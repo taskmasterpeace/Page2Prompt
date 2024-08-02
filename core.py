@@ -304,50 +304,34 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, camera_shot: str, camera_move: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium", style_prefix: str = "", style_suffix: str = "") -> Tuple[str, str, str]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, camera_shot: str, camera_move: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
-            # Update instance variables
-            self.style_prefix, self.style_suffix = style.split(': ', 1) if ': ' in style else (style, "")
-            self.highlighted_text = highlighted_text
-            self.shot_description = shot_description
-            self.directors_notes = directors_notes
-            self.camera_shot = camera_shot
-            self.camera_move = camera_move
-            self.script = script
-            self.stick_to_script = stick_to_script
-            self.end_parameters = end_parameters
-            
-            if style_prefix or style_suffix:
-                self.style_prefix = style_prefix
-                self.style_suffix = style_suffix
-
             # Prepare the base prompt with all information
             base_prompt = f"""
-Create three outputs based on the following information:
+{style}
+{shot_description}
+{style}
+{end_parameters}
 
-1. Shot Description:
-[{self.style_prefix}] {self.shot_description} [{self.style_suffix}] [{self.end_parameters}]
+Director's Notes:
+{directors_notes}
 
-2. Director's Notes:
-{self.directors_notes}
-
-3. Scene:
-{"Full Script:" if self.stick_to_script else "Highlighted Portion:"}
-{self.script if self.stick_to_script else self.highlighted_text}
+{"Script:" if stick_to_script else ""}
+{script if stick_to_script else ""}
 
 Additional Information:
-Camera Shot: {self.camera_shot}
-Camera Move: {self.camera_move}
+Camera Shot: {camera_shot}
+Camera Move: {camera_move}
 Active Subjects: {self._format_active_subjects(active_subjects)}
 
 Desired Output Length: {length}
 
-Generate three distinct outputs as described above, focusing on visual elements and capturing the essence of the scene.
+Generate a visual prompt based on the above information, focusing on the shot description and capturing the essence of the scene.
 """
             
-            # Generate outputs using LangChain's LLMChain
+            # Generate output using LangChain's LLMChain
             prompt_chain = LLMChain(
                 llm=self.llm,
                 prompt=PromptTemplate(
@@ -356,30 +340,25 @@ Generate three distinct outputs as described above, focusing on visual elements 
                 )
             )
             
-            outputs = await prompt_chain.arun({"content": base_prompt})
-            outputs = outputs.strip().encode('utf-8', errors='ignore').decode('utf-8')
+            output = await prompt_chain.arun({"content": base_prompt})
+            output = output.strip().encode('utf-8', errors='ignore').decode('utf-8')
             
-            # Split the outputs into three parts
-            parts = outputs.split("\n\n", 2)
-            shot_description, directors_notes, scene = parts if len(parts) == 3 else (outputs, "", "")
-            
-            # Log the inputs and generated outputs
+            # Log the inputs and generated output
             inputs = {
-                "shot_description": self.shot_description,
-                "style_prefix": self.style_prefix,
-                "style_suffix": self.style_suffix,
-                "camera_shot": self.camera_shot,
-                "camera_move": self.camera_move,
-                "directors_notes": self.directors_notes,
-                "script": self.script,
-                "stick_to_script": self.stick_to_script,
+                "shot_description": shot_description,
+                "style": style,
+                "camera_shot": camera_shot,
+                "camera_move": camera_move,
+                "directors_notes": directors_notes,
+                "script": script if stick_to_script else "",
+                "stick_to_script": stick_to_script,
                 "active_subjects": [s['name'] for s in active_subjects],
-                "end_parameters": self.end_parameters,
+                "end_parameters": end_parameters,
                 "length": length
             }
-            self.prompt_logger.log_prompt(inputs, outputs)
+            self.prompt_logger.log_prompt(inputs, output)
             
-            return shot_description, directors_notes, scene
+            return output
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
