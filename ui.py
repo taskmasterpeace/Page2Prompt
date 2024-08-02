@@ -155,7 +155,9 @@ class AutomatedAnalysisFrame(ttk.Frame):
         self.style_combo = ttk.Combobox(self, values=list(self.core.meta_chain.director_styles.keys()))
         self.style_combo.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
 
-        ttk.Button(self, text="Analyze Script", command=self.analyze_script).grid(row=2, column=1, sticky="e", padx=5, pady=5)
+        generate_subjects_button = ttk.Button(self, text="Generate Subjects", command=self.generate_subjects)
+        generate_subjects_button.grid(row=2, column=1, sticky="e", padx=5, pady=5)
+        ToolTip(generate_subjects_button, "Analyze the script and generate subjects")
 
         self.results_text = scrolledtext.ScrolledText(self, height=8, width=60)
         self.results_text.grid(row=3, column=0, columnspan=3, sticky="nsew", padx=5, pady=2)
