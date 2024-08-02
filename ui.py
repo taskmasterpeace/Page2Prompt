@@ -579,4 +579,10 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
-    main()
+    import sys
+    import subprocess
+
+    if sys.executable and sys.executable != 'python':
+        subprocess.call([sys.executable, __file__] + sys.argv[1:])
+    else:
+        main()

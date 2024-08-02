@@ -1,0 +1,14 @@
+{
+  "None": {
+    "prefix": "3D cartoon in the style of a Pixar film",
+    "suffix": "disney pixar style"
+  },
+  "Da": {
+    "prefix": "Disney Pixar",
+    "suffix": "AS"
+  },
+  "Disney Pixar": {
+    "prefix": "3D cartoon in the style of a Pixar film",
+    "suffix": "disney pixar style"
+  }
+}
