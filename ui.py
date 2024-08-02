@@ -5,12 +5,11 @@ from tkinter import ttk, scrolledtext, filedialog, messagebox
 from tkinter.ttk import Frame, Scrollbar
 import pyperclip
 from core import PromptForgeCore
-import logging
 import os
 import asyncio
 import random
 from styles import predefined_styles
-from tkinter import messagebox
+from functools import partial
 
 class ToolTip:
     def __init__(self, widget, text):
@@ -283,7 +282,7 @@ class PageToPromptUI:
         self.script_text = scrolledtext.ScrolledText(input_frame, height=10, width=50, wrap=tk.WORD)
         self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
         self.script_text.insert(tk.END, "")
-        self.script_text.bind("<<Selection>>", self.on_script_selection)
+        self.script_text.bind("<<Selection>>", partial(self.on_script_selection))
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
@@ -490,28 +489,22 @@ class PageToPromptUI:
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
-        self.script_selection = None  # Add this line to store the selection
+        self.script_selection = None
+        self.selection_timer = None
 
     def on_script_selection(self, event):
+        if self.selection_timer is not None:
+            self.master.after_cancel(self.selection_timer)
+        self.selection_timer = self.master.after(200, self.handle_script_selection)
+
+    def handle_script_selection(self):
         try:
             if self.script_text.tag_ranges(tk.SEL):
                 self.script_selection = (self.script_text.index(tk.SEL_FIRST), self.script_text.index(tk.SEL_LAST))
-                selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
-                logging.info(f"Selected text: {selected_text}")
             else:
                 self.script_selection = None
-                logging.info("No text selected")
         except Exception as e:
-            logging.error(f"Error in on_script_selection: {str(e)}")
-        finally:
-            # Schedule the UI update for the next idle moment
-            self.master.after_idle(self.reapply_selection)
-
-    def reapply_selection(self):
-        if self.script_selection:
-            self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
-            self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
-        self.master.update_idletasks()
+            print(f"Error in handle_script_selection: {str(e)}")
 
     def on_style_selected(self, event):
         selected_style = self.style_combo.get()
