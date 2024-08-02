@@ -1,14 +1,14 @@
 {
   "None": {
-    "prefix": "3D cartoon in the style of a Pixar film",
-    "suffix": "disney pixar style"
-  },
-  "Da": {
-    "prefix": "Disney Pixar",
-    "suffix": "AS"
+    "prefix": "Golden Age comic illustration style",
+    "suffix": "Bold outlines, primary colors, simplified anatomy, exaggerated poses, limited backgrounds, straightforward panel layouts"
   },
   "Disney Pixar": {
     "prefix": "3D cartoon in the style of a Pixar film",
     "suffix": "disney pixar style"
+  },
+  "Golden Age Comics": {
+    "prefix": "Golden Age comic illustration style",
+    "suffix": "Bold outlines, primary colors, simplified anatomy, exaggerated poses, limited backgrounds, straightforward panel layouts"
   }
 }
