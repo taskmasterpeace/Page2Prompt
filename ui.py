@@ -44,9 +44,16 @@ class SubjectFrame(ttk.Frame):
 
     def update_subjects(self, subjects):
         self.subjects_listbox.delete(0, tk.END)
+        category_icons = {
+            "Main Character": "👤",
+            "Supporting Character": "👥",
+            "Location": "🏠",
+            "Object": "🔮"
+        }
         for subject in subjects:
             status = 'Active' if subject['active'] else 'Inactive'
-            self.subjects_listbox.insert(tk.END, f"{subject['name']} ({subject['category']}) ({status})")
+            icon = category_icons.get(subject['category'], "❓")
+            self.subjects_listbox.insert(tk.END, f"{icon} {subject['name']} ({subject['category']}) ({status})")
 
     def setup_ui(self):
         ttk.Label(self, text="Subject Name:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
