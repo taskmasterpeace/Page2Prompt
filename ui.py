@@ -342,13 +342,10 @@ class PageToPromptUI:
             shot_description = self.shot_text.get("1.0", tk.END).strip()
             style_prefix = self.style_prefix_entry.get().strip()
             style_suffix = self.style_suffix_entry.get().strip()
-            camera_shot = self.shot_var.get()
-            camera_move = self.move_var.get()
             directors_notes = self.notes_text.get("1.0", tk.END).strip()
             stick_to_script = self.stick_to_script_var.get()
             script = self.script_text.get("1.0", tk.END).strip() if stick_to_script else ""
             end_parameters = self.end_parameters_entry.get()
-            length = "medium"
 
             # Error checking
             if not shot_description:
@@ -356,23 +353,21 @@ class PageToPromptUI:
 
             style = f"{style_prefix}{style_suffix}"
 
-            # Generate prompt
-            prompt = await self.core.generate_prompt(
+            # Generate prompts
+            prompts = await self.core.generate_prompt(
                 style=style,
                 highlighted_text="",
                 shot_description=shot_description,
                 directors_notes=directors_notes,
-                camera_shot=camera_shot,
-                camera_move=camera_move,
                 script=script,
                 stick_to_script=stick_to_script,
-                end_parameters=end_parameters,
-                length=length
+                end_parameters=end_parameters
             )
 
-            # Display generated prompt
+            # Display generated prompts
             self.results_text.delete("1.0", tk.END)
-            self.results_text.insert(tk.END, prompt)
+            for length, prompt in prompts.items():
+                self.results_text.insert(tk.END, f"{length.capitalize()} Prompt:\n{prompt}\n\n")
 
         except ValueError as ve:
             messagebox.showerror("Input Error", str(ve))

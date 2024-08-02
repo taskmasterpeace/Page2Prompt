@@ -304,61 +304,35 @@ class PromptForgeCore:
             'subjects': self.subjects
         }
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, camera_shot: str, camera_move: str, script: str, stick_to_script: bool, end_parameters: str, length: str = "medium") -> str:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> Dict[str, str]:
         try:
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
-            # Prepare the base prompt with all information
-            base_prompt = f"""
-{style}
-{shot_description}
-{style}
-{end_parameters}
-
-Director's Notes:
-{directors_notes}
-
-{"Script:" if stick_to_script else ""}
-{script if stick_to_script else ""}
-
-Additional Information:
-Camera Shot: {camera_shot}
-Camera Move: {camera_move}
-Active Subjects: {self._format_active_subjects(active_subjects)}
-
-Desired Output Length: {length}
-
-Generate a visual prompt based on the above information, focusing on the shot description and capturing the essence of the scene.
-"""
-            
-            # Generate output using LangChain's LLMChain
-            prompt_chain = LLMChain(
-                llm=self.llm,
-                prompt=PromptTemplate(
-                    input_variables=["content"],
-                    template="{content}"
-                )
+            # Generate prompts using MetaChain
+            prompts = await self.meta_chain.generate_prompt(
+                active_subjects=active_subjects,
+                style=style,
+                shot_description=shot_description,
+                directors_notes=directors_notes,
+                highlighted_text=highlighted_text,
+                full_script=script if stick_to_script else "",
+                end_parameters=end_parameters
             )
             
-            output = await prompt_chain.arun({"content": base_prompt})
-            output = output.strip().encode('utf-8', errors='ignore').decode('utf-8')
-            
-            # Log the inputs and generated output
+            # Log the inputs and generated outputs
             inputs = {
                 "shot_description": shot_description,
                 "style": style,
-                "camera_shot": camera_shot,
-                "camera_move": camera_move,
                 "directors_notes": directors_notes,
                 "script": script if stick_to_script else "",
                 "stick_to_script": stick_to_script,
                 "active_subjects": [s['name'] for s in active_subjects],
-                "end_parameters": end_parameters,
-                "length": length
+                "end_parameters": end_parameters
             }
-            self.prompt_logger.log_prompt(inputs, output)
+            for length, prompt in prompts.items():
+                self.prompt_logger.log_prompt({**inputs, "length": length}, prompt)
             
-            return output
+            return prompts
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise

@@ -47,39 +47,45 @@ class MetaChain:
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
 
-    async def generate_prompt(self, length: str = "medium", active_subjects: list = None, 
+    async def generate_prompt(self, active_subjects: list = None, 
                               style: str = "", shot_description: str = "", directors_notes: str = "",
-                              highlighted_text: str = "", full_script: str = "", camera_shot: str = "",
-                              camera_move: str = "", end_parameters: str = "") -> str:
+                              highlighted_text: str = "", full_script: str = "", end_parameters: str = "") -> Dict[str, str]:
         try:
             # Prepare inputs
             subject_info = self._format_subject_info(active_subjects)
             
-            # Create prompt template
-            template = self._get_prompt_template(length)
+            # Create prompt templates for each length
+            templates = {
+                "concise": self._get_prompt_template("concise"),
+                "normal": self._get_prompt_template("normal"),
+                "detailed": self._get_prompt_template("detailed")
+            }
 
-            # Create and run chain
-            chain = LLMChain(llm=self.llm, prompt=template)
-            result = await chain.arun({
-                "style": style,
-                "shot_description": shot_description,
-                "directors_notes": directors_notes,
-                "highlighted_text": highlighted_text,
-                "full_script": full_script,
-                "subject_info": subject_info,
-                "length": length,
-                "camera_shot": camera_shot,
-                "camera_move": camera_move,
-                "end_parameters": end_parameters
-            })
+            # Create and run chains for each length
+            results = {}
+            for length, template in templates.items():
+                chain = LLMChain(llm=self.llm, prompt=template)
+                result = await chain.arun({
+                    "style": style,
+                    "shot_description": shot_description,
+                    "directors_notes": directors_notes,
+                    "highlighted_text": highlighted_text,
+                    "full_script": full_script,
+                    "subject_info": subject_info,
+                    "end_parameters": end_parameters
+                })
+                results[length] = result.strip()
 
-            return result
+            return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")
             raise
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
+        Subjects:
+        {subject_info}
+
         Style: {style}
         
         Shot Description: {shot_description}
@@ -90,22 +96,15 @@ class MetaChain:
         
         Full Script: {full_script}
         
-        Subjects:
-        {subject_info}
-        
-        Camera Shot: {camera_shot}
-        
-        Camera Move: {camera_move}
-        
         End Parameters: {end_parameters}
         
-        Based on the above information, generate a {length} content prompt that captures the essence of the scene, incorporating the script context, style, camera techniques, and any specific instructions. The prompt should describe the content, actions, and setting, integrating the specified style and camera techniques. Make sure to incorporate the subjects and their descriptions into the content prompt.
+        Based on the above information, generate a {length} content prompt that captures the essence of the scene. The prompt should start with the subjects and their actions, followed by the setting and atmosphere. Do not include any camera moves or shot sizes in the prompt. Make sure to incorporate the style and any specific instructions from the director's notes.
         
-        Content Prompt:
+        {length} Content Prompt:
         """
 
         return PromptTemplate(
-            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "length", "camera_shot", "camera_move", "end_parameters"],
+            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "length"],
             template=base_template
         )
 
