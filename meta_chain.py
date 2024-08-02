@@ -106,6 +106,8 @@ class MetaChain:
         The prompt should follow this structure:
         {style} [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] {end_parameters}
 
+        Important: Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
+
         {length} Prompt:
         """
 
