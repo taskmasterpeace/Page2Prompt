@@ -249,6 +249,7 @@ class PromptForgeCore:
             subjects = []
             current_subject = {}
             for line in subjects_text.split('\n'):
+                line = line.strip()
                 if line.startswith('Name:'):
                     if current_subject:
                         subjects.append(current_subject)
@@ -257,6 +258,8 @@ class PromptForgeCore:
                     current_subject['category'] = line.split(':', 1)[1].strip()
                 elif line.startswith('Description:'):
                     current_subject['description'] = line.split(':', 1)[1].strip()
+                elif current_subject and 'description' in current_subject:
+                    current_subject['description'] += ' ' + line
 
             if current_subject:
                 subjects.append(current_subject)
@@ -264,7 +267,7 @@ class PromptForgeCore:
             return subjects
         except Exception as e:
             logging.error(f"Error generating subjects: {str(e)}")
-            return []
+            raise
 
     def add_subject(self, name: str, category: str, description: str):
         self.subjects.append({
