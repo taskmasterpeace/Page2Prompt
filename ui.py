@@ -388,7 +388,7 @@ class PageToPromptUI:
         paned_window.pack(fill="both", expand=True)
 
         # Add the ScrolledText widget to the PanedWindow
-        self.results_text = scrolledtext.ScrolledText(paned_window, wrap=tk.WORD)
+        self.results_text = scrolledtext.ScrolledText(paned_window, wrap=tk.WORD, font=("Courier", 10))
         paned_window.add(self.results_text, weight=1)
 
         button_frame = ttk.Frame(output_frame)
@@ -405,6 +405,50 @@ class PageToPromptUI:
 
         self.show_logs_button = ttk.Button(button_frame, text="Show Logs", command=self.show_logs)
         self.show_logs_button.pack(side="left", padx=2)
+
+    async def handle_generate_button_click(self):
+        try:
+            # ... (existing code)
+
+            # Generate prompts
+            prompts = await self.core.generate_prompt(
+                style=style,
+                highlighted_text="",
+                shot_description=shot_description,
+                directors_notes=directors_notes,
+                script=script,
+                stick_to_script=stick_to_script,
+                end_parameters=end_parameters
+            )
+
+            # Display generated prompts
+            self.results_text.delete("1.0", tk.END)
+            for length, prompt in prompts.items():
+                self.results_text.insert(tk.END, f"{length}:\n{prompt}\n\n")
+
+            # Apply tags for bold text
+            self.results_text.tag_configure("bold", font=("Courier", 10, "bold"))
+            for tag in self.results_text.tag_names():
+                if tag != "sel":
+                    self.results_text.tag_delete(tag)
+
+            start = "1.0"
+            while True:
+                start = self.results_text.search(r'\*\*', start, tk.END, regexp=True)
+                if not start:
+                    break
+                end = self.results_text.search(r'\*\*', f"{start}+2c", tk.END, regexp=True)
+                if not end:
+                    break
+                self.results_text.delete(start, f"{start}+2c")
+                self.results_text.delete(f"{end}-2c", end)
+                self.results_text.tag_add("bold", start, end)
+                start = end
+
+        except ValueError as ve:
+            messagebox.showerror("Input Error", str(ve))
+        except Exception as e:
+            messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {str(e)}\n\nPlease report this to the developer.")
 
     def save_prompt(self):
         prompt = self.results_text.get("1.0", tk.END).strip()
