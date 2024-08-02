@@ -78,6 +78,9 @@ class MetaChain:
             # Post-process the results
             for length, prompt in results.items():
                 prompt = prompt.replace("Concise Prompt:", "").replace("Normal Prompt:", "").replace("Detailed Prompt:", "").strip()
+                # Remove end_parameters if they're already in the prompt
+                if end_parameters in prompt:
+                    prompt = prompt.replace(end_parameters, "").strip()
                 results[length] = f"{style} {prompt} {end_parameters}".strip()
 
             return results
