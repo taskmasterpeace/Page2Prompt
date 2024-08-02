@@ -218,6 +218,58 @@ class PromptForgeCore:
         # Initialize StyleHandler
         self.style_handler = StyleHandler()
 
+    async def generate_subjects(self, script_text: str) -> List[Dict[str, Any]]:
+        prompt = f"""
+        Analyze the following script excerpt and perform these tasks:
+
+        Identify key subjects (characters, locations, objects) crucial to the scene.
+        For each subject, provide:
+
+        A clear, concise name
+        A category (Character, Location, or Object)
+        A detailed description (50-100 words) that includes:
+        - Physical attributes (appearance, size, color, etc.)
+        - Emotional or atmospheric qualities
+        - Relevance to the scene or story
+        - Any unique features or characteristics
+
+        Ensure descriptions are consistent with the script but expand beyond explicitly stated details.
+        Present the information in a structured format for each subject:
+        Name: [Subject Name]
+        Category: [Category]
+        Description: [Detailed description]
+
+        Script excerpt: {script_text}
+        """
+
+        response = await self.llm.agenerate([prompt])
+        subjects_text = response.generations[0][0].text
+
+        subjects = []
+        current_subject = {}
+        for line in subjects_text.split('\n'):
+            if line.startswith('Name:'):
+                if current_subject:
+                    subjects.append(current_subject)
+                current_subject = {'name': line.split(':', 1)[1].strip()}
+            elif line.startswith('Category:'):
+                current_subject['category'] = line.split(':', 1)[1].strip()
+            elif line.startswith('Description:'):
+                current_subject['description'] = line.split(':', 1)[1].strip()
+
+        if current_subject:
+            subjects.append(current_subject)
+
+        return subjects
+
+    def add_subject(self, name: str, category: str, description: str):
+        self.subjects.append({
+            'name': name,
+            'category': category,
+            'description': description,
+            'active': True
+        })
+
     def generate_style_details(self, prefix: str) -> str:
         style_chain = LLMChain(
             llm=self.llm,
