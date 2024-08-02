@@ -48,21 +48,18 @@ class MetaChain:
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
 
-    async def generate_prompt(self, active_subjects: list = None, 
+    async def generate_prompt(self, active_subjects: list = None,
                               style: str = "", shot_description: str = "", directors_notes: str = "",
                               highlighted_text: str = "", full_script: str = "", end_parameters: str = "") -> Dict[str, str]:
         try:
-            # Prepare inputs
             subject_info = self._format_subject_info(active_subjects)
             
-            # Create prompt templates for each length with word count targets
             templates = {
-                "concise": self._get_prompt_template("concise (around 30 words)"),
-                "normal": self._get_prompt_template("normal (around 50 words)"),
-                "detailed": self._get_prompt_template("detailed (around 100 words)")
+                "concise": self._get_prompt_template("concise (about 20 words)"),
+                "normal": self._get_prompt_template("normal (about 40 words)"),
+                "detailed": self._get_prompt_template("detailed (about 80 words)")
             }
 
-            # Create and run chains for each length
             results = {}
             for length, template in templates.items():
                 chain = RunnableSequence(template | self.llm)
@@ -78,6 +75,11 @@ class MetaChain:
                 })
                 results[length] = result.content.strip()
 
+            # Post-process the results
+            for length, prompt in results.items():
+                prompt = prompt.replace("Concise Prompt:", "").replace("Normal Prompt:", "").replace("Detailed Prompt:", "").strip()
+                results[length] = f"{style} {prompt} {end_parameters}".strip()
+
             return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")
@@ -87,15 +89,13 @@ class MetaChain:
         base_template = """
         Generate a {length} prompt based on the following information:
         Subjects: {subject_info}
-        Style Prefix: {style}
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
         Full Script: {full_script}
-        End Parameters: {end_parameters}
 
         The prompt should follow this structure:
-        [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects], [Style Suffix] [End Parameters]
+        {style} [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] {end_parameters}
 
         {length} Prompt:
         """
