@@ -1,9 +1,13 @@
 # main.py
+#!/usr/bin/env python3
+# main.py
 import asyncio
 import logging
 import tkinter as tk
 from ui import PageToPromptUI
 from core import PromptForgeCore
+import sys
+import subprocess
 
 async def main():
     root = tk.Tk()
