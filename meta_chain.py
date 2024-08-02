@@ -2,9 +2,9 @@
 
 # meta_chain.py
 
-from langchain_openai import OpenAI
-from langchain.chains import LLMChain
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
+from langchain_core.runnables import RunnableSequence
 import json
 from typing import List, Dict, Optional
 import logging
@@ -43,7 +43,7 @@ class MetaChain:
     def __init__(self, core):
         self.core = core
         self.model_name = "gpt-4o-mini"
-        self.llm = OpenAI(model_name=self.model_name, temperature=0.7)
+        self.llm = ChatOpenAI(model_name=self.model_name, temperature=0.7)
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
 
@@ -64,8 +64,8 @@ class MetaChain:
             # Create and run chains for each length
             results = {}
             for length, template in templates.items():
-                chain = LLMChain(llm=self.llm, prompt=template)
-                result = await chain.arun({
+                chain = RunnableSequence(template | self.llm)
+                result = await chain.ainvoke({
                     "style": style,
                     "shot_description": shot_description,
                     "directors_notes": directors_notes,
@@ -74,7 +74,7 @@ class MetaChain:
                     "subject_info": subject_info,
                     "end_parameters": end_parameters
                 })
-                results[length] = result.strip()
+                results[length] = result.content.strip()
 
             return results
         except Exception as e:
