@@ -483,18 +483,35 @@ class PageToPromptUI:
         self.automated_frame = AutomatedAnalysisFrame(automated_frame, self.core)
         self.automated_frame.pack(fill="both", expand=True)
 
+    def __init__(self, master, core):
+        self.master = master
+        self.core = core
+        self.loop = asyncio.get_event_loop()
+        self.setup_ui()
+        self.all_prompts_window = None
+        self.all_prompts_text = None
+        self.script_selection = None  # Add this line to store the selection
+
     def on_script_selection(self, event):
         try:
             if self.script_text.tag_ranges(tk.SEL):
+                self.script_selection = (self.script_text.index(tk.SEL_FIRST), self.script_text.index(tk.SEL_LAST))
                 selected_text = self.script_text.get(tk.SEL_FIRST, tk.SEL_LAST)
                 logging.info(f"Selected text: {selected_text}")
             else:
+                self.script_selection = None
                 logging.info("No text selected")
         except Exception as e:
             logging.error(f"Error in on_script_selection: {str(e)}")
         finally:
             # Schedule the UI update for the next idle moment
-            self.master.after_idle(self.master.update_idletasks)
+            self.master.after_idle(self.reapply_selection)
+
+    def reapply_selection(self):
+        if self.script_selection:
+            self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
+            self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
+        self.master.update_idletasks()
 
     def on_style_selected(self, event):
         selected_style = self.style_combo.get()
