@@ -415,7 +415,16 @@ class PageToPromptUI:
 
     async def handle_generate_button_click(self):
         try:
-            # ... (existing code)
+            # Get input values
+            shot_description = self.shot_text.get("1.0", tk.END).strip()
+            style_prefix = self.style_prefix_entry.get().strip()
+            style_suffix = self.style_suffix_entry.get().strip()
+            directors_notes = self.notes_text.get("1.0", tk.END).strip()
+            stick_to_script = self.stick_to_script_var.get()
+            script = self.script_text.get("1.0", tk.END).strip() if stick_to_script else ""
+            end_parameters = self.end_parameters_entry.get()
+
+            style = f"{style_prefix}{style_suffix}"
 
             # Generate prompts
             prompts = await self.core.generate_prompt(
