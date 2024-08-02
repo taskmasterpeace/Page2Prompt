@@ -55,7 +55,7 @@ class MetaChain:
             subject_info = self._format_subject_info(active_subjects)
             
             templates = {
-                "concise": self._get_prompt_template("concise (about 20 words)"),
+                "concise": self._get_prompt_template("concise (about 12 words)"),
                 "normal": self._get_prompt_template("normal (about 40 words)"),
                 "detailed": self._get_prompt_template("detailed (about 80 words)")
             }
