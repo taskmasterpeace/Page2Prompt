@@ -2,6 +2,7 @@ from typing import Dict, List
 import json
 import os
 import logging
+import logging
 class PromptManager:
     def __init__(self, save_file: str = "saved_prompts.json"):
         self.save_file = save_file
@@ -33,9 +34,22 @@ class PromptManager:
 
     def _load_prompts(self) -> List[Dict]:
         if os.path.exists(self.save_file):
-            with open(self.save_file, 'r') as f:
-                return json.load(f)
-        return []
+            try:
+                with open(self.save_file, 'r') as f:
+                    content = f.read()
+                    if content.strip():  # Check if file is not empty
+                        return json.loads(content)
+                    else:
+                        logging.warning(f"The file {self.save_file} is empty.")
+                        return []
+            except json.JSONDecodeError as e:
+                logging.error(f"Error decoding JSON from {self.save_file}: {e}")
+                return []
+        else:
+            logging.info(f"The file {self.save_file} does not exist. Creating a new one.")
+            with open(self.save_file, 'w') as f:
+                json.dump([], f)
+            return []
 
     def search_prompts(self, keyword: str) -> List[Dict]:
         return [prompt for prompt in self.saved_prompts 
