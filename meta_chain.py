@@ -92,8 +92,14 @@ class MetaChain:
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
-        Full Script: {full_script}
+        """
 
+        # Only include Full Script if it's not empty (i.e., when stick_to_script is True)
+        base_template += """
+        Full Script: {full_script}
+        """ if "{full_script}" else ""
+
+        base_template += """
         The prompt should follow this structure:
         {style} [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] {end_parameters}
 
