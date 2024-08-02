@@ -73,7 +73,8 @@ class MetaChain:
                     "highlighted_text": highlighted_text,
                     "full_script": full_script,
                     "subject_info": subject_info,
-                    "end_parameters": end_parameters
+                    "end_parameters": end_parameters,
+                    "length": length  # Add this line
                 })
                 results[length] = result.content.strip()
 
