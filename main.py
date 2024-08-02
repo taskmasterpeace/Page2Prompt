@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import tkinter as tk
-from ui import Page2PromptUI
+from ui import PageToPromptUI
 from core import PromptForgeCore
 
 async def main():

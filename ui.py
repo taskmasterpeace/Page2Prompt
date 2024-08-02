@@ -580,7 +580,7 @@ class PageToPromptUI:
 
 def main():
     root = tk.Tk()
-    app = Page2PromptUI(root)
+    app = PageToPromptUI(root, PromptForgeCore())
     root.mainloop()
 
 if __name__ == "__main__":
