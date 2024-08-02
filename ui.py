@@ -221,6 +221,9 @@ class PageToPromptUI:
         self.create_subject_frame(right_frame)
         self.create_automated_analysis_frame(right_frame)
 
+        # Bind event to prevent losing selection
+        self.master.bind("<Button-1>", self.maintain_selection)
+
     def create_input_fields(self, parent):
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
         input_frame.pack(fill="both", expand=True)
@@ -501,10 +504,17 @@ class PageToPromptUI:
         try:
             if self.script_text.tag_ranges(tk.SEL):
                 self.script_selection = (self.script_text.index(tk.SEL_FIRST), self.script_text.index(tk.SEL_LAST))
+                self.update_ui_with_selection()
             else:
                 self.script_selection = None
         except Exception as e:
             print(f"Error in handle_script_selection: {str(e)}")
+
+    def update_ui_with_selection(self):
+        if self.script_selection:
+            selected_text = self.script_text.get(self.script_selection[0], self.script_selection[1])
+            self.shot_text.delete("1.0", tk.END)
+            self.shot_text.insert(tk.END, selected_text)
 
     def on_style_selected(self, event):
         selected_style = self.style_combo.get()
@@ -580,6 +590,12 @@ class PageToPromptUI:
 
         # Update subjects
         self.subject_frame.update_subjects(state['subjects'])
+
+    def maintain_selection(self, event):
+        if self.script_selection:
+            self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
+            self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
+            return "break"  # Prevents the default behavior of clearing the selection
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 
