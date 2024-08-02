@@ -32,35 +32,21 @@ class PromptLogger:
                 return json.load(file)
         except FileNotFoundError:
             return []
-import json
-from datetime import datetime
-
 class PromptLogger:
-    def __init__(self, log_file="prompt_log.json"):
+    def __init__(self, log_file="prompt_log.txt"):
         self.log_file = log_file
 
-    def log_prompt(self, inputs, generated_prompt):
-        log_entry = {
-            "timestamp": datetime.now().isoformat(),
-            "inputs": inputs,
-            "generated_prompt": generated_prompt
-        }
-        
+    def log_prompt(self, prompt):
         try:
             with open(self.log_file, "a") as f:
-                json.dump(log_entry, f)
-                f.write("\n")  # Add a newline for readability between entries
+                f.write(prompt + "\n")
         except Exception as e:
             print(f"Error writing to log file: {e}")
 
     def get_logs(self):
-        logs = []
         try:
             with open(self.log_file, "r") as f:
-                for line in f:
-                    logs.append(json.loads(line))
+                return f.read().splitlines()
         except FileNotFoundError:
             print("Log file not found. No logs available.")
-        except json.JSONDecodeError:
-            print("Error decoding log file. Some logs may be corrupted.")
-        return logs
+            return []
