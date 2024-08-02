@@ -55,11 +55,11 @@ class MetaChain:
             # Prepare inputs
             subject_info = self._format_subject_info(active_subjects)
             
-            # Create prompt templates for each length
+            # Create prompt templates for each length with word count targets
             templates = {
-                "concise": self._get_prompt_template("concise"),
-                "normal": self._get_prompt_template("normal"),
-                "detailed": self._get_prompt_template("detailed")
+                "concise": self._get_prompt_template("concise (around 30 words)"),
+                "normal": self._get_prompt_template("normal (around 50 words)"),
+                "detailed": self._get_prompt_template("detailed (around 100 words)")
             }
 
             # Create and run chains for each length
@@ -74,7 +74,7 @@ class MetaChain:
                     "full_script": full_script,
                     "subject_info": subject_info,
                     "end_parameters": end_parameters,
-                    "length": length  # Add this line
+                    "length": length
                 })
                 results[length] = result.content.strip()
 
@@ -85,24 +85,19 @@ class MetaChain:
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
-        Subjects:
-        {subject_info}
-
-        Style: {style}
-        
+        Generate a {length} prompt based on the following information:
+        Subjects: {subject_info}
+        Style Prefix: {style}
         Shot Description: {shot_description}
-        
         Director's Notes: {directors_notes}
-        
         Highlighted Script: {highlighted_text}
-        
         Full Script: {full_script}
-        
         End Parameters: {end_parameters}
-        
-        Based on the above information, generate a {length} content prompt that captures the essence of the scene. The prompt should start with the subjects and their actions, followed by the setting and atmosphere. Do not include any camera moves or shot sizes in the prompt. Make sure to incorporate the style and any specific instructions from the director's notes.
-        
-        {length} Content Prompt:
+
+        The prompt should follow this structure:
+        [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects], [Style Suffix] [End Parameters]
+
+        {length} Prompt:
         """
 
         return PromptTemplate(
