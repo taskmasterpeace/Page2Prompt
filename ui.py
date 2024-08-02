@@ -51,7 +51,7 @@ class SubjectFrame(ttk.Frame):
             "Object": "🔮"
         }
         for subject in subjects:
-            status = 'Active' if subject['active'] else 'Inactive'
+            status = 'Active' if subject.get('active', True) else 'Inactive'
             icon = category_icons.get(subject['category'], "❓")
             self.subjects_listbox.insert(tk.END, f"{icon} {subject['name']} ({subject['category']}) ({status})")
 
@@ -96,7 +96,7 @@ class SubjectFrame(ttk.Frame):
                 raise ValueError("All fields must be filled")
 
             self.core.add_subject(name, category, description)
-            self.subjects_listbox.insert(tk.END, f"{name} ({category})")
+            self.update_subjects(self.core.subjects)  # Update the listbox with all subjects
             self.clear_inputs()
         except Exception as e:
             messagebox.showerror("Error", str(e))
