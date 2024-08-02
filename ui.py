@@ -797,8 +797,37 @@ class PageToPromptUI:
     def create_subject_frame(self, parent):
         subject_frame = ttk.LabelFrame(parent, text="Subjects", padding="10")
         subject_frame.pack(fill="both", expand=True, pady=(10, 0))
+        
+        button_frame = ttk.Frame(subject_frame)
+        button_frame.pack(fill="x", pady=(0, 5))
+        
+        generate_subjects_button = ttk.Button(button_frame, text="Generate Subjects", command=self.generate_subjects)
+        generate_subjects_button.pack(side="left", padx=5)
+        ToolTip(generate_subjects_button, "Generate subjects from script or notes")
+        
         self.subject_frame = SubjectFrame(subject_frame, self.core)
         self.subject_frame.pack(fill="both", expand=True)
+
+    def generate_subjects(self):
+        script = self.script_text.get("1.0", tk.END).strip()
+        directors_notes = self.notes_text.get("1.0", tk.END).strip()
+        shot_description = self.shot_text.get("1.0", tk.END).strip()
+        
+        if script:
+            text_to_analyze = script
+        elif directors_notes:
+            text_to_analyze = directors_notes
+        elif shot_description:
+            text_to_analyze = shot_description
+        else:
+            messagebox.showerror("Error", "Please provide a script, director's notes, or shot description.")
+            return
+
+        subjects = self.core.generate_subjects(text_to_analyze)
+        if subjects:
+            self.show_subject_selection_window(subjects)
+        else:
+            messagebox.showinfo("No Subjects Found", "No subjects were generated. Please provide more detailed information.")
 
     def create_automated_analysis_frame(self, parent):
         automated_frame = ttk.LabelFrame(parent, text="Automated Script Analysis", padding="10")
