@@ -183,7 +183,7 @@ class AutomatedAnalysisFrame(ttk.Frame):
 
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
-class Page2PromptUI:
+class PageToPromptUI:
     def __init__(self, master, core):
         self.master = master
         self.core = core
@@ -193,7 +193,7 @@ class Page2PromptUI:
         self.all_prompts_text = None
 
     def setup_ui(self):
-        self.master.title("Page 2 Prompt - Bring Your Script to Life")
+        self.master.title("Page to Prompt - Bring Your Script to Life")
         self.master.geometry("1200x800")
         self.master.configure(bg='#f0f0f0')  # Light gray background
 

@@ -13,7 +13,7 @@ async def main():
     core = PromptForgeCore()
     
     # Pass the core instance to PromptForgeUI
-    app = Page2PromptUI(root, core)
+    app = PageToPromptUI(root, core)
     
     while True:
         root.update()
