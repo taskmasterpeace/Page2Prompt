@@ -428,18 +428,20 @@ class PromptForgeCore:
         self.script = full_script.strip()
         self.stick_to_script = stick_to_script
 
-    def _save_state(self):
-        state = {
-            'shot_description': self.shot_description,
-            'directors_notes': self.directors_notes,
-            'script': self.script,
-            'highlighted_text': self.highlighted_text,
-            'stick_to_script': self.stick_to_script,
-            'style_prefix': self.style_prefix,
-            'style_suffix': self.style_suffix,
-            'end_parameters': self.end_parameters,
-            'subjects': self.subjects.copy()  # Add subjects to the state
-        }
+    def _save_state(self, state=None):
+        if state is None:
+            state = {
+                'shot_description': self.shot_description,
+                'directors_notes': self.directors_notes,
+                'script': self.script,
+                'highlighted_text': self.highlighted_text,
+                'stick_to_script': self.stick_to_script,
+                'style_prefix': self.style_prefix,
+                'style_suffix': self.style_suffix,
+                'end_parameters': self.end_parameters,
+                'subjects': self.subjects.copy(),  # Add subjects to the state
+                'temperature': self.temperature  # Add temperature to the state
+            }
         self.history.append(state)
         self.future.clear()  # Clear redo stack when a new action is performed
 
