@@ -492,9 +492,9 @@ class AutomatedAnalysisFrame(ttk.Frame):
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
 class PageToPromptUI:
-    def __init__(self, master, core):
+    def __init__(self, master):
         self.master = master
-        self.core = core
+        self.core = PromptForgeCore()
         self.loop = asyncio.get_event_loop()
         self.setup_ui()
         self.all_prompts_window = None
