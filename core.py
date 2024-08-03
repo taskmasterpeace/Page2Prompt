@@ -488,6 +488,12 @@ class PromptForgeCore:
             'camera_move': self.camera_move
         }
 
+    def _save_state(self, state=None):
+        if state is None:
+            state = self._get_current_state()
+        self.history.append(state)
+        self.future.clear()  # Clear redo stack when a new action is performed
+
 class TemplateManager:
     def __init__(self, template_file: str = "prompt_templates.json"):
         self.template_file = template_file
