@@ -635,6 +635,7 @@ class PageToPromptUI:
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
+        self.script_text.bind("<KeyRelease>", lambda e: self.handle_script_update())
         self.timeline_view = None
 
     def setup_ui(self):
@@ -705,9 +706,22 @@ class PageToPromptUI:
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
         input_frame.pack(fill="both", expand=True)
         
+        # Create a PanedWindow to separate timeline and input fields
+        paned_window = ttk.PanedWindow(input_frame, orient=tk.VERTICAL)
+        paned_window.pack(fill="both", expand=True)
+
+        # Add Timeline View
+        timeline_frame = ttk.Frame(paned_window)
+        paned_window.add(timeline_frame, weight=1)
+        self.timeline_view = TimelineView(timeline_frame, self.core)
+        self.timeline_view.pack(fill="both", expand=True)
+
         # Create a canvas with scrollbar for the input fields
-        canvas = tk.Canvas(input_frame)
-        scrollbar = ttk.Scrollbar(input_frame, orient="vertical", command=canvas.yview)
+        input_canvas_frame = ttk.Frame(paned_window)
+        paned_window.add(input_canvas_frame, weight=2)
+
+        canvas = tk.Canvas(input_canvas_frame)
+        scrollbar = ttk.Scrollbar(input_canvas_frame, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
 
         scrollable_frame.bind(
@@ -722,7 +736,7 @@ class PageToPromptUI:
         scrollbar.pack(side="right", fill="y")
 
         # Set a minimum size for the canvas
-        canvas.config(width=400, height=600)
+        canvas.config(width=400, height=400)
 
         # API Key
         api_key_frame = ttk.Frame(scrollable_frame)
@@ -937,6 +951,7 @@ class PageToPromptUI:
         self.timeline_view.clear_timeline()
         for sentence in sentences:
             self.timeline_view.add_sentence_node(sentence)
+        self.timeline_view.canvas.configure(scrollregion=self.timeline_view.canvas.bbox("all"))
 
     def save_project(self):
         filename = filedialog.asksaveasfilename(defaultextension=".json")
