@@ -704,33 +704,53 @@ class PageToPromptUI:
     def create_input_fields(self, parent):
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
         input_frame.pack(fill="both", expand=True)
+        
+        # Create a canvas with scrollbar for the input fields
+        canvas = tk.Canvas(input_frame)
+        scrollbar = ttk.Scrollbar(input_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
         # API Key
-        ttk.Label(input_frame, text="API Key:").grid(column=0, row=0, sticky=tk.W, pady=5)
-        self.api_key_entry = ttk.Entry(input_frame, width=50, show="*")
-        self.api_key_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
+        api_key_frame = ttk.Frame(scrollable_frame)
+        api_key_frame.pack(fill="x", pady=5)
+        ttk.Label(api_key_frame, text="API Key:").pack(side="left")
+        self.api_key_entry = ttk.Entry(api_key_frame, width=50, show="*")
+        self.api_key_entry.pack(side="left", expand=True, fill="x", padx=(5, 0))
         ToolTip(self.api_key_entry, "Enter your OpenAI API key here")
-        save_api_key_btn = ttk.Button(input_frame, text="Save API Key", command=self.save_api_key)
-        save_api_key_btn.grid(column=2, row=0, sticky=tk.W, pady=5)
+        save_api_key_btn = ttk.Button(api_key_frame, text="Save API Key", command=self.save_api_key)
+        save_api_key_btn.pack(side="right", padx=(5, 0))
         ToolTip(save_api_key_btn, "Save the entered API key")
 
         # Shot Description
-        ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
-        self.shot_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
-        self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
-        self.shot_text.insert(tk.END, "")
+        shot_frame = ttk.Frame(scrollable_frame)
+        shot_frame.pack(fill="x", pady=5)
+        ttk.Label(shot_frame, text="Shot Description:").pack(side="left", anchor="n")
+        self.shot_text = scrolledtext.ScrolledText(shot_frame, height=4, width=50, wrap=tk.WORD)
+        self.shot_text.pack(side="left", expand=True, fill="both", padx=(5, 0))
         ToolTip(self.shot_text, "Describe the shot you want to generate")
 
         # Director's Notes
-        ttk.Label(input_frame, text="📝 Director's Notes:").grid(column=0, row=2, sticky=tk.W, pady=5)
-        self.notes_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
-        self.notes_text.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
-        self.notes_text.insert(tk.END, "")
+        notes_frame = ttk.Frame(scrollable_frame)
+        notes_frame.pack(fill="x", pady=5)
+        ttk.Label(notes_frame, text="📝 Director's Notes:").pack(side="left", anchor="n")
+        self.notes_text = scrolledtext.ScrolledText(notes_frame, height=4, width=50, wrap=tk.WORD)
+        self.notes_text.pack(side="left", expand=True, fill="both", padx=(5, 0))
         ToolTip(self.notes_text, "Enter any additional notes or directions for the shot")
 
         # Style
-        style_frame = ttk.Frame(input_frame)
-        style_frame.grid(column=0, row=3, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        style_frame = ttk.Frame(scrollable_frame)
+        style_frame.pack(fill="x", pady=5)
 
         ttk.Label(style_frame, text="🎨 Style:").grid(column=0, row=0, sticky=tk.W)
         self.style_combo = ttk.Combobox(style_frame, width=30)
@@ -807,8 +827,8 @@ class PageToPromptUI:
         ToolTip(self.end_parameters_entry, "Enter parameters to be added at the end of every prompt (e.g., --ar 16:9 --q 2)")
 
         # Generate Button and Save as Template
-        button_frame = ttk.Frame(input_frame)
-        button_frame.grid(column=1, row=9, sticky=tk.E, pady=10)
+        button_frame = ttk.Frame(scrollable_frame)
+        button_frame.pack(fill="x", pady=10)
 
         self.generate_button = ttk.Button(button_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
         self.generate_button.pack(side=tk.LEFT, padx=2)
@@ -817,8 +837,8 @@ class PageToPromptUI:
         self.save_template_button.pack(side=tk.LEFT, padx=2)
 
         # Template Management
-        template_frame = ttk.Frame(input_frame)
-        template_frame.grid(column=1, row=10, sticky=tk.E, pady=5)
+        template_frame = ttk.Frame(scrollable_frame)
+        template_frame.pack(fill="x", pady=5)
 
         self.load_template_var = tk.StringVar()
         self.load_template_combo = ttk.Combobox(template_frame, textvariable=self.load_template_var, width=20)
@@ -827,7 +847,8 @@ class PageToPromptUI:
 
         self.update_template_list()
 
-        input_frame.columnconfigure(1, weight=1)
+        scrollable_frame.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox("all"))
 
     async def handle_generate_button_click(self):
         try:
@@ -1057,8 +1078,13 @@ class PageToPromptUI:
         self.all_prompts_text.delete("1.0", tk.END)
         saved_prompts = self.core.meta_chain.prompt_manager.get_all_prompts()
         for i, prompt_data in enumerate(saved_prompts, 1):
-            self.all_prompts_text.insert(tk.END, f"Prompt {i}:\n{prompt_data['prompt']}\n\n")
+            shot_description = prompt_data.get('components', {}).get('shot_description', 'No shot description')
+            self.all_prompts_text.insert(tk.END, f"Prompt {i}:\n")
+            self.all_prompts_text.insert(tk.END, f"Shot Description: ", "bold")
+            self.all_prompts_text.insert(tk.END, f"{shot_description}\n")
+            self.all_prompts_text.insert(tk.END, f"Prompt: {prompt_data['prompt']}\n\n")
 
+        self.all_prompts_text.tag_configure("bold", font=("TkDefaultFont", 10, "bold"))
         self.all_prompts_window.lift()
 
     def show_logs(self):
