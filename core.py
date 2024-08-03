@@ -636,7 +636,14 @@ class PromptForgeCore:
         return normal[:250] + ('...' if len(normal) > 250 else '')
 
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
-        self.meta_chain.prompt_manager.save_prompt(prompt, components)
+        self.meta_chain.prompt_manager.save_prompt(
+            prompt,
+            components.get('style_prefix', ''),
+            components.get('style_suffix', ''),
+            components.get('camera_move', ''),
+            components.get('camera_shot', ''),
+            components
+        )
 
     def add_subject(self, name: str, category: str, description: str) -> None:
         self.subjects.append({

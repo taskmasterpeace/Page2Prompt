@@ -1021,8 +1021,11 @@ class PageToPromptUI:
                 "stick_to_script": self.stick_to_script_var.get(),
                 "end_parameters": self.end_parameters_entry.get()
             }
-            self.core.save_prompt(prompt, components)
-            messagebox.showinfo("Saved", "Prompt saved successfully!")
+            try:
+                self.core.save_prompt(prompt, components)
+                messagebox.showinfo("Saved", "Prompt saved successfully!")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save prompt: {str(e)}")
         else:
             messagebox.showwarning("Empty Prompt", "There is no prompt to save.")
 
