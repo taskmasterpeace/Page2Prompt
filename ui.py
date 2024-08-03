@@ -502,7 +502,6 @@ class PageToPromptUI:
 
     def setup_ui(self):
         self.master.title("Page to Prompt - Bring Your Script to Life")
-        self.master.geometry("1200x800")
         self.master.configure(bg='#f0f0f0')  # Light gray background
 
         style = ttk.Style()
@@ -513,25 +512,59 @@ class PageToPromptUI:
         style.configure("TEntry", font=('Helvetica', 10))
         style.configure("TCombobox", font=('Helvetica', 10))
 
-        main_frame = ttk.Frame(self.master, padding="10")
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        self.main_paned = PanedWindow(self.master, orient=tk.HORIZONTAL)
+        self.main_paned.pack(fill=tk.BOTH, expand=True)
 
-        left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side="left", fill="both", expand=True)
+        left_frame = ttk.Frame(self.main_paned)
+        right_frame = ttk.Frame(self.main_paned)
 
-        right_frame = ttk.Frame(main_frame)
-        right_frame.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        self.main_paned.add(left_frame, weight=1)
+        self.main_paned.add(right_frame, weight=1)
 
         # Left Frame Contents
         self.create_input_fields(left_frame)
 
         # Right Frame Contents
-        self.create_output_area(right_frame)
-        self.create_subject_frame(right_frame)
-        self.create_automated_analysis_frame(right_frame)
+        self.right_paned = PanedWindow(right_frame, orient=tk.VERTICAL)
+        self.right_paned.pack(fill=tk.BOTH, expand=True)
+
+        output_frame = ttk.Frame(self.right_paned)
+        subject_frame = ttk.Frame(self.right_paned)
+        analysis_frame = ttk.Frame(self.right_paned)
+
+        self.right_paned.add(output_frame, weight=1)
+        self.right_paned.add(subject_frame, weight=1)
+        self.right_paned.add(analysis_frame, weight=1)
+
+        self.create_output_area(output_frame)
+        self.create_subject_frame(subject_frame)
+        self.create_automated_analysis_frame(analysis_frame)
 
         # Bind event to prevent losing selection
         self.master.bind("<Button-1>", self.maintain_selection)
+
+        # Load saved pane positions
+        self.load_pane_positions()
+
+        # Bind pane position saving
+        self.main_paned.bind("<ButtonRelease-1>", self.save_pane_positions)
+        self.right_paned.bind("<ButtonRelease-1>", self.save_pane_positions)
+
+    def load_pane_positions(self):
+        main_sash = config.get('UI_SETTINGS', 'main_paned_sash')
+        right_sash1 = config.get('UI_SETTINGS', 'right_paned_sash1')
+        right_sash2 = config.get('UI_SETTINGS', 'right_paned_sash2')
+
+        if main_sash:
+            self.main_paned.sashpos(0, int(main_sash))
+        if right_sash1 and right_sash2:
+            self.right_paned.sashpos(0, int(right_sash1))
+            self.right_paned.sashpos(1, int(right_sash2))
+
+    def save_pane_positions(self, event=None):
+        config.set('UI_SETTINGS', 'main_paned_sash', str(self.main_paned.sashpos(0)))
+        config.set('UI_SETTINGS', 'right_paned_sash1', str(self.right_paned.sashpos(0)))
+        config.set('UI_SETTINGS', 'right_paned_sash2', str(self.right_paned.sashpos(1)))
 
     def create_input_fields(self, parent):
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
