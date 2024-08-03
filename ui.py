@@ -2,7 +2,6 @@
 
 import tkinter as tk
 from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
-from tkinterdnd2 import DND_TEXT, TkinterDnD
 from tkinter.ttk import Frame, Scrollbar, PanedWindow
 import pyperclip
 from core import PromptForgeCore
