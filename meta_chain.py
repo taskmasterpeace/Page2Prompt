@@ -50,8 +50,10 @@ class MetaChain:
 
     async def generate_prompt(self, active_subjects: list = None,
                               style: str = "", shot_description: str = "", directors_notes: str = "",
-                              highlighted_text: str = "", full_script: str = "", end_parameters: str = "") -> Dict[str, str]:
+                              highlighted_text: str = "", full_script: str = "", end_parameters: str = "",
+                              temperature: float = 0.7) -> Dict[str, str]:
         try:
+            self._initialize_llm(temperature)  # Initialize LLM with the current temperature
             subject_info = self._format_subject_info(active_subjects)
             
             templates = {

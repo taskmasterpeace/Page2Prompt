@@ -205,6 +205,7 @@ class PromptForgeCore:
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
         self.prompt_logger = PromptLogger("prompt_log.json")
+        self.temperature = 0.7  # Default temperature
         self.style_prefix = ""
         self.style_suffix = ""
         self.end_parameters = ""
@@ -512,8 +513,9 @@ class TemplateManager:
                 return json.load(f)
         return {}
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> Dict[str, str]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, temperature: float = 0.7) -> Dict[str, str]:
         try:
+            self.temperature = temperature  # Update the temperature
             active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
             
             # Generate prompts using MetaChain
@@ -524,7 +526,8 @@ class TemplateManager:
                 directors_notes=directors_notes,
                 highlighted_text=highlighted_text,
                 full_script=script if stick_to_script else "",
-                end_parameters=end_parameters
+                end_parameters=end_parameters,
+                temperature=temperature  # Pass the temperature to MetaChain
             )
             
             # Generate different lengths of prompts
