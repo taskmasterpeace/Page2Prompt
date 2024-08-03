@@ -462,6 +462,7 @@ class PromptForgeCore:
         self.style_suffix = state['style_suffix']
         self.end_parameters = state['end_parameters']
         self.subjects = state['subjects'].copy()  # Restore subjects
+        self.temperature = state['temperature']
 
     def _get_current_state(self):
         return {
@@ -475,6 +476,7 @@ class PromptForgeCore:
             'end_parameters': self.end_parameters,
             'subjects': self.subjects,
             'camera_shot': self.camera_shot,
+            'temperature': self.temperature,
             'camera_move': self.camera_move
         }
 
