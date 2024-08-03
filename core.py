@@ -430,18 +430,7 @@ class PromptForgeCore:
 
     def _save_state(self, state=None):
         if state is None:
-            state = {
-                'shot_description': self.shot_description,
-                'directors_notes': self.directors_notes,
-                'script': self.script,
-                'highlighted_text': self.highlighted_text,
-                'stick_to_script': self.stick_to_script,
-                'style_prefix': self.style_prefix,
-                'style_suffix': self.style_suffix,
-                'end_parameters': self.end_parameters,
-                'subjects': self.subjects.copy(),  # Add subjects to the state
-                'temperature': self.temperature  # Add temperature to the state
-            }
+            state = self._get_current_state()
         self.history.append(state)
         self.future.clear()  # Clear redo stack when a new action is performed
 
@@ -487,12 +476,6 @@ class PromptForgeCore:
             'temperature': self.temperature,
             'camera_move': self.camera_move
         }
-
-    def _save_state(self, state=None):
-        if state is None:
-            state = self._get_current_state()
-        self.history.append(state)
-        self.future.clear()  # Clear redo stack when a new action is performed
 
 class TemplateManager:
     def __init__(self, template_file: str = "prompt_templates.json"):
