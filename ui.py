@@ -752,9 +752,9 @@ class PageToPromptUI:
         style_frame = ttk.Frame(scrollable_frame)
         style_frame.pack(fill="x", pady=5)
 
-        ttk.Label(style_frame, text="🎨 Style:").grid(column=0, row=0, sticky=tk.W)
+        ttk.Label(style_frame, text="🎨 Style:").pack(side="left")
         self.style_combo = ttk.Combobox(style_frame, width=30)
-        self.style_combo.grid(column=1, row=0, sticky=(tk.W, tk.E))
+        self.style_combo.pack(side="left", padx=(5, 0))
         style_names = ["None"] + self.core.style_manager.get_style_names()
         self.style_combo['values'] = style_names
         self.style_combo.set("None")
@@ -762,68 +762,82 @@ class PageToPromptUI:
         ToolTip(self.style_combo, "Select a predefined style or 'None' to create a custom style")
 
         generate_style_btn = ttk.Button(style_frame, text="Generate Random Style", command=self.generate_random_style)
-        generate_style_btn.grid(column=2, row=0, sticky=tk.W, padx=5)
+        generate_style_btn.pack(side="left", padx=5)
         ToolTip(generate_style_btn, "Generate a random predefined style")
 
         save_style_btn = ttk.Button(style_frame, text="Save Style", command=self.save_current_style)
-        save_style_btn.grid(column=3, row=0, sticky=tk.W, padx=5)
+        save_style_btn.pack(side="left", padx=5)
         ToolTip(save_style_btn, "Save the current style settings as a new style")
 
-        ttk.Label(style_frame, text="Prefix:").grid(column=0, row=1, sticky=tk.W, pady=5)
-        self.style_prefix_entry = ttk.Entry(style_frame, width=50)
-        self.style_prefix_entry.grid(column=1, row=1, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        style_prefix_frame = ttk.Frame(scrollable_frame)
+        style_prefix_frame.pack(fill="x", pady=5)
+        ttk.Label(style_prefix_frame, text="Prefix:").pack(side="left")
+        self.style_prefix_entry = ttk.Entry(style_prefix_frame, width=50)
+        self.style_prefix_entry.pack(side="left", expand=True, fill="x", padx=(5, 0))
         ToolTip(self.style_prefix_entry, "Enter a brief description of the style (e.g., 'noir film')")
 
-        ttk.Label(style_frame, text="Suffix:").grid(column=0, row=2, sticky=tk.W, pady=5)
-        self.style_suffix_entry = ttk.Entry(style_frame, width=50)
-        self.style_suffix_entry.grid(column=1, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        style_suffix_frame = ttk.Frame(scrollable_frame)
+        style_suffix_frame.pack(fill="x", pady=5)
+        ttk.Label(style_suffix_frame, text="Suffix:").pack(side="left")
+        self.style_suffix_entry = ttk.Entry(style_suffix_frame, width=50)
+        self.style_suffix_entry.pack(side="left", expand=True, fill="x", padx=(5, 0))
         ToolTip(self.style_suffix_entry, "Enter additional style details or leave blank to generate automatically")
 
-        generate_details_btn = ttk.Button(style_frame, text="Generate Style Details", command=self.generate_style_details)
-        generate_details_btn.grid(column=1, row=3, sticky=tk.E, pady=5)
+        generate_details_btn = ttk.Button(style_suffix_frame, text="Generate Style Details", command=self.generate_style_details)
+        generate_details_btn.pack(side="right", padx=5)
         ToolTip(generate_details_btn, "Generate detailed style descriptions based on the entered prefix")
 
         # Script
-        ttk.Label(input_frame, text="📜 Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
-        self.script_text = scrolledtext.ScrolledText(input_frame, height=10, width=50, wrap=tk.WORD)
-        self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
+        script_frame = ttk.Frame(scrollable_frame)
+        script_frame.pack(fill="x", pady=5)
+        ttk.Label(script_frame, text="📜 Script:").pack(side="left", anchor="n")
+        self.script_text = scrolledtext.ScrolledText(script_frame, height=10, width=50, wrap=tk.WORD)
+        self.script_text.pack(side="left", expand=True, fill="both", padx=(5, 0))
         self.script_text.insert(tk.END, "")
         self.script_text.bind("<<Selection>>", partial(self.on_script_selection))
         ToolTip(self.script_text, "Enter the script or scene description here")
 
         # Stick to Script Checkbox
+        stick_to_script_frame = ttk.Frame(scrollable_frame)
+        stick_to_script_frame.pack(fill="x", pady=5)
         self.stick_to_script_var = tk.BooleanVar()
-        self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
-        self.stick_to_script_check.grid(column=1, row=5, sticky=tk.W, pady=5)
+        self.stick_to_script_check = ttk.Checkbutton(stick_to_script_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
+        self.stick_to_script_check.pack(side="left")
         ToolTip(self.stick_to_script_check, "When checked, the generated prompt will closely follow the script")
 
         # Camera Shot
-        ttk.Label(input_frame, text="📷 Camera Shot:").grid(column=0, row=6, sticky=tk.W, pady=5)
+        camera_shot_frame = ttk.Frame(scrollable_frame)
+        camera_shot_frame.pack(fill="x", pady=5)
+        ttk.Label(camera_shot_frame, text="📷 Camera Shot:").pack(side="left")
         self.shot_var = tk.StringVar()
-        self.shot_combo = ttk.Combobox(input_frame, textvariable=self.shot_var, values=[
+        self.shot_combo = ttk.Combobox(camera_shot_frame, textvariable=self.shot_var, values=[
             "None", "Wide Shot", "Long Shot", "Full Shot", "Medium Shot", "Close-up", "Extreme Close-up",
             "Point of View Shot", "Over the Shoulder Shot", "Low Angle Shot", "High Angle Shot",
             "Dutch Angle Shot", "Bird's Eye View", "Worm's Eye View"
         ], width=47)
-        self.shot_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
+        self.shot_combo.pack(side="left", expand=True, fill="x", padx=(5, 0))
         self.shot_combo.set("None")
         ToolTip(self.shot_combo, "Select the type of camera shot for this prompt")
 
         # Camera Move
-        ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=7, sticky=tk.W, pady=5)
+        camera_move_frame = ttk.Frame(scrollable_frame)
+        camera_move_frame.pack(fill="x", pady=5)
+        ttk.Label(camera_move_frame, text="🎥 Camera Move:").pack(side="left")
         self.move_var = tk.StringVar()
-        self.move_combo = ttk.Combobox(input_frame, textvariable=self.move_var, values=[
+        self.move_combo = ttk.Combobox(camera_move_frame, textvariable=self.move_var, values=[
             "None", "Static", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal", "Crane Shot",
             "Steadicam", "Handheld", "Tracking Shot", "Pull Focus"
         ], width=47)
-        self.move_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
+        self.move_combo.pack(side="left", expand=True, fill="x", padx=(5, 0))
         self.move_combo.set("None")
         ToolTip(self.move_combo, "Select the type of camera movement for this prompt")
 
         # End Parameters
-        ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=8, sticky=tk.W, pady=5)
-        self.end_parameters_entry = ttk.Entry(input_frame, width=50)
-        self.end_parameters_entry.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
+        end_parameters_frame = ttk.Frame(scrollable_frame)
+        end_parameters_frame.pack(fill="x", pady=5)
+        ttk.Label(end_parameters_frame, text="End Parameters:").pack(side="left")
+        self.end_parameters_entry = ttk.Entry(end_parameters_frame, width=50)
+        self.end_parameters_entry.pack(side="left", expand=True, fill="x", padx=(5, 0))
         ToolTip(self.end_parameters_entry, "Enter parameters to be added at the end of every prompt (e.g., --ar 16:9 --q 2)")
 
         # Generate Button and Save as Template
@@ -842,7 +856,7 @@ class PageToPromptUI:
 
         self.load_template_var = tk.StringVar()
         self.load_template_combo = ttk.Combobox(template_frame, textvariable=self.load_template_var, width=20)
-        self.load_template_combo.pack(side=tk.LEFT, padx=2)
+        self.load_template_combo.pack(side="left", padx=2)
         self.load_template_combo.bind("<<ComboboxSelected>>", self.load_template)
 
         self.update_template_list()
