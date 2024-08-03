@@ -542,6 +542,12 @@ class PromptForgeCore:
         # Initialize TemplateManager
         self.template_manager = TemplateManager()
 
+    def _save_state(self, state=None):
+        if state is None:
+            state = self._get_current_state()
+        self.history.append(state)
+        self.future.clear()  # Clear redo stack when a new action is performed
+
     def _initialize_saved_prompts(self):
         if not os.path.exists("saved_prompts.json") or os.path.getsize("saved_prompts.json") == 0:
             with open("saved_prompts.json", "w") as f:
