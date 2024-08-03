@@ -1,8 +1,8 @@
 # ui.py
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
-from tkinter.ttk import Frame, Scrollbar, PanedWindow
+from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog, Canvas
+from tkinter.ttk import Frame, Scrollbar, PanedWindow, Scale
 import pyperclip
 from core import PromptForgeCore
 import os
