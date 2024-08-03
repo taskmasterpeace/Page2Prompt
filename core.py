@@ -523,6 +523,41 @@ class TemplateManager:
                 return json.load(f)
         return {}
 
+class PromptForgeCore:
+    def __init__(self):
+        self.meta_chain = MetaChain(self)
+        self.style_manager = StyleManager()
+        self.shot_description = ""
+        self.directors_notes = ""
+        self.script = ""
+        self.highlighted_text = ""
+        self.stick_to_script = False
+        self.subjects: List[Dict[str, Any]] = []
+        self.prompt_logger = PromptLogger("prompt_log.json")
+        self._initialize_saved_prompts()
+        self.temperature = 0.7  # Default temperature
+        self.style_prefix = ""
+        self.style_suffix = ""
+        self.end_parameters = ""
+        self.camera_shot = ""
+        self.camera_move = ""
+        self.history = deque(maxlen=10)  # Store last 10 states
+        self.future = deque(maxlen=10)  # Store undone states for redo
+        
+        # Initialize LLM
+        self.llm = ChatOpenAI(temperature=0.7)
+        
+        # Initialize StyleHandler
+        self.style_handler = StyleHandler()
+        
+        # Initialize TemplateManager
+        self.template_manager = TemplateManager()
+
+    def _initialize_saved_prompts(self):
+        if not os.path.exists("saved_prompts.json") or os.path.getsize("saved_prompts.json") == 0:
+            with open("saved_prompts.json", "w") as f:
+                json.dump([], f)
+
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, temperature: float = 0.7) -> Dict[str, str]:
         try:
             self.temperature = temperature  # Update the temperature
@@ -568,6 +603,16 @@ class TemplateManager:
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
+
+    def _generate_concise_prompt(self, full_prompt: str) -> str:
+        # Extract the first sentence or up to 100 characters
+        concise = full_prompt.split('.')[0]
+        return concise[:100] + ('...' if len(concise) > 100 else '')
+
+    def _generate_normal_prompt(self, full_prompt: str) -> str:
+        # Extract the first paragraph or up to 250 characters
+        normal = full_prompt.split('\n\n')[0]
+        return normal[:250] + ('...' if len(normal) > 250 else '')
 
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
         self.meta_chain.prompt_manager.save_prompt(prompt, components)
