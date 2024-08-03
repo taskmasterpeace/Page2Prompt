@@ -569,62 +569,6 @@ class TemplateManager:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
 
-    def _generate_concise_prompt(self, full_prompt: str) -> str:
-        # Extract the first sentence or up to 100 characters
-        concise = full_prompt.split('.')[0]
-        return concise[:100] + ('...' if len(concise) > 100 else '')
-
-    def _generate_normal_prompt(self, full_prompt: str) -> str:
-        # Extract the first paragraph or up to 250 characters
-        normal = full_prompt.split('\n\n')[0]
-        return normal[:250] + ('...' if len(normal) > 250 else '')
-
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, temperature: float = 0.7) -> Dict[str, str]:
-        try:
-            self.temperature = temperature  # Update the temperature
-            active_subjects = [subject for subject in self.subjects if subject.get('active', False)]
-            
-            # Generate prompts using MetaChain
-            full_prompt = await self.meta_chain.generate_prompt(
-                active_subjects=active_subjects,
-                style=style,
-                shot_description=shot_description,
-                directors_notes=directors_notes,
-                highlighted_text=highlighted_text,
-                full_script=script if stick_to_script else "",
-                end_parameters=end_parameters,
-                temperature=temperature  # Pass the temperature to MetaChain
-            )
-            
-            # Generate different lengths of prompts
-            concise_prompt = self._generate_concise_prompt(full_prompt)
-            normal_prompt = self._generate_normal_prompt(full_prompt)
-            detailed_prompt = full_prompt
-
-            prompts = {
-                "Concise Prompt": concise_prompt,
-                "Normal Prompt": normal_prompt,
-                "Detailed Prompt": detailed_prompt
-            }
-            
-            # Log the inputs and generated outputs
-            inputs = {
-                "shot_description": shot_description,
-                "style": style,
-                "directors_notes": directors_notes,
-                "script": script if stick_to_script else "",
-                "stick_to_script": stick_to_script,
-                "active_subjects": [s['name'] for s in active_subjects],
-                "end_parameters": end_parameters
-            }
-            for length, prompt in prompts.items():
-                self.prompt_logger.log_prompt({**inputs, "length": length}, prompt)
-            
-            return prompts
-        except Exception as e:
-            logging.exception("Error in PromptForgeCore.generate_prompt")
-            raise
-
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
         self.meta_chain.prompt_manager.save_prompt(prompt, components)
 
