@@ -562,7 +562,7 @@ class TimelineView(ttk.Frame):
 
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-class SentenceNode(TkinterDnD.Tk):
+class SentenceNode(tk.Frame):
     def __init__(self, master, sentence, zoom_level):
         super().__init__(master)
         self.sentence = sentence
@@ -578,14 +578,6 @@ class SentenceNode(TkinterDnD.Tk):
 
         self.cards = []
 
-        self.drag_source_register(DND_TEXT)
-        self.drop_target_register(DND_TEXT)
-
-        self.dnd_bind('<<DragInitCmd>>', self.drag_init)
-        self.dnd_bind('<<DropEnter>>', self.drop_enter)
-        self.dnd_bind('<<DropLeave>>', self.drop_leave)
-        self.dnd_bind('<<Drop>>', self.drop)
-
     def add_card(self, prompt=""):
         if len(self.cards) < 4:
             card = PromptCard(self, prompt)
@@ -596,21 +588,6 @@ class SentenceNode(TkinterDnD.Tk):
         self.zoom_level = zoom_level
         width = int(200 * (zoom_level / 100))
         self.label.configure(wraplength=width)
-
-    def drag_init(self, event):
-        return (DND_TEXT, self.sentence)
-
-    def drop_enter(self, event):
-        event.widget.focus_set()
-        return event.action
-
-    def drop_leave(self, event):
-        return event.action
-
-    def drop(self, event):
-        if event.data:
-            self.master.master.reorder_nodes(event.data, self.sentence)
-        return event.action
 
 class PromptCard(ttk.Frame):
     def __init__(self, master, prompt=""):
