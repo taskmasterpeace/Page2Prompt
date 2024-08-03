@@ -1055,7 +1055,8 @@ class PageToPromptUI:
         if self.script_selection:
             self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
             self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
-            return "break"  # Prevents the default behavior of clearing the selection
+            self.script_text.mark_set(tk.INSERT, self.script_selection[1])
+        return "break"  # Prevents the default behavior of clearing the selection
 
     def save_as_template(self):
         template_name = simpledialog.askstring("Save Template", "Enter a name for this template:")
