@@ -1096,28 +1096,20 @@ class PageToPromptUI:
 
     def generate_subjects(self):
         script = self.script_text.get("1.0", tk.END).strip()
-        directors_notes = self.notes_text.get("1.0", tk.END).strip()
-        shot_description = self.shot_text.get("1.0", tk.END).strip()
         
-        if script:
-            text_to_analyze = script
-        elif directors_notes:
-            text_to_analyze = directors_notes
-        elif shot_description:
-            text_to_analyze = shot_description
-        else:
-            messagebox.showerror("Error", "Please provide a script, director's notes, or shot description.")
+        if not script:
+            messagebox.showerror("Error", "Please provide a script in the script text area.")
             return
 
-        asyncio.create_task(self.async_generate_subjects(text_to_analyze))
+        asyncio.create_task(self.async_generate_subjects(script))
 
-    async def async_generate_subjects(self, text_to_analyze):
+    async def async_generate_subjects(self, script):
         try:
-            subjects = await self.core.generate_subjects(text_to_analyze)
+            subjects = await self.core.generate_subjects(script)
             if subjects:
                 self.master.after(0, self.show_subject_selection_window, subjects)
             else:
-                self.master.after(0, messagebox.showinfo, "No Subjects Found", "No subjects were generated. Please provide more detailed information.")
+                self.master.after(0, messagebox.showinfo, "No Subjects Found", "No subjects were generated. Please provide a more detailed script.")
         except Exception as e:
             self.master.after(0, messagebox.showerror, "Error", f"An error occurred while generating subjects: {str(e)}")
 
