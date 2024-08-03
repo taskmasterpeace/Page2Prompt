@@ -823,14 +823,17 @@ class PageToPromptUI:
             messagebox.showerror("Error", "Please provide a script, director's notes, or shot description.")
             return
 
+        asyncio.create_task(self.async_generate_subjects(text_to_analyze))
+
+    async def async_generate_subjects(self, text_to_analyze):
         try:
-            subjects = self.core.generate_subjects(text_to_analyze)
+            subjects = await self.core.generate_subjects(text_to_analyze)
             if subjects:
-                self.show_subject_selection_window(subjects)
+                self.master.after(0, self.show_subject_selection_window, subjects)
             else:
-                messagebox.showinfo("No Subjects Found", "No subjects were generated. Please provide more detailed information.")
+                self.master.after(0, messagebox.showinfo, "No Subjects Found", "No subjects were generated. Please provide more detailed information.")
         except Exception as e:
-            messagebox.showerror("Error", f"An error occurred while generating subjects: {str(e)}")
+            self.master.after(0, messagebox.showerror, "Error", f"An error occurred while generating subjects: {str(e)}")
 
     def show_subject_selection_window(self, subjects):
         selection_window = tk.Toplevel(self.master)

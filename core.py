@@ -218,7 +218,7 @@ class PromptForgeCore:
         # Initialize StyleHandler
         self.style_handler = StyleHandler()
 
-    def generate_subjects(self, script_text: str) -> List[Dict[str, Any]]:
+    async def generate_subjects(self, script_text: str) -> List[Dict[str, Any]]:
         prompt = f"""
         Analyze the following script excerpt and perform these tasks:
 
@@ -243,7 +243,7 @@ class PromptForgeCore:
         """
 
         try:
-            response = self.llm.generate([prompt])
+            response = await self.llm.agenerate([prompt])
             subjects_text = response.generations[0][0].text
 
             subjects = []
