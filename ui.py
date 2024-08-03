@@ -727,6 +727,20 @@ class PageToPromptUI:
             messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {str(e)}\n\nPlease report this to the developer.")
 
     def generate_button_click(self):
+        # Save current state before generating new prompt
+        current_state = {
+            'shot_description': self.shot_text.get("1.0", tk.END).strip(),
+            'directors_notes': self.notes_text.get("1.0", tk.END).strip(),
+            'script': self.script_text.get("1.0", tk.END).strip(),
+            'stick_to_script': self.stick_to_script_var.get(),
+            'style_prefix': self.style_prefix_entry.get(),
+            'style_suffix': self.style_suffix_entry.get(),
+            'end_parameters': self.end_parameters_entry.get(),
+            'camera_shot': self.shot_combo.get(),
+            'camera_move': self.move_combo.get(),
+            'subjects': self.core.subjects.copy()
+        }
+        self.core.save_state(current_state)
         asyncio.create_task(self.handle_generate_button_click())
 
     def create_output_area(self, parent):
@@ -1063,11 +1077,17 @@ class PageToPromptUI:
 
     def undo(self):
         current_state = self.core.undo()
-        self._update_ui_from_state(current_state)
+        if current_state:
+            self._update_ui_from_state(current_state)
+        else:
+            messagebox.showinfo("Undo", "Nothing to undo")
 
     def redo(self):
         current_state = self.core.redo()
-        self._update_ui_from_state(current_state)
+        if current_state:
+            self._update_ui_from_state(current_state)
+        else:
+            messagebox.showinfo("Redo", "Nothing to redo")
 
     def _update_ui_from_state(self, state):
         # Update UI elements with the current state
