@@ -1091,29 +1091,52 @@ class PageToPromptUI:
                 "camera_shot": self.shot_combo.get(),
                 "camera_move": self.move_combo.get(),
                 "end_parameters": self.end_parameters_entry.get(),
-                "stick_to_script": self.stick_to_script_var.get()
+                "stick_to_script": self.stick_to_script_var.get(),
+                "script": self.script_text.get("1.0", tk.END).strip()
             }
-            self.core.template_manager.save_template(template_name, components)
-            self.update_template_list()
-            messagebox.showinfo("Template Saved", f"Template '{template_name}' has been saved.")
+            
+            # Create a dialog to select which components to include
+            selection_dialog = tk.Toplevel(self.master)
+            selection_dialog.title("Select Components to Include")
+            
+            checkboxes = {}
+            for key in components:
+                var = tk.BooleanVar(value=True)
+                checkboxes[key] = (tk.Checkbutton(selection_dialog, text=key, variable=var), var)
+                checkboxes[key][0].pack(anchor="w")
+            
+            def save_selected():
+                selected_components = {k: v for k, v in components.items() if checkboxes[k][1].get()}
+                self.core.template_manager.save_template(template_name, selected_components)
+                self.update_template_list()
+                messagebox.showinfo("Template Saved", f"Template '{template_name}' has been saved.")
+                selection_dialog.destroy()
+            
+            tk.Button(selection_dialog, text="Save", command=save_selected).pack()
 
     def load_template(self, event=None):
         template_name = self.load_template_var.get()
         if template_name:
             template = self.core.template_manager.load_template(template_name)
+            
+            # Populate fields with placeholder text for missing components
             self.style_prefix_entry.delete(0, tk.END)
-            self.style_prefix_entry.insert(0, template.get("style_prefix", ""))
+            self.style_prefix_entry.insert(0, template.get("style_prefix", "[Style Prefix]"))
             self.style_suffix_entry.delete(0, tk.END)
-            self.style_suffix_entry.insert(0, template.get("style_suffix", ""))
+            self.style_suffix_entry.insert(0, template.get("style_suffix", "[Style Suffix]"))
             self.shot_text.delete("1.0", tk.END)
-            self.shot_text.insert(tk.END, template.get("shot_description", ""))
+            self.shot_text.insert(tk.END, template.get("shot_description", "[Shot Description]"))
             self.notes_text.delete("1.0", tk.END)
-            self.notes_text.insert(tk.END, template.get("directors_notes", ""))
+            self.notes_text.insert(tk.END, template.get("directors_notes", "[Director's Notes]"))
             self.shot_combo.set(template.get("camera_shot", "None"))
             self.move_combo.set(template.get("camera_move", "None"))
             self.end_parameters_entry.delete(0, tk.END)
-            self.end_parameters_entry.insert(0, template.get("end_parameters", ""))
+            self.end_parameters_entry.insert(0, template.get("end_parameters", "[End Parameters]"))
             self.stick_to_script_var.set(template.get("stick_to_script", False))
+            self.script_text.delete("1.0", tk.END)
+            self.script_text.insert(tk.END, template.get("script", "[Script]"))
+            
+            messagebox.showinfo("Template Loaded", f"Template '{template_name}' has been loaded.")
 
     def update_template_list(self):
         templates = list(self.core.template_manager.get_all_templates().keys())
@@ -1124,13 +1147,8 @@ class PageToPromptUI:
 def main():
     root = tk.Tk()
     app = PageToPromptUI(root, PromptForgeCore())
+    root.protocol("WM_DELETE_WINDOW", root.quit)  # Ensure the program closes properly
     root.mainloop()
 
 if __name__ == "__main__":
-    import sys
-    import subprocess
-
-    if sys.executable and sys.executable != 'python':
-        subprocess.call([sys.executable, __file__] + sys.argv[1:])
-    else:
-        main()
+    main()
