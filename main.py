@@ -14,8 +14,11 @@ async def main():
     # Set the initial window size from config
     root.geometry(config.get('UI_SETTINGS', 'main_window_geometry'))
     
+    # Create an instance of PromptForgeCore
+    core = PromptForgeCore()
+    
     # Create an instance of PageToPromptUI
-    app = PageToPromptUI(root)
+    app = PageToPromptUI(root, core)
     
     while True:
         root.update()
