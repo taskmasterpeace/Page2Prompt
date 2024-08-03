@@ -565,37 +565,53 @@ class PromptForgeCore:
                 directors_notes=directors_notes,
                 highlighted_text=highlighted_text,
                 full_script=script if stick_to_script else "",
-                end_parameters=end_parameters
+                end_parameters=end_parameters,
+                temperature=self.temperature
             )
             
-            # Generate different lengths of prompts
-            concise_prompt = self._generate_concise_prompt(full_prompt)
-            normal_prompt = self._generate_normal_prompt(full_prompt)
-            detailed_prompt = full_prompt
-
-            prompts = {
-                "Concise Prompt": concise_prompt,
-                "Normal Prompt": normal_prompt,
-                "Detailed Prompt": detailed_prompt
-            }
+            # Process and format the generated prompts
+            prompts = self._process_generated_prompts(full_prompt)
             
             # Log the inputs and generated outputs
-            inputs = {
-                "shot_description": shot_description,
-                "style": style,
-                "directors_notes": directors_notes,
-                "script": script if stick_to_script else "",
-                "stick_to_script": stick_to_script,
-                "active_subjects": [s['name'] for s in active_subjects],
-                "end_parameters": end_parameters
-            }
-            for length, prompt in prompts.items():
-                self.prompt_logger.log_prompt({**inputs, "length": length}, prompt)
+            self._log_prompt_generation(prompts, locals())
             
             return prompts
         except Exception as e:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
+
+    def _process_generated_prompts(self, full_prompt: Dict[str, str]) -> Dict[str, str]:
+        return {
+            "Concise Prompt": self._format_prompt(full_prompt['concise']),
+            "Normal Prompt": self._format_prompt(full_prompt['normal']),
+            "Detailed Prompt": self._format_prompt(full_prompt['detailed'])
+        }
+
+    def _format_prompt(self, prompt: str) -> str:
+        formatted = f"{self.style_prefix} {prompt} {self.style_suffix}".strip()
+        if self.camera_shot:
+            formatted = f"{self.camera_shot} of {formatted}"
+        if self.camera_move:
+            formatted = f"{self.camera_move} to {formatted}"
+        return f"{formatted} {self.end_parameters}".strip()
+
+    def _log_prompt_generation(self, prompts: Dict[str, str], inputs: Dict[str, Any]):
+        log_inputs = {
+            "shot_description": inputs['shot_description'],
+            "style": inputs['style'],
+            "directors_notes": inputs['directors_notes'],
+            "script": inputs['script'] if inputs['stick_to_script'] else "",
+            "stick_to_script": inputs['stick_to_script'],
+            "active_subjects": [s['name'] for s in inputs['active_subjects']],
+            "end_parameters": inputs['end_parameters'],
+            "temperature": self.temperature,
+            "style_prefix": self.style_prefix,
+            "style_suffix": self.style_suffix,
+            "camera_shot": self.camera_shot,
+            "camera_move": self.camera_move
+        }
+        for length, prompt in prompts.items():
+            self.prompt_logger.log_prompt({**log_inputs, "length": length}, prompt)
 
     def _generate_concise_prompt(self, full_prompt: Union[str, Dict[str, str]]) -> str:
         if isinstance(full_prompt, dict):

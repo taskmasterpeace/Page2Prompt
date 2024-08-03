@@ -56,13 +56,13 @@ class MetaChain:
                               highlighted_text: str = "", full_script: str = "", end_parameters: str = "",
                               temperature: float = 0.7) -> Dict[str, str]:
         try:
-            self._initialize_llm(temperature)  # Initialize LLM with the current temperature
+            self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
             
             templates = {
-                "concise": self._get_prompt_template("concise (about 12 words)"),
-                "normal": self._get_prompt_template("normal (about 40 words)"),
-                "detailed": self._get_prompt_template("detailed (about 80 words)")
+                "concise": self._get_prompt_template("concise (about 20 words)"),
+                "normal": self._get_prompt_template("normal (about 50 words)"),
+                "detailed": self._get_prompt_template("detailed (about 100 words)")
             }
 
             results = {}
@@ -79,22 +79,20 @@ class MetaChain:
                         "end_parameters": end_parameters,
                         "length": length
                     })
-                    results[length] = result.content.strip()
+                    results[length] = self._post_process_prompt(result.content.strip(), style, end_parameters)
                 except Exception as e:
                     raise ModelInvocationError(f"Error invoking model for {length} prompt: {str(e)}")
-
-            # Post-process the results
-            for length, prompt in results.items():
-                prompt = prompt.replace("Concise Prompt:", "").replace("Normal Prompt:", "").replace("Detailed Prompt:", "").strip()
-                # Remove end_parameters if they're already in the prompt
-                if end_parameters in prompt:
-                    prompt = prompt.replace(end_parameters, "").strip()
-                results[length] = f"{style} {prompt} {end_parameters}".strip()
 
             return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")
             raise PromptGenerationError(f"Failed to generate prompt: {str(e)}")
+
+    def _post_process_prompt(self, prompt: str, style: str, end_parameters: str) -> str:
+        prompt = prompt.replace("Concise Prompt:", "").replace("Normal Prompt:", "").replace("Detailed Prompt:", "").strip()
+        if end_parameters in prompt:
+            prompt = prompt.replace(end_parameters, "").strip()
+        return prompt
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
