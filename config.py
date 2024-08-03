@@ -22,7 +22,12 @@ class Config:
         self.config['UI_SETTINGS'] = {
             'main_window_geometry': '1200x800',
             'input_frame_height': '400',
-            'output_frame_height': '300'
+            'output_frame_height': '300',
+            'main_paned_sash': '600',
+            'right_paned_sash1': '200',
+            'right_paned_sash2': '400',
+            'prompt_editor_geometry': '800x600',
+            'prompt_editor_sash': '400'
         }
         self.save_config()
 
@@ -31,7 +36,12 @@ class Config:
             self.config.write(configfile)
 
     def get(self, section, key):
-        return self.config.get(section, key)
+        try:
+            return self.config.get(section, key)
+        except configparser.NoOptionError:
+            if section == 'UI_SETTINGS':
+                return self.config['UI_SETTINGS'].get(key, '')
+            raise
 
     def set(self, section, key, value):
         if not self.config.has_section(section):
