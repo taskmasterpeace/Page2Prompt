@@ -549,19 +549,16 @@ class PageToPromptUI:
 
     def load_pane_positions(self):
         main_sash = config.get('UI_SETTINGS', 'main_paned_sash')
-        right_sash1 = config.get('UI_SETTINGS', 'right_paned_sash1')
-        right_sash2 = config.get('UI_SETTINGS', 'right_paned_sash2')
+        right_sash = config.get('UI_SETTINGS', 'right_paned_sash')
 
         if main_sash:
             self.main_paned.sashpos(0, int(main_sash))
-        if right_sash1 and right_sash2:
-            self.right_paned.sashpos(0, int(right_sash1))
-            self.right_paned.sashpos(1, int(right_sash2))
+        if right_sash:
+            self.right_paned.sashpos(0, int(right_sash))
 
     def save_pane_positions(self, event=None):
         config.set('UI_SETTINGS', 'main_paned_sash', str(self.main_paned.sashpos(0)))
-        config.set('UI_SETTINGS', 'right_paned_sash1', str(self.right_paned.sashpos(0)))
-        config.set('UI_SETTINGS', 'right_paned_sash2', str(self.right_paned.sashpos(1)))
+        config.set('UI_SETTINGS', 'right_paned_sash', str(self.right_paned.sashpos(0)))
 
     def create_input_fields(self, parent):
         input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
