@@ -1,7 +1,7 @@
 # ui.py
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, filedialog, messagebox
+from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
 from tkinter.ttk import Frame, Scrollbar
 import pyperclip
 from core import PromptForgeCore
@@ -630,9 +630,23 @@ class PageToPromptUI:
         self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
         self.generate_button.grid(column=1, row=9, sticky=tk.E, pady=10)
 
+        # Template Management
+        template_frame = ttk.Frame(input_frame)
+        template_frame.grid(column=1, row=10, sticky=tk.E, pady=5)
+
+        self.save_template_button = ttk.Button(template_frame, text="Save as Template", command=self.save_as_template)
+        self.save_template_button.pack(side=tk.LEFT, padx=2)
+
+        self.load_template_var = tk.StringVar()
+        self.load_template_combo = ttk.Combobox(template_frame, textvariable=self.load_template_var, width=20)
+        self.load_template_combo.pack(side=tk.LEFT, padx=2)
+        self.load_template_combo.bind("<<ComboboxSelected>>", self.load_template)
+
+        self.update_template_list()
+
         # Add Undo and Redo buttons
         undo_redo_frame = ttk.Frame(input_frame)
-        undo_redo_frame.grid(column=1, row=10, sticky=tk.E, pady=5)
+        undo_redo_frame.grid(column=1, row=11, sticky=tk.E, pady=5)
 
         self.undo_button = ttk.Button(undo_redo_frame, text="↩ Undo", command=self.undo)
         self.undo_button.pack(side=tk.LEFT, padx=2)
@@ -1054,6 +1068,9 @@ class PageToPromptUI:
         self.end_parameters_entry.delete(0, tk.END)
         self.end_parameters_entry.insert(0, state['end_parameters'])
 
+        self.shot_combo.set(state['camera_shot'])
+        self.move_combo.set(state['camera_move'])
+
         # Update subjects
         self.subject_frame.update_subjects(state['subjects'])
 
@@ -1062,6 +1079,45 @@ class PageToPromptUI:
             self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
             self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
             return "break"  # Prevents the default behavior of clearing the selection
+
+    def save_as_template(self):
+        template_name = simpledialog.askstring("Save Template", "Enter a name for this template:")
+        if template_name:
+            components = {
+                "style_prefix": self.style_prefix_entry.get(),
+                "style_suffix": self.style_suffix_entry.get(),
+                "shot_description": self.shot_text.get("1.0", tk.END).strip(),
+                "directors_notes": self.notes_text.get("1.0", tk.END).strip(),
+                "camera_shot": self.shot_combo.get(),
+                "camera_move": self.move_combo.get(),
+                "end_parameters": self.end_parameters_entry.get(),
+                "stick_to_script": self.stick_to_script_var.get()
+            }
+            self.core.template_manager.save_template(template_name, components)
+            self.update_template_list()
+            messagebox.showinfo("Template Saved", f"Template '{template_name}' has been saved.")
+
+    def load_template(self, event=None):
+        template_name = self.load_template_var.get()
+        if template_name:
+            template = self.core.template_manager.load_template(template_name)
+            self.style_prefix_entry.delete(0, tk.END)
+            self.style_prefix_entry.insert(0, template.get("style_prefix", ""))
+            self.style_suffix_entry.delete(0, tk.END)
+            self.style_suffix_entry.insert(0, template.get("style_suffix", ""))
+            self.shot_text.delete("1.0", tk.END)
+            self.shot_text.insert(tk.END, template.get("shot_description", ""))
+            self.notes_text.delete("1.0", tk.END)
+            self.notes_text.insert(tk.END, template.get("directors_notes", ""))
+            self.shot_combo.set(template.get("camera_shot", "None"))
+            self.move_combo.set(template.get("camera_move", "None"))
+            self.end_parameters_entry.delete(0, tk.END)
+            self.end_parameters_entry.insert(0, template.get("end_parameters", ""))
+            self.stick_to_script_var.set(template.get("stick_to_script", False))
+
+    def update_template_list(self):
+        templates = list(self.core.template_manager.get_all_templates().keys())
+        self.load_template_combo['values'] = templates
 
     # ... (rest of the PromptForgeUI methods remain unchanged)
 

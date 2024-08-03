@@ -16,6 +16,7 @@ from datetime import datetime
 from styles import StyleManager
 import random
 from collections import deque
+from typing import Dict, Any
 
 
 from config import get_openai_api_key
@@ -217,6 +218,9 @@ class PromptForgeCore:
         
         # Initialize StyleHandler
         self.style_handler = StyleHandler()
+        
+        # Initialize TemplateManager
+        self.template_manager = TemplateManager()
 
     async def generate_subjects(self, script_text: str) -> List[Dict[str, Any]]:
         prompt = f"""
@@ -468,8 +472,45 @@ class PromptForgeCore:
             'style_prefix': self.style_prefix,
             'style_suffix': self.style_suffix,
             'end_parameters': self.end_parameters,
-            'subjects': self.subjects
+            'subjects': self.subjects,
+            'camera_shot': self.camera_shot,
+            'camera_move': self.camera_move
         }
+
+class TemplateManager:
+    def __init__(self, template_file: str = "prompt_templates.json"):
+        self.template_file = template_file
+        self.templates = self._load_templates()
+
+    def save_template(self, name: str, components: Dict[str, Any]):
+        self.templates[name] = components
+        self._save_templates()
+
+    def load_template(self, name: str) -> Dict[str, Any]:
+        return self.templates.get(name, {})
+
+    def get_all_templates(self) -> Dict[str, Dict[str, Any]]:
+        return self.templates
+
+    def delete_template(self, name: str):
+        if name in self.templates:
+            del self.templates[name]
+            self._save_templates()
+
+    def update_template(self, name: str, components: Dict[str, Any]):
+        if name in self.templates:
+            self.templates[name] = components
+            self._save_templates()
+
+    def _save_templates(self):
+        with open(self.template_file, 'w') as f:
+            json.dump(self.templates, f)
+
+    def _load_templates(self) -> Dict[str, Dict[str, Any]]:
+        if os.path.exists(self.template_file):
+            with open(self.template_file, 'r') as f:
+                return json.load(f)
+        return {}
 
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> Dict[str, str]:
         try:
