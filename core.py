@@ -565,12 +565,15 @@ class PromptForgeCore:
                 directors_notes=directors_notes,
                 highlighted_text=highlighted_text,
                 full_script=script if stick_to_script else "",
-                end_parameters=end_parameters,
                 temperature=self.temperature
             )
             
             # Process and format the generated prompts
             prompts = self._process_generated_prompts(full_prompt)
+            
+            # Add end_parameters to each prompt
+            for key in prompts:
+                prompts[key] = f"{prompts[key]} {end_parameters}".strip()
             
             # Log the inputs and generated outputs
             self._log_prompt_generation(prompts, locals())

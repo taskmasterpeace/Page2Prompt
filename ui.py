@@ -709,19 +709,24 @@ class PageToPromptUI:
         ttk.Label(input_frame, text="API Key:").grid(column=0, row=0, sticky=tk.W, pady=5)
         self.api_key_entry = ttk.Entry(input_frame, width=50, show="*")
         self.api_key_entry.grid(column=1, row=0, sticky=(tk.W, tk.E), pady=5)
-        ttk.Button(input_frame, text="Save API Key", command=self.save_api_key).grid(column=2, row=0, sticky=tk.W, pady=5)
+        ToolTip(self.api_key_entry, "Enter your OpenAI API key here")
+        save_api_key_btn = ttk.Button(input_frame, text="Save API Key", command=self.save_api_key)
+        save_api_key_btn.grid(column=2, row=0, sticky=tk.W, pady=5)
+        ToolTip(save_api_key_btn, "Save the entered API key")
 
         # Shot Description
         ttk.Label(input_frame, text="Shot Description:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.shot_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
         self.shot_text.grid(column=1, row=1, sticky=(tk.W, tk.E), pady=5)
         self.shot_text.insert(tk.END, "")
+        ToolTip(self.shot_text, "Describe the shot you want to generate")
 
         # Director's Notes
         ttk.Label(input_frame, text="📝 Director's Notes:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.notes_text = scrolledtext.ScrolledText(input_frame, height=4, width=50, wrap=tk.WORD)
         self.notes_text.grid(column=1, row=2, sticky=(tk.W, tk.E), pady=5)
         self.notes_text.insert(tk.END, "")
+        ToolTip(self.notes_text, "Enter any additional notes or directions for the shot")
 
         # Style
         style_frame = ttk.Frame(input_frame)
@@ -734,6 +739,7 @@ class PageToPromptUI:
         self.style_combo['values'] = style_names
         self.style_combo.set("None")
         self.style_combo.bind("<<ComboboxSelected>>", self.on_style_selected)
+        ToolTip(self.style_combo, "Select a predefined style or 'None' to create a custom style")
 
         generate_style_btn = ttk.Button(style_frame, text="Generate Random Style", command=self.generate_random_style)
         generate_style_btn.grid(column=2, row=0, sticky=tk.W, padx=5)
@@ -741,21 +747,21 @@ class PageToPromptUI:
 
         save_style_btn = ttk.Button(style_frame, text="Save Style", command=self.save_current_style)
         save_style_btn.grid(column=3, row=0, sticky=tk.W, padx=5)
-        ToolTip(save_style_btn, "Save the current style settings")
+        ToolTip(save_style_btn, "Save the current style settings as a new style")
 
         ttk.Label(style_frame, text="Prefix:").grid(column=0, row=1, sticky=tk.W, pady=5)
         self.style_prefix_entry = ttk.Entry(style_frame, width=50)
         self.style_prefix_entry.grid(column=1, row=1, columnspan=3, sticky=(tk.W, tk.E), pady=5)
-        ToolTip(self.style_prefix_entry, "Enter the style prefix")
+        ToolTip(self.style_prefix_entry, "Enter a brief description of the style (e.g., 'noir film')")
 
         ttk.Label(style_frame, text="Suffix:").grid(column=0, row=2, sticky=tk.W, pady=5)
         self.style_suffix_entry = ttk.Entry(style_frame, width=50)
         self.style_suffix_entry.grid(column=1, row=2, columnspan=3, sticky=(tk.W, tk.E), pady=5)
-        ToolTip(self.style_suffix_entry, "Enter the style suffix")
+        ToolTip(self.style_suffix_entry, "Enter additional style details or leave blank to generate automatically")
 
         generate_details_btn = ttk.Button(style_frame, text="Generate Style Details", command=self.generate_style_details)
         generate_details_btn.grid(column=1, row=3, sticky=tk.E, pady=5)
-        ToolTip(generate_details_btn, "Generate a suffix based on the entered prefix")
+        ToolTip(generate_details_btn, "Generate detailed style descriptions based on the entered prefix")
 
         # Script
         ttk.Label(input_frame, text="📜 Script:").grid(column=0, row=4, sticky=tk.W, pady=5)
@@ -763,11 +769,13 @@ class PageToPromptUI:
         self.script_text.grid(column=1, row=4, sticky=(tk.W, tk.E), pady=5)
         self.script_text.insert(tk.END, "")
         self.script_text.bind("<<Selection>>", partial(self.on_script_selection))
+        ToolTip(self.script_text, "Enter the script or scene description here")
 
         # Stick to Script Checkbox
         self.stick_to_script_var = tk.BooleanVar()
         self.stick_to_script_check = ttk.Checkbutton(input_frame, text="📌 Stick to Script", variable=self.stick_to_script_var)
         self.stick_to_script_check.grid(column=1, row=5, sticky=tk.W, pady=5)
+        ToolTip(self.stick_to_script_check, "When checked, the generated prompt will closely follow the script")
 
         # Camera Shot
         ttk.Label(input_frame, text="📷 Camera Shot:").grid(column=0, row=6, sticky=tk.W, pady=5)
@@ -779,6 +787,7 @@ class PageToPromptUI:
         ], width=47)
         self.shot_combo.grid(column=1, row=6, sticky=(tk.W, tk.E), pady=5)
         self.shot_combo.set("None")
+        ToolTip(self.shot_combo, "Select the type of camera shot for this prompt")
 
         # Camera Move
         ttk.Label(input_frame, text="🎥 Camera Move:").grid(column=0, row=7, sticky=tk.W, pady=5)
@@ -789,11 +798,13 @@ class PageToPromptUI:
         ], width=47)
         self.move_combo.grid(column=1, row=7, sticky=(tk.W, tk.E), pady=5)
         self.move_combo.set("None")
+        ToolTip(self.move_combo, "Select the type of camera movement for this prompt")
 
         # End Parameters
         ttk.Label(input_frame, text="End Parameters:").grid(column=0, row=8, sticky=tk.W, pady=5)
         self.end_parameters_entry = ttk.Entry(input_frame, width=50)
         self.end_parameters_entry.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
+        ToolTip(self.end_parameters_entry, "Enter parameters to be added at the end of every prompt (e.g., --ar 16:9 --q 2)")
 
         # Generate Button and Save as Template
         button_frame = ttk.Frame(input_frame)
