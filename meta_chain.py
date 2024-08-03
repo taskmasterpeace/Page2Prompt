@@ -11,6 +11,7 @@ from typing import List, Dict, Optional
 import logging
 import os
 from prompt_manager import PromptManager
+from meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError, ModelInvocationError
 
 class DirectorStyle:
     def __init__(self, name: str, camera_techniques: List[str], visual_aesthetics: List[str], 
@@ -62,17 +63,20 @@ class MetaChain:
             results = {}
             for length, template in templates.items():
                 chain = RunnableSequence(template | self.llm)
-                result = await chain.ainvoke({
-                    "style": style,
-                    "shot_description": shot_description,
-                    "directors_notes": directors_notes,
-                    "highlighted_text": highlighted_text,
-                    "full_script": full_script,
-                    "subject_info": subject_info,
-                    "end_parameters": end_parameters,
-                    "length": length
-                })
-                results[length] = result.content.strip()
+                try:
+                    result = await chain.ainvoke({
+                        "style": style,
+                        "shot_description": shot_description,
+                        "directors_notes": directors_notes,
+                        "highlighted_text": highlighted_text,
+                        "full_script": full_script,
+                        "subject_info": subject_info,
+                        "end_parameters": end_parameters,
+                        "length": length
+                    })
+                    results[length] = result.content.strip()
+                except Exception as e:
+                    raise ModelInvocationError(f"Error invoking model for {length} prompt: {str(e)}")
 
             # Post-process the results
             for length, prompt in results.items():
@@ -85,7 +89,7 @@ class MetaChain:
             return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")
-            raise
+            raise PromptGenerationError(f"Failed to generate prompt: {str(e)}")
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
@@ -121,23 +125,35 @@ class MetaChain:
         return "\n".join([f"- {s['name']} ({s['category']}): {s['description']}" for s in active_subjects])
 
     def analyze_script(self, script: str, director_style: str) -> List[Dict]:
-        scenes = self.core.script_analyzer.analyze_script(script)
-        style = self.get_director_style(director_style)
-        
-        prompts = []
-        for scene in scenes:
-            prompt = self.generate_prompt(
-                length="medium",
-                active_subjects=scene.get("characters", []),
-                director_style=director_style
-            )
-            prompts.append({
-                "scene_number": scene["scene_number"],
-                "scene_description": scene["description"],
-                "generated_prompt": prompt
-            })
-        
-        return prompts
+        try:
+            scenes = self.core.script_analyzer.analyze_script(script)
+            style = self.get_director_style(director_style)
+            
+            prompts = []
+            for scene in scenes:
+                try:
+                    prompt = self.generate_prompt(
+                        length="medium",
+                        active_subjects=scene.get("characters", []),
+                        director_style=director_style
+                    )
+                    prompts.append({
+                        "scene_number": scene["scene_number"],
+                        "scene_description": scene["description"],
+                        "generated_prompt": prompt
+                    })
+                except PromptGenerationError as e:
+                    logging.error(f"Error generating prompt for scene {scene['scene_number']}: {str(e)}")
+                    prompts.append({
+                        "scene_number": scene["scene_number"],
+                        "scene_description": scene["description"],
+                        "generated_prompt": "Error: Failed to generate prompt"
+                    })
+            
+            return prompts
+        except Exception as e:
+            logging.exception("Error in MetaChain.analyze_script")
+            raise ScriptAnalysisError(f"Failed to analyze script: {str(e)}")
 
     def generate_prompt_spreadsheet(self, script: str, director_style: str) -> str:
         prompts = self.analyze_script(script, director_style)
