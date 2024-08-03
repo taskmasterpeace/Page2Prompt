@@ -1045,11 +1045,13 @@ class PageToPromptUI:
 
 
     def maintain_selection(self, event):
+        if event.widget == self.script_text:
+            return  # Allow default behavior in the script text widget
         if self.script_selection:
             self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
             self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
             self.script_text.mark_set(tk.INSERT, self.script_selection[1])
-        return "break"  # Prevents the default behavior of clearing the selection
+        return "break"  # Prevents the default behavior of clearing the selection for other widgets
 
     def save_as_template(self):
         template_name = simpledialog.askstring("Save Template", "Enter a name for this template:")
