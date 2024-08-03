@@ -996,17 +996,10 @@ class PageToPromptUI:
         try:
             if self.script_text.tag_ranges(tk.SEL):
                 self.script_selection = (self.script_text.index(tk.SEL_FIRST), self.script_text.index(tk.SEL_LAST))
-                self.update_ui_with_selection()
             else:
                 self.script_selection = None
         except Exception as e:
             print(f"Error in handle_script_selection: {str(e)}")
-
-    def update_ui_with_selection(self):
-        if self.script_selection:
-            selected_text = self.script_text.get(self.script_selection[0], self.script_selection[1])
-            self.shot_text.delete("1.0", tk.END)
-            self.shot_text.insert(tk.END, selected_text)
 
     def on_style_selected(self, event):
         selected_style = self.style_combo.get()
