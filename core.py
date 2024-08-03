@@ -547,6 +547,17 @@ class PromptForgeCore:
                 subject['active'] = not subject['active']
                 break
 
+    def edit_subject(self, index: int, name: str, category: str, description: str) -> None:
+        if 0 <= index < len(self.subjects):
+            self.subjects[index] = {
+                'name': name,
+                'category': category,
+                'description': description,
+                'active': self.subjects[index]['active']
+            }
+        else:
+            raise IndexError("Subject index out of range")
+
     def _format_active_subjects(self, active_subjects: List[Dict[str, Any]]) -> str:
         return "\n".join([f"- {s['name']} ({s['category']}): {s['description']}" for s in active_subjects])
 

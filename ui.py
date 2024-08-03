@@ -73,12 +73,16 @@ class SubjectFrame(ttk.Frame):
 
         self.subjects_listbox = tk.Listbox(self, height=5)
         self.subjects_listbox.grid(row=4, column=0, columnspan=2, sticky="nsew", padx=5, pady=2)
+        self.subjects_listbox.bind('<<ListboxSelect>>', self.on_subject_select)
 
         button_frame = ttk.Frame(self)
         button_frame.grid(row=5, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
         
         self.toggle_button = ttk.Button(button_frame, text="Toggle Active", command=self.toggle_subject)
         self.toggle_button.pack(side="left", padx=2)
+
+        self.edit_button = ttk.Button(button_frame, text="Edit Subject", command=self.edit_subject)
+        self.edit_button.pack(side="left", padx=2)
 
         self.remove_button = ttk.Button(button_frame, text="Remove Subject", command=self.remove_subject)
         self.remove_button.pack(side="right", padx=2)
@@ -138,6 +142,42 @@ class SubjectFrame(ttk.Frame):
         self.name_entry.delete(0, tk.END)
         self.category_combo.set("")
         self.description_text.delete("1.0", tk.END)
+
+    def on_subject_select(self, event):
+        selected = self.subjects_listbox.curselection()
+        if selected:
+            index = selected[0]
+            subject = self.core.subjects[index]
+            self.name_entry.delete(0, tk.END)
+            self.name_entry.insert(0, subject['name'])
+            self.category_combo.set(subject['category'])
+            self.description_text.delete("1.0", tk.END)
+            self.description_text.insert(tk.END, subject['description'])
+
+    def edit_subject(self):
+        try:
+            selected = self.subjects_listbox.curselection()
+            if not selected:
+                raise ValueError("No subject selected")
+            
+            index = selected[0]
+            name = self.name_entry.get().strip()
+            category = self.category_combo.get()
+            description = self.description_text.get("1.0", tk.END).strip()
+
+            if not name or not category or not description:
+                raise ValueError("All fields must be filled")
+
+            self.core.subjects[index] = {
+                'name': name,
+                'category': category,
+                'description': description,
+                'active': self.core.subjects[index]['active']
+            }
+            self.update_subjects(self.core.subjects)
+            messagebox.showinfo("Success", "Subject updated successfully")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
 
 class AutomatedAnalysisFrame(ttk.Frame):
     def __init__(self, master, core):
