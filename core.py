@@ -205,6 +205,12 @@ class PromptForgeCore:
         self.stick_to_script = False
         self.subjects: List[Dict[str, Any]] = []
         self.prompt_logger = PromptLogger("prompt_log.json")
+        self._initialize_saved_prompts()
+
+    def _initialize_saved_prompts(self):
+        if not os.path.exists("saved_prompts.json") or os.path.getsize("saved_prompts.json") == 0:
+            with open("saved_prompts.json", "w") as f:
+                json.dump([], f)
         self.temperature = 0.7  # Default temperature
         self.style_prefix = ""
         self.style_suffix = ""

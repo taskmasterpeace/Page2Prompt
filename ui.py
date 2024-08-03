@@ -729,7 +729,7 @@ class PageToPromptUI:
             'camera_move': self.move_combo.get(),
             'subjects': self.core.subjects.copy()
         }
-        self.core.save_state(current_state)
+        self.core._save_state(current_state)
         asyncio.create_task(self.handle_generate_button_click())
 
     def create_output_area(self, parent):
