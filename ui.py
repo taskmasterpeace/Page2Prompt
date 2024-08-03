@@ -716,20 +716,6 @@ class PageToPromptUI:
             messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {str(e)}\n\nPlease report this to the developer.")
 
     def generate_button_click(self):
-        # Save current state before generating new prompt
-        current_state = {
-            'shot_description': self.shot_text.get("1.0", tk.END).strip(),
-            'directors_notes': self.notes_text.get("1.0", tk.END).strip(),
-            'script': self.script_text.get("1.0", tk.END).strip(),
-            'stick_to_script': self.stick_to_script_var.get(),
-            'style_prefix': self.style_prefix_entry.get(),
-            'style_suffix': self.style_suffix_entry.get(),
-            'end_parameters': self.end_parameters_entry.get(),
-            'camera_shot': self.shot_combo.get(),
-            'camera_move': self.move_combo.get(),
-            'subjects': self.core.subjects.copy()
-        }
-        self.core._save_state(current_state)
         asyncio.create_task(self.handle_generate_button_click())
 
     def create_output_area(self, parent):
@@ -1064,47 +1050,6 @@ class PageToPromptUI:
         else:
             messagebox.showerror("Error", "Please enter a style prefix first.")
 
-    def undo(self):
-        current_state = self.core.undo()
-        if current_state:
-            self._update_ui_from_state(current_state)
-        else:
-            messagebox.showinfo("Undo", "Nothing to undo")
-
-    def redo(self):
-        current_state = self.core.redo()
-        if current_state:
-            self._update_ui_from_state(current_state)
-        else:
-            messagebox.showinfo("Redo", "Nothing to redo")
-
-    def _update_ui_from_state(self, state):
-        # Update UI elements with the current state
-        self.shot_text.delete("1.0", tk.END)
-        self.shot_text.insert(tk.END, state['shot_description'])
-
-        self.notes_text.delete("1.0", tk.END)
-        self.notes_text.insert(tk.END, state['directors_notes'])
-
-        self.script_text.delete("1.0", tk.END)
-        self.script_text.insert(tk.END, state['script'])
-
-        self.stick_to_script_var.set(state['stick_to_script'])
-
-        self.style_prefix_entry.delete(0, tk.END)
-        self.style_prefix_entry.insert(0, state['style_prefix'])
-
-        self.style_suffix_entry.delete(0, tk.END)
-        self.style_suffix_entry.insert(0, state['style_suffix'])
-
-        self.end_parameters_entry.delete(0, tk.END)
-        self.end_parameters_entry.insert(0, state['end_parameters'])
-
-        self.shot_combo.set(state['camera_shot'])
-        self.move_combo.set(state['camera_move'])
-
-        # Update subjects
-        self.subject_frame.update_subjects(state['subjects'])
 
     def maintain_selection(self, event):
         if self.script_selection:
