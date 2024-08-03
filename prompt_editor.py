@@ -9,7 +9,7 @@ class PromptEditor:
     def __init__(self, master):
         self.master = master
         self.master.title("Enhanced Prompt Editor")
-        self.master.geometry("1200x800")
+        self.master.geometry(config.get('UI_SETTINGS', 'prompt_editor_geometry'))
 
         self.core = PromptForgeCore()
         self.prompts = {}
@@ -19,17 +19,17 @@ class PromptEditor:
         self.load_prompts_from_files()
 
     def setup_ui(self):
-        main_frame = ttk.Frame(self.master)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        main_paned = PanedWindow(self.master, orient=tk.HORIZONTAL)
+        main_paned.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+        left_frame = ttk.Frame(main_paned)
+        right_frame = ttk.Frame(main_paned)
 
-        right_frame = ttk.Frame(main_frame)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        main_paned.add(left_frame, weight=1)
+        main_paned.add(right_frame, weight=3)
 
         # Left frame contents
-        self.prompt_listbox = tk.Listbox(left_frame, width=40)
+        self.prompt_listbox = tk.Listbox(left_frame)
         self.prompt_listbox.pack(fill=tk.BOTH, expand=True)
         self.prompt_listbox.bind('<<ListboxSelect>>', self.on_prompt_select)
 
@@ -45,6 +45,17 @@ class PromptEditor:
         ttk.Button(button_frame, text="Save to File", command=self.save_to_file).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Load from File", command=self.load_from_file).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Test Prompt", command=self.test_prompt).pack(side=tk.LEFT, padx=5)
+
+        # Load saved pane position
+        sash_pos = config.get('UI_SETTINGS', 'prompt_editor_sash')
+        if sash_pos:
+            main_paned.sashpos(0, int(sash_pos))
+
+        # Bind pane position saving
+        main_paned.bind("<ButtonRelease-1>", self.save_pane_position)
+
+    def save_pane_position(self, event=None):
+        config.set('UI_SETTINGS', 'prompt_editor_sash', str(event.widget.sashpos(0)))
 
     def setup_editor_area(self, parent):
         editor_frame = ttk.Frame(parent)

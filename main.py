@@ -1,17 +1,18 @@
 # main.py
 #!/usr/bin/env python3
-# main.py
 import asyncio
 import logging
 import tkinter as tk
 from ui import PageToPromptUI
 from core import PromptForgeCore
-import sys
-import subprocess
+from config import config
 
 async def main():
     root = tk.Tk()
     root.title("PromptForge")
+    
+    # Set the initial window size from config
+    root.geometry(config.get('UI_SETTINGS', 'main_window_geometry'))
     
     # Create an instance of PromptForgeCore
     core = PromptForgeCore()
