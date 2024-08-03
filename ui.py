@@ -977,6 +977,9 @@ class PageToPromptUI:
         self.copy_button = ttk.Button(button_frame, text="📋 Copy to Clipboard", command=self.copy_prompt_to_clipboard)
         self.copy_button.pack(side="left", padx=2)
 
+        self.clear_button = ttk.Button(button_frame, text="🗑️ Clear Prompts", command=self.clear_prompts)
+        self.clear_button.pack(side="left", padx=2)
+
         self.show_prompts_button = ttk.Button(button_frame, text="📚 Show All Prompts", command=self.show_all_prompts)
         self.show_prompts_button.pack(side="left", padx=2)
 
@@ -1065,6 +1068,10 @@ class PageToPromptUI:
         prompt = self.results_text.get("1.0", tk.END).strip()
         pyperclip.copy(prompt)
         messagebox.showinfo("Copied", "Prompt copied to clipboard!")
+
+    def clear_prompts(self):
+        self.results_text.delete("1.0", tk.END)
+        messagebox.showinfo("Cleared", "Prompts have been cleared!")
 
     def show_all_prompts(self):
         if self.all_prompts_window is None or not self.all_prompts_window.winfo_exists():
