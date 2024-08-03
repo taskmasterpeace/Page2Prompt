@@ -625,8 +625,6 @@ class TemplateManager:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
 
-    # Remove the _generate_file_list method as it's no longer needed
-
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
         self.meta_chain.prompt_manager.save_prompt(prompt, components)
 
