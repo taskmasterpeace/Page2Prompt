@@ -969,8 +969,7 @@ class PageToPromptUI:
         self.copy_button = ttk.Button(button_frame, text="📋 Copy to Clipboard", command=self.copy_prompt_to_clipboard)
         self.copy_button.pack(side="left", padx=2)
 
-        self.show_prompts_button = ttk.Button(button_frame, text="📚 Show All Prompts", comman
-d=self.show_all_prompts)
+        self.show_prompts_button = ttk.Button(button_frame, text="📚 Show All Prompts", command=self.show_all_prompts)
         self.show_prompts_button.pack(side="left", padx=2)
 
         self.show_logs_button = ttk.Button(button_frame, text="📜 Show Logs", command=self.show_logs)
