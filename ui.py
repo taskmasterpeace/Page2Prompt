@@ -655,8 +655,8 @@ class PageToPromptUI:
         left_frame = ttk.Frame(self.main_paned)
         right_frame = ttk.Frame(self.main_paned)
 
-        self.main_paned.add(left_frame, weight=1)
-        self.main_paned.add(right_frame, weight=1)
+        self.main_paned.add(left_frame, weight=3)
+        self.main_paned.add(right_frame, weight=2)
 
         # Left Frame Contents
         self.create_input_fields(left_frame)
@@ -720,6 +720,9 @@ class PageToPromptUI:
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
+
+        # Set a minimum size for the canvas
+        canvas.config(width=400, height=600)
 
         # API Key
         api_key_frame = ttk.Frame(scrollable_frame)
