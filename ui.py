@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
-from tkinter.ttk import Frame, Scrollbar
+from tkinter.ttk import Frame, Scrollbar, PanedWindow
 import pyperclip
 from core import PromptForgeCore
 import os
@@ -10,6 +10,7 @@ import asyncio
 import random
 from styles import predefined_styles
 from functools import partial
+from config import config
 
 class ToolTip:
     def __init__(self, widget, text):
