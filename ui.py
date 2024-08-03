@@ -539,9 +539,13 @@ class TimelineView(ttk.Frame):
             node.update_size(self.zoom_level)
 
     def add_sentence_node(self, sentence):
+        for node in self.sentence_nodes:
+            if node.sentence == sentence:
+                return node
         node = SentenceNode(self.timeline_frame, sentence, self.zoom_level)
         node.pack(side="left", padx=5, pady=5)
         self.sentence_nodes.append(node)
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
         return node
 
     def clear_timeline(self):
@@ -583,6 +587,8 @@ class SentenceNode(tk.Frame):
             card = PromptCard(self, prompt)
             card.pack(pady=2)
             self.cards.append(card)
+        else:
+            messagebox.showwarning("Maximum Cards Reached", "A maximum of 4 cards are allowed per node.")
 
     def update_size(self, zoom_level):
         self.zoom_level = zoom_level
@@ -924,17 +930,17 @@ class PageToPromptUI:
         asyncio.create_task(self.handle_generate_button_click())
 
     def add_prompt_to_timeline(self):
-        prompt = self.results_text.get("1.0", tk.END).strip()
-        if prompt:
-            selected_sentence = self.get_selected_sentence()
-            if selected_sentence:
-                node = self.timeline_view.add_sentence_node(selected_sentence)
+        selected_text = self.get_selected_sentence()
+        if selected_text:
+            node = self.timeline_view.add_sentence_node(selected_text)
+            prompt = self.results_text.get("1.0", tk.END).strip()
+            if prompt:
                 node.add_card(prompt)
-                self.timeline_view.canvas.configure(scrollregion=self.timeline_view.canvas.bbox("all"))
             else:
-                messagebox.showwarning("No Sentence Selected", "Please select a sentence in the script to add the prompt to.")
+                node.add_card()  # Add an empty card
+            self.timeline_view.canvas.configure(scrollregion=self.timeline_view.canvas.bbox("all"))
         else:
-            messagebox.showwarning("Empty Prompt", "There is no prompt to add to the timeline.")
+            messagebox.showwarning("No Text Selected", "Please select a sentence or paragraph in the script to add to the timeline.")
 
     def get_selected_sentence(self):
         if self.script_selection:
