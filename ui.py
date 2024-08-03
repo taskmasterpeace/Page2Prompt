@@ -530,15 +530,12 @@ class PageToPromptUI:
 
         output_frame = ttk.Frame(self.right_paned)
         subject_frame = ttk.Frame(self.right_paned)
-        analysis_frame = ttk.Frame(self.right_paned)
 
         self.right_paned.add(output_frame, weight=1)
         self.right_paned.add(subject_frame, weight=1)
-        self.right_paned.add(analysis_frame, weight=1)
 
         self.create_output_area(output_frame)
         self.create_subject_frame(subject_frame)
-        self.create_automated_analysis_frame(analysis_frame)
 
         # Bind event to prevent losing selection
         self.master.bind("<Button-1>", self.maintain_selection)
@@ -993,11 +990,6 @@ class PageToPromptUI:
         self.subject_frame.update_subjects(self.core.subjects)
         window.destroy()
 
-    def create_automated_analysis_frame(self, parent):
-        automated_frame = ttk.LabelFrame(parent, text="Automated Script Analysis", padding="10")
-        automated_frame.pack(fill="both", expand=True, pady=(10, 0))
-        self.automated_frame = AutomatedAnalysisFrame(automated_frame, self.core)
-        self.automated_frame.pack(fill="both", expand=True)
 
     def __init__(self, master, core):
         self.master = master
