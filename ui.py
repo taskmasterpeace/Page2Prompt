@@ -1011,12 +1011,15 @@ class PageToPromptUI:
         prompt = self.results_text.get("1.0", tk.END).strip()
         if prompt:
             components = {
-                "style": self.style_entry.get(),
+                "style_prefix": self.style_prefix_entry.get(),
+                "style_suffix": self.style_suffix_entry.get(),
                 "shot_description": self.shot_text.get("1.0", tk.END).strip(),
+                "camera_shot": self.shot_var.get(),
                 "camera_move": self.move_var.get(),
                 "directors_notes": self.notes_text.get("1.0", tk.END).strip(),
                 "script": self.script_text.get("1.0", tk.END).strip(),
-                "stick_to_script": self.stick_to_script_var.get()
+                "stick_to_script": self.stick_to_script_var.get(),
+                "end_parameters": self.end_parameters_entry.get()
             }
             self.core.save_prompt(prompt, components)
             messagebox.showinfo("Saved", "Prompt saved successfully!")
