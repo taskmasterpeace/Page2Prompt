@@ -811,7 +811,8 @@ class PageToPromptUI:
         self.script_text = scrolledtext.ScrolledText(script_frame, height=10, width=50, wrap=tk.WORD)
         self.script_text.pack(side="left", expand=True, fill="both", padx=(5, 0))
         self.script_text.insert(tk.END, "")
-        self.script_text.bind("<<Selection>>", partial(self.on_script_selection))
+        self.script_text.bind("<<Selection>>", self.on_script_selection)
+        self.master.bind_all("<Button-1>", self.maintain_selection, "+")
         ToolTip(self.script_text, "Enter the script or scene description here")
 
         # Stick to Script Checkbox
@@ -927,23 +928,18 @@ class PageToPromptUI:
         if prompt:
             selected_sentence = self.get_selected_sentence()
             if selected_sentence:
-                for node in self.timeline_view.sentence_nodes:
-                    if node.sentence == selected_sentence:
-                        node.add_card(prompt)
-                        break
+                node = self.timeline_view.add_sentence_node(selected_sentence)
+                node.add_card(prompt)
+                self.timeline_view.canvas.configure(scrollregion=self.timeline_view.canvas.bbox("all"))
             else:
                 messagebox.showwarning("No Sentence Selected", "Please select a sentence in the script to add the prompt to.")
         else:
             messagebox.showwarning("Empty Prompt", "There is no prompt to add to the timeline.")
 
     def get_selected_sentence(self):
-        try:
-            cursor_pos = self.script_text.index(tk.INSERT)
-            line_start = self.script_text.index(f"{cursor_pos} linestart")
-            line_end = self.script_text.index(f"{cursor_pos} lineend")
-            return self.script_text.get(line_start, line_end).strip()
-        except:
-            return None
+        if self.script_selection:
+            return self.script_text.get(self.script_selection[0], self.script_selection[1]).strip()
+        return None
 
     def handle_script_update(self):
         script = self.script_text.get("1.0", tk.END).strip()
@@ -1334,7 +1330,8 @@ class PageToPromptUI:
             self.script_text.tag_remove(tk.SEL, "1.0", tk.END)
             self.script_text.tag_add(tk.SEL, self.script_selection[0], self.script_selection[1])
             self.script_text.mark_set(tk.INSERT, self.script_selection[1])
-        return "break"  # Prevents the default behavior of clearing the selection for other widgets
+            return "break"  # Prevents the default behavior of clearing the selection for other widgets
+        return  # Allow default behavior if there's no selection
 
     def save_as_template(self):
         template_name = simpledialog.askstring("Save Template", "Enter a name for this template:")
