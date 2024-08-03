@@ -654,16 +654,19 @@ class PageToPromptUI:
         self.end_parameters_entry = ttk.Entry(input_frame, width=50)
         self.end_parameters_entry.grid(column=1, row=8, sticky=(tk.W, tk.E), pady=5)
 
-        # Generate Button
-        self.generate_button = ttk.Button(input_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
-        self.generate_button.grid(column=1, row=9, sticky=tk.E, pady=10)
+        # Generate Button and Save as Template
+        button_frame = ttk.Frame(input_frame)
+        button_frame.grid(column=1, row=9, sticky=tk.E, pady=10)
+
+        self.generate_button = ttk.Button(button_frame, text="🚀 Generate Prompt", command=self.generate_button_click)
+        self.generate_button.pack(side=tk.LEFT, padx=2)
+
+        self.save_template_button = ttk.Button(button_frame, text="💾 Save as Template", command=self.save_as_template)
+        self.save_template_button.pack(side=tk.LEFT, padx=2)
 
         # Template Management
         template_frame = ttk.Frame(input_frame)
         template_frame.grid(column=1, row=10, sticky=tk.E, pady=5)
-
-        self.save_template_button = ttk.Button(template_frame, text="Save as Template", command=self.save_as_template)
-        self.save_template_button.pack(side=tk.LEFT, padx=2)
 
         self.load_template_var = tk.StringVar()
         self.load_template_combo = ttk.Combobox(template_frame, textvariable=self.load_template_var, width=20)
@@ -672,21 +675,7 @@ class PageToPromptUI:
 
         self.update_template_list()
 
-        # Add Undo and Redo buttons
-        undo_redo_frame = ttk.Frame(input_frame)
-        undo_redo_frame.grid(column=1, row=11, sticky=tk.E, pady=5)
-
-        self.undo_button = ttk.Button(undo_redo_frame, text="↩ Undo", command=self.undo)
-        self.undo_button.pack(side=tk.LEFT, padx=2)
-
-        self.redo_button = ttk.Button(undo_redo_frame, text="Redo ↪", command=self.redo)
-        self.redo_button.pack(side=tk.LEFT, padx=2)
-
         input_frame.columnconfigure(1, weight=1)
-
-        # Bind keyboard shortcuts
-        self.master.bind('<Control-z>', lambda event: self.undo())
-        self.master.bind('<Control-y>', lambda event: self.redo())
 
     async def handle_generate_button_click(self):
         try:
