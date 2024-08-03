@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
+from tkinterdnd2 import DND_TEXT, TkinterDnD
 from tkinter.ttk import Frame, Scrollbar, PanedWindow
 import pyperclip
 from core import PromptForgeCore
@@ -491,6 +492,165 @@ class AutomatedAnalysisFrame(ttk.Frame):
 
     # ... (rest of the AutomatedAnalysisFrame methods remain unchanged)
 
+class TimelineView(ttk.Frame):
+    def __init__(self, master, core):
+        super().__init__(master)
+        self.core = core
+        self.setup_ui()
+
+    def setup_ui(self):
+        # Create the scrollable canvas
+        self.canvas = tk.Canvas(self, width=400, height=300)
+        self.scrollbar = ttk.Scrollbar(self, orient="horizontal", command=self.canvas.xview)
+        self.canvas.configure(xscrollcommand=self.scrollbar.set)
+
+        self.scrollbar.pack(side="bottom", fill="x")
+        self.canvas.pack(side="left", fill="both", expand=True)
+
+        # Frame to hold sentence nodes
+        self.timeline_frame = ttk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.timeline_frame, anchor="nw")
+
+        # Bind events for scrolling and zooming
+        self.canvas.bind("<Configure>", self.on_canvas_configure)
+        self.canvas.bind("<MouseWheel>", self.on_mousewheel)
+        self.bind("<Control-plus>", self.zoom_in)
+        self.bind("<Control-minus>", self.zoom_out)
+
+        self.zoom_level = 100
+        self.sentence_nodes = []
+
+    def on_canvas_configure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def on_mousewheel(self, event):
+        self.canvas.xview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def zoom_in(self, event):
+        self.zoom_level = min(200, self.zoom_level + 50)
+        self.update_zoom()
+
+    def zoom_out(self, event):
+        self.zoom_level = max(50, self.zoom_level - 50)
+        self.update_zoom()
+
+    def update_zoom(self):
+        # Update the size of sentence nodes based on zoom level
+        for node in self.sentence_nodes:
+            node.update_size(self.zoom_level)
+
+    def add_sentence_node(self, sentence):
+        node = SentenceNode(self.timeline_frame, sentence, self.zoom_level)
+        node.pack(side="left", padx=5, pady=5)
+        self.sentence_nodes.append(node)
+        return node
+
+    def clear_timeline(self):
+        for node in self.sentence_nodes:
+            node.destroy()
+        self.sentence_nodes.clear()
+
+    def reorder_nodes(self, source_sentence, target_sentence):
+        source_index = next(i for i, node in enumerate(self.sentence_nodes) if node.sentence == source_sentence)
+        target_index = next(i for i, node in enumerate(self.sentence_nodes) if node.sentence == target_sentence)
+
+        node = self.sentence_nodes.pop(source_index)
+        self.sentence_nodes.insert(target_index, node)
+
+        for i, node in enumerate(self.sentence_nodes):
+            node.pack_forget()
+            node.pack(side="left", padx=5, pady=5)
+
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+class SentenceNode(TkinterDnD.Tk):
+    def __init__(self, master, sentence, zoom_level):
+        super().__init__(master)
+        self.sentence = sentence
+        self.zoom_level = zoom_level
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.label = ttk.Label(self, text=self.sentence, wraplength=200)
+        self.label.pack(pady=5)
+
+        self.add_card_button = ttk.Button(self, text="➕ Add Card", command=self.add_card)
+        self.add_card_button.pack(pady=5)
+
+        self.cards = []
+
+        self.drag_source_register(DND_TEXT)
+        self.drop_target_register(DND_TEXT)
+
+        self.dnd_bind('<<DragInitCmd>>', self.drag_init)
+        self.dnd_bind('<<DropEnter>>', self.drop_enter)
+        self.dnd_bind('<<DropLeave>>', self.drop_leave)
+        self.dnd_bind('<<Drop>>', self.drop)
+
+    def add_card(self, prompt=""):
+        if len(self.cards) < 4:
+            card = PromptCard(self, prompt)
+            card.pack(pady=2)
+            self.cards.append(card)
+
+    def update_size(self, zoom_level):
+        self.zoom_level = zoom_level
+        width = int(200 * (zoom_level / 100))
+        self.label.configure(wraplength=width)
+
+    def drag_init(self, event):
+        return (DND_TEXT, self.sentence)
+
+    def drop_enter(self, event):
+        event.widget.focus_set()
+        return event.action
+
+    def drop_leave(self, event):
+        return event.action
+
+    def drop(self, event):
+        if event.data:
+            self.master.master.reorder_nodes(event.data, self.sentence)
+        return event.action
+
+class PromptCard(ttk.Frame):
+    def __init__(self, master, prompt=""):
+        super().__init__(master)
+        self.prompt = prompt
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.label = ttk.Label(self, text=self.prompt or "📝 Prompt Card")
+        self.label.pack(pady=2)
+
+        self.menu = tk.Menu(self, tearoff=0)
+        self.menu.add_command(label="✂️ Cut", command=self.cut)
+        self.menu.add_command(label="📋 Copy", command=self.copy)
+        self.menu.add_command(label="📌 Paste", command=self.paste)
+        self.menu.add_command(label="🗑️ Remove", command=self.remove)
+
+        self.bind("<Button-3>", self.show_menu)
+
+    def show_menu(self, event):
+        self.menu.post(event.x_root, event.y_root)
+
+    def cut(self):
+        self.copy()
+        self.remove()
+
+    def copy(self):
+        self.clipboard_clear()
+        self.clipboard_append(self.prompt)
+
+    def paste(self):
+        pasted_text = self.clipboard_get()
+        self.prompt = pasted_text
+        self.label.config(text=self.prompt)
+
+    def remove(self):
+        self.master.cards.remove(self)
+        self.destroy()
+
 class PageToPromptUI:
     def __init__(self, master):
         self.master = master
@@ -499,9 +659,10 @@ class PageToPromptUI:
         self.setup_ui()
         self.all_prompts_window = None
         self.all_prompts_text = None
+        self.timeline_view = None
 
     def setup_ui(self):
-        self.master.title("Page to Prompt - Bring Your Script to Life")
+        self.master.title("🎬 Page to Prompt - Bring Your Script to Life")
         self.master.configure(bg='#f0f0f0')  # Light gray background
 
         style = ttk.Style()
@@ -536,6 +697,10 @@ class PageToPromptUI:
 
         self.create_output_area(output_frame)
         self.create_subject_frame(subject_frame)
+
+        # Add Timeline View
+        self.timeline_view = TimelineView(left_frame, self.core)
+        self.timeline_view.pack(fill="both", expand=True, pady=(10, 0))
 
         # Bind event to prevent losing selection
         self.master.bind("<Button-1>", self.maintain_selection)
@@ -718,8 +883,73 @@ class PageToPromptUI:
     def generate_button_click(self):
         asyncio.create_task(self.handle_generate_button_click())
 
+    def add_prompt_to_timeline(self):
+        prompt = self.results_text.get("1.0", tk.END).strip()
+        if prompt:
+            selected_sentence = self.get_selected_sentence()
+            if selected_sentence:
+                for node in self.timeline_view.sentence_nodes:
+                    if node.sentence == selected_sentence:
+                        node.add_card(prompt)
+                        break
+            else:
+                messagebox.showwarning("No Sentence Selected", "Please select a sentence in the script to add the prompt to.")
+        else:
+            messagebox.showwarning("Empty Prompt", "There is no prompt to add to the timeline.")
+
+    def get_selected_sentence(self):
+        try:
+            cursor_pos = self.script_text.index(tk.INSERT)
+            line_start = self.script_text.index(f"{cursor_pos} linestart")
+            line_end = self.script_text.index(f"{cursor_pos} lineend")
+            return self.script_text.get(line_start, line_end).strip()
+        except:
+            return None
+
+    def handle_script_update(self):
+        script = self.script_text.get("1.0", tk.END).strip()
+        sentences = self.core.parse_script_into_sentences(script)
+        self.timeline_view.clear_timeline()
+        for sentence in sentences:
+            self.timeline_view.add_sentence_node(sentence)
+
+    def save_project(self):
+        filename = filedialog.asksaveasfilename(defaultextension=".json")
+        if filename:
+            self.core.save_project(filename)
+            messagebox.showinfo("Project Saved", f"Project saved to {filename}")
+
+    def load_project(self):
+        filename = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
+        if filename:
+            self.core.load_project(filename)
+            self.update_ui_from_project()
+
+    def update_ui_from_project(self):
+        # Update script text area
+        self.script_text.delete("1.0", tk.END)
+        self.script_text.insert(tk.END, self.core.script)
+
+        # Update timeline view
+        self.timeline_view.clear_timeline()
+        for sentence, prompts in self.core.get_timeline_data().items():
+            node = self.timeline_view.add_sentence_node(sentence)
+            for prompt in prompts:
+                node.add_card(prompt)
+
+        # Update other UI elements as needed
+        self.shot_text.delete("1.0", tk.END)
+        self.shot_text.insert(tk.END, self.core.shot_description)
+        self.notes_text.delete("1.0", tk.END)
+        self.notes_text.insert(tk.END, self.core.directors_notes)
+        self.style_prefix_entry.delete(0, tk.END)
+        self.style_prefix_entry.insert(0, self.core.style_prefix)
+        self.style_suffix_entry.delete(0, tk.END)
+        self.style_suffix_entry.insert(0, self.core.style_suffix)
+        self.stick_to_script_var.set(self.core.stick_to_script)
+
     def create_output_area(self, parent):
-        output_frame = ttk.LabelFrame(parent, text="Generated Prompt", padding="10")
+        output_frame = ttk.LabelFrame(parent, text="🎨 Generated Prompt", padding="10")
         output_frame.pack(fill="both", expand=True)
 
         # Create a PanedWindow to allow resizing
@@ -733,17 +963,21 @@ class PageToPromptUI:
         button_frame = ttk.Frame(output_frame)
         button_frame.pack(fill="x", pady=5)
 
-        self.save_button = ttk.Button(button_frame, text="Save Prompt", command=self.save_prompt)
+        self.save_button = ttk.Button(button_frame, text="💾 Save Prompt", command=self.save_prompt)
         self.save_button.pack(side="left", padx=2)
 
-        self.copy_button = ttk.Button(button_frame, text="Copy to Clipboard", command=self.copy_prompt_to_clipboard)
+        self.copy_button = ttk.Button(button_frame, text="📋 Copy to Clipboard", command=self.copy_prompt_to_clipboard)
         self.copy_button.pack(side="left", padx=2)
 
-        self.show_prompts_button = ttk.Button(button_frame, text="Show All Prompts", command=self.show_all_prompts)
+        self.show_prompts_button = ttk.Button(button_frame, text="📚 Show All Prompts", comman
+d=self.show_all_prompts)
         self.show_prompts_button.pack(side="left", padx=2)
 
-        self.show_logs_button = ttk.Button(button_frame, text="Show Logs", command=self.show_logs)
+        self.show_logs_button = ttk.Button(button_frame, text="📜 Show Logs", command=self.show_logs)
         self.show_logs_button.pack(side="left", padx=2)
+
+        self.add_to_timeline_button = ttk.Button(button_frame, text="➕ Add to Timeline", command=self.add_prompt_to_timeline)
+        self.add_to_timeline_button.pack(side="left", padx=2)
 
     async def handle_generate_button_click(self):
         try:
