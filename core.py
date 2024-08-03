@@ -1,7 +1,7 @@
 # core.py
 
 import asyncio
-from typing import List, Dict, Optional, Tuple, Any
+from typing import List, Dict, Optional, Tuple, Any, Union
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain_community.chat_models import ChatOpenAI as CommunityChatOpenAI
@@ -597,14 +597,26 @@ class PromptForgeCore:
             logging.exception("Error in PromptForgeCore.generate_prompt")
             raise
 
-    def _generate_concise_prompt(self, full_prompt: str) -> str:
+    def _generate_concise_prompt(self, full_prompt: Union[str, Dict[str, str]]) -> str:
+        if isinstance(full_prompt, dict):
+            # Assuming the prompt is stored in a 'text' key
+            prompt_text = full_prompt.get('text', '')
+        else:
+            prompt_text = str(full_prompt)
+        
         # Extract the first sentence or up to 100 characters
-        concise = full_prompt.split('.')[0]
+        concise = prompt_text.split('.')[0]
         return concise[:100] + ('...' if len(concise) > 100 else '')
 
-    def _generate_normal_prompt(self, full_prompt: str) -> str:
+    def _generate_normal_prompt(self, full_prompt: Union[str, Dict[str, str]]) -> str:
+        if isinstance(full_prompt, dict):
+            # Assuming the prompt is stored in a 'text' key
+            prompt_text = full_prompt.get('text', '')
+        else:
+            prompt_text = str(full_prompt)
+        
         # Extract the first paragraph or up to 250 characters
-        normal = full_prompt.split('\n\n')[0]
+        normal = prompt_text.split('\n\n')[0]
         return normal[:250] + ('...' if len(normal) > 250 else '')
 
     def save_prompt(self, prompt: str, components: Dict[str, Any]) -> None:
