@@ -43,8 +43,7 @@ class DirectorStyle:
 class MetaChain:
     def __init__(self, core):
         self.core = core
-        self.model_name = "gpt-4o-mini"
-        self.llm = ChatOpenAI(model_name=self.model_name, temperature=0.7)
+        self.llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.7)
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.prompt_manager = PromptManager()
 
