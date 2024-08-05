@@ -401,7 +401,7 @@ class PromptForgeCore:
             llm=self.llm,
             prompt=PromptTemplate(
                 input_variables=["style"],
-                template="Given the style '{style}', generate three distinct and detailed visual descriptors that characterize this style. Focus on unique elements, color palettes, lighting, and overall atmosphere. Separate each descriptor with a semicolon:"
+                template="Based on the style '{style}', generate 3-4 distinct visual descriptors that characterize this style. Focus on visual elements like color palette, lighting, textures, and any other visual components of the style. Provide these descriptors in a comma-separated list."
             )
         )
         result = style_chain.run({"style": prefix})
