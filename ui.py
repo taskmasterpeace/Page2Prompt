@@ -805,30 +805,30 @@ class PageToPromptUI:
         self.stick_to_script_check.pack(side="left")
         ToolTip(self.stick_to_script_check, "When checked, the generated prompt will closely follow the script")
 
+        # Camera Shot and Move
+        camera_frame = ttk.Frame(scrollable_frame)
+        camera_frame.pack(fill="x", pady=5)
+        
         # Camera Shot
-        camera_shot_frame = ttk.Frame(scrollable_frame)
-        camera_shot_frame.pack(fill="x", pady=5)
-        ttk.Label(camera_shot_frame, text="📷 Camera Shot:").pack(side="left")
+        ttk.Label(camera_frame, text="📷 Camera Shot:").pack(side="left")
         self.shot_var = tk.StringVar()
-        self.shot_combo = ttk.Combobox(camera_shot_frame, textvariable=self.shot_var, values=[
+        self.shot_combo = ttk.Combobox(camera_frame, textvariable=self.shot_var, values=[
             "None", "Wide Shot", "Long Shot", "Full Shot", "Medium Shot", "Close-up", "Extreme Close-up",
             "Point of View Shot", "Over the Shoulder Shot", "Low Angle Shot", "High Angle Shot",
             "Dutch Angle Shot", "Bird's Eye View", "Worm's Eye View"
-        ], width=47)
-        self.shot_combo.pack(side="left", expand=True, fill="x", padx=(5, 0))
+        ], width=20)
+        self.shot_combo.pack(side="left", padx=(5, 10))
         self.shot_combo.set("None")
         ToolTip(self.shot_combo, "Select the type of camera shot for this prompt")
 
         # Camera Move
-        camera_move_frame = ttk.Frame(scrollable_frame)
-        camera_move_frame.pack(fill="x", pady=5)
-        ttk.Label(camera_move_frame, text="🎥 Camera Move:").pack(side="left")
+        ttk.Label(camera_frame, text="🎥 Camera Move:").pack(side="left")
         self.move_var = tk.StringVar()
-        self.move_combo = ttk.Combobox(camera_move_frame, textvariable=self.move_var, values=[
+        self.move_combo = ttk.Combobox(camera_frame, textvariable=self.move_var, values=[
             "None", "Static", "Pan", "Tilt", "Zoom", "Dolly", "Truck", "Pedestal", "Crane Shot",
             "Steadicam", "Handheld", "Tracking Shot", "Pull Focus"
-        ], width=47)
-        self.move_combo.pack(side="left", expand=True, fill="x", padx=(5, 0))
+        ], width=20)
+        self.move_combo.pack(side="left", padx=(5, 0))
         self.move_combo.set("None")
         ToolTip(self.move_combo, "Select the type of camera movement for this prompt")
 
