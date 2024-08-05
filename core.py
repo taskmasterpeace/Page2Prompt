@@ -697,4 +697,15 @@ class PromptForgeCore:
     async def analyze_script(self, script_content: str, director_style: str) -> str:
         return await self.meta_chain.generate_prompt_spreadsheet(script_content, director_style)
 
+    def generate_style_details(self, prefix: str) -> str:
+        style_chain = LLMChain(
+            llm=self.llm,
+            prompt=PromptTemplate(
+                input_variables=["style"],
+                template="Based on the style '{style}', generate 3-4 distinct visual descriptors that characterize this style. Focus on visual elements like color palette, lighting, textures, and any other visual components of the style. Provide these descriptors in a comma-separated list."
+            )
+        )
+        result = style_chain.run({"style": prefix})
+        return result.strip()
+
 # End of PromptForgeCore class
