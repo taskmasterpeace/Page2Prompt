@@ -607,7 +607,9 @@ class PromptForgeCore:
             formatted = f"{self.camera_shot} of {formatted}"
         if self.camera_move:
             formatted = f"{self.camera_move} to {formatted}"
-        formatted = f"{self.style_prefix} {formatted} {self.style_suffix}".strip()
+        formatted = f"{self.style_prefix} {formatted}".strip()
+        if self.style_suffix:
+            formatted = f"{formatted}, {self.style_suffix}"
         return f"{formatted} {self.end_parameters}".strip()
 
     def _log_prompt_generation(self, prompts: Dict[str, str], inputs: Dict[str, Any]):
