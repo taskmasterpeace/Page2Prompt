@@ -706,7 +706,7 @@ class PageToPromptUI:
         input_paned.pack(fill="both", expand=True)
 
         input_frame = ttk.LabelFrame(input_paned, text="Input", padding="10")
-        input_paned.add(input_frame, weight=1)
+        input_paned.add(input_frame, weight=9)  # Increased weight for more space
         
         # Create a canvas with scrollbar for the input fields
         canvas = tk.Canvas(input_frame)
@@ -724,8 +724,18 @@ class PageToPromptUI:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        # Make the input frame resizable
-        input_paned.add(ttk.Frame(input_paned), weight=1)
+        # Make the input frame resizable with a maximum size
+        spacer_frame = ttk.Frame(input_paned)
+        input_paned.add(spacer_frame, weight=1)
+        
+        def limit_input_size(event):
+            total_height = input_paned.winfo_height()
+            max_input_height = int(total_height * 1.1)  # 110% of default size
+            current_input_height = input_frame.winfo_height()
+            if current_input_height > max_input_height:
+                input_paned.paneconfig(input_frame, height=max_input_height)
+
+        input_paned.bind("<Configure>", limit_input_size)
 
         # API Key
         api_key_frame = ttk.Frame(scrollable_frame)
