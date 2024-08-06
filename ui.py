@@ -724,6 +724,9 @@ class PageToPromptUI:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+        # Make the input frame resizable
+        input_paned.add(ttk.Frame(input_paned), weight=1)
+
         # API Key
         api_key_frame = ttk.Frame(scrollable_frame)
         api_key_frame.pack(fill="x", pady=5)
