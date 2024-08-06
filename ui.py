@@ -702,8 +702,11 @@ class PageToPromptUI:
         config.set('UI_SETTINGS', 'right_paned_sash', str(self.right_paned.sashpos(0)))
 
     def create_input_fields(self, parent):
-        input_frame = ttk.LabelFrame(parent, text="Input", padding="10")
-        input_frame.pack(fill="both", expand=True)
+        input_paned = ttk.PanedWindow(parent, orient=tk.VERTICAL)
+        input_paned.pack(fill="both", expand=True)
+
+        input_frame = ttk.LabelFrame(input_paned, text="Input", padding="10")
+        input_paned.add(input_frame, weight=1)
         
         # Create a canvas with scrollbar for the input fields
         canvas = tk.Canvas(input_frame)
