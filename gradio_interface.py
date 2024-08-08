@@ -25,7 +25,7 @@ with gr.Blocks() as app:
     camera_move = gr.Dropdown(label="Camera Move", choices=["Move1", "Move2", "Move3"])  # Added camera move choices
     end_parameters = gr.Textbox(label="End Parameters")
 
-    generated_prompt = gr.Textbox(label="Generated Prompt", readonly=True)
+    generated_prompt = gr.Textbox(label="Generated Prompt")
     save_prompt = gr.Button(label="Save Prompt")
     copy_to_clipboard = gr.Button(label="Copy to Clipboard")
     clear_prompts = gr.Button(label="Clear Prompts")
