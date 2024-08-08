@@ -27,7 +27,7 @@ with gr.Blocks() as app:
 
     generated_prompt = gr.Textbox(label="Generated Prompt")
     save_prompt = gr.Button("Save Prompt")
-    copy_to_clipboard = gr.Button(label="Copy to Clipboard")
+    copy_to_clipboard = gr.Button("Copy to Clipboard")
     clear_prompts = gr.Button(label="Clear Prompts")
     show_all_prompts = gr.Button(label="Show All Prompts")
     show_logs = gr.Button(label="Show Logs")
