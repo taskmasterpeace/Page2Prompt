@@ -55,10 +55,10 @@ with gr.Blocks() as app:
         print("Show Logs button clicked")  # Replace with actual implementation
 
     # Connect event handlers to buttons
-    save_prompt.on_click(on_save_prompt)
-    copy_to_clipboard.on_click(on_copy_to_clipboard)
-    clear_prompts.on_click(on_clear_prompts)
-    show_all_prompts.on_click(on_show_all_prompts)
-    show_logs.on_click(on_show_logs)
+    save_prompt.set_on_click(on_save_prompt)
+    copy_to_clipboard.set_on_click(on_copy_to_clipboard)
+    clear_prompts.set_on_click(on_clear_prompts)
+    show_all_prompts.set_on_click(on_show_all_prompts)
+    show_logs.set_on_click(on_show_logs)
 
 app.launch()
