@@ -9,13 +9,13 @@ with gr.Blocks() as app:
     api_key = gr.Textbox(label="API Key")
     shot_description = gr.Textbox(label="Shot Description")
     directors_notes = gr.Textbox(label="Director's Notes")
-    style = gr.Dropdown(label="Style", choices=[])  # TODO: Add style choices
+    style = gr.Dropdown(label="Style", choices=["Style1", "Style2", "Style3"])  # Added style choices
     prefix = gr.Textbox(label="Prefix")
     suffix = gr.Textbox(label="Suffix")
     script = gr.Textbox(label="Script")
     stick_to_script = gr.Checkbox(label="Stick to Script")
-    camera_shot = gr.Dropdown(label="Camera Shot", choices=[])  # TODO: Add camera shot choices
-    camera_move = gr.Dropdown(label="Camera Move", choices=[])  # TODO: Add camera move choices
+    camera_shot = gr.Dropdown(label="Camera Shot", choices=["Shot1", "Shot2", "Shot3"])  # Added camera shot choices
+    camera_move = gr.Dropdown(label="Camera Move", choices=["Move1", "Move2", "Move3"])  # Added camera move choices
     end_parameters = gr.Textbox(label="End Parameters")
 
     generated_prompt = gr.Textbox(label="Generated Prompt", readonly=True)
