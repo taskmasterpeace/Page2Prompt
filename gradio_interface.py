@@ -1,8 +1,11 @@
 import gradio as gr
+from meta_chain import MetaChain
+from core import PromptForgeCore
 
 def helper_function(text):
-    # Implemented helper function
-    return text.upper()  # Example implementation, modify as needed
+    # Use MetaChain or PromptForgeCore to process the text
+    processed_text = meta_chain.process_text(text)  # Replace with actual method
+    return processed_text
 
 with gr.Blocks() as app:
     # Define components
@@ -27,19 +30,25 @@ with gr.Blocks() as app:
 
     # Define event handlers
     def on_save_prompt():
-        print("Save Prompt button clicked")  # Example implementation, modify as needed
+        # Use PromptForgeCore to save the prompt
+        core.save_prompt(generated_prompt.get_value())  # Replace with actual method
 
     def on_copy_to_clipboard():
-        print("Copy to Clipboard button clicked")  # Example implementation, modify as needed
+        # Use Gradio's Clipboard API to copy the prompt to the clipboard
+        gr.Clipboard.copy(generated_prompt.get_value())
 
     def on_clear_prompts():
-        print("Clear Prompts button clicked")  # Example implementation, modify as needed
+        # Use PromptForgeCore to clear the prompts
+        core.clear_prompts()  # Replace with actual method
 
     def on_show_all_prompts():
-        print("Show All Prompts button clicked")  # Example implementation, modify as needed
+        # Use PromptForgeCore to get all prompts and display them
+        all_prompts = core.get_all_prompts()  # Replace with actual method
+        print(all_prompts)
 
     def on_show_logs():
-        print("Show Logs button clicked")  # Example implementation, modify as needed
+        # Use your application's logging system to show logs
+        print("Show Logs button clicked")  # Replace with actual implementation
 
     # Connect event handlers to buttons
     save_prompt.on_click(on_save_prompt)
