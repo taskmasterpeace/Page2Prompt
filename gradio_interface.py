@@ -2,6 +2,9 @@ import gradio as gr
 from meta_chain import MetaChain
 from core import PromptForgeCore
 
+meta_chain = MetaChain()
+core = PromptForgeCore()
+
 def helper_function(text):
     # Use MetaChain or PromptForgeCore to process the text
     processed_text = meta_chain.process_text(text)  # Replace with actual method
