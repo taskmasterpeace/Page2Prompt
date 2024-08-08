@@ -29,7 +29,7 @@ with gr.Blocks() as app:
     save_prompt = gr.Button("Save Prompt")
     copy_to_clipboard = gr.Button("Copy to Clipboard")
     clear_prompts = gr.Button("Clear Prompts")
-    show_all_prompts = gr.Button(label="Show All Prompts")
+    show_all_prompts = gr.Button("Show All Prompts")
     show_logs = gr.Button(label="Show Logs")
 
     # Define event handlers
