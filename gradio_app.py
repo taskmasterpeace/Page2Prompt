@@ -52,12 +52,16 @@ async def analyze_script(script_content, director_style):
     except Exception as e:
         return f"Unexpected error: {str(e)}"
 
-def save_prompt(prompt, name):
+def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
     try:
-        prompt_manager.save_prompt(prompt, name, "", "", "", {})
-        return f"Prompt '{name}' saved successfully."
+        prompt_manager.save_prompt({
+            "concise": concise_prompt,
+            "normal": normal_prompt,
+            "detailed": detailed_prompt
+        }, name, "", "", "", {})
+        return f"Prompts '{name}' saved successfully."
     except Exception as e:
-        return f"Error saving prompt: {str(e)}"
+        return f"Error saving prompts: {str(e)}"
 
 def load_prompt(name):
     try:
@@ -82,10 +86,10 @@ with gr.Blocks() as app:
             style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
             shot_description_input = gr.Textbox(label="Shot Description")
             directors_notes_input = gr.Textbox(label="Director's Notes")
+            highlighted_text_input = gr.Textbox(label="Highlighted Text", lines=3)
             script_input = gr.Textbox(label="Script", lines=5)
             stick_to_script_input = gr.Checkbox(label="Stick to Script")
             end_parameters_input = gr.Textbox(label="End Parameters")
-            generate_button = gr.Button("Generate Prompt")
         
         with gr.Column(scale=1):
             # Right column
@@ -98,6 +102,8 @@ with gr.Blocks() as app:
                 copy_button = gr.Button("Copy to Clipboard")
                 clear_button = gr.Button("Clear Prompts")
     
+    generate_button = gr.Button("Generate Prompt")
+    
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt(*args)),
         inputs=[style_input, shot_description_input, 
@@ -107,8 +113,22 @@ with gr.Blocks() as app:
     
     # Add event handlers for save, copy, and clear buttons
     save_button.click(save_prompt, inputs=[normal_output, "Untitled"], outputs=gr.Textbox(label="Save Result"))
-    copy_button.click(lambda x: gr.Textbox.update(value=x), inputs=[normal_output], outputs=[gr.Textbox()])
-    clear_button.click(lambda: ("", "", ""), outputs=[concise_output, normal_output, detailed_output])
+    copy_concise_button = gr.Button("Copy Concise")
+    copy_normal_button = gr.Button("Copy Normal")
+    copy_detailed_button = gr.Button("Copy Detailed")
+    
+    copy_concise_button.click(lambda x: gr.Textbox.update(value=x), inputs=[concise_output], outputs=[gr.Textbox()])
+    copy_normal_button.click(lambda x: gr.Textbox.update(value=x), inputs=[normal_output], outputs=[gr.Textbox()])
+    copy_detailed_button.click(lambda x: gr.Textbox.update(value=x), inputs=[detailed_output], outputs=[gr.Textbox()])
+    def clear_all():
+        return ("", "", "", "", "", "", "", "", "", "")
+    
+    clear_button.click(
+        clear_all,
+        outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
+                 script_input, stick_to_script_input, end_parameters_input,
+                 concise_output, normal_output, detailed_output]
+    )
     
     # Script Analysis (can be added as a separate tab or integrated into the main interface)
     with gr.Tab("Script Analysis"):
