@@ -128,4 +128,4 @@ with gr.Blocks() as app:
         refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
 
 if __name__ == "__main__":
-    app.launch()
+    app.launch(share=True)
