@@ -19,12 +19,13 @@ meta_chain = MetaChain(core)
 prompt_logger = PromptLogger()
 
 # Set up OpenAI API key
-openai_api_key = get_openai_api_key()
+import os
+openai_api_key = os.getenv("OPENAI_API_KEY")
 if openai_api_key:
     import openai
     openai.api_key = openai_api_key
 else:
-    raise ValueError("OpenAI API key not found. Please set it up in the configuration file or environment variables.")
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please set it up before running the application.")
 
 async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters):
     try:
