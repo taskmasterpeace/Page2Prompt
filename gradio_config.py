@@ -14,11 +14,18 @@ class Config:
             self.create_default_config()
 
     def create_default_config(self):
-        self.config['DEFAULT'] = {
-            'OpenAI_API_Key': '',
-            'UI_Settings': {
-                'main_window_geometry': '800x600'
-            }
+        self.config['API_KEYS'] = {
+            'openai_api_key': '',
+            'langsmith_api_key': ''
+        }
+        self.config['UI_SETTINGS'] = {
+            'main_window_geometry': '1200x800',
+            'input_frame_height': '400',
+            'output_frame_height': '300',
+            'main_paned_sash': '866',
+            'right_paned_sash1': '476',
+            'right_paned_sash2': '795',
+            'right_paned_sash': '554'
         }
         self.save_config()
 
@@ -37,4 +44,4 @@ class Config:
 
 def get_openai_api_key():
     config = Config()
-    return config.get('DEFAULT', 'OpenAI_API_Key')
+    return config.get('API_KEYS', 'openai_api_key')
