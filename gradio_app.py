@@ -24,7 +24,7 @@ if openai_api_key:
     import openai
     openai.api_key = openai_api_key
 else:
-    print("Warning: OpenAI API key not found. Some features may not work.")
+    raise ValueError("OpenAI API key not found. Please set it up in the configuration file or environment variables.")
 
 async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters):
     try:
@@ -112,7 +112,12 @@ with gr.Blocks() as app:
     )
     
     # Add event handlers for save, copy, and clear buttons
-    save_button.click(save_prompt, inputs=[normal_output, "Untitled"], outputs=gr.Textbox(label="Save Result"))
+    save_prompt_name = gr.Textbox(label="Prompt Name", value="Untitled")
+    save_button.click(
+        save_prompt, 
+        inputs=[concise_output, normal_output, detailed_output, save_prompt_name],
+        outputs=gr.Textbox(label="Save Result")
+    )
     copy_concise_button = gr.Button("Copy Concise")
     copy_normal_button = gr.Button("Copy Normal")
     copy_detailed_button = gr.Button("Copy Detailed")
