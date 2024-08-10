@@ -76,26 +76,41 @@ def get_prompt_logs():
 with gr.Blocks() as app:
     gr.Markdown("# PromptForge")
     
-    with gr.Tab("Generate Prompt"):
-        style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
-        highlighted_text_input = gr.Textbox(label="Highlighted Text")
-        shot_description_input = gr.Textbox(label="Shot Description")
-        directors_notes_input = gr.Textbox(label="Director's Notes")
-        script_input = gr.Textbox(label="Script", lines=5)
-        stick_to_script_input = gr.Checkbox(label="Stick to Script")
-        end_parameters_input = gr.Textbox(label="End Parameters")
-        generate_button = gr.Button("Generate Prompt")
-        concise_output = gr.Textbox(label="Concise Prompt")
-        normal_output = gr.Textbox(label="Normal Prompt")
-        detailed_output = gr.Textbox(label="Detailed Prompt")
+    with gr.Row():
+        with gr.Column(scale=1):
+            # Left column
+            style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
+            shot_description_input = gr.Textbox(label="Shot Description")
+            directors_notes_input = gr.Textbox(label="Director's Notes")
+            script_input = gr.Textbox(label="Script", lines=5)
+            stick_to_script_input = gr.Checkbox(label="Stick to Script")
+            end_parameters_input = gr.Textbox(label="End Parameters")
+            generate_button = gr.Button("Generate Prompt")
         
-        generate_button.click(
-            lambda *args: asyncio.run(generate_prompt(*args)),
-            inputs=[style_input, highlighted_text_input, shot_description_input, 
-                    directors_notes_input, script_input, stick_to_script_input, end_parameters_input],
-            outputs=[concise_output, normal_output, detailed_output]
-        )
+        with gr.Column(scale=1):
+            # Right column
+            concise_output = gr.Textbox(label="Concise Prompt")
+            normal_output = gr.Textbox(label="Normal Prompt")
+            detailed_output = gr.Textbox(label="Detailed Prompt")
+            
+            with gr.Row():
+                save_button = gr.Button("Save Prompt")
+                copy_button = gr.Button("Copy to Clipboard")
+                clear_button = gr.Button("Clear Prompts")
     
+    generate_button.click(
+        lambda *args: asyncio.run(generate_prompt(*args)),
+        inputs=[style_input, shot_description_input, 
+                directors_notes_input, script_input, stick_to_script_input, end_parameters_input],
+        outputs=[concise_output, normal_output, detailed_output]
+    )
+    
+    # Add event handlers for save, copy, and clear buttons
+    save_button.click(save_prompt, inputs=[normal_output, "Untitled"], outputs=gr.Textbox(label="Save Result"))
+    copy_button.click(lambda x: gr.Textbox.update(value=x), inputs=[normal_output], outputs=[gr.Textbox()])
+    clear_button.click(lambda: ("", "", ""), outputs=[concise_output, normal_output, detailed_output])
+    
+    # Script Analysis (can be added as a separate tab or integrated into the main interface)
     with gr.Tab("Script Analysis"):
         script_analysis_input = gr.Textbox(label="Script to Analyze", lines=10)
         director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="Director Style")
@@ -108,19 +123,7 @@ with gr.Blocks() as app:
             outputs=analysis_output
         )
     
-    with gr.Tab("Manage Prompts"):
-        save_prompt_input = gr.Textbox(label="Prompt to Save")
-        save_prompt_name = gr.Textbox(label="Prompt Name")
-        save_button = gr.Button("Save Prompt")
-        save_output = gr.Textbox(label="Save Result")
-        
-        load_prompt_name = gr.Dropdown(choices=[p.get("name", "") for p in prompt_manager.get_all_prompts()], label="Load Prompt")
-        load_button = gr.Button("Load Prompt")
-        load_output = gr.Textbox(label="Loaded Prompt")
-        
-        save_button.click(save_prompt, inputs=[save_prompt_input, save_prompt_name], outputs=save_output)
-        load_button.click(load_prompt, inputs=load_prompt_name, outputs=load_output)
-
+    # Prompt Logs (can be added as a separate tab or integrated into the main interface)
     with gr.Tab("Prompt Logs"):
         log_output = gr.JSON(label="Prompt Generation Logs")
         refresh_logs_button = gr.Button("Refresh Logs")
