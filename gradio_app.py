@@ -86,6 +86,7 @@ with gr.Blocks() as app:
             # Left column
             style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
             shot_description_input = gr.Textbox(label="Shot Description")
+            highlighted_text_input = gr.Textbox(label="Highlighted Text", lines=3)
             directors_notes_input = gr.Textbox(label="Director's Notes")
             highlighted_text_input = gr.Textbox(label="Highlighted Text", lines=3)
             script_input = gr.Textbox(label="Script", lines=5)
@@ -107,7 +108,7 @@ with gr.Blocks() as app:
     
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt(*args)),
-        inputs=[style_input, shot_description_input, 
+        inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, end_parameters_input],
         outputs=[concise_output, normal_output, detailed_output]
     )
