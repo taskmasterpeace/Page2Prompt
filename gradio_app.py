@@ -33,10 +33,14 @@ core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeC
 prompt_logger = PromptLogger()
 
 @debug_func
-async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, subjects_json):
+async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, subjects_json, predictability_index):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         subjects = json.loads(subjects_json) if subjects_json else []
+        
+        # Convert predictability index to temperature
+        _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+        
         result = await core.meta_chain.generate_prompt(
             style=style,
             highlighted_text=highlighted_text,
@@ -47,7 +51,7 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             end_parameters=end_parameters,
             active_subjects=active_subjects_list,
             full_script=script,
-            temperature=0.7  # Add a default temperature value
+            temperature=temperature
         )
         prompt_logger.log_prompt(result)
         assert isinstance(result, dict), f"generate_prompt returned {type(result)}, expected dict"
