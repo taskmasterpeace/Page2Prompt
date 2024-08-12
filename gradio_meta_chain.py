@@ -11,7 +11,7 @@ class MetaChain:
         self.llm = None  # Initialize as None
         self.director_styles = {"Default": {}}  # Add more styles as needed
 
-    def _initialize_llm(self, temperature: float):
+    def _initialize_llm(self, temperature: float = 0.7):
         from langchain_openai import ChatOpenAI
         self.llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=temperature)
 
