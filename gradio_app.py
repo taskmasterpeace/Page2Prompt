@@ -9,7 +9,7 @@ from gradio_script_analyzer import ScriptAnalyzer
 from gradio_meta_chain import MetaChain
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
-from debug_utils import logger, debug_func
+from debug_utils import logger, debug_func, get_error_report
 
 # Initialize components
 config = Config()
@@ -151,16 +151,25 @@ with gr.Blocks() as app:
     
     async def generate_prompt_wrapper(*args):
         try:
+            logger.info("Starting generate_prompt_wrapper")
             result = await generate_prompt(*args, subjects_list.value)
-            return (
-                result.get("concise", {}).get("Full Prompt", ""),
-                result.get("normal", {}).get("Full Prompt", ""),
-                result.get("detailed", {}).get("Full Prompt", ""),
-                "Prompt generated successfully"
-            )
+            logger.info(f"generate_prompt result: {result}")
+        
+            if not isinstance(result, dict):
+                logger.error(f"Unexpected result type: {type(result)}")
+                return "", "", "", f"Error: Unexpected result type {type(result)}"
+        
+            concise = result.get("concise", {}).get("Full Prompt", "")
+            normal = result.get("normal", {}).get("Full Prompt", "")
+            detailed = result.get("detailed", {}).get("Full Prompt", "")
+        
+            logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
+        
+            return concise, normal, detailed, "Prompt generated successfully"
         except Exception as e:
             logger.exception("Error in generate_prompt_wrapper")
-            return "", "", "", f"Error: {str(e)}"
+            error_report = get_error_report()
+            return "", "", "", f"Error: {str(e)}\n\nError Report:\n{error_report}"
 
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt_wrapper(*args)),
@@ -169,6 +178,15 @@ with gr.Blocks() as app:
                 end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
         outputs=[concise_output, normal_output, detailed_output, feedback_area]
     )
+    
+    # Add a debug button to display the error report
+    debug_button = gr.Button("Show Debug Info")
+    debug_output = gr.Textbox(label="Debug Information", lines=10)
+    
+    def show_debug_info():
+        return get_error_report()
+    
+    debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
     
     # Add event handlers for save, copy, and clear buttons
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
