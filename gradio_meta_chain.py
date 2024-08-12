@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Dict, List
+from typing import Dict, List, Optional
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
@@ -98,10 +98,10 @@ class MetaChain:
             template=base_template
         )
 
-    def _format_subject_info(self, active_subjects: List[Dict]) -> str:
+    def _format_subject_info(self, active_subjects: Optional[List[Dict]]) -> str:
         if not active_subjects:
             return "No active subjects"
-        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects])
+        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
 
     async def analyze_script(self, script: str, director_style: str):
         try:
