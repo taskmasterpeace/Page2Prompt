@@ -140,7 +140,7 @@ with gr.Blocks() as app:
             with gr.Group():
                 gr.Markdown("## 👤 Subject Details")
                 subject_name = gr.Textbox(label="Subject Name")
-                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Object", "Other"])
+                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
                 add_subject_button = gr.Button("➕ Add Subject")
                 subjects_list = gr.JSON(label="Added Subjects")
