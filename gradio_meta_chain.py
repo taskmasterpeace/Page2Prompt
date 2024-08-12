@@ -31,11 +31,18 @@ class MetaChain:
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
+    
+        # Use default values for empty inputs
+        style = style or "Default style"
+        highlighted_text = highlighted_text or "Default scene"
+        script = script or full_script or "Default script"
+        shot_description = shot_description or "Default shot"
+        directors_notes = directors_notes or "No specific notes"
+
         try:
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
-            
-            style = style or ""
+        
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
@@ -78,14 +85,15 @@ class MetaChain:
 
             valid_prompts = [result for result in results.values() if result.get("Full Prompt") and not result["Full Prompt"].startswith("Error")]
             if not valid_prompts:
-                raise PromptGenerationError("Failed to generate any valid prompts")
+                logger.warning("No valid prompts generated. Returning error messages.")
+                return results  # Return the results with error messages instead of raising an exception
 
             logger.info(f"Generated prompts: {results}")
             return results
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
             logger.exception(error_msg)
-            raise PromptGenerationError(error_msg)
+            return {"error": error_msg}  # Return an error dictionary instead of raising an exception
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
