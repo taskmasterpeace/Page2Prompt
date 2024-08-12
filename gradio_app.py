@@ -107,12 +107,12 @@ with gr.Blocks() as app:
             with gr.Group():
                 gr.Markdown("## 🎨 Style")
                 style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
-                generate_random_style_button = gr.Button("🎲 Generate Random Style")
                 style_prefix_input = gr.Textbox(label="Style Prefix", placeholder="Enter style name/details")
                 style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix")
                 with gr.Row():
                     save_style_button = gr.Button("💾 Save Style")
                     generate_style_details_button = gr.Button("🔍 Generate Style Details")
+                generate_random_style_button = gr.Button("🎲 Generate Random Style")
             
             script_input = gr.Textbox(label="📜 Script", lines=10)
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
