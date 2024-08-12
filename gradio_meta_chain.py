@@ -34,6 +34,7 @@ class MetaChain:
             for length, template in templates.items():
                 chain = RunnableSequence(template | self.llm)
                 try:
+                    script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
                     result = await chain.ainvoke({
                         "style_prefix": style_prefix,
                         "style_suffix": style_suffix,
@@ -43,7 +44,7 @@ class MetaChain:
                         "full_script": full_script,
                         "subject_info": subject_info,
                         "end_parameters": end_parameters,
-                        "stick_to_script": stick_to_script,
+                        "script_adherence": script_adherence,
                         "length": length
                     })
                     structured_output = self._structure_prompt_output(result.content)
@@ -70,7 +71,7 @@ class MetaChain:
         Full Script: {full_script}
         End Parameters: {end_parameters}
 
-        {'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'}
+        {script_adherence}
 
         The prompt should follow this structure:
         [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects]
