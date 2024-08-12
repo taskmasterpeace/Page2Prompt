@@ -204,12 +204,12 @@ with gr.Blocks() as app:
             return "", "", "", f"Unexpected error: {str(e)}\n\nError Report:\n{error_report}"
 
     generate_button.click(
-        lambda *args: asyncio.run(generate_prompt_wrapper(*args)),
+        generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
-                end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input,
-                predictability_input],
-        outputs=[concise_output, normal_output, detailed_output, feedback_area]
+                end_parameters_input, active_subjects_input, subjects_list, 
+                predictability_input, camera_shot_input, camera_move_input],
+        outputs=[generated_prompts]
     )
     
     # Debug information section
