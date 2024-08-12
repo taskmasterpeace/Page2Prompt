@@ -29,16 +29,13 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
-        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50]}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50]}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
+        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
         try:
-            if not highlighted_text or not script:
-                raise ValueError('Highlighted text and script must not be empty.')
-            
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
             
-            style = style or ""  # Set style to an empty string if it's None
+            style = style or ""
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
@@ -58,12 +55,14 @@ class MetaChain:
                         "style_suffix": style_suffix,
                         "shot_description": shot_description,
                         "directors_notes": directors_notes,
-                        "highlighted_text": highlighted_text,
-                        "full_script": full_script,
+                        "highlighted_text": highlighted_text or "",
+                        "full_script": full_script or script or "",
                         "subject_info": subject_info,
                         "end_parameters": end_parameters,
                         "script_adherence": script_adherence,
-                        "length": length
+                        "length": length,
+                        "camera_shot": camera_shot,
+                        "camera_move": camera_move
                     }
                     logger.debug(f"Invoking chain for {length} prompt with input: {input_data}")
                     result = await chain.ainvoke(input_data)
@@ -77,14 +76,12 @@ class MetaChain:
                     logger.error(error_msg)
                     results[length] = {"Full Prompt": error_msg}
 
-            if not any(result.get("Full Prompt") for result in results.values()):
+            valid_prompts = [result for result in results.values() if result.get("Full Prompt") and not result["Full Prompt"].startswith("Error")]
+            if not valid_prompts:
                 raise PromptGenerationError("Failed to generate any valid prompts")
 
             logger.info(f"Generated prompts: {results}")
             return results
-        except ValueError as ve:
-            logger.error(f"Input validation error: {str(ve)}")
-            raise PromptGenerationError(f"Input error: {str(ve)}")
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
             logger.exception(error_msg)
@@ -137,30 +134,38 @@ class MetaChain:
         return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
 
     def _structure_prompt_output(self, content: str) -> Dict[str, str]:
-        lines = content.strip().split('\n')
-        structured_output = {
-            "Subject": "", "Action/Pose": "", "Context/Setting": "", "Time of Day": "",
-            "Weather Conditions": "", "Composition": "", "Foreground Elements": "",
-            "Background Elements": "", "Mood/Atmosphere": "", "Props/Objects": "",
-            "Environmental Effects": "", "Full Prompt": ""
-        }
-        current_field = ""
-        for line in lines:
-            if ':' in line:
-                key, value = line.split(':', 1)
-                key = key.strip()
-                value = value.strip()
-                if key in structured_output:
-                    current_field = key
-                    structured_output[current_field] = value
-            elif current_field:
-                structured_output[current_field] += " " + line.strip()
-        
-        # If 'Full Prompt' is empty, construct it from other fields
-        if not structured_output["Full Prompt"]:
-            structured_output["Full Prompt"] = " ".join(structured_output.values())
-        
-        return structured_output
+        try:
+            lines = content.strip().split('\n')
+            structured_output = {
+                "Subject": "", "Action/Pose": "", "Context/Setting": "", "Time of Day": "",
+                "Weather Conditions": "", "Composition": "", "Foreground Elements": "",
+                "Background Elements": "", "Mood/Atmosphere": "", "Props/Objects": "",
+                "Environmental Effects": "", "Full Prompt": ""
+            }
+            current_field = ""
+            for line in lines:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    key = key.strip()
+                    value = value.strip()
+                    if key in structured_output:
+                        current_field = key
+                        structured_output[current_field] = value
+                elif current_field:
+                    structured_output[current_field] += " " + line.strip()
+            
+            # If 'Full Prompt' is empty, construct it from other fields
+            if not structured_output["Full Prompt"]:
+                structured_output["Full Prompt"] = " ".join(value for key, value in structured_output.items() if key != "Full Prompt" and value)
+            
+            # Ensure 'Full Prompt' is not empty
+            if not structured_output["Full Prompt"]:
+                raise ValueError("Failed to generate a valid prompt")
+            
+            return structured_output
+        except Exception as e:
+            logger.error(f"Error in _structure_prompt_output: {str(e)}")
+            return {"Full Prompt": f"Error in structuring output: {str(e)}"}
 
     async def analyze_script(self, script: str, director_style: str):
         try:
