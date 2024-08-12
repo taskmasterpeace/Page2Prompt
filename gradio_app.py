@@ -143,12 +143,9 @@ with gr.Blocks() as app:
     generate_button = gr.Button("🚀 Generate Prompt")
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, predictability_index):
+    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
         try:
             logger.info("Starting generate_prompt_wrapper")
-        
-            # Convert predictability index to temperature
-            _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
         
             result = await core.meta_chain.generate_prompt(
                 style=style,
@@ -160,7 +157,6 @@ with gr.Blocks() as app:
                 end_parameters=end_parameters,
                 active_subjects=json.loads(active_subjects) if active_subjects else [],
                 full_script=script,
-                temperature=temperature,
                 camera_shot=camera_shot,
                 camera_move=camera_move
             )
