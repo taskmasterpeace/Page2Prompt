@@ -1,4 +1,5 @@
 import asyncio
+from typing import Dict, List
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 
 class MetaChain:
