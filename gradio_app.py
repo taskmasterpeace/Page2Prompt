@@ -33,7 +33,7 @@ core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeC
 prompt_logger = PromptLogger()
 
 @debug_func
-async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, subjects_json, predictability_index):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, subjects_json, predictability_index, camera_shot, camera_move):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         subjects = json.loads(subjects_json) if subjects_json else []
@@ -51,26 +51,15 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             end_parameters=end_parameters,
             active_subjects=active_subjects_list,
             full_script=script,
-            temperature=temperature
+            temperature=temperature,
+            camera_shot=camera_shot,
+            camera_move=camera_move
         )
         prompt_logger.log_prompt(result)
-        assert isinstance(result, dict), f"generate_prompt returned {type(result)}, expected dict"
-        assert all(key in result for key in ["concise", "normal", "detailed"]), f"generate_prompt result missing expected keys"
-        return (
-            result["concise"]["Full Prompt"],
-            result["normal"]["Full Prompt"],
-            result["detailed"]["Full Prompt"],
-            ""  # Add an empty string as the fourth return value
-        )
-    except PromptGenerationError as e:
-        logger.error(f"Prompt generation failed: {str(e)}")
-        return f"Error generating prompt: {str(e)}", "", "", ""
-    except ValueError as e:
-        logger.error(f"Configuration error: {str(e)}")
-        return f"Configuration error: {str(e)}. Please check your OpenAI API key in the configuration.", "", "", ""
+        return json.dumps(result, indent=2)
     except Exception as e:
-        logger.exception("Unexpected error in generate_prompt")
-        return f"Unexpected error: {str(e)}", "", "", ""
+        logger.exception("Unexpected error in generate_prompt_wrapper")
+        return json.dumps({"error": str(e)}, indent=2)
 
 @debug_func
 async def analyze_script(script_content, director_style):
@@ -155,16 +144,12 @@ with gr.Blocks() as app:
 
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
-            gr.Markdown("## 🖼️ Generated Prompt")
-            concise_output = gr.Textbox(label="💡 Concise Prompt", lines=3)
-            normal_output = gr.Textbox(label="📊 Normal Prompt", lines=5)
-            detailed_output = gr.Textbox(label="📚 Detailed Prompt", lines=7)
+            gr.Markdown("## 🖼️ Generated Prompts")
+            generated_prompts = gr.JSON(label="Generated Prompts")
             
             with gr.Row():
-                save_button = gr.Button("💾 Save Prompt")
-                copy_concise_button = gr.Button("📋 Copy Concise")
-                copy_normal_button = gr.Button("📋 Copy Normal")
-                copy_detailed_button = gr.Button("📋 Copy Detailed")
+                save_button = gr.Button("💾 Save Prompts")
+                copy_button = gr.Button("📋 Copy Prompts")
                 clear_button = gr.Button("🧹 Clear All")
             
             with gr.Group():
