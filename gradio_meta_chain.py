@@ -105,6 +105,24 @@ class MetaChain:
             return "No active subjects"
         return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
 
+    def _structure_prompt_output(self, content: str) -> Dict[str, str]:
+        lines = content.strip().split('\n')
+        structured_output = {}
+        current_field = ""
+        for line in lines:
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                if key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions", 
+                           "Composition", "Foreground Elements", "Background Elements", "Mood/Atmosphere", 
+                           "Props/Objects", "Environmental Effects", "Full Prompt"]:
+                    current_field = key
+                    structured_output[current_field] = value
+            elif current_field:
+                structured_output[current_field] += " " + line.strip()
+        return structured_output
+
     async def analyze_script(self, script: str, director_style: str):
         try:
             # Placeholder for script analysis logic
