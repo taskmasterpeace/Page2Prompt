@@ -118,14 +118,7 @@ with gr.Blocks() as app:
             
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             
-            predictability_input = gr.Slider(
-                minimum=0,
-                maximum=len(PREDICTABILITY_SETTINGS) - 1,
-                step=1,
-                value=next(i for i, (label, _) in enumerate(PREDICTABILITY_SETTINGS) if label == DEFAULT_PREDICTABILITY),
-                label="🎲 Predictability",
-                info="Adjust the predictability of the generated prompt",
-            )
+            # Removed predictability_input
 
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
