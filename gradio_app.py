@@ -18,6 +18,7 @@ prompt_manager = PromptManager()
 style_manager = StyleManager()
 script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
+core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeCore instance
 prompt_logger = PromptLogger()
 
 @debug_func
@@ -166,10 +167,13 @@ with gr.Blocks() as app:
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
             return concise, normal, detailed, "Prompt generated successfully"
+        except PromptGenerationError as e:
+            logger.error(f"Prompt generation error: {str(e)}")
+            return "", "", "", f"Error generating prompt: {str(e)}"
         except Exception as e:
-            logger.exception("Error in generate_prompt_wrapper")
+            logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return "", "", "", f"Error: {str(e)}\n\nError Report:\n{error_report}"
+            return "", "", "", f"Unexpected error: {str(e)}\n\nError Report:\n{error_report}"
 
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt_wrapper(*args)),

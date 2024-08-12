@@ -55,12 +55,8 @@ class MetaChain:
                     full_prompt = f"{style_prefix} {structured_output['Full Prompt']} {style_suffix} {end_parameters}".strip()
                     structured_output['Full Prompt'] = full_prompt
                     results[length] = structured_output
-                except KeyError as e:
-                    error_msg = f"KeyError in generate_prompt for {length}: {str(e)}"
-                    logging.error(error_msg)
-                    results[length] = {"Full Prompt": error_msg}
                 except Exception as e:
-                    error_msg = f"Unexpected error in generate_prompt for {length}: {str(e)}"
+                    error_msg = f"Error in generate_prompt for {length}: {str(e)}"
                     logging.error(error_msg)
                     results[length] = {"Full Prompt": error_msg}
 
