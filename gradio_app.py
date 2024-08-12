@@ -11,16 +11,6 @@ from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
 
-# Define predictability settings
-PREDICTABILITY_SETTINGS = [
-    ("Highly Predictable", 0.1),
-    ("Predictable", 0.3),
-    ("Balanced", 0.7),
-    ("Somewhat Unpredictable", 1.0),
-    ("Unpredictable", 1.5),
-    ("Highly Unpredictable", 2.0)
-]
-DEFAULT_PREDICTABILITY = "Balanced"
 
 # Initialize components
 config = Config()
@@ -213,7 +203,7 @@ with gr.Blocks() as app:
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, 
-                predictability_input, camera_shot_input, camera_move_input],
+                camera_shot_input, camera_move_input],
         outputs=[generated_prompts]
     )
     
