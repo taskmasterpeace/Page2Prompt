@@ -187,15 +187,6 @@ with gr.Blocks() as app:
         outputs=[concise_output, normal_output, detailed_output, feedback_area]
     )
     
-    # Add a debug button to display the error report
-    debug_button = gr.Button("Show Debug Info")
-    debug_output = gr.Textbox(label="Debug Information", lines=10)
-    
-    def show_debug_info():
-        return get_error_report()
-    
-    debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
-    
     # Debug information section
     with gr.Group():
         gr.Markdown("## 🐛 Debug Information")
