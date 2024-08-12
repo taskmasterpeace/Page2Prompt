@@ -145,7 +145,7 @@ with gr.Blocks() as app:
                 minimum=0,
                 maximum=len(PREDICTABILITY_SETTINGS) - 1,
                 step=1,
-                default=next(i for i, (label, _) in enumerate(PREDICTABILITY_SETTINGS) if label == DEFAULT_PREDICTABILITY),
+                value=next(i for i, (label, _) in enumerate(PREDICTABILITY_SETTINGS) if label == DEFAULT_PREDICTABILITY),
                 label="🎲 Predictability",
                 info="Adjust the predictability of the generated prompt",
             )
