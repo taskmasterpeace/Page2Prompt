@@ -16,25 +16,25 @@ class PromptForgeCore:
             prompts = {}
             for prompt_type in ["concise", "normal", "detailed"]:
                 result = await self.meta_chain.generate_prompt(
-                    style_prefix=style_prefix,
-                    style_suffix=style_suffix,
+                    style=style,
                     prompt_type=prompt_type,
                     highlighted_text=highlighted_text,
                     shot_description=shot_description,
                     directors_notes=directors_notes,
                     script=script,
                     stick_to_script=stick_to_script,
-                    active_subjects=active_subjects
+                    active_subjects=active_subjects,
+                    full_script=full_script
                 )
-                prompts[prompt_type] = self.format_prompt(result, style_prefix, style_suffix, end_parameters)
+                prompts[prompt_type] = self.format_prompt(result, style, end_parameters)
 
             self.prompt_logger.log_prompt(prompts)
             return prompts
         except Exception as e:
             raise PromptGenerationError(str(e))
 
-    def format_prompt(self, prompt: str, style_prefix: str, style_suffix: str, end_parameters: str) -> str:
-        return f"{style_prefix} {prompt} {style_suffix} {end_parameters}"
+    def format_prompt(self, prompt: str, style: str, end_parameters: str) -> str:
+        return f"{style} {prompt} {end_parameters}"
 
     async def analyze_script(self, script_content, director_style):
         try:
