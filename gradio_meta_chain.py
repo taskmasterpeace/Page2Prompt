@@ -75,7 +75,19 @@ class MetaChain:
                     result = await chain.ainvoke(input_data)
                     logger.debug(f"Chain result for {length}: {result.content}")
                     structured_output = self._structure_prompt_output(result.content)
-                    full_prompt = f"{style_prefix} {structured_output['Full Prompt']} {style_suffix} {end_parameters}".strip()
+                    full_prompt_parts = []
+                    if structured_output.get("Camera Shot"):
+                        full_prompt_parts.append(structured_output["Camera Shot"])
+                    if structured_output.get("Camera Move"):
+                        full_prompt_parts.append(structured_output["Camera Move"])
+                    if style_prefix:
+                        full_prompt_parts.append(style_prefix)
+                    full_prompt_parts.append(structured_output['Full Prompt'])
+                    if style_suffix:
+                        full_prompt_parts.append(style_suffix)
+                    if end_parameters:
+                        full_prompt_parts.append(end_parameters)
+                    full_prompt = " ".join(full_prompt_parts).strip()
                     structured_output['Full Prompt'] = full_prompt
                     results[length] = structured_output
                 except Exception as e:
@@ -99,6 +111,8 @@ class MetaChain:
         base_template = """
         Generate a {length} prompt based on the following information:
         Subjects: {subject_info}
+        Camera Shot: {camera_shot}
+        Camera Move: {camera_move}
         Style Prefix: {style_prefix}
         Style Suffix: {style_suffix}
         Shot Description: {shot_description}
@@ -110,23 +124,28 @@ class MetaChain:
         {script_adherence}
 
         The prompt should follow this structure:
-        [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects]
+        [Camera Shot] [Camera Move] [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] [Style Suffix] [End Parameters]
 
-        Important: Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
+        Important:
+        1. Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
+        2. Do not include any visual style elements or descriptors (e.g., 3D, comic book style) in the main body of the prompt. These should only be in the Style Prefix or Style Suffix.
+        3. If Camera Shot or Camera Move are not provided, do not mention them in the prompt.
 
         Generate a structured output with the following fields:
-        1. Subject
-        2. Action/Pose
-        3. Context/Setting
-        4. Time of Day
-        5. Weather Conditions
-        6. Composition
-        7. Foreground Elements
-        8. Background Elements
-        9. Mood/Atmosphere
-        10. Props/Objects
-        11. Environmental Effects
-        12. Full Prompt
+        1. Camera Shot
+        2. Camera Move
+        3. Subject
+        4. Action/Pose
+        5. Context/Setting
+        6. Time of Day
+        7. Weather Conditions
+        8. Composition
+        9. Foreground Elements
+        10. Background Elements
+        11. Mood/Atmosphere
+        12. Props/Objects
+        13. Environmental Effects
+        14. Full Prompt
 
         {length} Prompt:
         """
@@ -145,10 +164,11 @@ class MetaChain:
         try:
             lines = content.strip().split('\n')
             structured_output = {
-                "Subject": "", "Action/Pose": "", "Context/Setting": "", "Time of Day": "",
-                "Weather Conditions": "", "Composition": "", "Foreground Elements": "",
-                "Background Elements": "", "Mood/Atmosphere": "", "Props/Objects": "",
-                "Environmental Effects": "", "Full Prompt": ""
+                "Camera Shot": "", "Camera Move": "", "Subject": "", "Action/Pose": "",
+                "Context/Setting": "", "Time of Day": "", "Weather Conditions": "",
+                "Composition": "", "Foreground Elements": "", "Background Elements": "",
+                "Mood/Atmosphere": "", "Props/Objects": "", "Environmental Effects": "",
+                "Full Prompt": ""
             }
             current_field = ""
             for line in lines:
@@ -164,7 +184,14 @@ class MetaChain:
             
             # If 'Full Prompt' is empty, construct it from other fields
             if not structured_output["Full Prompt"]:
-                structured_output["Full Prompt"] = " ".join(value for key, value in structured_output.items() if key != "Full Prompt" and value)
+                full_prompt_parts = []
+                for key, value in structured_output.items():
+                    if key != "Full Prompt" and value:
+                        if key in ["Camera Shot", "Camera Move"]:
+                            full_prompt_parts.insert(0, value)
+                        else:
+                            full_prompt_parts.append(value)
+                structured_output["Full Prompt"] = " ".join(full_prompt_parts)
             
             # Ensure 'Full Prompt' is not empty
             if not structured_output["Full Prompt"]:
