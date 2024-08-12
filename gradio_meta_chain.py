@@ -16,6 +16,7 @@ class MetaChain:
         self.llm = ChatOpenAI(model_name="gpt-4", temperature=temperature)
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7) -> Dict[str, Dict[str, str]]:
+        logging.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text}, shot_description={shot_description}, directors_notes={directors_notes}, script={script}, stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script}, temperature={temperature}")
         try:
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
@@ -35,7 +36,7 @@ class MetaChain:
                 chain = RunnableSequence(template | self.llm)
                 try:
                     script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
-                    result = await chain.ainvoke({
+                    input_data = {
                         "style_prefix": style_prefix,
                         "style_suffix": style_suffix,
                         "shot_description": shot_description,
@@ -46,7 +47,10 @@ class MetaChain:
                         "end_parameters": end_parameters,
                         "script_adherence": script_adherence,
                         "length": length
-                    })
+                    }
+                    logging.info(f"Invoking chain for {length} prompt with input: {input_data}")
+                    result = await chain.ainvoke(input_data)
+                    logging.info(f"Chain result for {length}: {result.content}")
                     structured_output = self._structure_prompt_output(result.content)
                     full_prompt = f"{style_prefix} {structured_output['Full Prompt']} {style_suffix} {end_parameters}".strip()
                     structured_output['Full Prompt'] = full_prompt
@@ -58,6 +62,7 @@ class MetaChain:
                     logging.error(f"Unexpected error in generate_prompt for {length}: {str(e)}")
                     results[length] = {"Full Prompt": f"Error: {str(e)}"}
 
+            logging.info(f"Generated prompts: {results}")
             return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")

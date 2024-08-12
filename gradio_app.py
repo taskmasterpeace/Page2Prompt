@@ -149,8 +149,21 @@ with gr.Blocks() as app:
     generate_button = gr.Button("🚀 Generate Prompt")
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
+    async def generate_prompt_wrapper(*args):
+        try:
+            result = await generate_prompt(*args, subjects_list.value)
+            return (
+                result.get("concise", {}).get("Full Prompt", ""),
+                result.get("normal", {}).get("Full Prompt", ""),
+                result.get("detailed", {}).get("Full Prompt", ""),
+                "Prompt generated successfully"
+            )
+        except Exception as e:
+            logger.exception("Error in generate_prompt_wrapper")
+            return "", "", "", f"Error: {str(e)}"
+
     generate_button.click(
-        lambda *args: asyncio.run(generate_prompt(*args, subjects_list.value)),
+        lambda *args: asyncio.run(generate_prompt_wrapper(*args)),
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
