@@ -34,6 +34,8 @@ class Config:
             self.config.write(configfile)
 
     def get(self, section, key):
+        if section == 'API_KEYS' and key == 'openai_api_key':
+            return os.environ.get('OPENAI_API_KEY') or self.config.get(section, key)
         return self.config.get(section, key)
 
     def set(self, section, key, value):
@@ -43,5 +45,4 @@ class Config:
         self.save_config()
 
 def get_openai_api_key():
-    config = Config()
-    return config.get('API_KEYS', 'openai_api_key')
+    return os.environ.get('OPENAI_API_KEY') or Config().get('API_KEYS', 'openai_api_key')
