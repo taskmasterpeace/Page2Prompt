@@ -4,7 +4,7 @@ from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 from gradio_config import Config
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 class PromptForgeCore:
     def __init__(self):
