@@ -3,10 +3,12 @@ from gradio_meta_chain import MetaChain
 from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
+from gradio_config import Config
 from typing import Dict, List, Any
 
 class PromptForgeCore:
     def __init__(self):
+        self.config = Config()
         self.meta_chain = MetaChain(self)
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
