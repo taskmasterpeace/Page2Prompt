@@ -41,7 +41,12 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
         if predictability_index is None or predictability_index == '':
             temperature = 0.7  # Default temperature
         else:
-            _, temperature = PREDICTABILITY_SETTINGS[int(float(predictability_index))]
+            try:
+                index = int(float(predictability_index))
+                _, temperature = PREDICTABILITY_SETTINGS[index]
+            except (ValueError, TypeError, KeyError):
+                logger.warning(f"Invalid predictability_index value: {predictability_index}")
+                temperature = 0.7  # Default temperature
         
         result = await core.meta_chain.generate_prompt(
             style=style,
