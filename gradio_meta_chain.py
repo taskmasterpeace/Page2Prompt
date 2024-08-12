@@ -96,7 +96,7 @@ class MetaChain:
         """
 
         return PromptTemplate(
-            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "stick_to_script", "length"],
+            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "length"],
             template=base_template
         )
 
