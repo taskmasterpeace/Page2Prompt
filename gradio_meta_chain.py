@@ -56,17 +56,23 @@ class MetaChain:
                     structured_output['Full Prompt'] = full_prompt
                     results[length] = structured_output
                 except KeyError as e:
-                    logging.error(f"KeyError in generate_prompt for {length}: {str(e)}")
-                    results[length] = {"Full Prompt": f"Error: Missing key {str(e)} in model output"}
+                    error_msg = f"KeyError in generate_prompt for {length}: {str(e)}"
+                    logging.error(error_msg)
+                    results[length] = {"Full Prompt": error_msg}
                 except Exception as e:
-                    logging.error(f"Unexpected error in generate_prompt for {length}: {str(e)}")
-                    results[length] = {"Full Prompt": f"Error: {str(e)}"}
+                    error_msg = f"Unexpected error in generate_prompt for {length}: {str(e)}"
+                    logging.error(error_msg)
+                    results[length] = {"Full Prompt": error_msg}
+
+            if not any(result.get("Full Prompt") for result in results.values()):
+                raise PromptGenerationError("Failed to generate any valid prompts")
 
             logging.info(f"Generated prompts: {results}")
             return results
         except Exception as e:
-            logging.exception("Error in MetaChain.generate_prompt")
-            raise PromptGenerationError(f"Failed to generate prompt: {str(e)}")
+            error_msg = f"Failed to generate prompt: {str(e)}"
+            logging.exception(error_msg)
+            raise PromptGenerationError(error_msg)
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """

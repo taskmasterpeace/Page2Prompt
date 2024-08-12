@@ -152,24 +152,32 @@ with gr.Blocks() as app:
     async def generate_prompt_wrapper(*args):
         try:
             logger.info("Starting generate_prompt_wrapper")
-            result = await generate_prompt(*args, subjects_list.value)
+            result = await core.meta_chain.generate_prompt(*args, subjects_list.value)
             logger.info(f"generate_prompt result: {result}")
-        
+    
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
                 return "", "", "", f"Error: Unexpected result type {type(result)}"
-        
+    
             concise = result.get("concise", {}).get("Full Prompt", "")
             normal = result.get("normal", {}).get("Full Prompt", "")
             detailed = result.get("detailed", {}).get("Full Prompt", "")
-        
+    
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
-        
+    
             return concise, normal, detailed, "Prompt generated successfully"
         except Exception as e:
             logger.exception("Error in generate_prompt_wrapper")
             error_report = get_error_report()
             return "", "", "", f"Error: {str(e)}\n\nError Report:\n{error_report}"
+
+    generate_button.click(
+        generate_prompt_wrapper,
+        inputs=[style_input, highlighted_text_input, shot_description_input, 
+                directors_notes_input, script_input, stick_to_script_input, 
+                end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
+        outputs=[concise_output, normal_output, detailed_output, feedback_area]
+    )
 
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt_wrapper(*args)),
