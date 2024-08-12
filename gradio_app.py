@@ -65,6 +65,9 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
     except PromptGenerationError as e:
         logger.error(f"Prompt generation failed: {str(e)}")
         return f"Error generating prompt: {str(e)}", "", "", ""
+    except ValueError as e:
+        logger.error(f"Configuration error: {str(e)}")
+        return f"Configuration error: {str(e)}. Please check your OpenAI API key in the configuration.", "", "", ""
     except Exception as e:
         logger.exception("Unexpected error in generate_prompt")
         return f"Unexpected error: {str(e)}", "", "", ""

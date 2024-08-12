@@ -13,7 +13,10 @@ class MetaChain:
 
     def _initialize_llm(self, temperature: float = 0.7):
         from langchain_openai import ChatOpenAI
-        self.llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=temperature)
+        api_key = self.core.config.get('API_KEYS', 'openai_api_key')
+        if not api_key:
+            raise ValueError("OpenAI API key is not set in the configuration.")
+        self.llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=temperature, api_key=api_key)
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
         logging.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text}, shot_description={shot_description}, directors_notes={directors_notes}, script={script}, stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script}, temperature={temperature}")
