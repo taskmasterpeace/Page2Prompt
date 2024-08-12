@@ -31,6 +31,14 @@ class MetaChain:
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "", length: str = "detailed") -> Dict[str, str]:
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
+        
+        # Map the length parameter to word counts
+        length_to_words = {
+            "concise": "about 20 words",
+            "normal": "about 50 words",
+            "detailed": "about 100 words"
+        }
+        word_count = length_to_words.get(length, "about 100 words")  # Default to detailed if invalid length is provided
     
         # Use default values for empty inputs
         style = style or "Default style"
@@ -46,7 +54,7 @@ class MetaChain:
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
-            template = self._get_prompt_template("detailed (about 100 words)")
+            template = self._get_prompt_template(word_count)
             chain = RunnableSequence(template | self.llm)
             
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
@@ -97,9 +105,9 @@ class MetaChain:
         words = detailed_prompt.split()
         return " ".join(words[:50])
 
-    def _get_prompt_template(self) -> PromptTemplate:
-        base_template = """
-        Generate a {length} prompt based on the following information:
+    def _get_prompt_template(self, word_count: str) -> PromptTemplate:
+        base_template = f"""
+        Generate a {word_count} prompt based on the following information:
         Subjects: {subject_info}
         Camera Shot: {camera_shot}
         Camera Move: {camera_move}
@@ -137,11 +145,11 @@ class MetaChain:
         13. Environmental Effects
         14. Full Prompt
 
-        {length} Prompt:
+        Prompt:
         """
 
         return PromptTemplate(
-            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "length"],
+            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move"],
             template=base_template
         )
 
