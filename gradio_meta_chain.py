@@ -51,8 +51,12 @@ class MetaChain:
                     full_prompt = f"{style_prefix} {structured_output['Full Prompt']} {style_suffix} {end_parameters}".strip()
                     structured_output['Full Prompt'] = full_prompt
                     results[length] = structured_output
+                except KeyError as e:
+                    logging.error(f"KeyError in generate_prompt for {length}: {str(e)}")
+                    results[length] = {"Full Prompt": f"Error: Missing key {str(e)} in model output"}
                 except Exception as e:
-                    raise PromptGenerationError(f"Error invoking model for {length} prompt: {str(e)}")
+                    logging.error(f"Unexpected error in generate_prompt for {length}: {str(e)}")
+                    results[length] = {"Full Prompt": f"Error: {str(e)}"}
 
             return results
         except Exception as e:
@@ -107,20 +111,28 @@ class MetaChain:
 
     def _structure_prompt_output(self, content: str) -> Dict[str, str]:
         lines = content.strip().split('\n')
-        structured_output = {}
+        structured_output = {
+            "Subject": "", "Action/Pose": "", "Context/Setting": "", "Time of Day": "",
+            "Weather Conditions": "", "Composition": "", "Foreground Elements": "",
+            "Background Elements": "", "Mood/Atmosphere": "", "Props/Objects": "",
+            "Environmental Effects": "", "Full Prompt": ""
+        }
         current_field = ""
         for line in lines:
             if ':' in line:
                 key, value = line.split(':', 1)
                 key = key.strip()
                 value = value.strip()
-                if key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions", 
-                           "Composition", "Foreground Elements", "Background Elements", "Mood/Atmosphere", 
-                           "Props/Objects", "Environmental Effects", "Full Prompt"]:
+                if key in structured_output:
                     current_field = key
                     structured_output[current_field] = value
             elif current_field:
                 structured_output[current_field] += " " + line.strip()
+        
+        # If 'Full Prompt' is empty, construct it from other fields
+        if not structured_output["Full Prompt"]:
+            structured_output["Full Prompt"] = " ".join(structured_output.values())
+        
         return structured_output
 
     async def analyze_script(self, script: str, director_style: str):
