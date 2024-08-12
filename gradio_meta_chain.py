@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
@@ -15,11 +15,12 @@ class MetaChain:
         from langchain_openai import ChatOpenAI
         self.llm = ChatOpenAI(model_name="gpt-4", temperature=temperature)
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7) -> Dict[str, Dict[str, str]]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7) -> Dict[str, Dict[str, str]]:
         try:
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
             
+            style = style or ""  # Set style to an empty string if it's None
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
