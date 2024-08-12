@@ -106,9 +106,9 @@ class MetaChain:
         words = detailed_prompt.split()
         return " ".join(words[:50])
 
-    def _get_prompt_template(self, word_count: str) -> PromptTemplate:
+    def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
-        Generate a {word_count} prompt based on the following information:
+        Generate a {length} prompt based on the following information:
         Subjects: {{subject_info}}
         Camera Shot: {{camera_shot}}
         Camera Move: {{camera_move}}
@@ -150,7 +150,7 @@ class MetaChain:
         """
 
         return PromptTemplate(
-            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move"],
+            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
             template=base_template
         )
 
