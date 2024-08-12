@@ -104,8 +104,9 @@ class MetaChain:
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
         Full Script: {full_script}
-        Stick to Script: {stick_to_script}
         End Parameters: {end_parameters}
+
+        {'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'}
 
         The prompt should follow this structure:
         {style} [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] {end_parameters}
