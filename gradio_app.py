@@ -103,15 +103,14 @@ with gr.Blocks() as app:
                 generate_style_details_button = gr.Button("🔍 Generate Style Details")
             
             script_input = gr.Textbox(label="📜 Script", lines=10)
+            stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
+            highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
             
             with gr.Row():
                 camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["Close-up", "Medium shot", "Long shot", "Over-the-shoulder", "Dutch angle"])
                 camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["Static", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
             
-            highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
-            stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
-            active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
 
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
@@ -134,15 +133,17 @@ with gr.Blocks() as app:
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
                 add_subject_button = gr.Button("➕ Add Subject")
                 subjects_list = gr.JSON(label="Added Subjects")
+                active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
     
     generate_button = gr.Button("🚀 Generate Prompt")
+    feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
     generate_button.click(
         lambda *args: asyncio.run(generate_prompt(*args)),
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
-        outputs=[concise_output, normal_output, detailed_output]
+        outputs=[concise_output, normal_output, detailed_output, feedback_area]
     )
     
     # Add event handlers for save, copy, and clear buttons
