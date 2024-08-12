@@ -10,20 +10,43 @@ class MetaChain:
 
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", prompt_type: str = "normal") -> Dict[str, Dict[str, str]]:
         try:
-            return await self.core.generate_prompt(
-                active_subjects=active_subjects,
-                style=style,
-                shot_description=shot_description,
-                directors_notes=directors_notes,
-                highlighted_text=highlighted_text,
-                script=script,
-                full_script=full_script,
-                end_parameters=end_parameters,
-                stick_to_script=stick_to_script,
-                prompt_type=prompt_type
-            )
+            import logging
+            logging.debug(f"MetaChain.generate_prompt called with prompt_type: {prompt_type}")
+            
+            # Directly generate the prompt here instead of calling self.core.generate_prompt
+            prompt_template = self._get_prompt_template(prompt_type)
+            
+            prompt_input = {
+                "style": style,
+                "highlighted_text": highlighted_text,
+                "shot_description": shot_description,
+                "directors_notes": directors_notes,
+                "script": script,
+                "stick_to_script": stick_to_script,
+                "end_parameters": end_parameters,
+                "active_subjects": self._format_subject_info(active_subjects),
+                "full_script": full_script,
+            }
+            
+            generated_prompt = prompt_template.format(**prompt_input)
+            
+            return {prompt_type: {"Full Prompt": generated_prompt}}
         except Exception as e:
-            raise PromptGenerationError(str(e))
+            logging.exception("Error in MetaChain.generate_prompt")
+            raise PromptGenerationError(f"Failed to generate prompt: {str(e)}")
+
+    def _get_prompt_template(self, prompt_type: str) -> str:
+        templates = {
+            "concise": "Concise ({style}): {shot_description}. {highlighted_text} {end_parameters}",
+            "normal": "Normal ({style}): {shot_description}. {highlighted_text}. {directors_notes} {end_parameters}",
+            "detailed": "Detailed ({style}): {shot_description}. {highlighted_text}. {directors_notes}. Script: {script} {end_parameters}"
+        }
+        return templates.get(prompt_type, templates["normal"])
+
+    def _format_subject_info(self, active_subjects: List[Dict]) -> str:
+        if not active_subjects:
+            return "No active subjects"
+        return ", ".join([f"{s['name']} ({s['category']})" for s in active_subjects])
 
     async def analyze_script(self, script: str, director_style: str):
         try:
