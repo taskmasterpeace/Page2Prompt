@@ -5,6 +5,9 @@ from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 class MetaChain:
     def __init__(self, core):
         self.core = core
@@ -12,17 +15,26 @@ class MetaChain:
         self.director_styles = {"Default": {}}  # Add more styles as needed
 
     def _initialize_llm(self, temperature: float = 0.7):
-        from langchain_openai import ChatOpenAI
-        from gradio_config import get_openai_api_key
-        
-        api_key = get_openai_api_key()
-        if not api_key:
-            raise ValueError("OpenAI API key is not set in the environment or configuration.")
-        self.llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=temperature, openai_api_key=api_key)
+        logger.debug(f"Initializing LLM with temperature {temperature}")
+        try:
+            from langchain_openai import ChatOpenAI
+            from gradio_config import get_openai_api_key
+            
+            api_key = get_openai_api_key()
+            if not api_key:
+                raise ValueError("OpenAI API key is not set in the environment or configuration.")
+            self.llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=temperature, openai_api_key=api_key)
+            logger.info("LLM initialized successfully")
+        except Exception as e:
+            logger.exception(f"Failed to initialize LLM: {str(e)}")
+            raise
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
-        logging.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text}, shot_description={shot_description}, directors_notes={directors_notes}, script={script}, stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script}, temperature={temperature}")
+        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50]}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50]}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
         try:
+            if not highlighted_text or not script:
+                raise ValueError('Highlighted text and script must not be empty.')
+            
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
             
@@ -53,26 +65,29 @@ class MetaChain:
                         "script_adherence": script_adherence,
                         "length": length
                     }
-                    logging.info(f"Invoking chain for {length} prompt with input: {input_data}")
+                    logger.debug(f"Invoking chain for {length} prompt with input: {input_data}")
                     result = await chain.ainvoke(input_data)
-                    logging.info(f"Chain result for {length}: {result.content}")
+                    logger.debug(f"Chain result for {length}: {result.content}")
                     structured_output = self._structure_prompt_output(result.content)
                     full_prompt = f"{style_prefix} {structured_output['Full Prompt']} {style_suffix} {end_parameters}".strip()
                     structured_output['Full Prompt'] = full_prompt
                     results[length] = structured_output
                 except Exception as e:
                     error_msg = f"Error in generate_prompt for {length}: {str(e)}"
-                    logging.error(error_msg)
+                    logger.error(error_msg)
                     results[length] = {"Full Prompt": error_msg}
 
             if not any(result.get("Full Prompt") for result in results.values()):
                 raise PromptGenerationError("Failed to generate any valid prompts")
 
-            logging.info(f"Generated prompts: {results}")
+            logger.info(f"Generated prompts: {results}")
             return results
+        except ValueError as ve:
+            logger.error(f"Input validation error: {str(ve)}")
+            raise PromptGenerationError(f"Input error: {str(ve)}")
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
-            logging.exception(error_msg)
+            logger.exception(error_msg)
             raise PromptGenerationError(error_msg)
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
