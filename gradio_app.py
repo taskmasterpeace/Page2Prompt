@@ -19,9 +19,10 @@ script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
 prompt_logger = PromptLogger()
 
-async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
+async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, subjects_json):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
+        subjects = json.loads(subjects_json) if subjects_json else []
         result = await core.meta_chain.generate_prompt(
             style=style,
             highlighted_text=highlighted_text,
@@ -32,7 +33,8 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             end_parameters=end_parameters,
             active_subjects=active_subjects_list,
             camera_shot=camera_shot,
-            camera_move=camera_move
+            camera_move=camera_move,
+            subjects=subjects
         )
         prompt_logger.log_prompt(result)
         return (
@@ -110,7 +112,15 @@ with gr.Blocks() as app:
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
-        
+            
+            with gr.Group():
+                gr.Markdown("## 👤 Subject Details")
+                subject_name = gr.Textbox(label="Subject Name")
+                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Object", "Other"])
+                subject_description = gr.Textbox(label="Subject Description", lines=3)
+                add_subject_button = gr.Button("➕ Add Subject")
+                subjects_list = gr.JSON(label="Added Subjects")
+
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
             gr.Markdown("## 🖼️ Generated Prompt")
@@ -148,14 +158,26 @@ with gr.Blocks() as app:
     copy_detailed_button.click(lambda x: gr.Textbox.update(value=x), inputs=[detailed_output], outputs=[gr.Textbox()])
     
     def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "")
+        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "")
     
     clear_button.click(
         clear_all,
         outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                  script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                  end_parameters_input, active_subjects_input,
-                 concise_output, normal_output, detailed_output, style_prefix_input]
+                 concise_output, normal_output, detailed_output, style_prefix_input, subjects_list]
+    )
+
+    subjects = []
+
+    def add_subject(name, category, description):
+        subjects.append({"name": name, "category": category, "description": description})
+        return json.dumps(subjects, indent=2), "", "", ""
+
+    add_subject_button.click(
+        add_subject,
+        inputs=[subject_name, subject_category, subject_description],
+        outputs=[subjects_list, subject_name, subject_category, subject_description]
     )
     
     # Style-related event handlers
