@@ -139,7 +139,7 @@ with gr.Blocks() as app:
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
     generate_button.click(
-        lambda *args: asyncio.run(generate_prompt(*args)),
+        lambda *args: asyncio.run(generate_prompt(*args, subjects_list.value)),
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
@@ -223,4 +223,4 @@ with gr.Blocks() as app:
         refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
 
 if __name__ == "__main__":
-    app.launch()
+    app.launch(share=True)
