@@ -33,7 +33,8 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             script=script,
             stick_to_script=stick_to_script,
             end_parameters=end_parameters,
-            active_subjects=active_subjects_list
+            active_subjects=active_subjects_list,
+            full_script=script  # Add this line
         )
         prompt_logger.log_prompt(result)
         assert isinstance(result, dict), f"generate_prompt returned {type(result)}, expected dict"
@@ -41,14 +42,15 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
         return (
             result["concise"]["Full Prompt"],
             result["normal"]["Full Prompt"],
-            result["detailed"]["Full Prompt"]
+            result["detailed"]["Full Prompt"],
+            ""  # Add an empty string as the fourth return value
         )
     except PromptGenerationError as e:
         logger.error(f"Prompt generation failed: {str(e)}")
-        return f"Error generating prompt: {str(e)}", "", ""
+        return f"Error generating prompt: {str(e)}", "", "", ""
     except Exception as e:
         logger.exception("Unexpected error in generate_prompt")
-        return f"Unexpected error: {str(e)}", "", ""
+        return f"Unexpected error: {str(e)}", "", "", ""
 
 @debug_func
 async def analyze_script(script_content, director_style):

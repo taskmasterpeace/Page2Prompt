@@ -11,7 +11,7 @@ class PromptForgeCore:
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
 
-    async def generate_prompt(self, style_prefix: str, style_suffix: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: List[Dict[str, Any]] = None) -> Dict[str, str]:
+    async def generate_prompt(self, style_prefix: str, style_suffix: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: List[Dict[str, Any]] = None, full_script: str = "") -> Dict[str, str]:
         try:
             prompts = {}
             for prompt_type in ["concise", "normal", "detailed"]:
