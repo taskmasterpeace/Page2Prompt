@@ -9,6 +9,7 @@ from gradio_script_analyzer import ScriptAnalyzer
 from gradio_meta_chain import MetaChain
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
+from debug_utils import logger, debug_func
 
 # Initialize components
 config = Config()
@@ -19,6 +20,7 @@ script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
 prompt_logger = PromptLogger()
 
+@debug_func
 async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, subjects_json):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
@@ -34,22 +36,31 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             active_subjects=active_subjects_list
         )
         prompt_logger.log_prompt(result)
+        assert isinstance(result, dict), f"generate_prompt returned {type(result)}, expected dict"
+        assert all(key in result for key in ["concise", "normal", "detailed"]), f"generate_prompt result missing expected keys"
         return (
             result["concise"]["Full Prompt"],
             result["normal"]["Full Prompt"],
             result["detailed"]["Full Prompt"]
         )
     except PromptGenerationError as e:
+        logger.error(f"Prompt generation failed: {str(e)}")
         return f"Error generating prompt: {str(e)}", "", ""
     except Exception as e:
+        logger.exception("Unexpected error in generate_prompt")
         return f"Unexpected error: {str(e)}", "", ""
 
+@debug_func
 async def analyze_script(script_content, director_style):
     try:
-        return await core.analyze_script(script_content, director_style)
+        result = await core.analyze_script(script_content, director_style)
+        assert isinstance(result, str), f"analyze_script returned {type(result)}, expected str"
+        return result
     except ScriptAnalysisError as e:
+        logger.error(f"Script analysis failed: {str(e)}")
         return f"Error analyzing script: {str(e)}"
     except Exception as e:
+        logger.exception("Unexpected error in analyze_script")
         return f"Unexpected error: {str(e)}"
 
 def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
