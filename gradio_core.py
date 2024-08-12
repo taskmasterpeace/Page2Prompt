@@ -13,7 +13,7 @@ class PromptForgeCore:
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: List[Dict[str, Any]] = None, full_script: str = "", prompt_type: str = "normal") -> Dict[str, str]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", prompt_type: str = "normal", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
         try:
             result = await self.meta_chain.generate_prompt(
                 style=style,

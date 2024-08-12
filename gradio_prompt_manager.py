@@ -6,7 +6,7 @@ class PromptManager:
         self.save_file = save_file
         self.prompts = self._load_prompts()
 
-    def save_prompt(self, prompt, name, style, highlighted_text, shot_description, metadata):
+    def save_prompt(self, prompt: Dict[str, str], name: str, style: str = "", highlighted_text: str = "", shot_description: str = "", metadata: Dict[str, Any] = None):
         formatted_prompt = self.format_prompt({
             "name": name,
             "prompt": prompt,
@@ -18,7 +18,7 @@ class PromptManager:
         self.prompts.append(formatted_prompt)
         self._save_prompts()
 
-    def format_prompt(self, prompt_dict):
+    def format_prompt(self, prompt_dict: Dict[str, Any]) -> Dict[str, str]:
         return {
             "name": prompt_dict["name"],
             "formatted_prompt": f"Style: {prompt_dict['style']}\n"
