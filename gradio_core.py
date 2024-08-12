@@ -3,7 +3,7 @@ from gradio_meta_chain import MetaChain
 from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
-from typing import Dict, List
+from typing import Dict, List, Any
 
 class PromptForgeCore:
     def __init__(self):
