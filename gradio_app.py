@@ -213,22 +213,6 @@ with gr.Blocks() as app:
     debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
     clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
     
-    def save_prompt_with_name(concise, normal, detailed):
-        name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
-        save_button = gr.Button("Save")
-        
-        def do_save(name):
-            if not name:
-                return "Please enter a name for the prompt set."
-            prompt_manager.save_prompt({
-                "concise": concise,
-                "normal": normal,
-                "detailed": detailed
-            }, name)
-            return f"Prompt set '{name}' saved successfully."
-        
-        save_button.click(do_save, inputs=[name], outputs=feedback_area)
-
     def save_prompt_with_name(prompts):
         name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
         save_button = gr.Button("Save")
