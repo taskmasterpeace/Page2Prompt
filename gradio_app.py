@@ -31,10 +31,7 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             script=script,
             stick_to_script=stick_to_script,
             end_parameters=end_parameters,
-            active_subjects=active_subjects_list,
-            camera_shot=camera_shot,
-            camera_move=camera_move,
-            subjects=subjects
+            active_subjects=active_subjects_list
         )
         prompt_logger.log_prompt(result)
         return (
