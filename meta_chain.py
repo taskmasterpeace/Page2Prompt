@@ -54,7 +54,7 @@ class MetaChain:
     async def generate_prompt(self, active_subjects: list = None,
                               style: str = "", shot_description: str = "", directors_notes: str = "",
                               highlighted_text: str = "", full_script: str = "", end_parameters: str = "",
-                              temperature: float = 0.7) -> Dict[str, str]:
+                              stick_to_script: bool = False, temperature: float = 0.7) -> Dict[str, Dict[str, str]]:
         try:
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
@@ -77,9 +77,10 @@ class MetaChain:
                         "full_script": full_script,
                         "subject_info": subject_info,
                         "end_parameters": end_parameters,
+                        "stick_to_script": stick_to_script,
                         "length": length
                     })
-                    results[length] = self._post_process_prompt(result.content.strip(), style, end_parameters)
+                    results[length] = self._structure_prompt_output(result.content)
                 except Exception as e:
                     raise ModelInvocationError(f"Error invoking model for {length} prompt: {str(e)}")
 
@@ -98,27 +99,38 @@ class MetaChain:
         base_template = """
         Generate a {length} prompt based on the following information:
         Subjects: {subject_info}
+        Style: {style}
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
-        """
-
-        # Only include Full Script if it's not empty (i.e., when stick_to_script is True)
-        base_template += """
         Full Script: {full_script}
-        """ if "{full_script}" else ""
+        Stick to Script: {stick_to_script}
+        End Parameters: {end_parameters}
 
-        base_template += """
         The prompt should follow this structure:
         {style} [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] {end_parameters}
 
         Important: Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
 
+        Generate a structured output with the following fields:
+        1. Subject
+        2. Action/Pose
+        3. Context/Setting
+        4. Time of Day
+        5. Weather Conditions
+        6. Composition
+        7. Foreground Elements
+        8. Background Elements
+        9. Mood/Atmosphere
+        10. Props/Objects
+        11. Environmental Effects
+        12. Full Prompt
+
         {length} Prompt:
         """
 
         return PromptTemplate(
-            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "length"],
+            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "stick_to_script", "length"],
             template=base_template
         )
 
@@ -214,3 +226,20 @@ class MetaChain:
         variations = result.content.split('\n')
         variations = [v.strip() for v in variations if v.strip()]
         return variations[:num_variations]  # Ensure we return the correct number of variations
+    def _structure_prompt_output(self, content: str) -> Dict[str, str]:
+        lines = content.strip().split('\n')
+        structured_output = {}
+        current_field = ""
+        for line in lines:
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                if key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions", 
+                           "Composition", "Foreground Elements", "Background Elements", "Mood/Atmosphere", 
+                           "Props/Objects", "Environmental Effects", "Full Prompt"]:
+                    current_field = key
+                    structured_output[current_field] = value
+            elif current_field:
+                structured_output[current_field] += " " + line.strip()
+        return structured_output

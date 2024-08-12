@@ -27,23 +27,29 @@ if openai_api_key:
 else:
     raise ValueError("OPENAI_API_KEY not found in environment variables. Please set it up before running the application.")
 
-async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters):
+async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects):
     try:
-        result = await core.generate_prompt(
+        result = await core.meta_chain.generate_prompt(
             style=style,
             highlighted_text=highlighted_text,
             shot_description=shot_description,
             directors_notes=directors_notes,
             script=script,
             stick_to_script=stick_to_script,
-            end_parameters=end_parameters
+            end_parameters=end_parameters,
+            active_subjects=active_subjects
         )
         prompt_logger.log_prompt(result)
-        return result["Concise Prompt"], result["Normal Prompt"], result["Detailed Prompt"]
+        return (
+            result["concise"]["Full Prompt"],
+            result["normal"]["Full Prompt"],
+            result["detailed"]["Full Prompt"],
+            json.dumps(result, indent=2)
+        )
     except PromptGenerationError as e:
-        return f"Error generating prompt: {str(e)}", "", ""
+        return f"Error generating prompt: {str(e)}", "", "", ""
     except Exception as e:
-        return f"Unexpected error: {str(e)}", "", ""
+        return f"Unexpected error: {str(e)}", "", "", ""
 
 async def analyze_script(script_content, director_style):
     try:
