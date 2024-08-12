@@ -192,8 +192,8 @@ with gr.Blocks() as app:
                 return json.dumps({"error": f"Unexpected result type {type(result)}"})
 
             detailed = result.get("Full Prompt", "")
-            concise = core.meta_chain.derive_concise_prompt(detailed)
-            normal = core.meta_chain.derive_normal_prompt(detailed)
+            concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
+            normal = " ".join([result.get(key, "") for key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions"]])
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
@@ -201,6 +201,7 @@ with gr.Blocks() as app:
                 "concise": concise,
                 "normal": normal,
                 "detailed": detailed,
+                "structured": result,
                 "message": "Prompt generated successfully"
             })
         except Exception as e:
