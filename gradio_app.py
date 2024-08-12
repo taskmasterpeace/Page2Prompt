@@ -33,20 +33,9 @@ core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeC
 prompt_logger = PromptLogger()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, predictability_index, camera_shot, camera_move):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
-        
-        # Convert predictability index to temperature
-        if predictability_index is None or predictability_index == '':
-            temperature = 0.7  # Default temperature
-        else:
-            try:
-                index = int(float(predictability_index))
-                _, temperature = PREDICTABILITY_SETTINGS[index]
-            except (ValueError, TypeError, KeyError):
-                logger.warning(f"Invalid predictability_index value: {predictability_index}")
-                temperature = 0.7  # Default temperature
         
         result = await core.meta_chain.generate_prompt(
             style=style,
@@ -58,7 +47,6 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             end_parameters=end_parameters,
             active_subjects=active_subjects_list,
             full_script=script,
-            temperature=temperature,
             camera_shot=camera_shot,
             camera_move=camera_move
         )
