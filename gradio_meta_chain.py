@@ -29,8 +29,8 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
-        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "", length: str = "detailed") -> Dict[str, str]:
+        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
     
         # Use default values for empty inputs
         style = style or "Default style"
@@ -61,7 +61,8 @@ class MetaChain:
                 "end_parameters": end_parameters,
                 "script_adherence": script_adherence,
                 "camera_shot": camera_shot,
-                "camera_move": camera_move
+                "camera_move": camera_move,
+                "length": length
             }
             logger.debug(f"Invoking chain for detailed prompt with input: {input_data}")
             result = await chain.ainvoke(input_data)
@@ -96,7 +97,7 @@ class MetaChain:
         words = detailed_prompt.split()
         return " ".join(words[:50])
 
-    def _get_prompt_template(self, length: str) -> PromptTemplate:
+    def _get_prompt_template(self) -> PromptTemplate:
         base_template = """
         Generate a {length} prompt based on the following information:
         Subjects: {subject_info}
