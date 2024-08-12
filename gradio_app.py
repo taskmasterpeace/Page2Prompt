@@ -34,7 +34,7 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             stick_to_script=stick_to_script,
             end_parameters=end_parameters,
             active_subjects=active_subjects_list,
-            full_script=script  # Add this line
+            full_script=script
         )
         prompt_logger.log_prompt(result)
         assert isinstance(result, dict), f"generate_prompt returned {type(result)}, expected dict"
