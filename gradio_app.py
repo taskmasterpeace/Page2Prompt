@@ -89,6 +89,7 @@ with gr.Blocks() as app:
                 gr.Markdown("## 📝 Shot Details")
                 shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
                 directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
+                active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
             
             with gr.Group():
                 gr.Markdown("## 🎨 Style")
@@ -130,7 +131,6 @@ with gr.Blocks() as app:
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
                 add_subject_button = gr.Button("➕ Add Subject")
                 subjects_list = gr.JSON(label="Added Subjects")
-                active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
     
     generate_button = gr.Button("🚀 Generate Prompt")
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
