@@ -93,7 +93,7 @@ def generate_style_details(prefix):
 
 # Define Gradio interface
 with gr.Blocks() as app:
-    gr.Markdown("# 🎬 PromptForge - Bring Your Script to Life")
+    gr.Markdown("# 🎬 Page 2 Prompt - Bring Your Script to Life")
     
     with gr.Row():
         with gr.Column(scale=1):
@@ -110,8 +110,9 @@ with gr.Blocks() as app:
                 generate_random_style_button = gr.Button("🎲 Generate Random Style")
                 style_prefix_input = gr.Textbox(label="Style Prefix", placeholder="Enter style name/details")
                 style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix")
-                save_style_button = gr.Button("💾 Save Style")
-                generate_style_details_button = gr.Button("🔍 Generate Style Details")
+                with gr.Row():
+                    save_style_button = gr.Button("💾 Save Style")
+                    generate_style_details_button = gr.Button("🔍 Generate Style Details")
             
             script_input = gr.Textbox(label="📜 Script", lines=10)
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
