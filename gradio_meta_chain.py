@@ -29,7 +29,7 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, Dict[str, str]]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}")
     
         # Use default values for empty inputs
@@ -46,66 +46,55 @@ class MetaChain:
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
-            templates = {
-                "concise": self._get_prompt_template("concise (about 20 words)"),
-                "normal": self._get_prompt_template("normal (about 50 words)"),
-                "detailed": self._get_prompt_template("detailed (about 100 words)")
+            template = self._get_prompt_template("detailed (about 100 words)")
+            chain = RunnableSequence(template | self.llm)
+            
+            script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
+            input_data = {
+                "style_prefix": style_prefix,
+                "style_suffix": style_suffix,
+                "shot_description": shot_description,
+                "directors_notes": directors_notes,
+                "highlighted_text": highlighted_text or "",
+                "full_script": full_script or script or "",
+                "subject_info": subject_info,
+                "end_parameters": end_parameters,
+                "script_adherence": script_adherence,
+                "camera_shot": camera_shot,
+                "camera_move": camera_move
             }
-
-            results = {}
-            for length, template in templates.items():
-                chain = RunnableSequence(template | self.llm)
-                try:
-                    script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
-                    input_data = {
-                        "style_prefix": style_prefix,
-                        "style_suffix": style_suffix,
-                        "shot_description": shot_description,
-                        "directors_notes": directors_notes,
-                        "highlighted_text": highlighted_text or "",
-                        "full_script": full_script or script or "",
-                        "subject_info": subject_info,
-                        "end_parameters": end_parameters,
-                        "script_adherence": script_adherence,
-                        "length": length,
-                        "camera_shot": camera_shot,
-                        "camera_move": camera_move
-                    }
-                    logger.debug(f"Invoking chain for {length} prompt with input: {input_data}")
-                    result = await chain.ainvoke(input_data)
-                    logger.debug(f"Chain result for {length}: {result.content}")
-                    structured_output = self._structure_prompt_output(result.content)
-                    full_prompt_parts = []
-                    if structured_output.get("Camera Shot"):
-                        full_prompt_parts.append(structured_output["Camera Shot"])
-                    if structured_output.get("Camera Move"):
-                        full_prompt_parts.append(structured_output["Camera Move"])
-                    if style_prefix:
-                        full_prompt_parts.append(style_prefix)
-                    full_prompt_parts.append(structured_output['Full Prompt'])
-                    if style_suffix:
-                        full_prompt_parts.append(style_suffix)
-                    if end_parameters:
-                        full_prompt_parts.append(end_parameters)
-                    full_prompt = " ".join(full_prompt_parts).strip()
-                    structured_output['Full Prompt'] = full_prompt
-                    results[length] = structured_output
-                except Exception as e:
-                    error_msg = f"Error in generate_prompt for {length}: {str(e)}"
-                    logger.error(error_msg)
-                    results[length] = {"Full Prompt": error_msg}
-
-            valid_prompts = [result for result in results.values() if result.get("Full Prompt") and not result["Full Prompt"].startswith("Error")]
-            if not valid_prompts:
-                logger.warning("No valid prompts generated. Returning error messages.")
-                return results  # Return the results with error messages instead of raising an exception
-
-            logger.info(f"Generated prompts: {results}")
-            return results
+            logger.debug(f"Invoking chain for detailed prompt with input: {input_data}")
+            result = await chain.ainvoke(input_data)
+            logger.debug(f"Chain result: {result.content}")
+            structured_output = self._structure_prompt_output(result.content)
+            
+            full_prompt_parts = [
+                structured_output.get("Camera Shot", ""),
+                structured_output.get("Camera Move", ""),
+                style_prefix,
+                structured_output['Full Prompt'],
+                style_suffix,
+                end_parameters
+            ]
+            full_prompt = " ".join(filter(None, full_prompt_parts)).strip()
+            structured_output['Full Prompt'] = full_prompt
+            
+            logger.info(f"Generated prompt: {structured_output}")
+            return structured_output
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
             logger.exception(error_msg)
-            return {"error": error_msg}  # Return an error dictionary instead of raising an exception
+            return {"error": error_msg}
+
+    def derive_concise_prompt(self, detailed_prompt: str) -> str:
+        # Implement logic to derive a concise prompt (about 20 words) from the detailed prompt
+        words = detailed_prompt.split()
+        return " ".join(words[:20])
+
+    def derive_normal_prompt(self, detailed_prompt: str) -> str:
+        # Implement logic to derive a normal prompt (about 50 words) from the detailed prompt
+        words = detailed_prompt.split()
+        return " ".join(words[:50])
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """

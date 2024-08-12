@@ -182,28 +182,35 @@ with gr.Blocks() as app:
                 end_parameters=end_parameters,
                 active_subjects=json.loads(active_subjects) if active_subjects else [],
                 full_script=script,
-                temperature=temperature
+                temperature=temperature,
+                camera_shot=camera_shot,
+                camera_move=camera_move
             )
             logger.info(f"generate_prompt result: {result}")
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return "", "", "", f"Error: Unexpected result type {type(result)}"
+                return json.dumps({"error": f"Unexpected result type {type(result)}"})
 
-            concise = result.get("concise", {}).get("Full Prompt", "")
-            normal = result.get("normal", {}).get("Full Prompt", "")
-            detailed = result.get("detailed", {}).get("Full Prompt", "")
+            detailed = result.get("Full Prompt", "")
+            concise = core.meta_chain.derive_concise_prompt(detailed)
+            normal = core.meta_chain.derive_normal_prompt(detailed)
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return concise, normal, detailed, "Prompt generated successfully"
-        except PromptGenerationError as e:
-            logger.error(f"Prompt generation error: {str(e)}")
-            return "", "", "", f"Error generating prompt: {str(e)}"
+            return json.dumps({
+                "concise": concise,
+                "normal": normal,
+                "detailed": detailed,
+                "message": "Prompt generated successfully"
+            })
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return "", "", "", f"Unexpected error: {str(e)}\n\nError Report:\n{error_report}"
+            return json.dumps({
+                "error": f"Unexpected error: {str(e)}",
+                "error_report": error_report
+            })
 
     generate_button.click(
         generate_prompt_wrapper,
