@@ -24,7 +24,7 @@ class MetaChain:
             api_key = get_openai_api_key()
             if not api_key:
                 raise ValueError("OpenAI API key is not set in the environment or configuration.")
-            self.llm = ChatOpenAI(model_name="gpt-4-mini", openai_api_key=api_key)
+            self.llm = ChatOpenAI(model_name="gpt-4", openai_api_key=api_key)
             logger.info("LLM initialized successfully")
         except Exception as e:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
