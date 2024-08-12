@@ -11,25 +11,23 @@ class PromptForgeCore:
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: List[Dict[str, Any]] = None, full_script: str = "") -> Dict[str, str]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: List[Dict[str, Any]] = None, full_script: str = "", prompt_type: str = "normal") -> Dict[str, str]:
         try:
-            prompts = {}
-            for prompt_type in ["concise", "normal", "detailed"]:
-                result = await self.meta_chain.generate_prompt(
-                    style=style,
-                    prompt_type=prompt_type,
-                    highlighted_text=highlighted_text,
-                    shot_description=shot_description,
-                    directors_notes=directors_notes,
-                    script=script,
-                    stick_to_script=stick_to_script,
-                    active_subjects=active_subjects,
-                    full_script=full_script
-                )
-                prompts[prompt_type] = self.format_prompt(result, style, end_parameters)
-
-            self.prompt_logger.log_prompt(prompts)
-            return prompts
+            result = await self.meta_chain.generate_prompt(
+                style=style,
+                prompt_type=prompt_type,
+                highlighted_text=highlighted_text,
+                shot_description=shot_description,
+                directors_notes=directors_notes,
+                script=script,
+                stick_to_script=stick_to_script,
+                active_subjects=active_subjects,
+                full_script=full_script,
+                end_parameters=end_parameters
+            )
+            formatted_prompt = self.format_prompt(result, style, end_parameters)
+            self.prompt_logger.log_prompt({prompt_type: formatted_prompt})
+            return {prompt_type: formatted_prompt}
         except Exception as e:
             raise PromptGenerationError(str(e))
 

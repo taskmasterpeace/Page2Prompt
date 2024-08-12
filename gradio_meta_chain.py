@@ -8,7 +8,7 @@ class MetaChain:
         self.llm = None  # Initialize as None
         self.director_styles = {"Default": {}}  # Add more styles as needed
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "") -> Dict[str, Dict[str, str]]:
+    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", prompt_type: str = "normal") -> Dict[str, Dict[str, str]]:
         try:
             return await self.core.generate_prompt(
                 active_subjects=active_subjects,
@@ -19,7 +19,8 @@ class MetaChain:
                 script=script,
                 full_script=full_script,
                 end_parameters=end_parameters,
-                stick_to_script=stick_to_script
+                stick_to_script=stick_to_script,
+                prompt_type=prompt_type
             )
         except Exception as e:
             raise PromptGenerationError(str(e))
