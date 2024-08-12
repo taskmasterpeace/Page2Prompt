@@ -10,9 +10,11 @@ class MetaChain:
 
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None) -> Dict[str, Dict[str, str]]:
         try:
+            style_prefix, style_suffix = self.core.style_manager.get_style(style)
             return await self.core.generate_prompt(
                 active_subjects=active_subjects,
-                style=style,
+                style_prefix=style_prefix,
+                style_suffix=style_suffix,
                 shot_description=shot_description,
                 directors_notes=directors_notes,
                 highlighted_text=highlighted_text,

@@ -20,7 +20,12 @@ class StyleManager:
         return list(self.styles.keys())
 
     def get_style(self, name):
-        return self.styles.get(name, {})
+        style = self.styles.get(name, {})
+        return style.get('prefix', ''), style.get('suffix', '')
+
+    def add_style(self, name, prefix, suffix):
+        self.styles[name] = {'prefix': prefix, 'suffix': suffix}
+        self.save_styles()
 
     def add_style(self, name, style_dict):
         self.styles[name] = style_dict

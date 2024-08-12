@@ -11,10 +11,8 @@ class PromptForgeCore:
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
 
-    async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> Dict[str, str]:
+    async def generate_prompt(self, style_prefix: str, style_suffix: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str) -> Dict[str, str]:
         try:
-            style_prefix, style_suffix = self.format_style(style, end_parameters)
-            
             prompts = {}
             for prompt_type in ["concise", "normal", "detailed"]:
                 result = await self.meta_chain.generate_prompt(
@@ -27,18 +25,15 @@ class PromptForgeCore:
                     script=script,
                     stick_to_script=stick_to_script
                 )
-                prompts[prompt_type] = result
+                prompts[prompt_type] = self.format_prompt(result, style_prefix, style_suffix, end_parameters)
 
             self.prompt_logger.log_prompt(prompts)
             return prompts
         except Exception as e:
             raise PromptGenerationError(str(e))
 
-    def format_style(self, style: str, end_parameters: str) -> tuple[str, str]:
-        # TODO: Implement logic to format style prefix and suffix
-        style_prefix = f"{style} "
-        style_suffix = f" {end_parameters}"
-        return style_prefix, style_suffix
+    def format_prompt(self, prompt: str, style_prefix: str, style_suffix: str, end_parameters: str) -> str:
+        return f"{style_prefix} {prompt} {style_suffix} {end_parameters}"
 
     async def analyze_script(self, script_content, director_style):
         try:
