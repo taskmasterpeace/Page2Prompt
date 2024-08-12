@@ -196,8 +196,22 @@ with gr.Blocks() as app:
     
     debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
     
-    # Add event handlers for save, copy, and clear buttons
-    feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
+    # Debug information section
+    with gr.Group():
+        gr.Markdown("## 🐛 Debug Information")
+        debug_output = gr.Textbox(label="Debug Information", lines=10)
+        with gr.Row():
+            debug_button = gr.Button("Show Debug Info")
+            clear_debug_button = gr.Button("Clear Debug Info")
+
+    def show_debug_info():
+        return get_error_report()
+
+    def clear_debug_info():
+        return ""
+
+    debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
+    clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
     
     def save_prompt_with_name(concise, normal, detailed):
         name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
