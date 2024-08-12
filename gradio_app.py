@@ -19,7 +19,7 @@ script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
 prompt_logger = PromptLogger()
 
-async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects):
+async def generate_prompt(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         result = await core.meta_chain.generate_prompt(
@@ -30,7 +30,9 @@ async def generate_prompt(style, highlighted_text, shot_description, directors_n
             script=script,
             stick_to_script=stick_to_script,
             end_parameters=end_parameters,
-            active_subjects=active_subjects_list
+            active_subjects=active_subjects_list,
+            camera_shot=camera_shot,
+            camera_move=camera_move
         )
         prompt_logger.log_prompt(result)
         return (
@@ -65,6 +67,18 @@ def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
 def get_prompt_logs():
     return prompt_logger.get_logs()
 
+def generate_random_style():
+    # Placeholder for random style generation
+    return "Random Style"
+
+def save_style(style_name, prefix, suffix):
+    style_manager.add_style(style_name, prefix, suffix)
+    return f"Style '{style_name}' saved successfully."
+
+def generate_style_details(prefix):
+    # Placeholder for generating style details based on prefix
+    return "Generated style details based on prefix"
+
 # Define Gradio interface
 with gr.Blocks() as app:
     gr.Markdown("# 🎬 PromptForge - Bring Your Script to Life")
@@ -72,15 +86,28 @@ with gr.Blocks() as app:
     with gr.Row():
         with gr.Column(scale=1):
             # Left column (Input)
-            gr.Markdown("## 📝 Input")
-            style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="🎨 Style")
-            shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
-            directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
+            with gr.Group():
+                gr.Markdown("## 📝 Shot Details")
+                shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
+                directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
+            
+            with gr.Group():
+                gr.Markdown("## 🎨 Style")
+                style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style")
+                generate_random_style_button = gr.Button("🎲 Generate Random Style")
+                style_prefix_input = gr.Textbox(label="Style Prefix", placeholder="Enter style name/details")
+                style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix")
+                save_style_button = gr.Button("💾 Save Style")
+                generate_style_details_button = gr.Button("🔍 Generate Style Details")
+            
+            script_input = gr.Textbox(label="📜 Script", lines=10)
+            
+            with gr.Row():
+                camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["Close-up", "Medium shot", "Long shot", "Over-the-shoulder", "Dutch angle"])
+                camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["Static", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
+            
             highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
-            script_input = gr.Textbox(label="📜 Script", lines=5)
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
-            camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["None", "Close-up", "Medium shot", "Long shot", "Over-the-shoulder"])
-            camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["None", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
         
@@ -104,7 +131,7 @@ with gr.Blocks() as app:
         lambda *args: asyncio.run(generate_prompt(*args)),
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
-                end_parameters_input, active_subjects_input],
+                end_parameters_input, active_subjects_input, camera_shot_input, camera_move_input],
         outputs=[concise_output, normal_output, detailed_output]
     )
     
@@ -121,15 +148,20 @@ with gr.Blocks() as app:
     copy_detailed_button.click(lambda x: gr.Textbox.update(value=x), inputs=[detailed_output], outputs=[gr.Textbox()])
     
     def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "")
+        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "")
     
     clear_button.click(
         clear_all,
         outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                  script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                  end_parameters_input, active_subjects_input,
-                 concise_output, normal_output, detailed_output]
+                 concise_output, normal_output, detailed_output, style_prefix_input]
     )
+    
+    # Style-related event handlers
+    generate_random_style_button.click(generate_random_style, outputs=style_input)
+    save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=gr.Textbox(label="💾 Style Save Result"))
+    generate_style_details_button.click(generate_style_details, inputs=[style_prefix_input], outputs=style_suffix_input)
     
     # Script Analysis
     with gr.Tab("📊 Script Analysis"):
