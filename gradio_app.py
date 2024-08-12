@@ -112,14 +112,6 @@ with gr.Blocks() as app:
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
-            
-            with gr.Group():
-                gr.Markdown("## 👤 Subject Details")
-                subject_name = gr.Textbox(label="Subject Name")
-                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Object", "Other"])
-                subject_description = gr.Textbox(label="Subject Description", lines=3)
-                add_subject_button = gr.Button("➕ Add Subject")
-                subjects_list = gr.JSON(label="Added Subjects")
 
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
@@ -134,6 +126,14 @@ with gr.Blocks() as app:
                 copy_normal_button = gr.Button("📋 Copy Normal")
                 copy_detailed_button = gr.Button("📋 Copy Detailed")
                 clear_button = gr.Button("🧹 Clear All")
+            
+            with gr.Group():
+                gr.Markdown("## 👤 Subject Details")
+                subject_name = gr.Textbox(label="Subject Name")
+                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Object", "Other"])
+                subject_description = gr.Textbox(label="Subject Description", lines=3)
+                add_subject_button = gr.Button("➕ Add Subject")
+                subjects_list = gr.JSON(label="Added Subjects")
     
     generate_button = gr.Button("🚀 Generate Prompt")
     
