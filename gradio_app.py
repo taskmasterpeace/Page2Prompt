@@ -38,10 +38,10 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         
         # Convert predictability index to temperature
-        if predictability_index is None:
+        if predictability_index is None or predictability_index == '':
             temperature = 0.7  # Default temperature
         else:
-            _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+            _, temperature = PREDICTABILITY_SETTINGS[int(float(predictability_index))]
         
         result = await core.meta_chain.generate_prompt(
             style=style,
