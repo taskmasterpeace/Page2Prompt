@@ -1,15 +1,14 @@
 import gradio as gr
 import asyncio
 import json
-from gradio_core import PromptForgeCore
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
 from gradio_script_analyzer import ScriptAnalyzer
-from gradio_meta_chain import MetaChain
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
+from gradio_core import PromptForgeCore
 
 
 # Initialize components

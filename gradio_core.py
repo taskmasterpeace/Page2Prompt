@@ -1,10 +1,12 @@
 import asyncio
-from gradio_meta_chain import MetaChain
+from typing import Dict, List, Any, Optional
+from gradio_config import Config
 from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
-from gradio_config import Config
-from typing import Dict, List, Any, Optional
+
+# Import MetaChain at the end to avoid circular import
+from gradio_meta_chain import MetaChain
 
 class PromptForgeCore:
     def __init__(self):
