@@ -146,26 +146,42 @@ with gr.Blocks() as app:
     )
     
     # Add event handlers for save, copy, and clear buttons
-    save_prompt_name = gr.Textbox(label="📛 Prompt Name", value="Untitled")
+    feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
+    
+    def save_prompt_with_name(concise, normal, detailed):
+        name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
+        save_button = gr.Button("Save")
+        
+        def do_save(name):
+            if not name:
+                return "Please enter a name for the prompt set."
+            prompt_manager.save_prompt({
+                "concise": concise,
+                "normal": normal,
+                "detailed": detailed
+            }, name)
+            return f"Prompt set '{name}' saved successfully."
+        
+        save_button.click(do_save, inputs=[name], outputs=feedback_area)
+
     save_button.click(
-        save_prompt, 
-        inputs=[concise_output, normal_output, detailed_output, save_prompt_name],
-        outputs=gr.Textbox(label="💾 Save Result")
+        save_prompt_with_name, 
+        inputs=[concise_output, normal_output, detailed_output]
     )
     
-    copy_concise_button.click(lambda x: gr.Textbox.update(value=x), inputs=[concise_output], outputs=[gr.Textbox()])
-    copy_normal_button.click(lambda x: gr.Textbox.update(value=x), inputs=[normal_output], outputs=[gr.Textbox()])
-    copy_detailed_button.click(lambda x: gr.Textbox.update(value=x), inputs=[detailed_output], outputs=[gr.Textbox()])
+    copy_concise_button.click(lambda x: gr.Textbox.update(value=x), inputs=[concise_output], outputs=[feedback_area])
+    copy_normal_button.click(lambda x: gr.Textbox.update(value=x), inputs=[normal_output], outputs=[feedback_area])
+    copy_detailed_button.click(lambda x: gr.Textbox.update(value=x), inputs=[detailed_output], outputs=[feedback_area])
     
     def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "")
+        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
     
     clear_button.click(
         clear_all,
         outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                  script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                  end_parameters_input, active_subjects_input,
-                 concise_output, normal_output, detailed_output, style_prefix_input, subjects_list]
+                 concise_output, normal_output, detailed_output, style_prefix_input, style_suffix_input, subjects_list]
     )
 
     subjects = []
@@ -182,7 +198,7 @@ with gr.Blocks() as app:
     
     # Style-related event handlers
     generate_random_style_button.click(generate_random_style, outputs=style_input)
-    save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=gr.Textbox(label="💾 Style Save Result"))
+    save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
     generate_style_details_button.click(generate_style_details, inputs=[style_prefix_input], outputs=style_suffix_input)
     
     # Script Analysis
