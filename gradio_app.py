@@ -33,10 +33,9 @@ core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeC
 prompt_logger = PromptLogger()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, subjects_json, predictability_index, camera_shot, camera_move):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, predictability_index, camera_shot, camera_move):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
-        subjects = json.loads(subjects_json) if subjects_json else []
         
         # Convert predictability index to temperature
         _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
@@ -216,7 +215,7 @@ with gr.Blocks() as app:
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input, 
                 directors_notes_input, script_input, stick_to_script_input, 
-                end_parameters_input, active_subjects_input, subjects_list, 
+                end_parameters_input, active_subjects_input, 
                 predictability_input, camera_shot_input, camera_move_input],
         outputs=[generated_prompts]
     )
