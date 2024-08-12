@@ -11,6 +11,10 @@ class MetaChain:
         self.llm = None  # Initialize as None
         self.director_styles = {"Default": {}}  # Add more styles as needed
 
+    def _initialize_llm(self, temperature: float):
+        from langchain_openai import ChatOpenAI
+        self.llm = ChatOpenAI(model_name="gpt-4", temperature=temperature)
+
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: list = None, full_script: str = "", temperature: float = 0.7) -> Dict[str, Dict[str, str]]:
         try:
             self._initialize_llm(temperature)
