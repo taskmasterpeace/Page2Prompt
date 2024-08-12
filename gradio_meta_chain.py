@@ -13,24 +13,29 @@ class MetaChain:
             import logging
             logging.debug(f"MetaChain.generate_prompt called with prompt_type: {prompt_type}")
             
-            # Directly generate the prompt here instead of calling self.core.generate_prompt
-            prompt_template = self._get_prompt_template(prompt_type)
+            # Generate prompts for all types
+            prompt_types = ["concise", "normal", "detailed"]
+            results = {}
             
-            prompt_input = {
-                "style": style,
-                "highlighted_text": highlighted_text,
-                "shot_description": shot_description,
-                "directors_notes": directors_notes,
-                "script": script,
-                "stick_to_script": stick_to_script,
-                "end_parameters": end_parameters,
-                "active_subjects": self._format_subject_info(active_subjects),
-                "full_script": full_script,
-            }
+            for p_type in prompt_types:
+                prompt_template = self._get_prompt_template(p_type)
+                
+                prompt_input = {
+                    "style": style,
+                    "highlighted_text": highlighted_text,
+                    "shot_description": shot_description,
+                    "directors_notes": directors_notes,
+                    "script": script,
+                    "stick_to_script": stick_to_script,
+                    "end_parameters": end_parameters,
+                    "active_subjects": self._format_subject_info(active_subjects),
+                    "full_script": full_script,
+                }
+                
+                generated_prompt = prompt_template.format(**prompt_input)
+                results[p_type] = {"Full Prompt": generated_prompt}
             
-            generated_prompt = prompt_template.format(**prompt_input)
-            
-            return {prompt_type: {"Full Prompt": generated_prompt}}
+            return results
         except Exception as e:
             logging.exception("Error in MetaChain.generate_prompt")
             raise PromptGenerationError(f"Failed to generate prompt: {str(e)}")
