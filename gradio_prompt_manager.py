@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Dict, Any
 
 class PromptManager:
     def __init__(self, save_file: str = "saved_prompts.json"):
