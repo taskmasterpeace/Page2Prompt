@@ -30,7 +30,7 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "", length: str = "detailed") -> Dict[str, str]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", temperature: float = 0.7, camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
         # Map the length parameter to word counts
@@ -47,6 +47,8 @@ class MetaChain:
         script = script or full_script or "Default script"
         shot_description = shot_description or "Default shot"
         directors_notes = directors_notes or "No specific notes"
+        camera_shot = camera_shot or ""
+        camera_move = camera_move or ""
 
         try:
             self._initialize_llm(temperature)
@@ -64,8 +66,8 @@ class MetaChain:
                 "style_suffix": style_suffix,
                 "shot_description": shot_description,
                 "directors_notes": directors_notes,
-                "highlighted_text": highlighted_text or "",
-                "full_script": full_script or script or "",
+                "highlighted_text": highlighted_text,
+                "full_script": full_script or script,
                 "subject_info": subject_info,
                 "end_parameters": end_parameters,
                 "script_adherence": script_adherence,
