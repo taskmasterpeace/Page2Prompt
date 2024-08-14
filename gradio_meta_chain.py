@@ -40,6 +40,7 @@ class MetaChain:
             raise
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", temperature: float = 0.7, camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
+        start_time = time.time()
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
         # Map the length parameter to word counts
@@ -60,9 +61,12 @@ class MetaChain:
         camera_move = camera_move or ""
 
         try:
+            script_analysis_start = time.time()
             self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
+            logger.info(f"Script analysis took {time.time() - script_analysis_start:.2f} seconds")
         
+            prompt_generation_start = time.time()
             style_prefix = style.split('--')[0].strip() if '--' in style else style
             style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
@@ -100,12 +104,15 @@ class MetaChain:
             full_prompt = " ".join(filter(None, full_prompt_parts)).strip()
             structured_output['Full Prompt'] = full_prompt
             
+            logger.info(f"Prompt generation took {time.time() - prompt_generation_start:.2f} seconds")
             logger.info(f"Generated prompt: {structured_output}")
             return structured_output
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
             logger.exception(error_msg)
             return {"error": error_msg}
+        finally:
+            logger.info(f"generate_prompt took {time.time() - start_time:.2f} seconds total")
 
     def derive_concise_prompt(self, detailed_prompt: str) -> str:
         # Implement logic to derive a concise prompt (about 20 words) from the detailed prompt
