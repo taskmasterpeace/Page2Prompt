@@ -52,13 +52,10 @@ class MetaChain:
         word_count = length_to_words.get(length, "about 100 words")  # Default to detailed if invalid length is provided
     
         # Use default values for empty inputs
-        style = style or "Default style"
         highlighted_text = highlighted_text or "Default scene"
         script = script or full_script or "Default script"
         shot_description = shot_description or "Default shot"
         directors_notes = directors_notes or "No specific notes"
-        camera_shot = camera_shot or ""
-        camera_move = camera_move or ""
 
         try:
             script_analysis_start = time.time()
@@ -67,16 +64,13 @@ class MetaChain:
             logger.info(f"Script analysis took {time.time() - script_analysis_start:.2f} seconds")
         
             prompt_generation_start = time.time()
-            style_prefix = style.split('--')[0].strip() if '--' in style else style
-            style_suffix = style.split('--')[1].strip() if '--' in style else ""
             
             template = self._get_prompt_template(word_count)
             chain = RunnableSequence(template | self.llm)
             
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
             input_data = {
-                "style_prefix": style_prefix,
-                "style_suffix": style_suffix,
+                "style": style,
                 "shot_description": shot_description,
                 "directors_notes": directors_notes,
                 "highlighted_text": highlighted_text,
@@ -88,25 +82,15 @@ class MetaChain:
                 "camera_move": camera_move,
                 "length": length
             }
-            logger.debug(f"Invoking chain for detailed prompt with input: {input_data}")
+            logger.debug(f"Invoking chain for prompt generation with input: {input_data}")
             result = await chain.ainvoke(input_data)
             logger.debug(f"Chain result: {result.content}")
-            structured_output = self._structure_prompt_output(result.content)
             
-            full_prompt_parts = [
-                structured_output.get("Camera Shot", ""),
-                structured_output.get("Camera Move", ""),
-                style_prefix,
-                structured_output['Full Prompt'],
-                style_suffix,
-                end_parameters
-            ]
-            full_prompt = " ".join(filter(None, full_prompt_parts)).strip()
-            structured_output['Full Prompt'] = full_prompt
+            prompts = self._structure_prompt_output(result.content)
             
             logger.info(f"Prompt generation took {time.time() - prompt_generation_start:.2f} seconds")
-            logger.info(f"Generated prompt: {structured_output}")
-            return structured_output
+            logger.info(f"Generated prompts: {prompts}")
+            return prompts
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
             logger.exception(error_msg)
