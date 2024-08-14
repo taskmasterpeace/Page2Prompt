@@ -127,18 +127,18 @@ class MetaChain:
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
         Generate a {length} prompt based on the following information:
-        Subjects: {{subject_info}}
-        Camera Shot: {{camera_shot}}
-        Camera Move: {{camera_move}}
-        Style Prefix: {{style_prefix}}
-        Style Suffix: {{style_suffix}}
-        Shot Description: {{shot_description}}
-        Director's Notes: {{directors_notes}}
-        Highlighted Script: {{highlighted_text}}
-        Full Script: {{full_script}}
-        End Parameters: {{end_parameters}}
+        Subjects: {subject_info}
+        Camera Shot: {camera_shot}
+        Camera Move: {camera_move}
+        Style Prefix: {style_prefix}
+        Style Suffix: {style_suffix}
+        Shot Description: {shot_description}
+        Director's Notes: {directors_notes}
+        Highlighted Script: {highlighted_text}
+        Full Script: {full_script}
+        End Parameters: {end_parameters}
 
-        {{script_adherence}}
+        {script_adherence}
 
         The prompt should follow this structure:
         [Camera Shot] [Camera Move] [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] [Style Suffix] [End Parameters]
