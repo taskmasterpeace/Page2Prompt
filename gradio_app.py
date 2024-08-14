@@ -176,12 +176,12 @@ with gr.Blocks() as app:
                 return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
             detailed = result.get("Full Prompt", "")
-            concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
             normal = " ".join([result.get(key, "") for key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions"]])
+            concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return concise, normal, detailed, json.dumps(result), "Prompt generated successfully"
+            return concise, normal, detailed, json.dumps(result), "Prompts generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
