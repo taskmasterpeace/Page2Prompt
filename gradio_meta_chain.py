@@ -15,16 +15,10 @@ class MetaChain:
     def __init__(self, core):
         self.core = core
         self.llm = None
+        self.director_styles = {"Default": {}}  # Add more styles as needed
         self.initialize_llm()
 
-    def initialize_llm(self):
-        # Initialize your LLM here
-        # For example:
-        # self.llm = SomeLLMClass()
-        pass
-        self.director_styles = {"Default": {}}  # Add more styles as needed
-
-    def _initialize_llm(self, temperature: float = 0.7):
+    def initialize_llm(self, temperature: float = 0.7):
         logger.debug(f"Initializing LLM with temperature {temperature}")
         try:
             from langchain_openai import ChatOpenAI
@@ -33,15 +27,15 @@ class MetaChain:
             api_key = get_openai_api_key()
             if not api_key:
                 raise ValueError("OpenAI API key is not set in the environment or configuration.")
-            self.llm = ChatOpenAI(model_name="gpt-4o-mini", openai_api_key=api_key)
+            self.llm = ChatOpenAI(model_name="gpt-4o-mini", openai_api_key=api_key, temperature=temperature)
             logger.info("LLM initialized successfully")
         except Exception as e:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", temperature: float = 0.7, camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
         start_time = time.time()
-        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., temperature={temperature}, camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
+        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
         # Map the length parameter to word counts
         length_to_words = {
@@ -59,7 +53,6 @@ class MetaChain:
 
         try:
             script_analysis_start = time.time()
-            self._initialize_llm(temperature)
             subject_info = self._format_subject_info(active_subjects)
             logger.info(f"Script analysis took {time.time() - script_analysis_start:.2f} seconds")
         
