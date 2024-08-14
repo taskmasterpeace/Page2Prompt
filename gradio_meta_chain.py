@@ -9,10 +9,19 @@ from gradio_config import get_openai_api_key
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+import time
+
 class MetaChain:
     def __init__(self, core):
         self.core = core
-        self.llm = None  # Initialize as None
+        self.llm = None
+        self.initialize_llm()
+
+    def initialize_llm(self):
+        # Initialize your LLM here
+        # For example:
+        # self.llm = SomeLLMClass()
+        pass
         self.director_styles = {"Default": {}}  # Add more styles as needed
 
     def _initialize_llm(self, temperature: float = 0.7):
