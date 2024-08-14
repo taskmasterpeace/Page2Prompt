@@ -212,12 +212,12 @@ class MetaChain:
             
             # Ensure 'Full Prompt' is not empty
             if not structured_output["Full Prompt"]:
-                raise ValueError("Failed to generate a valid prompt")
+                return {"error": "Failed to generate a valid prompt", "Full Prompt": ""}
             
             return structured_output
         except Exception as e:
             logger.error(f"Error in _structure_prompt_output: {str(e)}")
-            return {"Full Prompt": f"Error in structuring output: {str(e)}"}
+            return {"error": f"Error in structuring output: {str(e)}", "Full Prompt": ""}
 
     async def analyze_script(self, script: str, director_style: str):
         try:
