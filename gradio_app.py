@@ -1,6 +1,7 @@
 import gradio as gr
 import asyncio
 import json
+import time
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
@@ -123,7 +124,11 @@ with gr.Blocks() as app:
         with gr.Column(scale=1):
             # Right column (Generated Prompt)
             gr.Markdown("## 🖼️ Generated Prompts")
-            generated_prompts = gr.JSON(label="Generated Prompts")
+            concise_prompt = gr.Textbox(label="Concise Prompt")
+            normal_prompt = gr.Textbox(label="Normal Prompt")
+            detailed_prompt = gr.Textbox(label="Detailed Prompt")
+            structured_prompt = gr.JSON(label="Structured Prompt")
+            generation_message = gr.Textbox(label="Generation Message")
     
             with gr.Row():
                 save_button = gr.Button("💾 Save Prompts")
@@ -144,9 +149,13 @@ with gr.Blocks() as app:
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
     async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
+        start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
         
+            active_subjects_list = json.loads(active_subjects) if active_subjects else []
+        
+            meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
                 style=style,
                 highlighted_text=highlighted_text,
@@ -155,16 +164,16 @@ with gr.Blocks() as app:
                 script=script,
                 stick_to_script=stick_to_script,
                 end_parameters=end_parameters,
-                active_subjects=json.loads(active_subjects) if active_subjects else [],
+                active_subjects=active_subjects_list,
                 full_script=script,
                 camera_shot=camera_shot,
                 camera_move=camera_move
             )
-            logger.info(f"generate_prompt result: {result}")
+            logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return json.dumps({"error": f"Unexpected result type {type(result)}"})
+                return {"error": f"Unexpected result type {type(result)}"}
 
             detailed = result.get("Full Prompt", "")
             concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
@@ -172,20 +181,22 @@ with gr.Blocks() as app:
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return json.dumps({
+            return {
                 "concise": concise,
                 "normal": normal,
                 "detailed": detailed,
                 "structured": result,
                 "message": "Prompt generated successfully"
-            })
+            }
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return json.dumps({
+            return {
                 "error": f"Unexpected error: {str(e)}",
                 "error_report": error_report
-            })
+            }
+        finally:
+            logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
     generate_button.click(
         generate_prompt_wrapper,
@@ -193,7 +204,7 @@ with gr.Blocks() as app:
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, 
                 camera_shot_input, camera_move_input],
-        outputs=[generated_prompts]
+        outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
     )
     
     # Debug information section
@@ -213,34 +224,39 @@ with gr.Blocks() as app:
     debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
     clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
     
-    def save_prompt_with_name(prompts):
+    def save_prompt_with_name(concise, normal, detailed, structured):
         name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
         save_button = gr.Button("Save")
         
         def do_save(name):
             if not name:
                 return "Please enter a name for the prompt set."
-            prompt_manager.save_prompt(prompts, name)
+            prompt_manager.save_prompt({
+                "concise": concise,
+                "normal": normal,
+                "detailed": detailed,
+                "structured": structured
+            }, name)
             return f"Prompt set '{name}' saved successfully."
         
         save_button.click(do_save, inputs=[name], outputs=feedback_area)
 
     save_button.click(
         save_prompt_with_name, 
-        inputs=[generated_prompts]
+        inputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt]
     )
     
     copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[generated_prompts], outputs=[feedback_area])
     
     def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "", {})
+        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "", "", "")
     
     clear_button.click(
         clear_all,
         outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                  script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                  end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
-                 subjects_list, generated_prompts]
+                 subjects_list, concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
     )
 
     subjects = []
