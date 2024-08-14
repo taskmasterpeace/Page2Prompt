@@ -234,20 +234,20 @@ with gr.Blocks() as app:
 
     save_button.click(
         save_prompt_with_name, 
-        inputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt]
+        inputs=[generated_prompts, structured_prompt]
     )
     
     copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
     
     def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "", "", "")
+        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
     
     clear_button.click(
         clear_all,
         outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                  script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                  end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
-                 subjects_list, concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
+                 subjects_list, generated_prompts, structured_prompt, generation_message]
     )
 
     subjects = []
