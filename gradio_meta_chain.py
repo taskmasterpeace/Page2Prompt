@@ -199,25 +199,14 @@ class MetaChain:
                 elif current_field:
                     structured_output[current_field] += " " + line.strip()
             
-            # If 'Full Prompt' is empty, construct it from other fields
+            # If 'Full Prompt' is empty, use the entire content as the full prompt
             if not structured_output["Full Prompt"]:
-                full_prompt_parts = []
-                for key, value in structured_output.items():
-                    if key != "Full Prompt" and value:
-                        if key in ["Camera Shot", "Camera Move"]:
-                            full_prompt_parts.insert(0, value)
-                        else:
-                            full_prompt_parts.append(value)
-                structured_output["Full Prompt"] = " ".join(full_prompt_parts)
-            
-            # Ensure 'Full Prompt' is not empty
-            if not structured_output["Full Prompt"]:
-                return {"error": "Failed to generate a valid prompt", "Full Prompt": ""}
+                structured_output["Full Prompt"] = content.strip()
             
             return structured_output
         except Exception as e:
             logger.error(f"Error in _structure_prompt_output: {str(e)}")
-            return {"error": f"Error in structuring output: {str(e)}", "Full Prompt": ""}
+            return {"error": f"Error in structuring output: {str(e)}", "Full Prompt": content.strip()}
 
     async def analyze_script(self, script: str, director_style: str):
         try:
