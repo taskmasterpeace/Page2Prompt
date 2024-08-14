@@ -122,11 +122,11 @@ with gr.Blocks() as app:
             # Removed predictability_input
 
         with gr.Column(scale=1):
-            # Right column (Generated Prompt)
+            # Right column (Generated Prompts)
             gr.Markdown("## 🖼️ Generated Prompts")
-            concise_prompt = gr.Textbox(label="Concise Prompt")
-            normal_prompt = gr.Textbox(label="Normal Prompt")
-            detailed_prompt = gr.Textbox(label="Detailed Prompt")
+            concise_prompt = gr.Textbox(label="Concise Prompt", lines=3)
+            normal_prompt = gr.Textbox(label="Normal Prompt", lines=5)
+            detailed_prompt = gr.Textbox(label="Detailed Prompt", lines=10)
             structured_prompt = gr.JSON(label="Structured Prompt")
             generation_message = gr.Textbox(label="Generation Message")
     
