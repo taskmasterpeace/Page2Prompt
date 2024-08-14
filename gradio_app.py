@@ -246,7 +246,7 @@ with gr.Blocks() as app:
         inputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt]
     )
     
-    copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[generated_prompts], outputs=[feedback_area])
+    copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
     
     def clear_all():
         return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "", "", "")
