@@ -124,9 +124,7 @@ with gr.Blocks() as app:
         with gr.Column(scale=1):
             # Right column (Generated Prompts)
             gr.Markdown("## 🖼️ Generated Prompts")
-            concise_prompt = gr.Textbox(label="Concise Prompt", lines=3)
-            normal_prompt = gr.Textbox(label="Normal Prompt", lines=5)
-            detailed_prompt = gr.Textbox(label="Detailed Prompt", lines=10)
+            generated_prompts = gr.Textbox(label="Generated Prompts", lines=15)
             structured_prompt = gr.JSON(label="Structured Prompt")
             generation_message = gr.Textbox(label="Generation Message")
     
@@ -152,9 +150,9 @@ with gr.Blocks() as app:
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
-    
+
             active_subjects_list = json.loads(active_subjects) if active_subjects else []
-    
+
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
                 style=style,
@@ -173,19 +171,21 @@ with gr.Blocks() as app:
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
+                return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
-            detailed = result.get("Full Prompt", "")
-            normal = " ".join([result.get(key, "") for key in ["Subject", "Action/Pose", "Context/Setting", "Time of Day", "Weather Conditions"]])
-            concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
+            concise = result.get("Concise Prompt", "")
+            normal = result.get("Normal Prompt", "")
+            detailed = result.get("Detailed Prompt", "")
+
+            all_prompts = f"Concise Prompt:\n{concise}\n\nNormal Prompt:\n{normal}\n\nDetailed Prompt:\n{detailed}"
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return concise, normal, detailed, json.dumps(result), "Prompts generated successfully"
+            return all_prompts, json.dumps(result), "Prompts generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return "", "", "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
+            return "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
@@ -195,7 +195,7 @@ with gr.Blocks() as app:
                 directors_notes_input, script_input, stick_to_script_input, 
                 end_parameters_input, active_subjects_input, 
                 camera_shot_input, camera_move_input],
-        outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
+        outputs=[generated_prompts, structured_prompt, generation_message]
     )
     
     # Debug information section
