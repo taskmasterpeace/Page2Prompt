@@ -152,9 +152,9 @@ with gr.Blocks() as app:
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
-        
+    
             active_subjects_list = json.loads(active_subjects) if active_subjects else []
-        
+    
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
                 style=style,
@@ -173,7 +173,7 @@ with gr.Blocks() as app:
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return {"error": f"Unexpected result type {type(result)}"}
+                return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
             detailed = result.get("Full Prompt", "")
             concise = result.get("Subject", "") + " " + result.get("Action/Pose", "")
@@ -181,20 +181,11 @@ with gr.Blocks() as app:
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return {
-                "concise": concise,
-                "normal": normal,
-                "detailed": detailed,
-                "structured": result,
-                "message": "Prompt generated successfully"
-            }
+            return concise, normal, detailed, json.dumps(result), "Prompt generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return {
-                "error": f"Unexpected error: {str(e)}",
-                "error_report": error_report
-            }
+            return "", "", "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
