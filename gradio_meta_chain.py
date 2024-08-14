@@ -33,7 +33,7 @@ class MetaChain:
             api_key = get_openai_api_key()
             if not api_key:
                 raise ValueError("OpenAI API key is not set in the environment or configuration.")
-            self.llm = ChatOpenAI(model_name="gpt-4", openai_api_key=api_key)
+            self.llm = ChatOpenAI(model_name="gpt-4o-mini", openai_api_key=api_key)
             logger.info("LLM initialized successfully")
         except Exception as e:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
@@ -140,7 +140,7 @@ class MetaChain:
 
         {script_adherence}
 
-        The prompt should follow this structure:
+        The prompt should follow this structure If it is not included above. Then use your artistic interpretation. Except for  [Camera Shot] [Camera Move] [Style Prefix] [Style Prefix]  [Style Suffix] [End Parameters].  These should remain empty if not specified :
         [Camera Shot] [Camera Move] [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] [Style Suffix] [End Parameters]
 
         Important:
