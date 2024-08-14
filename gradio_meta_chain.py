@@ -110,49 +110,30 @@ class MetaChain:
 
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
-        Generate a {length} prompt based on the following information:
+        Generate three prompts (concise, normal, and detailed) based on the following information:
         Subjects: {subject_info}
-        Camera Shot: {camera_shot}
-        Camera Move: {camera_move}
-        Style Prefix: {style_prefix}
-        Style Suffix: {style_suffix}
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
         Full Script: {full_script}
         End Parameters: {end_parameters}
+        Camera Shot: {camera_shot}
+        Camera Move: {camera_move}
+        Style: {style}
 
         {script_adherence}
 
-        The prompt should follow this structure If it is not included above. Then use your artistic interpretation. Except for  [Camera Shot] [Camera Move] [Style Prefix] [Style Prefix]  [Style Suffix] [End Parameters].  These should remain empty if not specified :
-        [Camera Shot] [Camera Move] [Style Prefix] [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects] [Style Suffix] [End Parameters]
-
         Important:
         1. Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
-        2. Do not include any visual style elements or descriptors (e.g., 3D, comic book style) in the main body of the prompt. These should only be in the Style Prefix or Style Suffix.
-        3. If Camera Shot or Camera Move are not provided, do not mention them in the prompt.
+        2. Only include camera information if it's provided in the input.
+        3. Only include style information if it's provided in the input.
+        4. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words).
 
-        Generate a structured output with the following fields:
-        1. Camera Shot
-        2. Camera Move
-        3. Subject
-        4. Action/Pose
-        5. Context/Setting
-        6. Time of Day
-        7. Weather Conditions
-        8. Composition
-        9. Foreground Elements
-        10. Background Elements
-        11. Mood/Atmosphere
-        12. Props/Objects
-        13. Environmental Effects
-        14. Full Prompt
-
-        Prompt:
+        Prompts:
         """
 
         return PromptTemplate(
-            input_variables=["style_prefix", "style_suffix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
+            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
             template=base_template
         )
 
@@ -163,31 +144,17 @@ class MetaChain:
 
     def _structure_prompt_output(self, content: str) -> Dict[str, str]:
         try:
-            lines = content.strip().split('\n')
-            structured_output = {
-                "Camera Shot": "", "Camera Move": "", "Subject": "", "Action/Pose": "",
-                "Context/Setting": "", "Time of Day": "", "Weather Conditions": "",
-                "Composition": "", "Foreground Elements": "", "Background Elements": "",
-                "Mood/Atmosphere": "", "Props/Objects": "", "Environmental Effects": "",
-                "Full Prompt": ""
+            paragraphs = content.strip().split('\n\n')
+            if len(paragraphs) != 3:
+                raise ValueError("Expected 3 paragraphs in the output")
+            
+            prompts = {
+                "Concise Prompt": paragraphs[0].strip(),
+                "Normal Prompt": paragraphs[1].strip(),
+                "Detailed Prompt": paragraphs[2].strip()
             }
-            current_field = ""
-            for line in lines:
-                if ':' in line:
-                    key, value = line.split(':', 1)
-                    key = key.strip()
-                    value = value.strip()
-                    if key in structured_output:
-                        current_field = key
-                        structured_output[current_field] = value
-                elif current_field:
-                    structured_output[current_field] += " " + line.strip()
             
-            # If 'Full Prompt' is empty, use the entire content as the full prompt
-            if not structured_output["Full Prompt"]:
-                structured_output["Full Prompt"] = content.strip()
-            
-            return structured_output
+            return prompts
         except Exception as e:
             logger.error(f"Error in _structure_prompt_output: {str(e)}")
             return {"error": f"Error in structuring output: {str(e)}", "Full Prompt": content.strip()}
