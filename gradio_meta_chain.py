@@ -62,6 +62,8 @@ class MetaChain:
             chain = RunnableSequence(template | self.llm)
             
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
+            subject_info = self._format_subject_info(active_subjects)
+        
             input_data = {
                 "style": style,
                 "style_prefix": self.core.style_manager.get_style_prefix(style),
@@ -108,6 +110,7 @@ class MetaChain:
         # Subjects: {subject_info}
         # Active Subjects: {subject_info}
         # The following subjects are included: {subject_info}. Use them to enhance the scene description.
+        # Ensure that the subjects are integrated into the narrative of the scene.
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
@@ -137,7 +140,7 @@ class MetaChain:
     def _format_subject_info(self, active_subjects: Optional[List[Dict]]) -> str:
         if not active_subjects:
             return "No active subjects"
-        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {self._expand_description(s.get('description', ''))})" for s in active_subjects if isinstance(s, dict)])
+        return ", ".join([f"{s.get('name', 'Unknown')} ({s.get('category', 'Uncategorized')}): {self._expand_description(s.get('description', 'No description'))}" for s in active_subjects if isinstance(s, dict)])
 
     def _expand_description(self, description: str) -> str:
         # Implement logic to expand and word the description
