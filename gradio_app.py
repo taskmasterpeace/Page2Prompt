@@ -82,6 +82,8 @@ def generate_random_style():
     return f"{random.choice(adjectives)} {random.choice(nouns)}"
 
 def save_style(style_name, prefix, suffix):
+    if not style_name:
+        return "Error: Style name cannot be empty."
     style_manager.add_style(style_name, prefix, suffix)
     return f"Style '{style_name}' saved successfully."
 
@@ -116,6 +118,16 @@ with gr.Blocks() as app:
                     save_style_button = gr.Button("💾 Save Style")
                     generate_style_details_button = gr.Button("🔍 Generate Style Details")
                     generate_random_style_button = gr.Button("🎲 Generate Random Style")
+        
+            def update_style_inputs(style_name):
+                prefix, suffix = style_manager.get_style(style_name)
+                return gr.Textbox.update(value=prefix), gr.Textbox.update(value=suffix)
+
+            style_input.change(
+                update_style_inputs,
+                inputs=[style_input],
+                outputs=[style_prefix_input, style_suffix_input]
+            )
             
             script_input = gr.Textbox(label="📜 Script", lines=10)
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
