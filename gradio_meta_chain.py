@@ -64,6 +64,8 @@ class MetaChain:
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
             subject_info = self._format_subject_info(active_subjects)
         
+            subject_info = self._format_subject_info(active_subjects)
+        
             input_data = {
                 "style": style,
                 "style_prefix": self.core.style_manager.get_style_prefix(style),
@@ -111,6 +113,7 @@ class MetaChain:
         # Active Subjects: {subject_info}
         # The following subjects are included: {subject_info}. Use them to enhance the scene description.
         # Ensure that the subjects are integrated into the narrative of the scene.
+        # Consider how each subject contributes to the overall theme and mood.
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
