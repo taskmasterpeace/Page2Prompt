@@ -30,10 +30,8 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
     try:
         # Validate and parse active_subjects
         try:
-            active_subjects_list = json.loads(active_subjects) if active_subjects else []
-            if not isinstance(active_subjects_list, list):
-                raise ValueError("Active subjects must be a list.")
-        except (json.JSONDecodeError, ValueError) as e:
+            active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
+        except Exception as e:
             logger.error(f"Invalid active subjects input: {str(e)}")
             return "", json.dumps({"error": f"Invalid active subjects input: {str(e)}"}), "Error: Invalid active subjects input"
         
