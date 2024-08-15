@@ -64,6 +64,7 @@ class MetaChain:
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
             input_data = {
                 "style": style,
+                "style_prefix": self.core.style_manager.get_style_prefix(style),
                 "shot_description": shot_description,
                 "directors_notes": directors_notes,
                 "highlighted_text": highlighted_text,
@@ -113,6 +114,7 @@ class MetaChain:
         Camera Shot: {camera_shot}
         Camera Move: {camera_move}
         Style: {style}
+        Style Prefix: {style_prefix}
 
         {script_adherence}
 
@@ -126,7 +128,7 @@ class MetaChain:
         """
 
         return PromptTemplate(
-            input_variables=["style", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
+            input_variables=["style", "style_prefix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
             template=base_template
         )
 
