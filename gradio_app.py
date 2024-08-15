@@ -193,7 +193,7 @@ with gr.Blocks() as app:
         try:
             logger.info("Starting generate_prompt_wrapper")
 
-            active_subjects_list = json.loads(active_subjects) if active_subjects else []
+            active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
 
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
