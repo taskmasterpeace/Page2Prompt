@@ -227,134 +227,134 @@ with gr.Blocks() as app:
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
-generate_button.click(
-    generate_prompt_wrapper,
-    inputs=[style_input, highlighted_text_input, shot_description_input, 
-            directors_notes_input, script_input, stick_to_script_input, 
-            end_parameters_input, active_subjects_input, 
-            camera_shot_input, camera_move_input, structured_prompt],
-    outputs=[generated_prompts, structured_prompt, generation_message]
-)
+    generate_button.click(
+        generate_prompt_wrapper,
+        inputs=[style_input, highlighted_text_input, shot_description_input, 
+                directors_notes_input, script_input, stick_to_script_input, 
+                end_parameters_input, active_subjects_input, 
+                camera_shot_input, camera_move_input, structured_prompt],
+        outputs=[generated_prompts, structured_prompt, generation_message]
+    )
 
-# Debug information section
-with gr.Group():
-    gr.Markdown("## 🐛 Debug Information")
-    debug_output = gr.Textbox(label="Debug Information", lines=10)
-    with gr.Row():
-        debug_button = gr.Button("Show Debug Info")
-        clear_debug_button = gr.Button("Clear Debug Info")
+    # Debug information section
+    with gr.Group():
+        gr.Markdown("## 🐛 Debug Information")
+        debug_output = gr.Textbox(label="Debug Information", lines=10)
+        with gr.Row():
+            debug_button = gr.Button("Show Debug Info")
+            clear_debug_button = gr.Button("Clear Debug Info")
 
-    def show_debug_info():
-        return get_error_report()
+        def show_debug_info():
+            return get_error_report()
 
-    def clear_debug_info():
-        return ""
+        def clear_debug_info():
+            return ""
 
-    debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
-    clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
-    
-    def save_prompt_with_name(concise, normal, detailed, structured):
-        name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
-        save_button = gr.Button("Save")
+        debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
+        clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
         
-        def do_save(name):
-            if not name:
-                return "Please enter a name for the prompt set."
-            prompt_manager.save_prompt({
-                "concise": concise,
-                "normal": normal,
-                "detailed": detailed,
-                "structured": structured
-            }, name)
-            return f"Prompt set '{name}' saved successfully."
-        
-        save_button.click(do_save, inputs=[name], outputs=feedback_area)
+        def save_prompt_with_name(concise, normal, detailed, structured):
+            name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
+            save_button = gr.Button("Save")
+            
+            def do_save(name):
+                if not name:
+                    return "Please enter a name for the prompt set."
+                prompt_manager.save_prompt({
+                    "concise": concise,
+                    "normal": normal,
+                    "detailed": detailed,
+                    "structured": structured
+                }, name)
+                return f"Prompt set '{name}' saved successfully."
+            
+            save_button.click(do_save, inputs=[name], outputs=feedback_area)
 
-    save_button.click(
-        save_prompt_with_name, 
-        inputs=[generated_prompts, structured_prompt]
-    )
-    
-    copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
-    
-    def clear_all():
-        return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
-    
-    clear_button.click(
-        clear_all,
-        outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
-                 script_input, stick_to_script_input, camera_shot_input, camera_move_input,
-                 end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
-                 subjects_list, generated_prompts, structured_prompt, generation_message]
-    )
-
-    subjects = []
-
-    def add_subject(name, category, description):
-        subjects.append({"name": name, "category": category, "description": description})
-        return json.dumps(subjects, indent=2), "", "", ""
-
-    def add_subject(name, category, description, active):
-        subject_manager.add_subject(name, category, description, active)
-        return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
-
-    def edit_subject(index, name, category, description, active):
-        subject_manager.edit_subject(index, name, category, description, active)
-        return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
-
-    def remove_subject(index):
-        subject_manager.remove_subject(index)
-        return json.dumps(subject_manager.subjects, indent=2)
-
-    add_subject_button.click(
-        add_subject,
-        inputs=[subject_name, subject_category, subject_description, subject_active],
-        outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
-    )
-
-    edit_subject_button.click(
-        edit_subject,
-        inputs=[edit_subject_index, subject_name, subject_category, subject_description, subject_active],
-        outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
-    )
-
-    remove_subject_button.click(
-        remove_subject,
-        inputs=[remove_subject_index],
-        outputs=[subjects_list]
-    )
-    
-    # Style-related event handlers
-    generate_random_style_button.click(
-        lambda: asyncio.run(generate_random_style_with_details()),
-        outputs=[style_prefix_input, style_suffix_input]
-    )
-    save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
-    generate_style_details_button.click(
-        lambda prefix: asyncio.run(generate_style_details(prefix)),
-        inputs=[style_prefix_input],
-        outputs=style_suffix_input
-    )
-    
-    # Script Analysis
-    with gr.Tab("📊 Script Analysis"):
-        script_analysis_input = gr.Textbox(label="📜 Script to Analyze", lines=10)
-        director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="🎭 Director Style")
-        analyze_button = gr.Button("🔍 Analyze Script")
-        analysis_output = gr.Textbox(label="📊 Analysis Result")
-        
-        analyze_button.click(
-            lambda *args: asyncio.run(analyze_script(*args)),
-            inputs=[script_analysis_input, director_style_input], 
-            outputs=analysis_output
+        save_button.click(
+            save_prompt_with_name, 
+            inputs=[generated_prompts, structured_prompt]
         )
-    
-    # Prompt Logs
-    with gr.Tab("📜 Prompt Logs"):
-        log_output = gr.JSON(label="📊 Prompt Generation Logs")
-        refresh_logs_button = gr.Button("🔄 Refresh Logs")
         
-        refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
+        copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
+        
+        def clear_all():
+            return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
+        
+        clear_button.click(
+            clear_all,
+            outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
+                     script_input, stick_to_script_input, camera_shot_input, camera_move_input,
+                     end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
+                     subjects_list, generated_prompts, structured_prompt, generation_message]
+        )
 
-if __name__ == "__main__":
-    app.launch(share=True)
+        subjects = []
+
+        def add_subject(name, category, description):
+            subjects.append({"name": name, "category": category, "description": description})
+            return json.dumps(subjects, indent=2), "", "", ""
+
+        def add_subject(name, category, description, active):
+            subject_manager.add_subject(name, category, description, active)
+            return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+
+        def edit_subject(index, name, category, description, active):
+            subject_manager.edit_subject(index, name, category, description, active)
+            return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+
+        def remove_subject(index):
+            subject_manager.remove_subject(index)
+            return json.dumps(subject_manager.subjects, indent=2)
+
+        add_subject_button.click(
+            add_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        edit_subject_button.click(
+            edit_subject,
+            inputs=[edit_subject_index, subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        remove_subject_button.click(
+            remove_subject,
+            inputs=[remove_subject_index],
+            outputs=[subjects_list]
+        )
+        
+        # Style-related event handlers
+        generate_random_style_button.click(
+            lambda: asyncio.run(generate_random_style_with_details()),
+            outputs=[style_prefix_input, style_suffix_input]
+        )
+        save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
+        generate_style_details_button.click(
+            lambda prefix: asyncio.run(generate_style_details(prefix)),
+            inputs=[style_prefix_input],
+            outputs=style_suffix_input
+        )
+        
+        # Script Analysis
+        with gr.Tab("📊 Script Analysis"):
+            script_analysis_input = gr.Textbox(label="📜 Script to Analyze", lines=10)
+            director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="🎭 Director Style")
+            analyze_button = gr.Button("🔍 Analyze Script")
+            analysis_output = gr.Textbox(label="📊 Analysis Result")
+            
+            analyze_button.click(
+                lambda *args: asyncio.run(analyze_script(*args)),
+                inputs=[script_analysis_input, director_style_input], 
+                outputs=analysis_output
+            )
+        
+        # Prompt Logs
+        with gr.Tab("📜 Prompt Logs"):
+            log_output = gr.JSON(label="📊 Prompt Generation Logs")
+            refresh_logs_button = gr.Button("🔄 Refresh Logs")
+            
+            refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
+
+    if __name__ == "__main__":
+        app.launch(share=True)
