@@ -44,6 +44,13 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             camera_move=camera_move
         )
         prompt_logger.log_prompt(result)
+        
+        # Format the prompts
+        concise = result.get("Concise Prompt", "")
+        normal = result.get("Normal Prompt", "")
+        detailed = result.get("Detailed Prompt", "")
+        formatted_prompts = f"**Concise Prompt:**\n{concise}\n\n**Normal Prompt:**\n{normal}\n\n**Detailed Prompt:**\n{detailed}"
+        
         # Append new prompts to existing prompts
         updated_prompts = existing_prompts + "\n\n" + formatted_prompts if existing_prompts else formatted_prompts
         
