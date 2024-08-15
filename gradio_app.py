@@ -74,9 +74,12 @@ def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
 def get_prompt_logs():
     return prompt_logger.get_logs()
 
+import random
+
 def generate_random_style():
-    # Placeholder for random style generation
-    return "Random Style"
+    adjectives = ["Vibrant", "Moody", "Ethereal", "Gritty", "Whimsical", "Minimalist", "Surreal", "Nostalgic", "Futuristic", "Retro"]
+    nouns = ["Cityscape", "Nature", "Portrait", "Abstract", "Still Life", "Landscape", "Architecture", "Street Scene", "Macro", "Fantasy"]
+    return f"{random.choice(adjectives)} {random.choice(nouns)}"
 
 def save_style(style_name, prefix, suffix):
     style_manager.add_style(style_name, prefix, suffix)
@@ -84,6 +87,11 @@ def save_style(style_name, prefix, suffix):
 
 async def generate_style_details(prefix):
     return await core.meta_chain.generate_style_suffix(prefix)
+
+async def generate_random_style_with_details():
+    prefix = generate_random_style()
+    suffix = await generate_style_details(prefix)
+    return prefix, suffix
 
 # Define Gradio interface
 with gr.Blocks() as app:
@@ -263,7 +271,10 @@ with gr.Blocks() as app:
     )
     
     # Style-related event handlers
-    generate_random_style_button.click(generate_random_style, outputs=style_input)
+    generate_random_style_button.click(
+        lambda: asyncio.run(generate_random_style_with_details()),
+        outputs=[style_prefix_input, style_suffix_input]
+    )
     save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
     generate_style_details_button.click(
         lambda prefix: asyncio.run(generate_style_details(prefix)),
