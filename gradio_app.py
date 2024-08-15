@@ -10,6 +10,7 @@ from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
 from gradio_core import PromptForgeCore
+from subject_manager import SubjectManager
 from gradio_meta_chain import MetaChain
 
 
@@ -22,6 +23,7 @@ script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
 core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeCore instance
 prompt_logger = PromptLogger()
+subject_manager = SubjectManager()
 
 @debug_func
 async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
@@ -161,7 +163,12 @@ with gr.Blocks() as app:
                 subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
                 add_subject_button = gr.Button("➕ Add Subject")
+                edit_subject_button = gr.Button("✏️ Edit Subject")
+                remove_subject_button = gr.Button("🗑️ Remove Subject")
+                subject_active = gr.Checkbox(label="Active in Scene")
                 subjects_list = gr.JSON(label="Added Subjects")
+                edit_subject_index = gr.Number(label="Index to Edit", value=-1, precision=0)
+                remove_subject_index = gr.Number(label="Index to Remove", value=-1, precision=0)
     
     generate_button = gr.Button("🚀 Generate Prompt")
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
@@ -201,7 +208,8 @@ with gr.Blocks() as app:
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            return all_prompts, json.dumps(result), "Prompts generated successfully"
+            formatted_prompts = f"**Concise Prompt:**\n{concise}\n\n**Normal Prompt:**\n{normal}\n\n**Detailed Prompt:**\n{detailed}"
+            return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
@@ -276,10 +284,34 @@ with gr.Blocks() as app:
         subjects.append({"name": name, "category": category, "description": description})
         return json.dumps(subjects, indent=2), "", "", ""
 
+    def add_subject(name, category, description, active):
+        subject_manager.add_subject(name, category, description, active)
+        return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+
+    def edit_subject(index, name, category, description, active):
+        subject_manager.edit_subject(index, name, category, description, active)
+        return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+
+    def remove_subject(index):
+        subject_manager.remove_subject(index)
+        return json.dumps(subject_manager.subjects, indent=2)
+
     add_subject_button.click(
         add_subject,
-        inputs=[subject_name, subject_category, subject_description],
-        outputs=[subjects_list, subject_name, subject_category, subject_description]
+        inputs=[subject_name, subject_category, subject_description, subject_active],
+        outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+    )
+
+    edit_subject_button.click(
+        edit_subject,
+        inputs=[edit_subject_index, subject_name, subject_category, subject_description, subject_active],
+        outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+    )
+
+    remove_subject_button.click(
+        remove_subject,
+        inputs=[remove_subject_index],
+        outputs=[subjects_list]
     )
     
     # Style-related event handlers
