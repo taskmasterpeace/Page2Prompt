@@ -26,7 +26,7 @@ prompt_logger = PromptLogger()
 subject_manager = SubjectManager()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         
@@ -232,7 +232,7 @@ with gr.Blocks() as app:
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
                 end_parameters_input, active_subjects_input,
-                camera_shot_input, camera_move_input],
+                camera_shot_input, camera_move_input, generated_prompts],
         outputs=[generated_prompts, structured_prompt, generation_message]
     )
 
