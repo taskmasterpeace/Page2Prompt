@@ -228,14 +228,14 @@ generate_button.click(
             camera_shot_input, camera_move_input, structured_prompt],
     outputs=[generated_prompts, structured_prompt, generation_message]
 )
-    
-    # Debug information section
-    with gr.Group():
-        gr.Markdown("## 🐛 Debug Information")
-        debug_output = gr.Textbox(label="Debug Information", lines=10)
-        with gr.Row():
-            debug_button = gr.Button("Show Debug Info")
-            clear_debug_button = gr.Button("Clear Debug Info")
+
+# Debug information section
+with gr.Group():
+    gr.Markdown("## 🐛 Debug Information")
+    debug_output = gr.Textbox(label="Debug Information", lines=10)
+    with gr.Row():
+        debug_button = gr.Button("Show Debug Info")
+        clear_debug_button = gr.Button("Clear Debug Info")
 
     def show_debug_info():
         return get_error_report()
