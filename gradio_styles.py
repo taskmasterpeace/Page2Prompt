@@ -35,3 +35,6 @@ class StyleManager:
         if name in self.styles:
             del self.styles[name]
             self.save_styles()
+
+    def get_style_prefix(self, name: str) -> str:
+        return self.styles.get(name, {}).get('prefix', '')
