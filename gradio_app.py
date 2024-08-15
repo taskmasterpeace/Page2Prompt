@@ -26,7 +26,7 @@ prompt_logger = PromptLogger()
 subject_manager = SubjectManager()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
     try:
         active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
         
@@ -44,7 +44,10 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             camera_move=camera_move
         )
         prompt_logger.log_prompt(result)
-        return json.dumps(result, indent=2)
+        # Append new prompts to existing prompts
+        updated_prompts = existing_prompts + "\n\n" + formatted_prompts if existing_prompts else formatted_prompts
+        
+        return updated_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
     except Exception as e:
         logger.exception("Unexpected error in generate_prompt_wrapper")
         return json.dumps({"error": str(e)}, indent=2)
@@ -217,14 +220,14 @@ with gr.Blocks() as app:
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
-    generate_button.click(
-        generate_prompt_wrapper,
-        inputs=[style_input, highlighted_text_input, shot_description_input, 
-                directors_notes_input, script_input, stick_to_script_input, 
-                end_parameters_input, active_subjects_input, 
-                camera_shot_input, camera_move_input],
-        outputs=[generated_prompts, structured_prompt, generation_message]
-    )
+generate_button.click(
+    generate_prompt_wrapper,
+    inputs=[style_input, highlighted_text_input, shot_description_input, 
+            directors_notes_input, script_input, stick_to_script_input, 
+            end_parameters_input, active_subjects_input, 
+            camera_shot_input, camera_move_input, structured_prompt],
+    outputs=[generated_prompts, structured_prompt, generation_message]
+)
     
     # Debug information section
     with gr.Group():
