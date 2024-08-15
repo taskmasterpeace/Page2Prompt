@@ -152,6 +152,19 @@ class MetaChain:
             logger.error(f"Error in _structure_prompt_output: {str(e)}")
             return {"error": f"Error in structuring output: {str(e)}", "Full Prompt": content.strip()}
 
+    async def generate_style_suffix(self, style_prefix: str) -> str:
+        try:
+            template = PromptTemplate(
+                input_variables=["style_prefix"],
+                template="Based on the style prefix '{style_prefix}', generate 5 visual description characteristics. Each characteristic should be a single word followed by a comma. Focus only on visual aspects, not story-related elements."
+            )
+            chain = RunnableSequence(template | self.llm)
+            result = await chain.ainvoke({"style_prefix": style_prefix})
+            return result.content.strip()
+        except Exception as e:
+            logger.error(f"Error in generate_style_suffix: {str(e)}")
+            return f"Error generating style suffix: {str(e)}"
+
     async def analyze_script(self, script: str, director_style: str):
         try:
             # Placeholder for script analysis logic

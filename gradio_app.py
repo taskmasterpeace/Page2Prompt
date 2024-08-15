@@ -82,9 +82,8 @@ def save_style(style_name, prefix, suffix):
     style_manager.add_style(style_name, prefix, suffix)
     return f"Style '{style_name}' saved successfully."
 
-def generate_style_details(prefix):
-    # Placeholder for generating style details based on prefix
-    return "Generated style details based on prefix"
+async def generate_style_details(prefix):
+    return await core.meta_chain.generate_style_suffix(prefix)
 
 # Define Gradio interface
 with gr.Blocks() as app:
@@ -265,7 +264,11 @@ with gr.Blocks() as app:
     # Style-related event handlers
     generate_random_style_button.click(generate_random_style, outputs=style_input)
     save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
-    generate_style_details_button.click(generate_style_details, inputs=[style_prefix_input], outputs=style_suffix_input)
+    generate_style_details_button.click(
+        lambda prefix: asyncio.run(generate_style_details(prefix)),
+        inputs=[style_prefix_input],
+        outputs=style_suffix_input
+    )
     
     # Script Analysis
     with gr.Tab("📊 Script Analysis"):
