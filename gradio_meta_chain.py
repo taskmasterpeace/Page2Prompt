@@ -105,7 +105,12 @@ class MetaChain:
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
         Generate three prompts (concise, normal, and detailed) based on the following information:
-        Subjects: {subject_info}
+        # Subjects: {subject_info}
+        # TODO: Update the prompt logic to handle subjects as sentences separated by commas.
+        # Each sentence should be interpreted as a subject.
+        # If director's notes have specifics, treat them accordingly.
+        # Example prompt logic:
+        # "The following subjects are included: {subject_info}. Use them to enhance the scene description."
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
