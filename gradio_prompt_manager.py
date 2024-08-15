@@ -38,5 +38,8 @@ class PromptManager:
     def _load_prompts(self):
         if os.path.exists(self.save_file):
             with open(self.save_file, 'r') as f:
-                return json.load(f)
+                content = f.read().strip()
+                if not content:
+                    return []
+                return json.loads(content)
         return []
