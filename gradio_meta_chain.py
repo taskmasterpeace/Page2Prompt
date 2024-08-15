@@ -135,7 +135,11 @@ class MetaChain:
     def _format_subject_info(self, active_subjects: Optional[List[Dict]]) -> str:
         if not active_subjects:
             return "No active subjects"
-        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
+        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {self._expand_description(s.get('description', ''))})" for s in active_subjects if isinstance(s, dict)])
+
+    def _expand_description(self, description: str) -> str:
+        # Implement logic to expand and word the description
+        return f"Expanded description of {description}"
 
     def _structure_prompt_output(self, content: str) -> Dict[str, str]:
         try:
