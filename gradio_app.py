@@ -29,23 +29,19 @@ subject_manager = SubjectManager()
 async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
     try:
         # Validate and parse active_subjects
-        try:
-            active_subjects_list = []
-            if active_subjects:
-                for subject in active_subjects.split(','):
-                    parts = subject.strip().split(':')
-                    if len(parts) == 2:
-                        name_category, description = parts
-                        name, category = name_category.strip().split('(')
-                        category = category.strip(')')
-                        active_subjects_list.append({
-                            "name": name.strip(),
-                            "category": category.strip(),
-                            "description": description.strip()
-                        })
-        except Exception as e:
-            logger.error(f"Invalid active subjects input: {str(e)}")
-            return "", json.dumps({"error": f"Invalid active subjects input: {str(e)}"}), "Error: Invalid active subjects input"
+        active_subjects_list = []
+        if active_subjects:
+            for subject in active_subjects.split(','):
+                parts = subject.strip().split(':')
+                if len(parts) == 2:
+                    name_category, description = parts
+                    name, category = name_category.strip().split('(')
+                    category = category.strip(')')
+                    active_subjects_list.append({
+                        "name": name.strip(),
+                        "category": category.strip(),
+                        "description": description.strip()
+                    })
         
         result = await core.meta_chain.generate_prompt(
             style=style,

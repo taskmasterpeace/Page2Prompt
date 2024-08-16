@@ -62,6 +62,8 @@ class MetaChain:
             chain = RunnableSequence(template | self.llm)
             
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
+            subject_info = self._format_subject_info(active_subjects)
+        
             input_data = {
                 "style": style,
                 "style_prefix": self.core.style_manager.get_style_prefix(style),
