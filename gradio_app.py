@@ -203,7 +203,7 @@ with gr.Blocks() as app:
             
             with gr.Group():
                 gr.Markdown("## 👤 Subject Details")
-                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[], allow_custom_value=True)
+                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[], allow_custom_value=True, multiselect=False)
                 subject_name = gr.Textbox(label="Subject Name")
                 subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
