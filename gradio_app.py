@@ -2,6 +2,7 @@ import gradio as gr
 import asyncio
 import json
 import time
+import csv
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
@@ -24,6 +25,17 @@ meta_chain = MetaChain(core)
 core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeCore instance
 prompt_logger = PromptLogger()
 subject_manager = SubjectManager()
+
+# Load camera work options from CSV
+def load_camera_work():
+    camera_work = {'shot': [], 'move': [], 'size': []}
+    with open('camera_work.csv', 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            camera_work[row['type']].append({'display': row['display'], 'insertion': row['insertion']})
+    return camera_work
+
+camera_work = load_camera_work()
 
 @debug_func
 async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts):
@@ -163,9 +175,9 @@ with gr.Blocks() as app:
             with gr.Group():
                 gr.Markdown("## 📷 Camera Settings")
                 with gr.Row():
-                    camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["Close-up", "Medium shot", "Long shot", "Over-the-shoulder", "Dutch angle"])
-                    camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["Static", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
-                    camera_size_input = gr.Textbox(label="📏 Camera Size", placeholder="Enter camera size details")
+                    camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=[shot['display'] for shot in camera_work['shot']])
+                    camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=[move['display'] for move in camera_work['move']])
+                    camera_size_input = gr.Dropdown(label="📏 Camera Size", choices=[size['display'] for size in camera_work['size']])
             
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             
@@ -207,11 +219,19 @@ with gr.Blocks() as app:
 
             active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
 
+            # Get the insertion text for camera work
+            camera_shot_insertion = next((shot['insertion'] for shot in camera_work['shot'] if shot['display'] == camera_shot), '')
+            camera_move_insertion = next((move['insertion'] for move in camera_work['move'] if move['display'] == camera_move), '')
+            camera_size_insertion = next((size['insertion'] for size in camera_work['size'] if size['display'] == camera_size), '')
+
+            # Combine camera work insertions
+            camera_work_description = f"{camera_shot_insertion} {camera_move_insertion} {camera_size_insertion}".strip()
+
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
                 style=style,
                 highlighted_text=highlighted_text,
-                shot_description=shot_description,
+                shot_description=f"{shot_description}\n{camera_work_description}",
                 directors_notes=directors_notes,
                 script=script,
                 stick_to_script=stick_to_script,
@@ -219,7 +239,8 @@ with gr.Blocks() as app:
                 active_subjects=active_subjects_list,
                 full_script=script,
                 camera_shot=camera_shot,
-                camera_move=camera_move
+                camera_move=camera_move,
+                camera_size=camera_size
             )
             logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
 

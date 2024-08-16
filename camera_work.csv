@@ -1,0 +1,17 @@
+type,display,insertion
+shot,Close-up,The camera frames a Close-up Shot, focusing intimately on the subject.
+shot,Medium shot,The camera captures a Medium Shot, showing the subject from the waist up.
+shot,Long shot,The camera pulls back for a Long Shot, revealing the full subject and their surroundings.
+shot,Over-the-shoulder,The camera positions for an Over-the-shoulder Shot, viewing the scene from behind one character.
+shot,Dutch angle,The camera tilts for a Dutch Angle Shot, creating a sense of unease or tension.
+move,Static,The camera remains Static, holding steady on the scene.
+move,Pan,The camera Pans smoothly, following the action horizontally.
+move,Tilt,The camera Tilts vertically, revealing more of the scene from top to bottom or vice versa.
+move,Zoom,The camera Zooms in or out, gradually changing the field of view.
+move,Dolly,The camera Dollies forward or backward, physically moving closer to or farther from the subject.
+move,Tracking,The camera executes a Tracking shot, moving alongside the subject.
+size,Extreme Close-up,The camera zooms in tightly for an Extreme Close-up Shot, focusing on a very small detail.
+size,Close-up,The camera frames a Close-up Shot, emphasizing facial expressions or small objects.
+size,Medium,The camera captures a Medium Shot, showing the subject from the waist up.
+size,Wide,The camera pulls back for a Wide Shot, revealing the full subject and their immediate surroundings.
+size,Extreme Wide,The camera captures an Extreme Wide Shot, showcasing the subject in relation to their entire environment.
