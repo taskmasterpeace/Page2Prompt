@@ -197,7 +197,7 @@ with gr.Blocks() as app:
     
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
+    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts, style_prefix, style_suffix):
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
@@ -224,9 +224,6 @@ with gr.Blocks() as app:
                 logger.error(f"Unexpected result type: {type(result)}")
                 return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
-            style_prefix = style_prefix_input
-            style_suffix = style_suffix_input
-
             concise = result.get('Concise Prompt', '')
             normal = result.get('Normal Prompt', '')
             detailed = result.get('Detailed Prompt', '')
@@ -249,7 +246,8 @@ with gr.Blocks() as app:
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
                 end_parameters_input, active_subjects_input,
-                camera_shot_input, camera_move_input],
+                camera_shot_input, camera_move_input, generated_prompts,
+                style_prefix_input, style_suffix_input],
         outputs=[generated_prompts, structured_prompt, generation_message]
     )
 
