@@ -224,9 +224,12 @@ with gr.Blocks() as app:
                 logger.error(f"Unexpected result type: {type(result)}")
                 return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
-            concise = result.get("Concise Prompt", "")
-            normal = result.get("Normal Prompt", "")
-            detailed = result.get("Detailed Prompt", "")
+            style_prefix = style_prefix_input
+            style_suffix = style_suffix_input
+
+            concise = f"{style_prefix} {result.get('Concise Prompt', '')} {style_suffix}".strip()
+            normal = f"{style_prefix} {result.get('Normal Prompt', '')} {style_suffix}".strip()
+            detailed = f"{style_prefix} {result.get('Detailed Prompt', '')} {style_suffix}".strip()
 
             all_prompts = f"Concise Prompt:\n{concise}\n\nNormal Prompt:\n{normal}\n\nDetailed Prompt:\n{detailed}"
 
