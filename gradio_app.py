@@ -233,6 +233,10 @@ with gr.Blocks() as app:
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
             formatted_prompts = f"**Concise Prompt:**\n{style_prefix} {concise} {style_suffix}\n\n**Normal Prompt:**\n{style_prefix} {normal} {style_suffix}\n\n**Detailed Prompt:**\n{style_prefix} {detailed} {style_suffix}"
+
+            # Remove any duplicate occurrences of style prefix or suffix
+            formatted_prompts = formatted_prompts.replace(f"{style_prefix} {style_prefix}", style_prefix)
+            formatted_prompts = formatted_prompts.replace(f"{style_suffix} {style_suffix}", style_suffix)
             return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
