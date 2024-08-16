@@ -62,10 +62,6 @@ class MetaChain:
             chain = RunnableSequence(template | self.llm)
             
             script_adherence = 'Strictly adhere to the provided script.' if stick_to_script else 'Use the script as inspiration, but feel free to be creative.'
-            subject_info = self._format_subject_info(active_subjects)
-        
-            subject_info = self._format_subject_info(active_subjects)
-        
             input_data = {
                 "style": style,
                 "style_prefix": self.core.style_manager.get_style_prefix(style),
@@ -109,11 +105,7 @@ class MetaChain:
     def _get_prompt_template(self, length: str) -> PromptTemplate:
         base_template = """
         Generate three prompts (concise, normal, and detailed) based on the following information:
-        # Subjects: {subject_info}
-        # Active Subjects: {subject_info}
-        # The following subjects are included: {subject_info}. Use them to enhance the scene description.
-        # Ensure that the subjects are integrated into the narrative of the scene.
-        # Consider how each subject contributes to the overall theme and mood.
+        Subjects: {subject_info}
         Shot Description: {shot_description}
         Director's Notes: {directors_notes}
         Highlighted Script: {highlighted_text}
@@ -131,6 +123,7 @@ class MetaChain:
         2. Only include camera information if it's provided in the input.
         3. Only include style information if it's provided in the input.
         4. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words).
+        5. Describe the subjects in the description.
 
         Prompts:
         """
@@ -143,11 +136,7 @@ class MetaChain:
     def _format_subject_info(self, active_subjects: Optional[List[Dict]]) -> str:
         if not active_subjects:
             return "No active subjects"
-        return ", ".join([f"{s.get('name', 'Unknown')} ({s.get('category', 'Uncategorized')}): {s.get('description', 'No description')}" for s in active_subjects if isinstance(s, dict)])
-
-    def _expand_description(self, description: str) -> str:
-        # Implement logic to expand and word the description
-        return f"Expanded description of {description}"
+        return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
 
     def _structure_prompt_output(self, content: str) -> Dict[str, str]:
         try:
@@ -170,7 +159,7 @@ class MetaChain:
         try:
             template = PromptTemplate(
                 input_variables=["style_prefix"],
-                template="Based on the style prefix '{style_prefix}', generate 5 visual description characteristics. Each characteristic should be a single word followed by a comma. Focus only on visual aspects, not story-related elements."
+                template="Based on the style prefix '{style_prefix}', write 5 distinct visual descriptions characteristics of the style prefix. Write the words out seperated by semi colons Like this. X;X;X;X;X  Each characteristic should be a single word followed by a colon. Focus only on visual aspects, not story-related elements."
             )
             chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"style_prefix": style_prefix})
