@@ -166,6 +166,8 @@ with gr.Blocks() as app:
             
             # Removed predictability_input
 
+            generate_button = gr.Button("🚀 Generate Prompt")
+
         with gr.Column(scale=1):
             # Right column (Generated Prompts)
             gr.Markdown("## 🖼️ Generated Prompts")
@@ -193,7 +195,6 @@ with gr.Blocks() as app:
                 edit_subject_index = gr.Number(label="Index to Edit", value=-1, precision=0)
                 remove_subject_index = gr.Number(label="Index to Remove", value=-1, precision=0)
     
-    generate_button = gr.Button("🚀 Generate Prompt")
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
     async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
