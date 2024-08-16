@@ -26,6 +26,10 @@ core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeC
 prompt_logger = PromptLogger()
 subject_manager = SubjectManager()
 
+# Load subjects
+subjects = subject_manager.get_subjects()
+subject_names = [s["name"] for s in subjects]
+
 # Load camera work options from CSV
 def load_camera_work():
     camera_work = {'shot': [], 'move': [], 'size': []}
@@ -199,7 +203,7 @@ with gr.Blocks() as app:
             
             with gr.Group():
                 gr.Markdown("## 👤 Subject Details")
-                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[])
+                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[], allow_custom_value=True)
                 subject_name = gr.Textbox(label="Subject Name")
                 subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
@@ -384,8 +388,8 @@ with gr.Blocks() as app:
             subjects = subject_manager.get_subjects()
             subject_names = [s["name"] for s in subjects]
             return (
-                subject_names,  # Choices for the dropdown
-                None,  # Value for the dropdown (None to clear selection)
+                gr.Dropdown.update(choices=subject_names, value=None),
+                gr.Dropdown.update(choices=subject_names, value=None),
                 json.dumps(subjects, indent=2),
                 "", "", "", False
             )
