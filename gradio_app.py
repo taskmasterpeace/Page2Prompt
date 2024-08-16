@@ -199,16 +199,18 @@ with gr.Blocks() as app:
             
             with gr.Group():
                 gr.Markdown("## 👤 Subject Details")
+                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[])
                 subject_name = gr.Textbox(label="Subject Name")
                 subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
-                add_subject_button = gr.Button("➕ Add Subject")
-                edit_subject_button = gr.Button("✏️ Edit Subject")
-                remove_subject_button = gr.Button("🗑️ Remove Subject")
                 subject_active = gr.Checkbox(label="Active in Scene")
+            
+                with gr.Row():
+                    add_subject_button = gr.Button("➕ Add Subject")
+                    edit_subject_button = gr.Button("✏️ Update Subject")
+                    delete_subject_button = gr.Button("🗑️ Delete Subject")
+            
                 subjects_list = gr.JSON(label="Added Subjects")
-                edit_subject_index = gr.Number(label="Index to Edit", value=-1, precision=0)
-                remove_subject_index = gr.Number(label="Index to Remove", value=-1, precision=0)
     
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
@@ -347,33 +349,55 @@ with gr.Blocks() as app:
             return json.dumps(subjects, indent=2), "", "", ""
 
         def add_subject(name, category, description, active):
-            subject_manager.add_subject(name, category, description, active)
-            return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+            new_subject = {"name": name, "category": category, "description": description, "active": active}
+            subject_manager.add_subject(new_subject)
+            return update_subjects_interface()
 
-        def edit_subject(index, name, category, description, active):
-            subject_manager.edit_subject(index, name, category, description, active)
-            return json.dumps(subject_manager.subjects, indent=2), "", "", "", False
+        def update_subject(name, category, description, active):
+            updated_subject = {"name": name, "category": category, "description": description, "active": active}
+            subject_manager.update_subject(updated_subject)
+            return update_subjects_interface()
 
-        def remove_subject(index):
-            subject_manager.remove_subject(index)
-            return json.dumps(subject_manager.subjects, indent=2)
+        def delete_subject(name):
+            subject_manager.remove_subject_by_name(name)
+            return update_subjects_interface()
+
+        def update_subjects_interface():
+            subjects = subject_manager.get_subjects()
+            return (
+                gr.Dropdown.update(choices=[s["name"] for s in subjects], value=None),
+                json.dumps(subjects, indent=2),
+                "", "", "", False
+            )
+
+        def load_subject(name):
+            subject = subject_manager.get_subject_by_name(name)
+            if subject:
+                return subject["name"], subject["category"], subject["description"], subject["active"]
+            return "", "", "", False
 
         add_subject_button.click(
             add_subject,
             inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
         )
 
         edit_subject_button.click(
-            edit_subject,
-            inputs=[edit_subject_index, subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_list, subject_name, subject_category, subject_description, subject_active]
+            update_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
         )
 
-        remove_subject_button.click(
-            remove_subject,
-            inputs=[remove_subject_index],
-            outputs=[subjects_list]
+        delete_subject_button.click(
+            delete_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        subjects_dropdown.change(
+            load_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subject_name, subject_category, subject_description, subject_active]
         )
         
         # Style-related event handlers

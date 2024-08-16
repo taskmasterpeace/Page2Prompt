@@ -32,26 +32,23 @@ class SubjectManager:
                     'active': subject['active']
                 })
 
-    def add_subject(self, name, category, description, active):
-        self.subjects.append({
-            "name": name,
-            "category": category,
-            "description": description,
-            "active": active
-        })
+    def add_subject(self, subject):
+        self.subjects.append(subject)
         self.save_subjects()
 
-    def edit_subject(self, index, name, category, description, active):
-        if 0 <= index < len(self.subjects):
-            self.subjects[index] = {
-                "name": name,
-                "category": category,
-                "description": description,
-                "active": active
-            }
-            self.save_subjects()
+    def update_subject(self, updated_subject):
+        for i, subject in enumerate(self.subjects):
+            if subject["name"] == updated_subject["name"]:
+                self.subjects[i] = updated_subject
+                break
+        self.save_subjects()
 
-    def remove_subject(self, index):
-        if 0 <= index < len(self.subjects):
-            del self.subjects[index]
-            self.save_subjects()
+    def remove_subject_by_name(self, name):
+        self.subjects = [s for s in self.subjects if s["name"] != name]
+        self.save_subjects()
+
+    def get_subjects(self):
+        return self.subjects
+
+    def get_subject_by_name(self, name):
+        return next((s for s in self.subjects if s["name"] == name), None)
