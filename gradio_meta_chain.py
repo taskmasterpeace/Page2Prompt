@@ -155,9 +155,9 @@ class MetaChain:
             style_suffix = input_data.get("end_parameters", "")
 
             prompts = {
-                "Concise Prompt": f"{style_prefix} {paragraphs[0].strip()} {style_suffix}",
-                "Normal Prompt": f"{style_prefix} {paragraphs[1].strip()} {style_suffix}",
-                "Detailed Prompt": f"{style_prefix} {paragraphs[2].strip()} {style_suffix}"
+                "Concise Prompt": f"{style_prefix} {paragraphs[0].strip()} {style_suffix}".strip(),
+                "Normal Prompt": f"{style_prefix} {paragraphs[1].strip()} {style_suffix}".strip(),
+                "Detailed Prompt": f"{style_prefix} {paragraphs[2].strip()} {style_suffix}".strip()
             }
             
             return prompts
