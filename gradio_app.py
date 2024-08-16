@@ -219,19 +219,26 @@ with gr.Blocks() as app:
 
             active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
 
-            # Get the insertion text for camera work
-            camera_shot_insertion = next((shot['insertion'] for shot in camera_work['shot'] if shot['display'] == camera_shot), '')
-            camera_move_insertion = next((move['insertion'] for move in camera_work['move'] if move['display'] == camera_move), '')
-            camera_size_insertion = next((size['insertion'] for size in camera_work['size'] if size['display'] == camera_size), '')
+            def format_camera_work(shot, move, size):
+                camera_descriptions = []
+                if shot:
+                    camera_descriptions.append(f"In a {shot},")
+                if move:
+                    camera_descriptions.append(f"with a {move},")
+                if size:
+                    camera_descriptions.append(f"framed as a {size},")
+                
+                if camera_descriptions:
+                    return " ".join(camera_descriptions) + " we see"
+                return ""
 
-            # Combine camera work insertions
-            camera_work_description = f"{camera_shot_insertion} {camera_move_insertion} {camera_size_insertion}".strip()
+            camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
 
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
                 style=style,
                 highlighted_text=highlighted_text,
-                shot_description=f"{shot_description}\n{camera_work_description}",
+                shot_description=f"{camera_work_description} {shot_description}".strip(),
                 directors_notes=directors_notes,
                 script=script,
                 stick_to_script=stick_to_script,
