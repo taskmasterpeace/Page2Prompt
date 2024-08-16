@@ -26,7 +26,7 @@ prompt_logger = PromptLogger()
 subject_manager = SubjectManager()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts):
     try:
         # Validate and parse active_subjects
         active_subjects_list = []
@@ -54,8 +54,7 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             active_subjects=active_subjects_list,
             full_script=script,
             camera_shot=camera_shot,
-            camera_move=camera_move,
-            camera_size=camera_size
+            camera_move=camera_move
         )
         prompt_logger.log_prompt(result)
         
