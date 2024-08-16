@@ -227,15 +227,15 @@ with gr.Blocks() as app:
             style_prefix = style_prefix_input
             style_suffix = style_suffix_input
 
-            concise = f"{style_prefix} {result.get('Concise Prompt', '')} {style_suffix}".strip()
-            normal = f"{style_prefix} {result.get('Normal Prompt', '')} {style_suffix}".strip()
-            detailed = f"{style_prefix} {result.get('Detailed Prompt', '')} {style_suffix}".strip()
+            concise = result.get('Concise Prompt', '')
+            normal = result.get('Normal Prompt', '')
+            detailed = result.get('Detailed Prompt', '')
 
-            all_prompts = f"Concise Prompt:\n{concise}\n\nNormal Prompt:\n{normal}\n\nDetailed Prompt:\n{detailed}"
+            all_prompts = f"Concise Prompt:\n{style_prefix} {concise} {style_suffix}\n\nNormal Prompt:\n{style_prefix} {normal} {style_suffix}\n\nDetailed Prompt:\n{style_prefix} {detailed} {style_suffix}"
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            formatted_prompts = f"**Concise Prompt:**\n{concise}\n\n**Normal Prompt:**\n{normal}\n\n**Detailed Prompt:**\n{detailed}"
+            formatted_prompts = f"**Concise Prompt:**\n{style_prefix} {concise} {style_suffix}\n\n**Normal Prompt:**\n{style_prefix} {normal} {style_suffix}\n\n**Detailed Prompt:**\n{style_prefix} {detailed} {style_suffix}"
             return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
