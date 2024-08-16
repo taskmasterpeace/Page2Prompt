@@ -33,7 +33,7 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, camera_size: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
         start_time = time.time()
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
@@ -76,6 +76,7 @@ class MetaChain:
                 "script_adherence": script_adherence,
                 "camera_shot": camera_shot,
                 "camera_move": camera_move,
+                "camera_size": camera_size,
                 "length": length
             }
             logger.debug(f"Input data for prompt generation: {input_data}")
@@ -120,6 +121,7 @@ class MetaChain:
         End Parameters: {end_parameters}
         Camera Shot: {camera_shot}
         Camera Move: {camera_move}
+        Camera Size: {camera_size}
         Style: {style}
         Style Prefix: {style_prefix}
 
@@ -137,7 +139,7 @@ class MetaChain:
         """
 
         return PromptTemplate(
-            input_variables=["style", "style_prefix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "length"],
+            input_variables=["style", "style_prefix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "camera_size", "length"],
             template=base_template
         )
 
