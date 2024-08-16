@@ -351,7 +351,13 @@ with gr.Blocks() as app:
         def add_subject(name, category, description, active):
             new_subject = {"name": name, "category": category, "description": description, "active": active}
             subject_manager.add_subject(new_subject)
-            return update_subjects_interface()
+            subjects = subject_manager.get_subjects()
+            return (
+                gr.Dropdown.update(choices=[s["name"] for s in subjects], value=name),
+                gr.Dropdown.update(choices=[s["name"] for s in subjects], value=name),
+                json.dumps(subjects, indent=2),
+                "", "", "", False
+            )
 
         def update_subject(name, category, description, active):
             updated_subject = {"name": name, "category": category, "description": description, "active": active}
