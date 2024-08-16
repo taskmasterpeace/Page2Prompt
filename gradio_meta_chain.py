@@ -33,7 +33,7 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, camera_size: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
         start_time = time.time()
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
@@ -126,11 +126,12 @@ class MetaChain:
         {script_adherence}
 
         Important:
-        1. Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
+        1. Shot Description is theDescribe the scene positively. Don't use phrases like "no additional props" or "no objects present" or "The scene unfolds in" or "Imagine a". Instead, focus on what is in the scene.
         2. Only include camera information if it's provided in the input.
-        3. Only include style information if it's provided in the input.
-        4. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words).
-        5. Describe the subjects in the description.
+        3. Never include style information in the image prompt.  Ignore that portion of the request.  That is done in the Style and Style Prefix Only.
+        4. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words). Seperate them by a space. Do not add a headings for these.
+        5. Consider the main subject and its placement. Think about depth. Include elements in the foreground, middle ground, and background to create a sense of dimension when the shot requires it do not force it
+        6. 
 
         Prompts:
         """
