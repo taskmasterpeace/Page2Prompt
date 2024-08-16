@@ -54,7 +54,8 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             active_subjects=active_subjects_list,
             full_script=script,
             camera_shot=camera_shot,
-            camera_move=camera_move
+            camera_move=camera_move,
+            camera_size=camera_size
         )
         prompt_logger.log_prompt(result)
         
@@ -160,9 +161,12 @@ with gr.Blocks() as app:
             stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
             highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
             
-            with gr.Row():
-                camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["Close-up", "Medium shot", "Long shot", "Over-the-shoulder", "Dutch angle"])
-                camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["Static", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
+            with gr.Group():
+                gr.Markdown("## 📷 Camera Settings")
+                with gr.Row():
+                    camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=["Close-up", "Medium shot", "Long shot", "Over-the-shoulder", "Dutch angle"])
+                    camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=["Static", "Pan", "Tilt", "Zoom", "Dolly", "Tracking"])
+                    camera_size_input = gr.Textbox(label="📏 Camera Size", placeholder="Enter camera size details")
             
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             
@@ -197,7 +201,7 @@ with gr.Blocks() as app:
     
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, existing_prompts, style_prefix, style_suffix):
+    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix):
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
@@ -250,7 +254,7 @@ with gr.Blocks() as app:
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
                 end_parameters_input, active_subjects_input,
-                camera_shot_input, camera_move_input, generated_prompts,
+                camera_shot_input, camera_move_input, camera_size_input, generated_prompts,
                 style_prefix_input, style_suffix_input],
         outputs=[generated_prompts, structured_prompt, generation_message]
     )
