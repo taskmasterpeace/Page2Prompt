@@ -1,0 +1,36 @@
+2024-08-04 10:45:20,096 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 10:45:20,098 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 10:45:20,253 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 10:46:31,897 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 10:46:31,899 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 10:46:32,073 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 10:57:24,103 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 10:57:24,105 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 10:57:24,266 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 10:57:24,378 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 10:57:24,379 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:09:44,234 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 11:09:44,306 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 11:09:44,461 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 11:09:44,527 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:09:44,527 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:11:11,017 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 11:11:11,018 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 11:11:11,165 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 11:11:11,234 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:11:11,235 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:12:10,490 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 11:12:10,491 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 11:12:10,650 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 11:12:10,729 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:12:10,730 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:12:57,602 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 11:12:57,603 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 11:12:57,753 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 11:12:57,817 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:12:57,817 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:13:45,542 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-08-04 11:13:45,543 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\taskm\\anaconda3\\Library\\ssl\\cacert.pem'
+2024-08-04 11:13:45,691 - asyncio - DEBUG - Using proactor: IocpProactor
+2024-08-04 11:13:45,758 - root - ERROR - An error occurred in the main loop: 'PageToPromptUI' object has no attribute 'debug_var'
+2024-08-04 11:13:45,759 - root - CRITICAL - Critical error: 'PageToPromptUI' object has no attribute 'debug_var'

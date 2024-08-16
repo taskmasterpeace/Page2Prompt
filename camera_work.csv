@@ -1,17 +1,31 @@
 type,display,insertion
-shot,Close-up,The camera frames a Close-up Shot, focusing intimately on the subject.
-shot,Medium shot,The camera captures a Medium Shot, showing the subject from the waist up.
-shot,Long shot,The camera pulls back for a Long Shot, revealing the full subject and their surroundings.
-shot,Over-the-shoulder,The camera positions for an Over-the-shoulder Shot, viewing the scene from behind one character.
-shot,Dutch angle,The camera tilts for a Dutch Angle Shot, creating a sense of unease or tension.
-move,Static,The camera remains Static, holding steady on the scene.
-move,Pan,The camera Pans smoothly, following the action horizontally.
-move,Tilt,The camera Tilts vertically, revealing more of the scene from top to bottom or vice versa.
-move,Zoom,The camera Zooms in or out, gradually changing the field of view.
-move,Dolly,The camera Dollies forward or backward, physically moving closer to or farther from the subject.
-move,Tracking,The camera executes a Tracking shot, moving alongside the subject.
-size,Extreme Close-up,The camera zooms in tightly for an Extreme Close-up Shot, focusing on a very small detail.
-size,Close-up,The camera frames a Close-up Shot, emphasizing facial expressions or small objects.
-size,Medium,The camera captures a Medium Shot, showing the subject from the waist up.
-size,Wide,The camera pulls back for a Wide Shot, revealing the full subject and their immediate surroundings.
-size,Extreme Wide,The camera captures an Extreme Wide Shot, showcasing the subject in relation to their entire environment.
+shot,Close-up,"The camera frames a Close-up Shot, focusing intimately on the subject."
+shot,Medium shot,"The camera captures a Medium Shot, showing the subject from the waist up."
+shot,Long shot,"The camera pulls back for a Long Shot, revealing the full subject and their surroundings."
+shot,Over-the-shoulder,"The camera positions for an Over-the-shoulder Shot, viewing the scene from behind one character."
+shot,Dutch angle,"The camera tilts for a Dutch Angle Shot, creating a sense of unease or tension."
+shot,Two-shot,"The camera frames two characters together for a Two-Shot, capturing their interaction during a conversation."
+shot,Low angle,"The camera is positioned low for a Low Angle Shot, making the subject appear powerful or imposing."
+shot,High angle,"The camera hovers above the subject for a High Angle Shot, making them appear smaller or more vulnerable."
+shot,Cut-In,"The shot focuses on a specific detail with a Cut-In Shot, emphasizing an important part of the subject."
+shot,Establishing,"The scene opens with a wide view in an Establishing Shot, setting the location or environment before zooming in on characters."
+move,Static,"The camera remains Static, holding steady on the scene."
+move,Pan,"The camera Pans smoothly, following the action horizontally."
+move,Tilt,"The camera Tilts vertically, revealing more of the scene from top to bottom or vice versa."
+move,Zoom,"The camera Zooms in or out, gradually changing the field of view."
+move,Dolly,"The camera Dollies forward or backward, physically moving closer to or farther from the subject."
+move,Tracking,"The camera executes a Tracking shot, moving alongside the subject."
+move,Crane,"The camera ascends or descends smoothly in a Crane move, changing the perspective by moving up or down."
+move,Handheld,"The camera is handheld for a Handheld move, adding a shaky, more immersive feel to the scene."
+move,Arc,"The camera circles around the subject in an Arc Shot move, creating a dynamic circular motion."
+move,Whip Pan,"The camera whips quickly across the scene in a Whip Pan move, blurring the transition between scenes."
+size,Extreme Close-up,"The camera zooms in tightly for an Extreme Close-up Shot, focusing on a very small detail."
+size,Close-up,"The camera frames a Close-up Shot, emphasizing facial expressions or small objects."
+size,Medium,"The camera captures a Medium Shot, showing the subject from the waist up."
+size,Wide,"The camera pulls back for a Wide Shot, revealing the full subject and their immediate surroundings."
+size,Extreme Wide,"The camera captures an Extreme Wide Shot, showcasing the subject in relation to their entire environment."
+size,Medium Close-up,"The camera frames the subject from the chest up in a Medium Close-up Shot, showing both face and some surroundings."
+size,Full Shot,"The entire subject is visible in the frame in a Full Shot, showing the person from head to toe."
+size,Medium Wide,"The shot captures the subject from the knees up in a Medium Wide Shot, giving more context to the surroundings."
+size,American Shot,"The camera frames the subject from the mid-thighs up in an American Shot, often seen in classic films."
+size,Cowboy Shot,"The camera captures the subject from the mid-thighs up in a Cowboy Shot, allowing space to show additional detail."

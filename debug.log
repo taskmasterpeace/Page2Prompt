@@ -1,0 +1,1140 @@
+2024-08-12 00:58:00,305 - gradio_app - ERROR - Prompt generation failed: PromptForgeCore.generate_prompt() got an unexpected keyword argument 'full_script'
+2024-08-12 01:00:50,008 - gradio_app - ERROR - Unexpected error in generate_prompt
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 28, in generate_prompt
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'full_script'
+2024-08-12 01:01:48,485 - gradio_app - ERROR - Prompt generation failed: MetaChain.generate_prompt() got an unexpected keyword argument 'style_prefix'
+2024-08-12 01:03:18,134 - gradio_app - ERROR - Prompt generation failed: MetaChain.generate_prompt() got an unexpected keyword argument 'prompt_type'
+2024-08-12 01:04:34,314 - gradio_app - ERROR - Prompt generation failed: maximum recursion depth exceeded
+2024-08-12 01:05:31,339 - gradio_app - ERROR - Unexpected error in generate_prompt
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 41, in generate_prompt
+    assert all(key in result for key in ["concise", "normal", "detailed"]), f"generate_prompt result missing expected keys"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: generate_prompt result missing expected keys
+2024-08-12 01:09:27,596 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: string indices must be integers, not 'str'
+2024-08-12 01:13:34,497 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: 'style_prefix'
+2024-08-12 01:13:40,199 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: 'style_prefix'
+2024-08-12 01:13:49,312 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: 'style_prefix'
+2024-08-12 01:16:49,820 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: 'MetaChain' object has no attribute '_initialize_llm'
+2024-08-12 01:18:26,238 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: argument of type 'NoneType' is not iterable
+2024-08-12 01:18:36,106 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: argument of type 'NoneType' is not iterable
+2024-08-12 01:19:13,279 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: argument of type 'NoneType' is not iterable
+2024-08-12 01:20:04,439 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: Error invoking model for concise prompt: 'Input to PromptTemplate is missing variables {"\'Strictly adhere to the provided script.\' if stick_to_script else \'Use the script as inspiration, but feel free to be creative.\'"}.  Expected: ["\'Strictly adhere to the provided script.\' if stick_to_script else \'Use the script as inspiration, but feel free to be creative.\'", \'directors_notes\', \'end_parameters\', \'full_script\', \'highlighted_text\', \'length\', \'shot_description\', \'style_prefix\', \'style_suffix\', \'subject_info\'] Received: [\'style_prefix\', \'style_suffix\', \'shot_description\', \'directors_notes\', \'highlighted_text\', \'full_script\', \'subject_info\', \'end_parameters\', \'stick_to_script\', \'length\']'
+2024-08-12 01:20:15,861 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: Error invoking model for concise prompt: 'Input to PromptTemplate is missing variables {"\'Strictly adhere to the provided script.\' if stick_to_script else \'Use the script as inspiration, but feel free to be creative.\'"}.  Expected: ["\'Strictly adhere to the provided script.\' if stick_to_script else \'Use the script as inspiration, but feel free to be creative.\'", \'directors_notes\', \'end_parameters\', \'full_script\', \'highlighted_text\', \'length\', \'shot_description\', \'style_prefix\', \'style_suffix\', \'subject_info\'] Received: [\'style_prefix\', \'style_suffix\', \'shot_description\', \'directors_notes\', \'highlighted_text\', \'full_script\', \'subject_info\', \'end_parameters\', \'stick_to_script\', \'length\']'
+2024-08-12 01:21:39,090 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: Error invoking model for concise prompt: 'MetaChain' object has no attribute '_structure_prompt_output'
+2024-08-12 01:22:32,338 - gradio_app - ERROR - Prompt generation failed: Failed to generate prompt: Error invoking model for concise prompt: 'Full Prompt'
+2024-08-12 01:27:18,630 - gradio_app - ERROR - Error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 156, in generate_prompt_wrapper
+    result.get("concise", {}).get("Full Prompt", ""),
+    ^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'get'
+2024-08-12 01:30:12,666 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 01:30:34,836 - gradio_app - INFO - generate_prompt result: ('', '', '', '')
+2024-08-12 01:30:34,837 - gradio_app - ERROR - Unexpected result type: <class 'tuple'>
+2024-08-12 01:32:58,450 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 01:33:23,236 - gradio_app - INFO - generate_prompt result: ('', '', '', '')
+2024-08-12 01:33:23,237 - gradio_app - ERROR - Unexpected result type: <class 'tuple'>
+2024-08-12 02:08:38,675 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 02:08:38,676 - gradio_app - ERROR - Error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 155, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(*args, subjects_list.value)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() takes from 8 to 11 positional arguments but 12 were given
+2024-08-12 02:08:38,686 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 02:08:38,686 - gradio_app - ERROR - Error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 155, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(*args, subjects_list.value)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() takes from 8 to 11 positional arguments but 12 were given
+2024-08-12 02:20:43,483 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 02:20:44,281 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: 1 validation error for ChatOpenAI
+temperature
+  none is not an allowed value (type=type_error.none.not_allowed)
+2024-08-12 02:21:01,470 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 02:21:01,804 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: 1 validation error for ChatOpenAI
+temperature
+  none is not an allowed value (type=type_error.none.not_allowed)
+2024-08-12 11:10:20,345 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 11:10:20,345 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 181, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(*args)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() takes from 8 to 11 positional arguments but 12 were given
+2024-08-12 11:17:45,417 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 11:18:38,676 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: Failed to generate any valid prompts
+2024-08-12 11:32:34,746 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 11:32:35,069 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: 'PromptForgeCore' object has no attribute 'config'
+2024-08-12 11:33:38,339 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 11:33:38,883 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: OpenAI API key is not set in the configuration.
+2024-08-12 12:31:45,054 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:31:45,378 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: OpenAI API key is not set in the configuration.
+2024-08-12 12:35:43,397 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:36:20,499 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: Failed to generate any valid prompts
+2024-08-12 12:42:28,270 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:42:28,270 - gradio_app - ERROR - Prompt generation error: Input error: Highlighted text and script must not be empty.
+2024-08-12 12:42:54,714 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:42:54,715 - gradio_app - ERROR - Prompt generation error: Input error: Highlighted text and script must not be empty.
+2024-08-12 12:43:20,336 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:44:16,895 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: Failed to generate any valid prompts
+2024-08-12 12:57:00,895 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 12:57:44,634 - gradio_app - ERROR - Prompt generation error: Failed to generate prompt: Failed to generate any valid prompts
+2024-08-12 13:34:14,710 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 13:34:14,710 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 172, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 13:40:02,457 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 13:40:02,458 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 175, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:02:12,229 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:02:12,230 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 175, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:06:37,514 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:06:37,515 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 175, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:14:41,664 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:14:41,664 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 180, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:21:01,934 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:21:01,934 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 180, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:25:46,470 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:25:46,470 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 180, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:29:49,339 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:29:49,340 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 168, in generate_prompt_wrapper
+    _, temperature = PREDICTABILITY_SETTINGS[int(predictability_index)]
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-08-12 14:38:40,121 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 14:38:41,054 - gradio_app - INFO - generate_prompt result: {'error': 'Failed to generate prompt: "Input to PromptTemplate is missing variables {\'length\'}.  Expected: [\'camera_move\', \'camera_shot\', \'directors_notes\', \'end_parameters\', \'full_script\', \'highlighted_text\', \'length\', \'script_adherence\', \'shot_description\', \'style_prefix\', \'style_suffix\', \'subject_info\'] Received: [\'style_prefix\', \'style_suffix\', \'shot_description\', \'directors_notes\', \'highlighted_text\', \'full_script\', \'subject_info\', \'end_parameters\', \'script_adherence\', \'camera_shot\', \'camera_move\']"'}
+2024-08-12 14:38:41,054 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: ...
+2024-08-12 15:03:29,184 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:03:30,011 - gradio_app - INFO - generate_prompt result: {'error': 'Failed to generate prompt: "Input to PromptTemplate is missing variables {\'word_count\'}.  Expected: [\'word_count\'] Received: [\'style_prefix\', \'style_suffix\', \'shot_description\', \'directors_notes\', \'highlighted_text\', \'full_script\', \'subject_info\', \'end_parameters\', \'script_adherence\', \'camera_shot\', \'camera_move\', \'length\']"'}
+2024-08-12 15:03:30,011 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: ...
+2024-08-12 15:13:33,659 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:13:34,772 - gradio_app - INFO - generate_prompt result: {'error': "Failed to generate prompt: Error code: 404 - {'error': {'message': 'The model `gpt-4-mini` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}"}
+2024-08-12 15:13:34,773 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: ...
+2024-08-12 15:16:14,452 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:16:32,968 - gradio_app - INFO - generate_prompt result: {'Full Prompt': 'Default style Error in structuring output: Failed to generate a valid prompt'}
+2024-08-12 15:16:32,968 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style Error in structuring output: Failed ...
+2024-08-12 15:29:24,839 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:29:45,064 - gradio_app - INFO - generate_prompt result: None None Default style Subject: A middle-aged woman with curly hair, wearing an elegant evening gown and a young boy, presumably her son, dressed in a formal suit.
+
+Action/Pose: The woman is seated at a grand piano, her fingers lightly touching the keys, while the boy stands beside her, a violin tucked under his chin, ready to play.
+
+Context/Setting: They are in a luxurious living room, full of rich, dark wooden furniture and a roaring fireplace.
+
+Time of Day: Late evening, the only light comes from the flickering flames and a few scattered candles.
+
+Weather Conditions: It is a cold winter's night, the heavy curtains are drawn but a light dusting of snow can be seen through a gap.
+
+Composition: The grand piano is at the center of the room, with the woman and the boy as the main focus. The room is seen from a perspective that displays its grandeur.
+
+Foreground Elements: A plush red carpet beneath their feet, a crystal chandelier hanging above their heads.
+
+Background Elements: A tall, ornate bookshelf filled with leather-bound books, a large painting of a tranquil landscape hangs above the fireplace.
+
+Mood/Atmosphere: The scene is warm and intimate, filled with a sense of anticipation.
+
+Props/Objects: Besides the grand piano and violin, there's a music stand with sheets of music, a vase with fresh flowers, and a glass of red wine on a side table.
+
+Environmental Effects: The crackling of the fire and the soft glow it casts around the room, the faint glimmer of the snow outside, and the shadowy figures of furniture in the background add to the scene's depth and character.
+2024-08-12 15:29:45,067 - gradio_app - ERROR - Unexpected result type: <class 'str'>
+2024-08-12 15:32:58,907 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:33:17,212 - gradio_app - INFO - generate_prompt result: None None Default style Subject: A young woman in her mid-20s with auburn hair and a serious expression, dressed in a white lab coat. She carries a clipboard in one hand and a pen in the other.
+Shot Description: The woman is standing in a brightly lit, modern laboratory. She is looking intently at a series of test tubes filled with colourful liquids.
+Director's Notes: The shot is to capture the focus and determination of the woman. It should convey her passion for her work and her drive for discovery.
+Highlighted Script: "Dr. Sarah Collins, a young and brilliant scientist, meticulously analyzes the results of her latest experiment. Her eyes are sharp, her movements precise. She is in her element, the sterile, state-of-the-art lab serving as a testament to her dedication."
+Full Script: The full scene unfolds with Dr. Collins going through her routine in the lab, performing experiments, and making observations. The atmosphere is one of quiet intensity and focus.
+
+Script Adherence: The shot should strictly adhere to the script and director's notes.
+
+Prompt: A young and brilliant scientist with auburn hair, Dr. Sarah Collins, stands in a brightly lit, state-of-the-art laboratory during the day. The weather outside, visible through a large window, is clear and sunny. Her serious expression accentuates her dedication as she meticulously analyzes colourful liquids in a series of test tubes. The composition of the scene centers on her, with the foreground featuring a clean, sterile lab bench, and the background revealing an array of high-tech lab equipment. The atmosphere in the room is one of quiet intensity, focus, and determination. A clipboard in one hand and a pen in the other further emphasize her precise and diligent nature.
+2024-08-12 15:33:17,214 - gradio_app - ERROR - Unexpected result type: <class 'str'>
+2024-08-12 15:34:24,362 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 15:34:42,644 - gradio_app - INFO - generate_prompt result: None None Default style [Subject] [Action/Pose] in [Context/Setting], [Time of Day], [Weather Conditions], [Composition], [Foreground Elements], [Background Elements], [Mood/Atmosphere], [Props/Objects], [Environmental Effects]. 
+
+Our subject, a middle-aged woman with a stern expression, is captured in a pose of deep contemplation. She is situated in a quaint, rustic library, surrounded by towering shelves filled with an array of colorful books. The time of day is late afternoon, with the setting sun casting long, creeping shadows that seem to dance along the room's ornate fixtures. 
+
+The weather conditions outside are clear, with a few stray clouds dotting the vibrant blue sky, peeking through the library's large, paned windows. The composition of the shot is balanced, with the woman in the center, surrounded by the expansive collection of literature. 
+
+In the foreground, a sturdy oak desk is cluttered with worn, leather-bound books and a flickering, antique oil lamp. The background is filled with the stacked bookshelves, their contents ranging from ancient tomes to modern novels, all bathed in the warm, orange glow of the setting sun.
+
+The mood of the scene is introspective and serene, a sanctuary of silence broken only by the occasional flipping of a page. The woman's props are a weathered, leather-bound book in her hands, and a pair of reading glasses perched on the bridge of her nose. 
+
+There are no environmental effects in the scene, but the natural light filtering through the windows and the soft flicker of the oil lamp create a sense of peaceful ambiance. This is a scene of solitude and reflection, a moment of tranquility amidst a world of knowledge.
+2024-08-12 15:34:42,646 - gradio_app - ERROR - Unexpected result type: <class 'str'>
+2024-08-12 15:59:51,622 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 16:00:01,454 - gradio_app - INFO - generate_prompt result: None None Default style "An experienced female astronaut, clad in a white, well-worn spacesuit, is floating in the zero gravity environment of her spaceship cabin, amidst the high-tech control panels and blinking lights. It's a quiet, late night in the spaceship, with the only light source being the dim, cold blue light of the control panels, casting a ghostly glow on everything. Outside the spaceship window, the infinite expanse of the star-studded universe unfolds, the Earth a distant, blue-green marble. The atmosphere inside the cabin is tense, as if precariously balanced on the edge of an abyss, a sense of impending danger hanging heavy in the air. On her gloved hand, the astronaut holds a small, silver locket, its exterior weathered and scuffed. She opens it to reveal two faded photographs, a reminder of her loved ones back on Earth. Suddenly, a shower of small, brilliant meteoroids streaks past the spaceship, their fiery tails illuminating the cabin with a mesmerizing light show."
+2024-08-12 16:00:01,454 - gradio_app - ERROR - Unexpected result type: <class 'str'>
+2024-08-12 23:39:07,856 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-12 23:39:28,816 - gradio_app - INFO - generate_prompt result: {'Camera Shot': 'Low Angle Shot', 'Camera Move': 'Dolly In', 'Subject': 'The protagonist, a seasoned detective', 'Action/Pose': 'Leaning against a lamppost, lighting a cigarette', 'Context/Setting': 'In a narrow, dimly lit alleyway', 'Time of Day': 'Midnight', 'Weather Conditions': 'Light drizzle', 'Composition': 'Centered Framing', 'Foreground Elements': 'Puddles reflecting the soft glow of a neon sign', 'Background Elements': 'Crumbling brick walls and scattered trash', 'Mood/Atmosphere': 'Tense, mysterious', 'Props/Objects': 'Worn Fedora, Trench coat, Cigarette', 'Environmental Effects': 'Smoke swirling from the cigarette, misty rain ', 'Full Prompt': "Low Angle Shot Dolly In Default style A neo-noir Low Angle Shot, Dolly In on the protagonist, a seasoned detective leaning against a lamppost, lighting a cigarette in a narrow, dimly lit alleyway at midnight. It's a light drizzle, and the scene is composed using centered framing. Puddles reflecting the soft glow of a neon sign are in the foreground, with crumbling brick walls and scattered trash in the background creating a tense and mysterious mood. The detective is dressed in a worn Fedora and Trench coat, and the cigarette smoke swirls around in the misty rain. This scene is shot in high contrast black and white. The shot ends as he takes a long drag from the cigarette and the camera focuses on his squinting eyes."}
+2024-08-12 23:39:28,818 - gradio_app - INFO - Prompts generated - Concise: The protagonist, a seasoned detective Leaning agai..., Normal: The protagonist, a seasoned detective Leaning agai..., Detailed: Low Angle Shot Dolly In Default style A neo-noir L...
+2024-08-13 00:32:56,282 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-13 00:33:23,475 - gradio_app - INFO - generate_prompt result: {'Camera Shot': 'Close-up shot', 'Camera Move': 'Slow pan', 'Subject': 'Middle-aged man', 'Action/Pose': 'Sitting pensively by a window', 'Context/Setting': 'Rustic cabin', 'Time of Day': 'Early hours of dawn', 'Weather Conditions': 'Light morning mist with a rising sun', 'Composition': 'Subject off-center, window framing his profile', 'Foreground Elements': 'Steaming cup of coffee, worn-out book', 'Background Elements': 'Dense woods through the window', 'Mood/Atmosphere': 'Serene, contemplative', 'Props/Objects': "Man's glasses on the book", 'Environmental Effects': 'Gentle breeze ruffling the pages', 'Full Prompt': "Close-up shot Slow pan Default style A close-up shot with a slow pan in a vintage black and white style showcases a middle-aged man sitting pensively by a window in a rustic cabin during the early hours of dawn, as the soft rays of a rising sun filter through a light morning mist. The composition has the subject off-center and the window framing his profile, with a steaming cup of coffee and a worn-out book in the foreground. Dense woods are barely visible through the mist in the background, creating a serene, contemplative mood. The man's glasses rest on the open page of the book, and a gentle breeze ruffles the pages. The scene, with an added grainy texture for an aged effect, ends with the man taking a deep breath and picking up his glasses."}
+2024-08-13 00:33:23,476 - gradio_app - INFO - Prompts generated - Concise: Middle-aged man Sitting pensively by a window..., Normal: Middle-aged man Sitting pensively by a window Rust..., Detailed: Close-up shot Slow pan Default style A close-up sh...
+2024-08-14 18:19:16,803 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:19:39,527 - gradio_app - INFO - meta_chain.generate_prompt took 22.50 seconds
+2024-08-14 18:19:39,527 - gradio_app - INFO - Prompts generated - Concise: A young woman and an old man The young woman is le..., Normal: A young woman and an old man The young woman is le..., Detailed: A wide shot A slow pans from left to right Default...
+2024-08-14 18:19:39,528 - gradio_app - INFO - generate_prompt_wrapper took 22.72 seconds total
+2024-08-14 18:23:04,085 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:23:26,495 - gradio_app - INFO - meta_chain.generate_prompt took 22.41 seconds
+2024-08-14 18:23:26,496 - gradio_app - INFO - Prompts generated - Concise: A detective, dressed in a trench coat and a fedora..., Normal: A detective, dressed in a trench coat and a fedora..., Detailed: Medium shot Dolly in Default style  Neo-noir, in a...
+2024-08-14 18:23:26,496 - gradio_app - INFO - generate_prompt_wrapper took 22.41 seconds total
+2024-08-14 18:26:40,784 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:26:57,788 - gradio_app - INFO - meta_chain.generate_prompt took 17.00 seconds
+2024-08-14 18:26:57,788 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style Error in structuring output: Failed ...
+2024-08-14 18:26:57,789 - gradio_app - INFO - generate_prompt_wrapper took 17.01 seconds total
+2024-08-14 18:34:42,804 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:34:59,760 - gradio_app - INFO - meta_chain.generate_prompt took 16.96 seconds
+2024-08-14 18:34:59,760 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style Error in structuring output: Failed ...
+2024-08-14 18:34:59,760 - gradio_app - INFO - generate_prompt_wrapper took 16.96 seconds total
+2024-08-14 18:37:14,634 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:37:32,506 - gradio_app - INFO - meta_chain.generate_prompt took 17.87 seconds
+2024-08-14 18:37:32,506 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style...
+2024-08-14 18:37:32,506 - gradio_app - INFO - generate_prompt_wrapper took 17.87 seconds total
+2024-08-14 18:40:38,613 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:40:59,980 - gradio_app - INFO - meta_chain.generate_prompt took 21.37 seconds
+2024-08-14 18:40:59,981 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style Default style, a fat cow standing se...
+2024-08-14 18:40:59,981 - gradio_app - INFO - generate_prompt_wrapper took 21.37 seconds total
+2024-08-14 18:58:50,774 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 18:58:55,444 - gradio_app - INFO - meta_chain.generate_prompt took 4.67 seconds
+2024-08-14 18:58:55,445 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style 1. **Camera Shot:** Medium shot  
+2....
+2024-08-14 18:58:55,445 - gradio_app - INFO - generate_prompt_wrapper took 4.67 seconds total
+2024-08-14 19:06:56,736 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:07:06,649 - gradio_app - INFO - meta_chain.generate_prompt took 9.91 seconds
+2024-08-14 19:07:06,649 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style 1. **Camera Shot**:  
+   
+2. **Camer...
+2024-08-14 19:07:06,650 - gradio_app - INFO - generate_prompt_wrapper took 9.91 seconds total
+2024-08-14 19:07:27,973 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:07:31,246 - gradio_app - INFO - meta_chain.generate_prompt took 3.27 seconds
+2024-08-14 19:07:31,246 - gradio_app - INFO - Prompts generated - Concise:  ..., Normal:     ..., Detailed: Default style 1. Camera Shot:  
+   
+2. Camera Move...
+2024-08-14 19:07:31,246 - gradio_app - INFO - generate_prompt_wrapper took 3.27 seconds total
+2024-08-14 19:28:46,619 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:28:50,776 - gradio_app - INFO - meta_chain.generate_prompt took 4.16 seconds
+2024-08-14 19:28:50,777 - gradio_app - INFO - Prompts generated - Concise: ..., Normal: ..., Detailed: ...
+2024-08-14 19:28:50,777 - gradio_app - INFO - generate_prompt_wrapper took 4.16 seconds total
+2024-08-14 19:34:11,399 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:34:15,829 - gradio_app - INFO - meta_chain.generate_prompt took 4.43 seconds
+2024-08-14 19:34:15,829 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A majestic polar bear stands gracef..., Normal: **Normal:**  
+In a unique juxtaposition, a strikin..., Detailed: **Detailed:**  
+Imagine a serene office environmen...
+2024-08-14 19:34:15,829 - gradio_app - INFO - generate_prompt_wrapper took 4.43 seconds total
+2024-08-14 19:34:52,030 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:34:55,337 - gradio_app - INFO - meta_chain.generate_prompt took 3.31 seconds
+2024-08-14 19:34:55,337 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A majestic polar bear is dep..., Normal: **Normal Prompt:**  
+In a striking long shot, a po..., Detailed: **Detailed Prompt:**  
+The scene unfolds with a lo...
+2024-08-14 19:34:55,337 - gradio_app - INFO - generate_prompt_wrapper took 3.31 seconds total
+2024-08-14 19:37:40,997 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 19:37:40,998 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 154, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-14 19:37:41,258 - gradio_app - INFO - generate_prompt_wrapper took 0.26 seconds total
+2024-08-14 20:04:44,936 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 20:04:48,082 - gradio_app - INFO - meta_chain.generate_prompt took 3.15 seconds
+2024-08-14 20:04:48,082 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a vibrant setting, a cute..., Normal: **Normal Prompt:**  
+A charming red car stands out..., Detailed: **Detailed Prompt:**  
+The scene captures a deligh...
+2024-08-14 20:04:48,082 - gradio_app - INFO - generate_prompt_wrapper took 3.15 seconds total
+2024-08-14 20:41:42,882 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 20:41:42,884 - gradio_app - INFO - meta_chain.generate_prompt took 0.00 seconds
+2024-08-14 20:41:42,884 - gradio_app - INFO - Prompts generated - Concise: ..., Normal: ..., Detailed: ...
+2024-08-14 20:41:42,884 - gradio_app - INFO - generate_prompt_wrapper took 0.00 seconds total
+2024-08-14 23:51:24,397 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-14 23:51:27,756 - gradio_app - INFO - meta_chain.generate_prompt took 3.36 seconds
+2024-08-14 23:51:27,756 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+Under a starlit sky, a majes..., Normal: **Normal Prompt:**  
+At night, a striking blue sto..., Detailed: **Detailed Prompt:**  
+In the heart of a tranquil ...
+2024-08-14 23:51:27,757 - gradio_app - INFO - generate_prompt_wrapper took 3.36 seconds total
+2024-08-15 00:29:59,242 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 00:30:02,534 - gradio_app - INFO - meta_chain.generate_prompt took 3.29 seconds
+2024-08-15 00:30:02,535 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A graceful grey winter fox e..., Normal: **Normal Prompt:**  
+In a tranquil winter scene, a..., Detailed: **Detailed Prompt:**  
+Set against a picturesque w...
+2024-08-15 00:30:02,535 - gradio_app - INFO - generate_prompt_wrapper took 3.29 seconds total
+2024-08-15 00:31:05,037 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 00:31:07,276 - gradio_app - INFO - meta_chain.generate_prompt took 2.24 seconds
+2024-08-15 00:31:07,276 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A serene winter forest scene..., Normal: **Normal Prompt:**  
+In a tranquil winter forest, ..., Detailed: **Detailed Prompt:**  
+In a stunning winter forest...
+2024-08-15 00:31:07,276 - gradio_app - INFO - generate_prompt_wrapper took 2.24 seconds total
+2024-08-15 09:02:06,663 - gradio_app - INFO - Launching Gradio app
+2024-08-15 09:05:05,920 - gradio_app - INFO - Starting application initialization
+2024-08-15 09:05:05,921 - gradio_app - INFO - Config initialized
+2024-08-15 09:05:06,615 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 09:05:06,615 - gradio_app - INFO - PromptManager initialized
+2024-08-15 09:05:06,616 - gradio_app - INFO - StyleManager initialized
+2024-08-15 09:05:06,616 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 09:05:06,924 - gradio_app - INFO - MetaChain initialized
+2024-08-15 09:05:06,924 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 09:05:06,925 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 09:05:07,024 - gradio_app - INFO - Launching Gradio app
+2024-08-15 10:20:47,434 - gradio_app - INFO - Starting application initialization
+2024-08-15 10:20:47,434 - gradio_app - INFO - Config initialized
+2024-08-15 10:20:48,067 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 10:20:48,067 - gradio_app - INFO - PromptManager initialized
+2024-08-15 10:20:48,067 - gradio_app - INFO - StyleManager initialized
+2024-08-15 10:20:48,067 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 10:20:48,369 - gradio_app - INFO - MetaChain initialized
+2024-08-15 10:20:48,370 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 10:20:48,370 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 10:23:10,142 - gradio_app - INFO - Starting application initialization
+2024-08-15 10:23:10,143 - gradio_app - INFO - Config initialized
+2024-08-15 10:23:10,804 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 10:23:10,804 - gradio_app - INFO - PromptManager initialized
+2024-08-15 10:23:10,805 - gradio_app - INFO - StyleManager initialized
+2024-08-15 10:23:10,805 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 10:23:11,100 - gradio_app - INFO - MetaChain initialized
+2024-08-15 10:23:11,100 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 10:23:11,101 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 10:28:01,217 - gradio_app - INFO - Starting application initialization
+2024-08-15 10:28:01,218 - gradio_app - INFO - Config initialized
+2024-08-15 10:28:02,005 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 10:28:02,007 - gradio_app - INFO - PromptManager initialized
+2024-08-15 10:28:02,007 - gradio_app - INFO - StyleManager initialized
+2024-08-15 10:28:02,007 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 10:28:02,311 - gradio_app - INFO - MetaChain initialized
+2024-08-15 10:28:02,311 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 10:28:02,311 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 10:33:18,019 - gradio_app - INFO - Starting application initialization
+2024-08-15 10:33:18,019 - gradio_app - INFO - Config initialized
+2024-08-15 10:33:18,677 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 10:33:18,677 - gradio_app - INFO - PromptManager initialized
+2024-08-15 10:33:18,677 - gradio_app - INFO - StyleManager initialized
+2024-08-15 10:33:18,677 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 10:33:18,977 - gradio_app - INFO - MetaChain initialized
+2024-08-15 10:33:18,978 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 10:33:18,978 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 10:35:54,361 - gradio_app - INFO - Starting application initialization
+2024-08-15 10:35:54,362 - gradio_app - INFO - Config initialized
+2024-08-15 10:35:55,026 - gradio_app - INFO - PromptForgeCore initialized
+2024-08-15 10:35:55,026 - gradio_app - INFO - PromptManager initialized
+2024-08-15 10:35:55,026 - gradio_app - INFO - StyleManager initialized
+2024-08-15 10:35:55,027 - gradio_app - INFO - ScriptAnalyzer initialized
+2024-08-15 10:35:55,323 - gradio_app - INFO - MetaChain initialized
+2024-08-15 10:35:55,323 - gradio_app - INFO - MetaChain set in PromptForgeCore
+2024-08-15 10:35:55,323 - gradio_app - INFO - PromptLogger initialized
+2024-08-15 11:40:19,744 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 11:40:22,003 - gradio_app - INFO - meta_chain.generate_prompt took 2.26 seconds
+2024-08-15 11:40:22,004 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A striking Yellow Lamborghini with ..., Normal: **Normal:**  
+In the bustling heart of downtown Ug..., Detailed: **Detailed:**  
+Set against the lively backdrop of...
+2024-08-15 11:40:22,004 - gradio_app - INFO - generate_prompt_wrapper took 2.26 seconds total
+2024-08-15 11:41:00,980 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 11:41:04,360 - gradio_app - INFO - meta_chain.generate_prompt took 3.38 seconds
+2024-08-15 11:41:04,361 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A stunning Yellow Lamborghini with ..., Normal: **Normal:**  
+In the heart of downtown Kampala, Ug..., Detailed: **Detailed:**  
+Set against the lively backdrop of...
+2024-08-15 11:41:04,361 - gradio_app - INFO - generate_prompt_wrapper took 3.38 seconds total
+2024-08-15 11:46:23,684 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 11:46:27,163 - gradio_app - INFO - meta_chain.generate_prompt took 3.48 seconds
+2024-08-15 11:46:27,164 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A vibrant scene in downtown ..., Normal: **Normal Prompt:**  
+In the heart of downtown Kamp..., Detailed: **Detailed Prompt:**  
+In downtown Kampala, Uganda...
+2024-08-15 11:46:27,164 - gradio_app - INFO - generate_prompt_wrapper took 3.48 seconds total
+2024-08-15 11:54:04,797 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 11:54:08,237 - gradio_app - INFO - meta_chain.generate_prompt took 3.44 seconds
+2024-08-15 11:54:08,237 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+In downtown Kampala, a striking Yel..., Normal: **Normal:**  
+A vibrant scene unfolds in downtown ..., Detailed: **Detailed:**  
+In the heart of downtown Kampala, ...
+2024-08-15 11:54:08,238 - gradio_app - INFO - generate_prompt_wrapper took 3.44 seconds total
+2024-08-15 11:54:28,946 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 11:54:28,947 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 181, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 11:54:28,970 - gradio_app - INFO - generate_prompt_wrapper took 0.02 seconds total
+2024-08-15 12:16:43,962 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:16:47,525 - gradio_app - INFO - meta_chain.generate_prompt took 3.56 seconds
+2024-08-15 12:16:47,526 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A beautifully crafted shotgl..., Normal: **Normal Prompt:**  
+In this scene, a striking sho..., Detailed: **Detailed Prompt:**  
+The scene focuses on a stun...
+2024-08-15 12:16:47,526 - gradio_app - INFO - generate_prompt_wrapper took 3.56 seconds total
+2024-08-15 12:17:26,456 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:17:29,957 - gradio_app - INFO - meta_chain.generate_prompt took 3.50 seconds
+2024-08-15 12:17:29,957 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A shot glass glistens under ..., Normal: **Normal Prompt:**  
+The scene features a shot gla..., Detailed: **Detailed Prompt:**  
+In this vibrant scene, a sh...
+2024-08-15 12:17:29,958 - gradio_app - INFO - generate_prompt_wrapper took 3.50 seconds total
+2024-08-15 12:46:09,241 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:46:14,350 - gradio_app - INFO - meta_chain.generate_prompt took 5.11 seconds
+2024-08-15 12:46:14,350 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A beautifully crafted shot glass gl..., Normal: **Normal:**  
+The scene centers on a stunning shot..., Detailed: **Detailed:**  
+In this vibrant scene, a meticulou...
+2024-08-15 12:46:14,351 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 225, in generate_prompt_wrapper
+    updated_structured_prompt = structured_prompt + "\n\n" + updated_structured_prompt
+                                ~~~~~~~~~~~~~~~~~~^~~~~~~~
+TypeError: unsupported operand type(s) for +: 'JSON' and 'str'
+2024-08-15 12:46:14,376 - gradio_app - INFO - generate_prompt_wrapper took 5.14 seconds total
+2024-08-15 12:51:23,129 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:51:27,637 - gradio_app - INFO - meta_chain.generate_prompt took 4.51 seconds
+2024-08-15 12:51:27,638 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A sleek grey shot glass stan..., Normal: **Normal Prompt:**  
+The scene showcases a stylish..., Detailed: **Detailed Prompt:**  
+In this captivating scene, ...
+2024-08-15 12:51:27,639 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 225, in generate_prompt_wrapper
+    updated_structured_prompt = structured_prompt + "\n\n" + updated_structured_prompt
+                                ~~~~~~~~~~~~~~~~~~^~~~~~~~
+TypeError: unsupported operand type(s) for +: 'JSON' and 'str'
+2024-08-15 12:51:27,665 - gradio_app - INFO - generate_prompt_wrapper took 4.54 seconds total
+2024-08-15 12:52:26,708 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:52:30,782 - gradio_app - INFO - meta_chain.generate_prompt took 4.07 seconds
+2024-08-15 12:52:30,783 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A captivating werewolf prowls under..., Normal: **Normal:**  
+In a moonlit forest, a werewolf emer..., Detailed: **Detailed:**  
+Under the enchanting glow of a ful...
+2024-08-15 12:52:30,784 - gradio_app - INFO - generate_prompt_wrapper took 4.08 seconds total
+2024-08-15 12:52:50,193 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:52:52,901 - gradio_app - INFO - meta_chain.generate_prompt took 2.71 seconds
+2024-08-15 12:52:52,901 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A rugged werewolf stands con..., Normal: **Normal Prompt:**  
+In a bustling western saloon,..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a vibr...
+2024-08-15 12:52:52,901 - gradio_app - INFO - generate_prompt_wrapper took 2.71 seconds total
+2024-08-15 12:53:55,546 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:53:55,546 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 191, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 12:53:55,560 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-15 12:54:11,170 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:54:17,243 - gradio_app - INFO - meta_chain.generate_prompt took 6.07 seconds
+2024-08-15 12:54:17,243 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a bustling western saloon..., Normal: **Normal Prompt:**  
+Inside a lively western saloo..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a rust...
+2024-08-15 12:54:17,244 - gradio_app - INFO - generate_prompt_wrapper took 6.07 seconds total
+2024-08-15 12:55:01,966 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:55:05,229 - gradio_app - INFO - meta_chain.generate_prompt took 3.26 seconds
+2024-08-15 12:55:05,229 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A werewolf prowls the dimly ..., Normal: **Normal Prompt:**  
+Inside a lively western saloo..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a bust...
+2024-08-15 12:55:05,230 - gradio_app - INFO - generate_prompt_wrapper took 3.26 seconds total
+2024-08-15 12:55:53,323 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:55:57,817 - gradio_app - INFO - meta_chain.generate_prompt took 4.49 seconds
+2024-08-15 12:55:57,817 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A formidable werewolf strides throu..., Normal: **Normal:**  
+In a lively western saloon, a striki..., Detailed: **Detailed:**  
+The scene unfolds in a classic wes...
+2024-08-15 12:55:57,818 - gradio_app - INFO - generate_prompt_wrapper took 4.50 seconds total
+2024-08-15 12:57:46,427 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:57:51,607 - gradio_app - INFO - meta_chain.generate_prompt took 5.18 seconds
+2024-08-15 12:57:51,607 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a lively western saloon, ..., Normal: **Normal Prompt:**  
+A grumpy purple werewolf ente..., Detailed: **Detailed Prompt:**  
+Set in a vibrant western sa...
+2024-08-15 12:57:51,608 - gradio_app - INFO - generate_prompt_wrapper took 5.18 seconds total
+2024-08-15 12:59:45,646 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 12:59:45,646 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 191, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 12:59:45,663 - gradio_app - INFO - generate_prompt_wrapper took 0.02 seconds total
+2024-08-15 13:16:45,349 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:16:48,463 - gradio_app - INFO - meta_chain.generate_prompt took 3.11 seconds
+2024-08-15 13:16:48,463 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A grumpy purple werewolf str..., Normal: **Normal Prompt:**  
+In a whimsical mushroom land,..., Detailed: **Detailed Prompt:**  
+Amidst the enchanting mushr...
+2024-08-15 13:16:48,464 - gradio_app - INFO - generate_prompt_wrapper took 3.12 seconds total
+2024-08-15 13:17:01,995 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:17:05,542 - gradio_app - INFO - meta_chain.generate_prompt took 3.55 seconds
+2024-08-15 13:17:05,543 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A grumpy purple werewolf str..., Normal: **Normal Prompt:**  
+In a charming mushroom land, ..., Detailed: **Detailed Prompt:**  
+In a whimsical mushroom lan...
+2024-08-15 13:17:05,543 - gradio_app - INFO - generate_prompt_wrapper took 3.55 seconds total
+2024-08-15 13:18:36,727 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:18:40,284 - gradio_app - INFO - meta_chain.generate_prompt took 3.56 seconds
+2024-08-15 13:18:40,285 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A purple werewolf strides co..., Normal: **Normal Prompt:**  
+A purple werewolf walks with ..., Detailed: **Detailed Prompt:**  
+In a dark and foreboding la...
+2024-08-15 13:18:40,286 - gradio_app - INFO - generate_prompt_wrapper took 3.56 seconds total
+2024-08-15 13:19:08,182 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:19:11,020 - gradio_app - INFO - meta_chain.generate_prompt took 2.84 seconds
+2024-08-15 13:19:11,020 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A purple werewolf confidentl..., Normal: **Normal Prompt:**  
+As the sun sets, a purple wer..., Detailed: **Detailed Prompt:**  
+In a dark and ominous land,...
+2024-08-15 13:19:11,021 - gradio_app - INFO - generate_prompt_wrapper took 2.84 seconds total
+2024-08-15 13:19:27,075 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:19:29,828 - gradio_app - INFO - meta_chain.generate_prompt took 2.75 seconds
+2024-08-15 13:19:29,829 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A majestic werewolf strides ..., Normal: **Normal Prompt:**  
+The scene opens with a formid..., Detailed: **Detailed Prompt:**  
+In a dark, eerie land, a fo...
+2024-08-15 13:19:29,830 - gradio_app - INFO - generate_prompt_wrapper took 2.75 seconds total
+2024-08-15 13:21:34,248 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:21:34,248 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 198, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 13:21:34,273 - gradio_app - INFO - generate_prompt_wrapper took 0.02 seconds total
+2024-08-15 13:21:51,992 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:21:55,578 - gradio_app - INFO - meta_chain.generate_prompt took 3.59 seconds
+2024-08-15 13:21:55,578 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a dark, ominous bar, a sh..., Normal: **Normal Prompt:**  
+In a dimly lit bar, a stunnin..., Detailed: **Detailed Prompt:**  
+In a sinister, dark bar, th...
+2024-08-15 13:21:55,579 - gradio_app - INFO - generate_prompt_wrapper took 3.59 seconds total
+2024-08-15 13:22:34,237 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:22:40,644 - gradio_app - INFO - meta_chain.generate_prompt took 6.41 seconds
+2024-08-15 13:22:40,645 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a dark, mysterious bar, a..., Normal: **Normal Prompt:**  
+In a dimly lit bar filled wit..., Detailed: **Detailed Prompt:**  
+The scene is set in a dark,...
+2024-08-15 13:22:40,645 - gradio_app - INFO - generate_prompt_wrapper took 6.41 seconds total
+2024-08-15 13:22:59,838 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:23:02,644 - gradio_app - INFO - meta_chain.generate_prompt took 2.81 seconds
+2024-08-15 13:23:02,645 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a dark, ominous bar, a pu..., Normal: **Normal Prompt:**  
+Inside a dimly lit bar, a men..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a dark...
+2024-08-15 13:23:02,645 - gradio_app - INFO - generate_prompt_wrapper took 2.81 seconds total
+2024-08-15 13:23:40,721 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:23:43,148 - gradio_app - INFO - meta_chain.generate_prompt took 2.43 seconds
+2024-08-15 13:23:43,149 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A purple werewolf is seen ea..., Normal: **Normal Prompt:**  
+In a dimly lit bar, a menacin..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a dark...
+2024-08-15 13:23:43,150 - gradio_app - INFO - generate_prompt_wrapper took 2.43 seconds total
+2024-08-15 13:24:15,678 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:24:19,651 - gradio_app - INFO - meta_chain.generate_prompt took 3.97 seconds
+2024-08-15 13:24:19,651 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a dark land, a purple wer..., Normal: **Normal Prompt:**  
+In a sinister, shadowy land, ..., Detailed: **Detailed Prompt:**  
+Set in a foreboding, dark l...
+2024-08-15 13:24:19,652 - gradio_app - INFO - generate_prompt_wrapper took 3.97 seconds total
+2024-08-15 13:26:05,302 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:26:05,303 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 198, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 13:26:05,321 - gradio_app - INFO - generate_prompt_wrapper took 0.02 seconds total
+2024-08-15 13:27:32,732 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:27:32,732 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 196, in generate_prompt_wrapper
+    active_subjects_list = json.loads(active_subjects) if active_subjects else []
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-08-15 13:27:32,753 - gradio_app - INFO - generate_prompt_wrapper took 0.02 seconds total
+2024-08-15 13:29:22,500 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:29:26,878 - gradio_app - INFO - meta_chain.generate_prompt took 4.38 seconds
+2024-08-15 13:29:26,878 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+The following subjects are i..., Normal: **Normal Prompt:**  
+The following subjects are in..., Detailed: **Detailed Prompt:**  
+The following subjects are ...
+2024-08-15 13:29:26,879 - gradio_app - INFO - generate_prompt_wrapper took 4.38 seconds total
+2024-08-15 13:30:02,693 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:30:05,802 - gradio_app - INFO - meta_chain.generate_prompt took 3.11 seconds
+2024-08-15 13:30:05,803 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a lively saloon, a shotgl..., Normal: **Normal Prompt:**  
+The scene unfolds in a vibran..., Detailed: **Detailed Prompt:**  
+Set in a bustling saloon, t...
+2024-08-15 13:30:05,804 - gradio_app - INFO - generate_prompt_wrapper took 3.11 seconds total
+2024-08-15 13:33:45,097 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 13:33:45,201 - gradio_app - INFO - meta_chain.generate_prompt took 0.10 seconds
+2024-08-15 13:33:45,202 - gradio_app - INFO - Prompts generated - Concise: ..., Normal: ..., Detailed: ...
+2024-08-15 13:33:45,202 - gradio_app - INFO - generate_prompt_wrapper took 0.11 seconds total
+2024-08-15 18:29:37,607 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 18:29:40,532 - gradio_app - INFO - meta_chain.generate_prompt took 2.92 seconds
+2024-08-15 18:29:40,532 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A giant leech glides gracefu..., Normal: **Normal Prompt:**  
+In a beautifully verdant scen..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a lush...
+2024-08-15 18:29:40,533 - gradio_app - INFO - generate_prompt_wrapper took 2.93 seconds total
+2024-08-15 18:34:54,111 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 18:34:56,385 - gradio_app - INFO - meta_chain.generate_prompt took 2.27 seconds
+2024-08-15 18:34:56,385 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A man stands confidently bes..., Normal: **Normal Prompt:**  
+In a serene forest glade, a m..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a lush...
+2024-08-15 18:34:56,385 - gradio_app - INFO - generate_prompt_wrapper took 2.27 seconds total
+2024-08-15 18:35:49,261 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 18:35:51,720 - gradio_app - INFO - meta_chain.generate_prompt took 2.46 seconds
+2024-08-15 18:35:51,720 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A man stands confidently in a lush ..., Normal: **Normal:**  
+In a vibrant forest, a man shares a ..., Detailed: **Detailed:**  
+Amidst the enchanting backdrop of ...
+2024-08-15 18:35:51,721 - gradio_app - INFO - generate_prompt_wrapper took 2.46 seconds total
+2024-08-15 19:43:11,332 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 19:43:13,765 - gradio_app - INFO - meta_chain.generate_prompt took 2.43 seconds
+2024-08-15 19:43:13,765 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A majestic grey goose glides..., Normal: **Normal Prompt:**  
+A grey goose swims elegantly ..., Detailed: **Detailed Prompt:**  
+In a picturesque landscape,...
+2024-08-15 19:43:13,765 - gradio_app - INFO - generate_prompt_wrapper took 2.43 seconds total
+2024-08-15 19:43:38,084 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 19:43:41,181 - gradio_app - INFO - meta_chain.generate_prompt took 3.10 seconds
+2024-08-15 19:43:41,182 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a surreal landscape of co..., Normal: **Normal Prompt:**  
+In the captivating inferno of..., Detailed: **Detailed Prompt:**  
+Amidst the surreal and chao...
+2024-08-15 19:43:41,182 - gradio_app - INFO - generate_prompt_wrapper took 3.10 seconds total
+2024-08-15 19:44:21,715 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 19:44:23,985 - gradio_app - INFO - meta_chain.generate_prompt took 2.27 seconds
+2024-08-15 19:44:23,985 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a surreal hellscape, a so..., Normal: **Normal Prompt:**  
+Set in a vivid hellscape, a l..., Detailed: **Detailed Prompt:**  
+In a striking hellscape, wh...
+2024-08-15 19:44:23,985 - gradio_app - INFO - generate_prompt_wrapper took 2.27 seconds total
+2024-08-15 19:48:14,618 - gradio_app - DEBUG - Calling analyze_script with args: ('Thug', None), kwargs: {}
+2024-08-15 19:48:14,618 - gradio_app - DEBUG - analyze_script returned: <coroutine object analyze_script at 0x000002D33A4C3C40>
+2024-08-15 19:48:24,753 - gradio_app - DEBUG - Calling analyze_script with args: ('Thug', None), kwargs: {}
+2024-08-15 19:48:24,753 - gradio_app - DEBUG - analyze_script returned: <coroutine object analyze_script at 0x000002D33A4C3C40>
+2024-08-15 20:09:16,269 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:09:20,507 - gradio_app - INFO - meta_chain.generate_prompt took 4.24 seconds
+2024-08-15 20:09:20,507 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a surreal world of bubble..., Normal: **Normal Prompt:**  
+Amidst a fantastical landscap..., Detailed: **Detailed Prompt:**  
+In a mesmerizing world craf...
+2024-08-15 20:09:20,508 - gradio_app - INFO - generate_prompt_wrapper took 4.24 seconds total
+2024-08-15 20:28:01,430 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:28:06,024 - gradio_app - INFO - meta_chain.generate_prompt took 4.59 seconds
+2024-08-15 20:28:06,024 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A man joyfully mingles with ..., Normal: **Normal Prompt:**  
+In a vibrant party scene, a m..., Detailed: **Detailed Prompt:**  
+The scene unfolds with a lo...
+2024-08-15 20:28:06,025 - gradio_app - INFO - generate_prompt_wrapper took 4.59 seconds total
+2024-08-15 20:28:15,748 - gradio_app - DEBUG - Calling analyze_script with args: ('', None), kwargs: {}
+2024-08-15 20:28:15,748 - gradio_app - DEBUG - analyze_script returned: <coroutine object analyze_script at 0x000002D33AE30E40>
+2024-08-15 20:33:11,810 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:33:14,631 - gradio_app - INFO - meta_chain.generate_prompt took 2.82 seconds
+2024-08-15 20:33:14,632 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+Capture a long shot of Gerro Adams ..., Normal: **Normal:**  
+In a long shot, depict the vibrant a..., Detailed: **Detailed:**  
+Frame a long shot that encapsulate...
+2024-08-15 20:33:14,632 - gradio_app - INFO - generate_prompt_wrapper took 2.82 seconds total
+2024-08-15 20:35:41,508 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:35:44,049 - gradio_app - INFO - meta_chain.generate_prompt took 2.54 seconds
+2024-08-15 20:35:44,050 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A girl sits comfortably on a..., Normal: **Normal Prompt:**  
+In a cozy living room, a girl..., Detailed: **Detailed Prompt:**  
+On a serene evening, a girl...
+2024-08-15 20:35:44,050 - gradio_app - INFO - generate_prompt_wrapper took 2.54 seconds total
+2024-08-15 20:36:02,625 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:36:05,019 - gradio_app - INFO - meta_chain.generate_prompt took 2.39 seconds
+2024-08-15 20:36:05,019 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A girl sits on a cozy couch,..., Normal: **Normal Prompt:**  
+On the couch, a girl cradles ..., Detailed: **Detailed Prompt:**  
+In a warmly lit living room...
+2024-08-15 20:36:05,020 - gradio_app - INFO - generate_prompt_wrapper took 2.39 seconds total
+2024-08-15 20:36:50,015 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:36:52,275 - gradio_app - INFO - meta_chain.generate_prompt took 2.26 seconds
+2024-08-15 20:36:52,276 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A girl sits on a couch, drin..., Normal: **Normal Prompt:**  
+On a cozy couch, a girl enjoy..., Detailed: **Detailed Prompt:**  
+Nestled comfortably on a pl...
+2024-08-15 20:36:52,277 - gradio_app - INFO - generate_prompt_wrapper took 2.26 seconds total
+2024-08-15 20:37:29,596 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 20:37:32,793 - gradio_app - INFO - meta_chain.generate_prompt took 3.20 seconds
+2024-08-15 20:37:32,794 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A girl sits on a bench, joyf..., Normal: **Normal Prompt:**  
+On a lively Friday night, a g..., Detailed: **Detailed Prompt:**  
+On a warm September night, ...
+2024-08-15 20:37:32,794 - gradio_app - INFO - generate_prompt_wrapper took 3.20 seconds total
+2024-08-15 22:28:49,104 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 22:28:51,466 - gradio_app - INFO - meta_chain.generate_prompt took 2.36 seconds
+2024-08-15 22:28:51,466 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An empty can rests on a sunl..., Normal: **Normal Prompt:**  
+On a sunlit table, an empty c..., Detailed: **Detailed Prompt:**  
+In the warm glow of the aft...
+2024-08-15 22:28:51,467 - gradio_app - INFO - generate_prompt_wrapper took 2.36 seconds total
+2024-08-15 22:35:31,649 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 22:35:34,431 - gradio_app - INFO - meta_chain.generate_prompt took 2.78 seconds
+2024-08-15 22:35:34,431 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A lively party scene unfolds..., Normal: **Normal Prompt:**  
+The scene captures a lively p..., Detailed: **Detailed Prompt:**  
+This scene immerses us in t...
+2024-08-15 22:35:34,432 - gradio_app - INFO - generate_prompt_wrapper took 2.78 seconds total
+2024-08-15 22:36:26,951 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 22:36:29,545 - gradio_app - INFO - meta_chain.generate_prompt took 2.59 seconds
+2024-08-15 22:36:29,546 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A vibrant party scene unfold..., Normal: **Normal Prompt:**  
+In a lively party setting, gu..., Detailed: **Detailed Prompt:**  
+The party scene is alive wi...
+2024-08-15 22:36:29,546 - gradio_app - INFO - generate_prompt_wrapper took 2.59 seconds total
+2024-08-15 23:01:44,608 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:01:47,362 - gradio_app - INFO - meta_chain.generate_prompt took 2.75 seconds
+2024-08-15 23:01:47,362 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A vibrant party atmosphere f..., Normal: **Normal Prompt:**  
+The gym is transformed into a..., Detailed: **Detailed Prompt:**  
+The gym is alive with the s...
+2024-08-15 23:01:47,362 - gradio_app - INFO - generate_prompt_wrapper took 2.75 seconds total
+2024-08-15 23:02:12,134 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:02:14,523 - gradio_app - INFO - meta_chain.generate_prompt took 2.39 seconds
+2024-08-15 23:02:14,523 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A vibrant party unfolds in a lively..., Normal: **Normal:**  
+The gym transforms into a festive pa..., Detailed: **Detailed:**  
+In an expansive gym, a lively part...
+2024-08-15 23:02:14,524 - gradio_app - INFO - generate_prompt_wrapper took 2.39 seconds total
+2024-08-15 23:05:09,792 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:05:12,025 - gradio_app - INFO - meta_chain.generate_prompt took 2.23 seconds
+2024-08-15 23:05:12,025 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A serene setting unfolds, ca..., Normal: **Normal Prompt:**  
+The default scene exudes a ca..., Detailed: **Detailed Prompt:**  
+In this default scene, a se...
+2024-08-15 23:05:12,026 - gradio_app - INFO - generate_prompt_wrapper took 2.23 seconds total
+2024-08-15 23:11:10,113 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:11:13,721 - gradio_app - INFO - meta_chain.generate_prompt took 3.61 seconds
+2024-08-15 23:11:13,721 - gradio_app - INFO - Prompts generated - Concise:  **Concise:**  
+A charming little Black girl strol..., Normal:  **Normal:**  
+A delightful scene unfolds as a cut..., Detailed:  **Detailed:**  
+In the heart of a tranquil neighb...
+2024-08-15 23:11:13,721 - gradio_app - INFO - generate_prompt_wrapper took 3.61 seconds total
+2024-08-15 23:18:25,007 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:18:29,956 - gradio_app - INFO - meta_chain.generate_prompt took 4.95 seconds
+2024-08-15 23:18:29,957 - gradio_app - INFO - Prompts generated - Concise:  **Concise Prompt:**  
+A beautifully crafted shot ..., Normal:  **Normal Prompt:**  
+In a warmly lit scene, a stu..., Detailed:  **Detailed Prompt:**  
+In a cozy, warmly illumina...
+2024-08-15 23:18:29,957 - gradio_app - INFO - generate_prompt_wrapper took 4.95 seconds total
+2024-08-15 23:21:03,559 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:21:06,476 - gradio_app - INFO - meta_chain.generate_prompt took 2.92 seconds
+2024-08-15 23:21:06,477 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a vibrant thug world, a l..., Normal: **Normal Prompt:**  
+The scene captures a lively E..., Detailed: **Detailed Prompt:**  
+Set against the backdrop of...
+2024-08-15 23:21:06,477 - gradio_app - INFO - generate_prompt_wrapper took 2.92 seconds total
+2024-08-15 23:22:54,362 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:22:57,345 - gradio_app - INFO - meta_chain.generate_prompt took 2.98 seconds
+2024-08-15 23:22:57,345 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An exquisite egg rests in a ..., Normal: **Normal Prompt:**  
+In a serene scene, a beautifu..., Detailed: **Detailed Prompt:**  
+In this enchanting scene, a...
+2024-08-15 23:22:57,346 - gradio_app - INFO - generate_prompt_wrapper took 2.98 seconds total
+2024-08-15 23:39:02,741 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:39:05,527 - gradio_app - INFO - meta_chain.generate_prompt took 2.79 seconds
+2024-08-15 23:39:05,528 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A vibrant city scene unfolds, showc..., Normal: **Normal:**  
+The scene captures a lively cityscap..., Detailed: **Detailed:**  
+The scene paints a vivid picture o...
+2024-08-15 23:39:05,528 - gradio_app - INFO - generate_prompt_wrapper took 2.79 seconds total
+2024-08-15 23:42:57,747 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:43:00,465 - gradio_app - INFO - meta_chain.generate_prompt took 2.72 seconds
+2024-08-15 23:43:00,465 - gradio_app - INFO - Prompts generated - Concise: <gradio.components.textbox.Textbox object at 0x000..., Normal: <gradio.components.textbox.Textbox object at 0x000..., Detailed: <gradio.components.textbox.Textbox object at 0x000...
+2024-08-15 23:43:00,465 - gradio_app - INFO - generate_prompt_wrapper took 2.72 seconds total
+2024-08-15 23:46:38,327 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:46:41,218 - gradio_app - INFO - meta_chain.generate_prompt took 2.89 seconds
+2024-08-15 23:46:41,218 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A wise wizard stands amidst ..., Normal: **Normal Prompt:**  
+In a mystical setting, a wiza..., Detailed: **Detailed Prompt:**  
+The scene unfolds in an enc...
+2024-08-15 23:46:41,219 - gradio_app - INFO - generate_prompt_wrapper took 2.89 seconds total
+2024-08-15 23:52:07,128 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:52:10,162 - gradio_app - INFO - meta_chain.generate_prompt took 3.03 seconds
+2024-08-15 23:52:10,163 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A whimsical Wes Anderson-ins..., Normal: **Normal Prompt:**  
+In a charming park reminiscen..., Detailed: **Detailed Prompt:**  
+Set in a captivating park i...
+2024-08-15 23:52:10,164 - gradio_app - INFO - generate_prompt_wrapper took 3.04 seconds total
+2024-08-15 23:58:25,541 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-15 23:58:29,524 - gradio_app - INFO - meta_chain.generate_prompt took 3.98 seconds
+2024-08-15 23:58:29,524 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A serene underwater scene sh..., Normal: **Normal Prompt:**  
+Beneath the surface, a charmi..., Detailed: **Detailed Prompt:**  
+In this captivating underwa...
+2024-08-15 23:58:29,525 - gradio_app - INFO - generate_prompt_wrapper took 3.98 seconds total
+2024-08-16 00:01:30,932 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 00:01:34,323 - gradio_app - INFO - meta_chain.generate_prompt took 3.39 seconds
+2024-08-16 00:01:34,323 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A lone spider gracefully wea..., Normal: **Normal Prompt:**  
+At night, a delicate spider e..., Detailed: **Detailed Prompt:**  
+In a quiet nighttime settin...
+2024-08-16 00:01:34,324 - gradio_app - INFO - generate_prompt_wrapper took 3.39 seconds total
+2024-08-16 00:01:58,509 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 00:02:02,935 - gradio_app - INFO - meta_chain.generate_prompt took 4.43 seconds
+2024-08-16 00:02:02,936 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A spider gracefully weaves i..., Normal: **Normal Prompt:**  
+Under the gentle embrace of n..., Detailed: **Detailed Prompt:**  
+In the stillness of the nig...
+2024-08-16 00:02:02,937 - gradio_app - INFO - generate_prompt_wrapper took 4.43 seconds total
+2024-08-16 00:23:37,776 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 00:23:40,780 - gradio_app - INFO - meta_chain.generate_prompt took 3.00 seconds
+2024-08-16 00:23:40,781 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A vibrant lobster rests on t..., Normal: **Normal Prompt:**  
+Under the enchanting glow of ..., Detailed: **Detailed Prompt:**  
+On a serene beach illuminat...
+2024-08-16 00:23:40,781 - gradio_app - INFO - generate_prompt_wrapper took 3.01 seconds total
+2024-08-16 00:31:03,503 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 00:31:05,893 - gradio_app - INFO - meta_chain.generate_prompt took 2.39 seconds
+2024-08-16 00:31:05,893 - gradio_app - INFO - Prompts generated - Concise: A beautifully crafted shotglass sits elegantly, re..., Normal: The scene centers on a stunning shotglass, glintin..., Detailed: In this delightful scene, a meticulously designed ...
+2024-08-16 00:31:05,894 - gradio_app - INFO - generate_prompt_wrapper took 2.39 seconds total
+2024-08-16 09:37:48,090 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:37:50,487 - gradio_app - INFO - meta_chain.generate_prompt took 2.40 seconds
+2024-08-16 09:37:50,487 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon gracefully glides through th..., Normal: In this enchanting scene, a majestic pink dragon s..., Detailed: The scene unfolds with a stunning pink dragon, its...
+2024-08-16 09:37:50,488 - gradio_app - INFO - generate_prompt_wrapper took 2.40 seconds total
+2024-08-16 09:38:15,014 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:38:18,524 - gradio_app - INFO - meta_chain.generate_prompt took 3.51 seconds
+2024-08-16 09:38:18,525 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon gracefully soars through the..., Normal: The scene captures a magnificent pink dragon glidi..., Detailed: In this enchanting scene, a stunning pink dragon f...
+2024-08-16 09:38:18,525 - gradio_app - INFO - generate_prompt_wrapper took 3.51 seconds total
+2024-08-16 09:38:33,742 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:38:36,195 - gradio_app - INFO - meta_chain.generate_prompt took 2.45 seconds
+2024-08-16 09:38:36,195 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon soars through a clear blue s..., Normal: In a breathtaking display, a magnificent pink drag..., Detailed: Set against a brilliant azure sky, a stunning pink...
+2024-08-16 09:38:36,196 - gradio_app - INFO - generate_prompt_wrapper took 2.45 seconds total
+2024-08-16 09:38:41,956 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:38:45,176 - gradio_app - INFO - meta_chain.generate_prompt took 3.22 seconds
+2024-08-16 09:38:45,176 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon gracefully soars through a c..., Normal: The scene captures a magnificent pink dragon glidi..., Detailed: In this enchanting scene, a stunning pink dragon d...
+2024-08-16 09:38:45,177 - gradio_app - INFO - generate_prompt_wrapper took 3.22 seconds total
+2024-08-16 09:38:53,671 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:38:56,011 - gradio_app - INFO - meta_chain.generate_prompt took 2.34 seconds
+2024-08-16 09:38:56,011 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon gracefully glides through a ..., Normal: In this delightful scene, a stunning pink dragon s..., Detailed: The scene unfolds as a magnificent pink dragon dan...
+2024-08-16 09:38:56,012 - gradio_app - INFO - generate_prompt_wrapper took 2.34 seconds total
+2024-08-16 09:39:19,261 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:39:22,871 - gradio_app - INFO - meta_chain.generate_prompt took 3.61 seconds
+2024-08-16 09:39:22,872 - gradio_app - INFO - Prompts generated - Concise: A vibrant pink dragon elegantly soars through the ..., Normal: In a breathtaking scene, a magnificent pink dragon..., Detailed: The scene unfolds as a stunning pink dragon, adorn...
+2024-08-16 09:39:22,872 - gradio_app - INFO - generate_prompt_wrapper took 3.61 seconds total
+2024-08-16 09:42:51,708 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:42:53,908 - gradio_app - INFO - meta_chain.generate_prompt took 2.20 seconds
+2024-08-16 09:42:53,909 - gradio_app - INFO - Prompts generated - Concise: A little black girl, radiant and joyful, embodies ..., Normal: In this enchanting scene, a little black girl tran..., Detailed: The scene unfolds underwater, where a little black...
+2024-08-16 09:42:53,909 - gradio_app - INFO - generate_prompt_wrapper took 2.20 seconds total
+2024-08-16 09:43:21,872 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:43:25,809 - gradio_app - INFO - meta_chain.generate_prompt took 3.94 seconds
+2024-08-16 09:43:25,809 - gradio_app - INFO - Prompts generated - Concise: A joyful little black girl, adorned with vibrant m..., Normal: In this enchanting scene, a little black girl tran..., Detailed: The scene captures a delightful moment featuring a...
+2024-08-16 09:43:25,809 - gradio_app - INFO - generate_prompt_wrapper took 3.94 seconds total
+2024-08-16 09:52:07,133 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:52:07,135 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 208, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'script'
+2024-08-16 09:52:07,147 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-16 09:52:42,709 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:52:42,709 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 208, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'script'
+2024-08-16 09:52:42,717 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-16 09:53:36,600 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:53:36,601 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "D:\github\promptforge2\gradio_app.py", line 208, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'script'
+2024-08-16 09:53:36,612 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-16 09:59:44,303 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 09:59:48,724 - gradio_app - INFO - meta_chain.generate_prompt took 4.42 seconds
+2024-08-16 09:59:48,725 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A graceful snake slithers th..., Normal: **Normal Prompt:**  
+In a vibrant scene, a snake g..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a verd...
+2024-08-16 09:59:48,725 - gradio_app - INFO - generate_prompt_wrapper took 4.42 seconds total
+2024-08-16 10:00:06,670 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:00:08,953 - gradio_app - INFO - meta_chain.generate_prompt took 2.28 seconds
+2024-08-16 10:00:08,954 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A striking snake slithers gr..., Normal: **Normal Prompt:**  
+In a serene environment, a be..., Detailed: **Detailed Prompt:**  
+In a tranquil natural setti...
+2024-08-16 10:00:08,954 - gradio_app - INFO - generate_prompt_wrapper took 2.28 seconds total
+2024-08-16 10:44:40,975 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:44:40,975 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 231, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'camera_size'
+2024-08-16 10:44:40,983 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-16 10:45:53,263 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:45:56,636 - gradio_app - INFO - meta_chain.generate_prompt took 3.37 seconds
+2024-08-16 10:45:56,636 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An extreme wide shot capture..., Normal: **Normal Prompt:**  
+In an extreme wide shot, a fo..., Detailed: **Detailed Prompt:**  
+The scene unfolds in an ext...
+2024-08-16 10:45:56,637 - gradio_app - INFO - generate_prompt_wrapper took 3.37 seconds total
+2024-08-16 10:46:09,117 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:12,827 - gradio_app - INFO - meta_chain.generate_prompt took 3.71 seconds
+2024-08-16 10:46:12,828 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+The scene features a thug in an exp..., Normal: **Normal:**  
+An extreme wide shot captures a thug..., Detailed: **Detailed:**  
+In this captivating extreme wide s...
+2024-08-16 10:46:12,828 - gradio_app - INFO - generate_prompt_wrapper took 3.71 seconds total
+2024-08-16 10:46:18,738 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:21,794 - gradio_app - INFO - meta_chain.generate_prompt took 3.06 seconds
+2024-08-16 10:46:21,794 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An extreme wide shot capture..., Normal: **Normal Prompt:**  
+The scene features an extreme..., Detailed: **Detailed Prompt:**  
+In this striking extreme wi...
+2024-08-16 10:46:21,795 - gradio_app - INFO - generate_prompt_wrapper took 3.06 seconds total
+2024-08-16 10:46:27,678 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:30,194 - gradio_app - INFO - meta_chain.generate_prompt took 2.52 seconds
+2024-08-16 10:46:30,194 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An Extreme Wide Shot capture..., Normal: **Normal Prompt:**  
+In an Extreme Wide Shot, a th..., Detailed: **Detailed Prompt:**  
+An Extreme Wide Shot reveal...
+2024-08-16 10:46:30,194 - gradio_app - INFO - generate_prompt_wrapper took 2.52 seconds total
+2024-08-16 10:46:36,171 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:39,128 - gradio_app - INFO - meta_chain.generate_prompt took 2.96 seconds
+2024-08-16 10:46:39,128 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+An extreme wide shot captures a con..., Normal: **Normal:**  
+In this extreme wide shot, a thug st..., Detailed: **Detailed:**  
+The camera presents an extreme wid...
+2024-08-16 10:46:39,129 - gradio_app - INFO - generate_prompt_wrapper took 2.96 seconds total
+2024-08-16 10:46:47,218 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:50,013 - gradio_app - INFO - meta_chain.generate_prompt took 2.80 seconds
+2024-08-16 10:46:50,013 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An extreme wide shot capture..., Normal: **Normal Prompt:**  
+In this extreme wide shot, a ..., Detailed: **Detailed Prompt:**  
+The scene opens with an ext...
+2024-08-16 10:46:50,013 - gradio_app - INFO - generate_prompt_wrapper took 2.80 seconds total
+2024-08-16 10:46:55,467 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 10:46:59,540 - gradio_app - INFO - meta_chain.generate_prompt took 4.07 seconds
+2024-08-16 10:46:59,541 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+An extreme wide shot capture..., Normal: **Normal Prompt:**  
+In an extreme wide shot, a th..., Detailed: **Detailed Prompt:**  
+The scene opens with an ext...
+2024-08-16 10:46:59,541 - gradio_app - INFO - generate_prompt_wrapper took 4.07 seconds total
+2024-08-16 11:43:21,979 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 11:43:25,436 - gradio_app - INFO - meta_chain.generate_prompt took 3.46 seconds
+2024-08-16 11:43:25,436 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+The Wendigo strides through ..., Normal: **Normal Prompt:**  
+In a lush, wet swamp, the Wen..., Detailed: **Detailed Prompt:**  
+The scene unfolds in a capt...
+2024-08-16 11:43:25,436 - gradio_app - INFO - generate_prompt_wrapper took 3.46 seconds total
+2024-08-16 12:12:52,321 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:12:55,370 - gradio_app - INFO - meta_chain.generate_prompt took 3.05 seconds
+2024-08-16 12:12:55,370 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A wise grey goose stands gra..., Normal: **Normal Prompt:**  
+In a tranquil setting, a wise..., Detailed: **Detailed Prompt:**  
+The scene unfolds by a tran...
+2024-08-16 12:12:55,370 - gradio_app - INFO - generate_prompt_wrapper took 3.05 seconds total
+2024-08-16 12:13:39,976 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:13:43,153 - gradio_app - INFO - meta_chain.generate_prompt took 3.18 seconds
+2024-08-16 12:13:43,153 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+A wise grey goose stands gra..., Normal: **Normal Prompt:**  
+In a tranquil setting, a wise..., Detailed: **Detailed Prompt:**  
+The scene unfolds by a peac...
+2024-08-16 12:13:43,153 - gradio_app - INFO - generate_prompt_wrapper took 3.18 seconds total
+2024-08-16 12:15:34,853 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:15:38,057 - gradio_app - INFO - meta_chain.generate_prompt took 3.20 seconds
+2024-08-16 12:15:38,057 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A wise grey goose strolls gracefull..., Normal: **Normal:**  
+In a lively mall filled with bustlin..., Detailed: **Detailed:**  
+Amidst the vibrant atmosphere of a...
+2024-08-16 12:15:38,057 - gradio_app - INFO - generate_prompt_wrapper took 3.20 seconds total
+2024-08-16 12:16:08,798 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:16:13,327 - gradio_app - INFO - meta_chain.generate_prompt took 4.53 seconds
+2024-08-16 12:16:13,327 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a bustling mall, a small,..., Normal: **Normal Prompt:**  
+A small, wise grey goose stro..., Detailed: **Detailed Prompt:**  
+Set in a lively mall teemin...
+2024-08-16 12:16:13,328 - gradio_app - INFO - generate_prompt_wrapper took 4.53 seconds total
+2024-08-16 12:17:26,779 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:17:29,005 - gradio_app - INFO - meta_chain.generate_prompt took 2.23 seconds
+2024-08-16 12:17:29,005 - gradio_app - INFO - Prompts generated - Concise: **Concise Prompt:**  
+In a bustling mall, a small,..., Normal: **Normal Prompt:**  
+Amidst the lively bustle of a..., Detailed: **Detailed Prompt:**  
+In a vibrant and bustling m...
+2024-08-16 12:17:29,005 - gradio_app - INFO - generate_prompt_wrapper took 2.23 seconds total
+2024-08-16 12:17:32,498 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:17:35,298 - gradio_app - INFO - meta_chain.generate_prompt took 2.80 seconds
+2024-08-16 12:17:35,299 - gradio_app - INFO - Prompts generated - Concise: **Concise:**  
+A small, wise grey goose waddles th..., Normal: **Normal:**  
+In a vibrant mall filled with the ch..., Detailed: **Detailed:**  
+Amidst the lively scene of a busy ...
+2024-08-16 12:17:35,299 - gradio_app - INFO - generate_prompt_wrapper took 2.80 seconds total
+2024-08-16 12:29:36,944 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:29:36,945 - gradio_app - ERROR - Unexpected error in generate_prompt_wrapper
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 231, in generate_prompt_wrapper
+    result = await core.meta_chain.generate_prompt(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MetaChain.generate_prompt() got an unexpected keyword argument 'camera_size'
+2024-08-16 12:29:36,952 - gradio_app - INFO - generate_prompt_wrapper took 0.01 seconds total
+2024-08-16 12:34:17,566 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:34:19,536 - gradio_app - INFO - meta_chain.generate_prompt took 1.97 seconds
+2024-08-16 12:34:19,537 - gradio_app - INFO - Prompts generated - Concise: A lady stands gracefully, radiating confidence and..., Normal: The scene features a lady exuding elegance, dresse..., Detailed: In a tranquil environment, a lady stands at the ce...
+2024-08-16 12:34:19,537 - gradio_app - INFO - generate_prompt_wrapper took 1.97 seconds total
+2024-08-16 12:34:27,479 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:34:30,457 - gradio_app - INFO - meta_chain.generate_prompt took 2.98 seconds
+2024-08-16 12:34:30,457 - gradio_app - INFO - Prompts generated - Concise: A lady stands gracefully, exuding confidence and w..., Normal: In a serene setting, a lady radiates elegance and ..., Detailed: A lady stands in a beautifully composed scene, emb...
+2024-08-16 12:34:30,457 - gradio_app - INFO - generate_prompt_wrapper took 2.98 seconds total
+2024-08-16 12:47:18,820 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 12:47:20,546 - gradio_app - INFO - meta_chain.generate_prompt took 1.73 seconds
+2024-08-16 12:47:20,546 - gradio_app - INFO - Prompts generated - Concise: A lady in a flowing pink and white dress stands gr..., Normal: In a picturesque garden, a lady in a pink and whit..., Detailed: Amidst a lush garden filled with colorful blossoms...
+2024-08-16 12:47:20,547 - gradio_app - INFO - generate_prompt_wrapper took 1.73 seconds total
+2024-08-16 13:20:23,522 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:20:28,529 - gradio_app - INFO - meta_chain.generate_prompt took 5.01 seconds
+2024-08-16 13:20:28,529 - gradio_app - INFO - Prompts generated - Concise: A dirty, hungry werewolf looms in an alley, captur..., Normal: In a New York alley at night, a dirty, hungry were..., Detailed: In the heart of a dark New York alley, a deadly an...
+2024-08-16 13:20:28,530 - gradio_app - INFO - generate_prompt_wrapper took 5.01 seconds total
+2024-08-16 13:21:02,892 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:21:04,673 - gradio_app - INFO - meta_chain.generate_prompt took 1.78 seconds
+2024-08-16 13:21:04,674 - gradio_app - INFO - Prompts generated - Concise: In a dimly lit New York alley at night, an extreme..., Normal: The camera captures an extreme close-up of a filth..., Detailed: Set in a shadowy New York alleyway, the camera imm...
+2024-08-16 13:21:04,674 - gradio_app - INFO - generate_prompt_wrapper took 1.78 seconds total
+2024-08-16 13:21:31,661 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:21:34,476 - gradio_app - INFO - meta_chain.generate_prompt took 2.81 seconds
+2024-08-16 13:21:34,477 - gradio_app - INFO - Prompts generated - Concise: In a dimly lit New York alley, an extreme close-up..., Normal: In the shadows of a New York alley at night, a han..., Detailed: The camera, held steady yet handheld, frames an ex...
+2024-08-16 13:21:34,477 - gradio_app - INFO - generate_prompt_wrapper took 2.82 seconds total
+2024-08-16 13:21:46,183 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:21:49,207 - gradio_app - INFO - meta_chain.generate_prompt took 3.02 seconds
+2024-08-16 13:21:49,208 - gradio_app - INFO - Prompts generated - Concise: In a dimly lit New York alley, an extreme close-up..., Normal: In an atmospheric New York alley at night, the cam..., Detailed: The scene unfolds in a haunting New York alley, sh...
+2024-08-16 13:21:49,208 - gradio_app - INFO - generate_prompt_wrapper took 3.02 seconds total
+2024-08-16 13:26:23,720 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:26:25,784 - gradio_app - INFO - meta_chain.generate_prompt took 2.06 seconds
+2024-08-16 13:26:25,784 - gradio_app - INFO - Prompts generated - Concise: In a dark New York alley, an extreme close-up capt..., Normal: In the heart of a dimly lit New York alley, an ext..., Detailed: Set in a shadowy New York alley at night, the scen...
+2024-08-16 13:26:25,785 - gradio_app - INFO - generate_prompt_wrapper took 2.07 seconds total
+2024-08-16 13:28:28,689 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:28:31,724 - gradio_app - INFO - meta_chain.generate_prompt took 3.03 seconds
+2024-08-16 13:28:31,725 - gradio_app - INFO - Prompts generated - Concise: In an intimate Miami living room, an extreme close..., Normal: The camera captures an extreme close-up of a menac..., Detailed: As the handheld camera moves in for an extreme clo...
+2024-08-16 13:28:31,725 - gradio_app - INFO - generate_prompt_wrapper took 3.04 seconds total
+2024-08-16 13:42:17,622 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:42:21,092 - gradio_app - INFO - meta_chain.generate_prompt took 3.47 seconds
+2024-08-16 13:42:21,093 - gradio_app - INFO - Prompts generated - Concise: A captivating living jar sits at the center, glowi..., Normal: In a warmly lit room, a living jar commands attent..., Detailed: The scene unfolds in a cozy, sunlit space where a ...
+2024-08-16 13:42:21,094 - gradio_app - INFO - generate_prompt_wrapper took 3.47 seconds total
+2024-08-16 13:42:35,078 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:42:37,318 - gradio_app - INFO - meta_chain.generate_prompt took 2.24 seconds
+2024-08-16 13:42:37,318 - gradio_app - INFO - Prompts generated - Concise: A living jar balances on a kitchen counter, surrou..., Normal: In a cozy kitchen, a living jar perches on the cou..., Detailed: The scene unfolds in a lively kitchen, where a liv...
+2024-08-16 13:42:37,319 - gradio_app - INFO - generate_prompt_wrapper took 2.24 seconds total
+2024-08-16 13:45:41,156 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:45:43,569 - gradio_app - INFO - meta_chain.generate_prompt took 2.41 seconds
+2024-08-16 13:45:43,570 - gradio_app - INFO - Prompts generated - Concise: A mason jar sits gracefully on a grandmother's bed..., Normal: On a cozy grandmother's bed, a mason jar captures ..., Detailed: Nestled on a beautifully made grandmother's bed, a...
+2024-08-16 13:45:43,572 - gradio_app - INFO - generate_prompt_wrapper took 2.42 seconds total
+2024-08-16 13:46:03,410 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:46:07,788 - gradio_app - INFO - meta_chain.generate_prompt took 4.38 seconds
+2024-08-16 13:46:07,788 - gradio_app - INFO - Prompts generated - Concise: A mason jar sits elegantly on a grandmother's bed,..., Normal: In a serene setting, a mason jar rests gently on t..., Detailed: The scene unfolds in a grandmother's tranquil bedr...
+2024-08-16 13:46:07,789 - gradio_app - INFO - generate_prompt_wrapper took 4.38 seconds total
+2024-08-16 13:47:05,317 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:47:07,133 - gradio_app - INFO - meta_chain.generate_prompt took 1.81 seconds
+2024-08-16 13:47:07,133 - gradio_app - INFO - Prompts generated - Concise: A mason jar rests gently on a grandmother's bed, c..., Normal: On a cozy grandmother's bed, a mason jar glints in..., Detailed: Nestled on a grandmother's bed, a mason jar captur...
+2024-08-16 13:47:07,134 - gradio_app - INFO - generate_prompt_wrapper took 1.82 seconds total
+2024-08-16 13:47:38,705 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 13:47:40,506 - gradio_app - INFO - meta_chain.generate_prompt took 1.80 seconds
+2024-08-16 13:47:40,507 - gradio_app - INFO - Prompts generated - Concise: A crystal-clear shotglass gleams in the soft light..., Normal: The camera captures a beautifully crafted shotglas..., Detailed: In a cozy, inviting bar setting, a meticulously de...
+2024-08-16 13:47:40,508 - gradio_app - INFO - generate_prompt_wrapper took 1.80 seconds total
+2024-08-16 14:00:54,540 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-08-16 14:00:57,325 - gradio_app - INFO - meta_chain.generate_prompt took 2.79 seconds
+2024-08-16 14:00:57,326 - gradio_app - INFO - Prompts generated - Concise: A vibrant basil plant glistens with fresh droplets..., Normal: In a peaceful garden, a wet basil plant stands out..., Detailed: A close-up reveals a wet basil plant, its leaves a...
+2024-08-16 14:00:57,326 - gradio_app - INFO - generate_prompt_wrapper took 2.79 seconds total
