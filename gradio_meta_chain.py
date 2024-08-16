@@ -119,21 +119,18 @@ class MetaChain:
         Highlighted Script: {highlighted_text}
         Full Script: {full_script}
         End Parameters: {end_parameters}
-        Camera Shot: {camera_shot}
-        Camera Move: {camera_move}
-        Camera Size: {camera_size}
         Style: {style}
         Style Prefix: {style_prefix}
 
         {script_adherence}
 
         Important:
-        1. Shot Description is theDescribe the scene positively. Don't use phrases like "no additional props" or "no objects present" or "The scene unfolds in" or "Imagine a". Instead, focus on what is in the scene.
-        2. Only include camera information if it's provided in the input.
-        3. Never include style information in the image prompt.  Ignore that portion of the request.  That is done in the Style and Style Prefix Only.
-        4. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words). Seperate them by a space. Do not add a headings for these.
-        5. Consider the main subject and its placement. Think about depth. Include elements in the foreground, middle ground, and background to create a sense of dimension when the shot requires it do not force it
-        6. 
+        1. Incorporate the camera work description seamlessly into the scene description. The camera work is already included at the beginning of the Shot Description.
+        2. Describe the scene positively. Don't use phrases like "no additional props" or "no objects present". Instead, focus on what is in the scene.
+        3. Only include camera information if it's provided in the input.
+        4. Never include style information in the image prompt. That is done in the Style and Style Prefix Only.
+        5. Generate three separate paragraphs: concise (about 20 words), normal (about 50 words), and detailed (about 100 words). Separate them by a space. Do not add headings for these.
+        6. Consider the main subject and its placement. Think about depth. Include elements in the foreground, middle ground, and background to create a sense of dimension when the shot requires it; do not force it.
 
         Prompts:
         """
