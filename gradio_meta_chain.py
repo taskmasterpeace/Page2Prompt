@@ -159,6 +159,7 @@ class MetaChain:
                 "Normal Prompt": f"{style_prefix} {paragraphs[1].strip()} {style_suffix}".strip(),
                 "Detailed Prompt": f"{style_prefix} {paragraphs[2].strip()} {style_suffix}".strip()
             }
+            logger.debug(f"Formatted Prompts with Prefix and Suffix: {prompts}")
             
             return prompts
         except Exception as e:
