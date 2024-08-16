@@ -78,6 +78,7 @@ class MetaChain:
                 "camera_move": camera_move,
                 "length": length
             }
+            logger.debug(f"Input data for prompt generation: {input_data}")
             logger.debug(f"Invoking chain for prompt generation with input: {input_data}")
             result = await chain.ainvoke(input_data)
             logger.debug(f"Chain result: {result.content}")
@@ -86,6 +87,8 @@ class MetaChain:
             
             logger.info(f"Prompt generation took {time.time() - prompt_generation_start:.2f} seconds")
             logger.info(f"Generated prompts: {prompts}")
+            logger.debug(f"Style Prefix: {style_prefix}, Style Suffix: {style_suffix}")
+            logger.debug(f"Formatted Prompts: {prompts}")
             return prompts
         except Exception as e:
             error_msg = f"Failed to generate prompt: {str(e)}"
