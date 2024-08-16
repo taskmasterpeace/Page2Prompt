@@ -82,7 +82,7 @@ class MetaChain:
             result = await chain.ainvoke(input_data)
             logger.debug(f"Chain result: {result.content}")
             
-            prompts = self._structure_prompt_output(result.content)
+            prompts = self._structure_prompt_output(result.content, input_data)
             
             logger.info(f"Prompt generation took {time.time() - prompt_generation_start:.2f} seconds")
             logger.info(f"Generated prompts: {prompts}")
@@ -140,7 +140,7 @@ class MetaChain:
             return "No active subjects"
         return ", ".join([f"{s.get('name', '')} ({s.get('category', '')}: {s.get('description', '')})" for s in active_subjects if isinstance(s, dict)])
 
-    def _structure_prompt_output(self, content: str) -> Dict[str, str]:
+    def _structure_prompt_output(self, content: str, input_data: Dict[str, Any]) -> Dict[str, str]:
         try:
             paragraphs = content.strip().split('\n\n')
             if len(paragraphs) != 3:
