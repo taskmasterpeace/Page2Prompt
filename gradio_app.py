@@ -133,6 +133,8 @@ with gr.Blocks() as app:
                 directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
                 active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
             
+            generate_button = gr.Button("🚀 Generate Prompt")
+
             with gr.Group():
                 gr.Markdown("## 🎨 Style")
                 with gr.Row():
@@ -165,8 +167,6 @@ with gr.Blocks() as app:
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
             
             # Removed predictability_input
-
-            generate_button = gr.Button("🚀 Generate Prompt")
 
         with gr.Column(scale=1):
             # Right column (Generated Prompts)
