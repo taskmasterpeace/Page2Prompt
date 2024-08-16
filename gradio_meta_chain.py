@@ -86,6 +86,8 @@ class MetaChain:
             prompts = self._structure_prompt_output(result.content, input_data)
             
             logger.info(f"Prompt generation took {time.time() - prompt_generation_start:.2f} seconds")
+            style_prefix = input_data.get("style_prefix", "")
+            style_suffix = input_data.get("end_parameters", "")
             logger.info(f"Generated prompts: {prompts}")
             logger.debug(f"Style Prefix: {style_prefix}, Style Suffix: {style_suffix}")
             logger.debug(f"Formatted Prompts: {prompts}")
