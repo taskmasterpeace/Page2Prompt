@@ -388,8 +388,8 @@ with gr.Blocks() as app:
             subjects = subject_manager.get_subjects()
             subject_names = [s["name"] for s in subjects]
             return (
-                gr.Dropdown.update(choices=subject_names, value=None),
-                gr.Dropdown.update(choices=subject_names, value=None),
+                subject_names,  # Choices for the dropdown
+                None,  # Value for the dropdown (None to clear selection)
                 json.dumps(subjects, indent=2),
                 "", "", "", False
             )
