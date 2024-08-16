@@ -17,6 +17,17 @@ class MetaChain:
         self.llm = None
         self.director_styles = {"Default": {}}  # Add more styles as needed
         self.initialize_llm()
+        self.load_director_styles()
+
+    def load_director_styles(self):
+        # Load predefined director styles
+        self.director_styles.update({
+            "Alfred Hitchcock": "Suspenseful, psychological, innovative camera angles",
+            "Wes Anderson": "Symmetrical framing, pastel colors, quirky characters",
+            "Christopher Nolan": "Non-linear storytelling, practical effects, mind-bending concepts",
+            "Quentin Tarantino": "Non-linear narrative, pop culture references, stylized violence",
+            "Stanley Kubrick": "Symmetrical compositions, long takes, psychological themes"
+        })
 
     def initialize_llm(self, temperature: float = 0.7):
         logger.debug(f"Initializing LLM with temperature {temperature}")
@@ -33,7 +44,7 @@ class MetaChain:
             logger.exception(f"Failed to initialize LLM: {str(e)}")
             raise
 
-    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, camera_size: Optional[str] = None, length: str = "detailed") -> Dict[str, str]:
+    async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, camera_size: Optional[str] = None, length: str = "detailed", director_style: Optional[str] = None) -> Dict[str, str]:
         start_time = time.time()
         logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
         
@@ -121,6 +132,7 @@ class MetaChain:
         End Parameters: {end_parameters}
         Style: {style}
         Style Prefix: {style_prefix}
+        Director's Style: {director_style}
 
         {script_adherence}
 

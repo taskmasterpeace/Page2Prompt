@@ -161,6 +161,7 @@ with gr.Blocks() as app:
                     save_style_button = gr.Button("💾 Save Style")
                     generate_style_details_button = gr.Button("🔍 Generate Style Details")
                     generate_random_style_button = gr.Button("🎲 Generate Random Style")
+                director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
         
             def update_style_inputs(style_name):
                 prefix, suffix = style_manager.get_style(style_name)
@@ -218,7 +219,7 @@ with gr.Blocks() as app:
     
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix):
+    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
@@ -290,7 +291,7 @@ with gr.Blocks() as app:
                 directors_notes_input, script_input, stick_to_script_input,
                 end_parameters_input, active_subjects_input,
                 camera_shot_input, camera_move_input, camera_size_input, generated_prompts,
-                style_prefix_input, style_suffix_input],
+                style_prefix_input, style_suffix_input, director_style_input],
         outputs=[generated_prompts, structured_prompt, generation_message]
     )
 
