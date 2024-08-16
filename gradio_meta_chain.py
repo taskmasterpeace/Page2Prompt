@@ -146,10 +146,13 @@ class MetaChain:
             if len(paragraphs) != 3:
                 raise ValueError("Expected 3 paragraphs in the output")
             
+            style_prefix = input_data.get("style_prefix", "")
+            style_suffix = input_data.get("end_parameters", "")
+
             prompts = {
-                "Concise Prompt": paragraphs[0].strip(),
-                "Normal Prompt": paragraphs[1].strip(),
-                "Detailed Prompt": paragraphs[2].strip()
+                "Concise Prompt": f"{style_prefix} {paragraphs[0].strip()} {style_suffix}",
+                "Normal Prompt": f"{style_prefix} {paragraphs[1].strip()} {style_suffix}",
+                "Detailed Prompt": f"{style_prefix} {paragraphs[2].strip()} {style_suffix}"
             }
             
             return prompts
