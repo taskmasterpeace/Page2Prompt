@@ -204,7 +204,9 @@ with gr.Blocks() as app:
             
             with gr.Group():
                 gr.Markdown("## 👤 Subject Details")
-                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=[], allow_custom_value=True)
+                subjects = subject_manager.get_subjects()
+                subject_names = [s["name"] for s in subjects]
+                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
                 subject_name = gr.Textbox(label="Subject Name")
                 subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                 subject_description = gr.Textbox(label="Subject Description", lines=3)
@@ -357,6 +359,7 @@ with gr.Blocks() as app:
         def add_subject(name, category, description, active):
             new_subject = {"name": name, "category": category, "description": description, "active": active}
             subject_manager.add_subject(new_subject)
+            print(f"Added subject: {new_subject}")  # Debug print
             return update_subjects_interface()
 
         def update_subject(name, category, description, active):
@@ -466,8 +469,8 @@ def update_subjects_interface():
     print("Subjects:", subjects)  # Added print statement
     subject_names = [s["name"] for s in subjects]
     return (
-        subject_names,  # Choices for the dropdown
-        None,  # Value for the dropdown (None to clear selection)
+        gr.Dropdown.update(choices=subject_names, value=None),  # Update first dropdown
+        gr.Dropdown.update(choices=subject_names, value=None),  # Update second dropdown
         json.dumps(subjects, indent=2),
         "", "", "", False
     )
