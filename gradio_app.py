@@ -481,5 +481,6 @@ def update_subjects_interface():
         gr.update(choices=subject_names, value=None),  # Update first dropdown
         gr.update(choices=subject_names, value=None),  # Update second dropdown
         json.dumps(subjects, indent=2),
-        "", "", "", False
+        "", "", "", False,
+        "", "", "", False  # Add additional values to match the expected outputs
     )
