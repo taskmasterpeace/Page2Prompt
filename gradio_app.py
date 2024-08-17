@@ -404,19 +404,19 @@ with gr.Blocks() as app:
         add_subject_button.click(
             add_subject,
             inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
         )
 
         edit_subject_button.click(
             update_subject,
             inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
         )
 
         delete_subject_button.click(
             delete_subject,
             inputs=[subjects_dropdown],
-            outputs=[subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
         )
 
         subjects_dropdown.change(
