@@ -3,23 +3,7 @@ import asyncio
 import json
 import time
 import csv
-import replicate
-import os
-import sys
 from gradio_config import Config
-
-# Check if REPLICATE_API_TOKEN is set in the environment variables
-REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
-if not REPLICATE_API_TOKEN:
-    print("Warning: REPLICATE_API_TOKEN is not set in the environment variables.")
-    print("Please set the REPLICATE_API_TOKEN environment variable before running this script.")
-    print("You can set it temporarily by running:")
-    print("    export REPLICATE_API_TOKEN='your-token-here'  # On Unix/Linux/macOS")
-    print("    set REPLICATE_API_TOKEN=your-token-here  # On Windows cmd")
-    print("    $env:REPLICATE_API_TOKEN='your-token-here'  # On Windows PowerShell")
-    sys.exit(1)
-
-# The replicate library will automatically use the REPLICATE_API_TOKEN from the environment
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
 from gradio_script_analyzer import ScriptAnalyzer
@@ -29,9 +13,6 @@ from debug_utils import logger, debug_func, get_error_report
 from gradio_core import PromptForgeCore
 from subject_manager import SubjectManager
 from gradio_meta_chain import MetaChain
-
-# Ensure REPLICATE_API_TOKEN is set in your environment variables
-REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
 
 
 # Initialize components
@@ -490,52 +471,6 @@ with gr.Blocks() as app:
             refresh_logs_button = gr.Button("🔄 Refresh Logs")
             
             refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
-
-    def generate_image(prompt, aspect_ratio, num_inference_steps, output_format):
-        input_data = {
-            "prompt": prompt,
-            "aspect_ratio": aspect_ratio,
-            "num_inference_steps": num_inference_steps,
-            "output_format": output_format
-        }
-    
-        output = replicate.run(
-            "black-forest-labs/flux-dev",
-            input=input_data
-        )
-        return output
-
-    with gr.Tab("🖼️ Image Generation"):
-        with gr.Row():
-            with gr.Column(scale=1):
-                prompt_input = gr.Textbox(label="Prompt")
-                aspect_ratio = gr.Dropdown(
-                    choices=["1:1", "16:9", "21:9", "2:3", "3:2", "4:5", "5:4", "9:16", "9:21"],
-                    label="Aspect Ratio",
-                    value="1:1"
-                )
-                num_inference_steps = gr.Slider(
-                    minimum=1,
-                    maximum=50,
-                    value=30,
-                    step=1,
-                    label="Number of Inference Steps"
-                )
-                output_format = gr.Dropdown(
-                    choices=["webp", "jpg", "png"],
-                    label="Output Format",
-                    value="webp"
-                )
-                generate_button = gr.Button("Generate Image")
-                
-            with gr.Column(scale=2):
-                gallery = gr.Gallery(label="Generated Images", show_label=False, elem_id="gallery", columns=2, height="auto")
-
-        generate_button.click(
-            generate_image,
-            inputs=[prompt_input, aspect_ratio, num_inference_steps, output_format],
-            outputs=gallery
-        )
 
     if __name__ == "__main__":
         app.launch(share=True)
