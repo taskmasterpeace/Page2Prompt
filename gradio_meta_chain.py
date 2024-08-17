@@ -46,7 +46,7 @@ class MetaChain:
 
     async def generate_prompt(self, style: Optional[str], highlighted_text: Optional[str], shot_description: str, directors_notes: str, script: Optional[str], stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", camera_shot: Optional[str] = None, camera_move: Optional[str] = None, camera_size: Optional[str] = None, length: str = "detailed", director_style: Optional[str] = None) -> Dict[str, str]:
         start_time = time.time()
-        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}")
+        logger.info(f"Generating prompt with inputs: style={style}, highlighted_text={highlighted_text[:50] if highlighted_text else 'None'}..., shot_description={shot_description[:50]}..., directors_notes={directors_notes[:50]}..., script={script[:50] if script else 'None'}..., stick_to_script={stick_to_script}, end_parameters={end_parameters}, active_subjects={active_subjects}, full_script={full_script[:50]}..., camera_shot={camera_shot}, camera_move={camera_move}, length={length}, director_style={director_style}")
         
         # Map the length parameter to word counts
         length_to_words = {
@@ -61,6 +61,7 @@ class MetaChain:
         script = script or full_script or "Default script"
         shot_description = shot_description or "Default shot"
         directors_notes = directors_notes or "No specific notes"
+        director_style = director_style or "Default"
 
         try:
             script_analysis_start = time.time()
@@ -88,7 +89,8 @@ class MetaChain:
                 "camera_shot": camera_shot,
                 "camera_move": camera_move,
                 "camera_size": camera_size,
-                "length": length
+                "length": length,
+                "director_style": director_style
             }
             logger.debug(f"Input data for prompt generation: {input_data}")
             logger.debug(f"Invoking chain for prompt generation with input: {input_data}")
@@ -104,8 +106,12 @@ class MetaChain:
             logger.debug(f"Style Prefix: {style_prefix}, Style Suffix: {style_suffix}")
             logger.debug(f"Formatted Prompts: {prompts}")
             return prompts
+        except KeyError as e:
+            error_msg = f"Missing input variable: {str(e)}"
+            logger.error(error_msg)
+            return {"error": error_msg}
         except Exception as e:
-            error_msg = f"Failed to generate prompt: {str(e)}"
+            error_msg = f"Unexpected error in generate_prompt: {str(e)}"
             logger.exception(error_msg)
             return {"error": error_msg}
         finally:
@@ -133,6 +139,10 @@ class MetaChain:
         Style: {style}
         Style Prefix: {style_prefix}
         Director's Style: {director_style}
+        Camera Shot: {camera_shot}
+        Camera Move: {camera_move}
+        Camera Size: {camera_size}
+        Length: {length}
 
         {script_adherence}
 
@@ -148,7 +158,12 @@ class MetaChain:
         """
 
         return PromptTemplate(
-            input_variables=["style", "style_prefix", "shot_description", "directors_notes", "highlighted_text", "full_script", "subject_info", "end_parameters", "script_adherence", "camera_shot", "camera_move", "camera_size", "length"],
+            input_variables=[
+                "style", "style_prefix", "shot_description", "directors_notes",
+                "highlighted_text", "full_script", "subject_info", "end_parameters",
+                "script_adherence", "camera_shot", "camera_move", "camera_size",
+                "length", "director_style"
+            ],
             template=base_template
         )
 
