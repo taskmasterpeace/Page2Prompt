@@ -368,8 +368,9 @@ with gr.Blocks() as app:
             return update_subjects_interface()
 
         def delete_subject(name):
-            subject_manager.remove_subject_by_name(name)
-            return update_subjects_interface()
+            updated_subjects = subject_manager.remove_subject_by_name(name)
+            subject_names = [s["name"] for s in updated_subjects]
+            return gr.Dropdown.update(choices=subject_names, value=None), gr.Dropdown.update(choices=subject_names, value=None), json.dumps(updated_subjects, indent=2), "", "", "", False
 
         add_subject_button.click(
             add_subject,

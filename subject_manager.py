@@ -46,6 +46,7 @@ class SubjectManager:
     def remove_subject_by_name(self, name):
         self.subjects = [s for s in self.subjects if s["name"] != name]
         self.save_subjects()
+        return self.get_subjects()  # Return the updated list of subjects
 
     def get_subjects(self):
         return self.subjects
