@@ -6,6 +6,14 @@ import csv
 import replicate
 import os
 from gradio_config import Config
+
+# Ensure REPLICATE_API_TOKEN is set in your environment variables
+REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
+if not REPLICATE_API_TOKEN:
+    raise ValueError("REPLICATE_API_TOKEN is not set in the environment variables")
+
+# Set the token for the replicate library
+os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
 from gradio_script_analyzer import ScriptAnalyzer
@@ -487,7 +495,8 @@ with gr.Blocks() as app:
         
         output = replicate.run(
             "black-forest-labs/flux-dev",
-            input=input_data
+            input=input_data,
+            api_token=REPLICATE_API_TOKEN
         )
         return output
 
