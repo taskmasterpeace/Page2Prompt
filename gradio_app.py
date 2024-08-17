@@ -505,7 +505,7 @@ with gr.Blocks() as app:
         )
         return output
 
-    with gr.Tab("Image Generation"):
+    with gr.Tab("🖼️ Image Generation"):
         with gr.Row():
             with gr.Column(scale=1):
                 prompt_input = gr.Textbox(label="Prompt")
