@@ -46,7 +46,10 @@ class SubjectManager:
 
     def remove_subject_by_name(self, name):
         print(f"Removing subject: {name}")  # Debug print
+        original_count = len(self.subjects)
         self.subjects = [s for s in self.subjects if s["name"] != name and s["name"].strip()]
+        removed_count = original_count - len(self.subjects)
+        print(f"Removed {removed_count} subjects. Remaining: {len(self.subjects)}")
         print(f"Subjects after removal: {self.subjects}")  # Debug print
         self.save_subjects()
         return self.get_subjects()  # Return the updated list of subjects
@@ -57,6 +60,7 @@ class SubjectManager:
             with open(self.filename, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=['name', 'category', 'description', 'active'])
                 writer.writeheader()
+                saved_count = 0
                 for subject in self.subjects:
                     if subject['name'].strip():  # Only save non-empty subjects
                         writer.writerow({
@@ -65,7 +69,10 @@ class SubjectManager:
                             'description': subject['description'],
                             'active': subject['active']
                         })
-            print("Subjects saved successfully")  # Debug print
+                        saved_count += 1
+            print(f"Subjects saved successfully. Saved {saved_count} subjects.")  # Debug print
+            with open(self.filename, 'r') as f:
+                print(f"File contents after saving: {f.read()}")  # Debug print
         except Exception as e:
             print(f"Error saving subjects: {str(e)}")  # Error logging
 

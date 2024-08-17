@@ -374,8 +374,8 @@ with gr.Blocks() as app:
                 print(f"Updated subjects: {updated_subjects}")  # Debug print
                 with open(subject_manager.filename, 'r') as f:
                     print(f"File contents after deletion: {f.read()}")  # Debug print
-                subject_names = [s["name"] for s in updated_subjects]
-                return gr.update(choices=subject_names, value=None), gr.update(choices=subject_names, value=None, interactive=False), json.dumps(updated_subjects, indent=2), "", "", "", False
+                subject_names = [s["name"] for s in updated_subjects if s["name"].strip()]
+                return gr.update(choices=subject_names, value=None), gr.update(choices=subject_names, value=None), json.dumps(updated_subjects, indent=2), "", "", "", False
             except Exception as e:
                 print(f"Error in delete_subject: {e}")  # Debug print
                 return gr.update(), gr.update(), "", f"Error: {str(e)}", "", "", False
