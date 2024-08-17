@@ -461,6 +461,7 @@ with gr.Blocks() as app:
         app.launch(share=True)
 def update_subjects_interface():
     subjects = subject_manager.get_subjects()
+    print("Subjects:", subjects)  # Added print statement
     subject_names = [s["name"] for s in subjects]
     return (
         subject_names,  # Choices for the dropdown
