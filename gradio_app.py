@@ -7,9 +7,16 @@ import replicate
 import os
 from gradio_config import Config
 
-# Ensure REPLICATE_API_TOKEN is set in your environment variables
-if "REPLICATE_API_TOKEN" not in os.environ:
-    raise ValueError("REPLICATE_API_TOKEN is not set in the environment variables")
+# Check if REPLICATE_API_TOKEN is set in the environment variables
+REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
+if not REPLICATE_API_TOKEN:
+    print("Warning: REPLICATE_API_TOKEN is not set in the environment variables.")
+    print("Please set the REPLICATE_API_TOKEN environment variable before running this script.")
+    print("You can set it temporarily by running:")
+    print("    export REPLICATE_API_TOKEN='your-token-here'  # On Unix/Linux/macOS")
+    print("    set REPLICATE_API_TOKEN=your-token-here  # On Windows cmd")
+    print("    $env:REPLICATE_API_TOKEN='your-token-here'  # On Windows PowerShell")
+    sys.exit(1)
 
 # The replicate library will automatically use the REPLICATE_API_TOKEN from the environment
 from gradio_prompt_manager import PromptManager
