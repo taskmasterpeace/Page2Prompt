@@ -5,6 +5,7 @@ import time
 import csv
 import replicate
 import os
+import sys
 from gradio_config import Config
 
 # Check if REPLICATE_API_TOKEN is set in the environment variables
