@@ -515,7 +515,7 @@ with gr.Blocks() as app:
                 generate_button = gr.Button("Generate Image")
                 
             with gr.Column(scale=2):
-                gallery = gr.Gallery(label="Generated Images", show_label=False, elem_id="gallery").style(grid=2, height="auto")
+                gallery = gr.Gallery(label="Generated Images", show_label=False, elem_id="gallery", columns=2, height="auto")
 
         generate_button.click(
             generate_image,
