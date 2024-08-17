@@ -18,6 +18,7 @@ class SubjectManager:
                         "description": row['description'],
                         "active": row['active'] == 'True'
                     })
+        print(f"Loaded subjects: {subjects}")  # Debug print
         return subjects
 
     def save_subjects(self):
@@ -44,9 +45,25 @@ class SubjectManager:
         self.save_subjects()
 
     def remove_subject_by_name(self, name):
+        print(f"Removing subject: {name}")  # Debug print
         self.subjects = [s for s in self.subjects if s["name"] != name]
+        print(f"Subjects after removal: {self.subjects}")  # Debug print
         self.save_subjects()
         return self.get_subjects()  # Return the updated list of subjects
+
+    def save_subjects(self):
+        print(f"Saving subjects: {self.subjects}")  # Debug print
+        with open(self.filename, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=['name', 'category', 'description', 'active'])
+            writer.writeheader()
+            for subject in self.subjects:
+                writer.writerow({
+                    'name': subject['name'],
+                    'category': subject['category'],
+                    'description': subject['description'],
+                    'active': subject['active']
+                })
+        print("Subjects saved successfully")  # Debug print
 
     def get_subjects(self):
         return self.subjects
