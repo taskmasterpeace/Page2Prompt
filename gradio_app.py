@@ -354,8 +354,6 @@ with gr.Blocks() as app:
             return json.dumps(subjects, indent=2), "", "", ""
 
         def add_subject(name, category, description, active):
-            if not name:
-                return update_subjects_interface()  # Return current state if name is empty
             new_subject = {"name": name, "category": category, "description": description, "active": active}
             subject_manager.add_subject(new_subject)
             return update_subjects_interface()
@@ -391,8 +389,8 @@ with gr.Blocks() as app:
             subjects = subject_manager.get_subjects()
             subject_names = [s["name"] for s in subjects]
             return (
-                gr.Dropdown.update(choices=subject_names, value=None),
-                gr.Dropdown.update(choices=subject_names, value=None),
+                subject_names,  # Choices for the dropdown
+                None,  # Value for the dropdown (None to clear selection)
                 json.dumps(subjects, indent=2),
                 "", "", "", False
             )
