@@ -8,12 +8,10 @@ import os
 from gradio_config import Config
 
 # Ensure REPLICATE_API_TOKEN is set in your environment variables
-REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
-if not REPLICATE_API_TOKEN:
+if "REPLICATE_API_TOKEN" not in os.environ:
     raise ValueError("REPLICATE_API_TOKEN is not set in the environment variables")
 
-# Set the token for the replicate library
-os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
+# The replicate library will automatically use the REPLICATE_API_TOKEN from the environment
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
 from gradio_script_analyzer import ScriptAnalyzer
@@ -492,11 +490,10 @@ with gr.Blocks() as app:
             "num_inference_steps": num_inference_steps,
             "output_format": output_format
         }
-        
+    
         output = replicate.run(
             "black-forest-labs/flux-dev",
-            input=input_data,
-            api_token=REPLICATE_API_TOKEN
+            input=input_data
         )
         return output
 
