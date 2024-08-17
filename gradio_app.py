@@ -358,27 +358,28 @@ with gr.Blocks() as app:
 
         def add_subject(name, category, description, active):
             new_subject = {"name": name, "category": category, "description": description, "active": active}
-            subject_manager.add_subject(new_subject)
+            updated_subjects = subject_manager.add_subject(new_subject)
             print(f"Added subject: {new_subject}")  # Debug print
-            return update_subjects_interface()
+            return update_subjects_interface(updated_subjects)
 
         def update_subject(name, category, description, active):
             updated_subject = {"name": name, "category": category, "description": description, "active": active}
-            subject_manager.update_subject(updated_subject)
-            return update_subjects_interface()
+            updated_subjects = subject_manager.update_subject(updated_subject)
+            return update_subjects_interface(updated_subjects)
 
         def delete_subject(name):
             try:
                 print(f"Deleting subject: {name}")  # Debug print
                 updated_subjects = subject_manager.remove_subject_by_name(name)
                 print(f"Updated subjects: {updated_subjects}")  # Debug print
-                with open(subject_manager.filename, 'r') as f:
-                    print(f"File contents after deletion: {f.read()}")  # Debug print
-                subject_names = [s["name"] for s in updated_subjects if s["name"].strip()]
-                return gr.update(choices=subject_names, value=None), gr.update(choices=subject_names, value=None), json.dumps(updated_subjects, indent=2), "", "", "", False
+                return update_subjects_interface(updated_subjects)
             except Exception as e:
                 print(f"Error in delete_subject: {e}")  # Debug print
                 return gr.update(), gr.update(), "", f"Error: {str(e)}", "", "", False
+
+        def update_subjects_interface(subjects):
+            subject_names = [s["name"] for s in subjects if s["name"].strip()]
+            return gr.update(choices=subject_names, value=None), gr.update(choices=subject_names, value=None), json.dumps(subjects, indent=2), "", "", "", False
 
         add_subject_button.click(
             add_subject,

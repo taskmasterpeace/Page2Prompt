@@ -1,6 +1,9 @@
 import csv
 import os
 
+import csv
+import os
+
 class SubjectManager:
     def __init__(self, filename: str = "subjects.csv"):
         self.filename = filename
@@ -30,12 +33,15 @@ class SubjectManager:
                     'name': subject['name'],
                     'category': subject['category'],
                     'description': subject['description'],
-                    'active': subject['active']
+                    'active': str(subject['active'])  # Convert boolean to string
                 })
+        print(f"Saved subjects: {self.subjects}")  # Debug print
 
     def add_subject(self, subject):
         self.subjects.append(subject)
         self.save_subjects()
+        print(f"Added subject: {subject}")  # Debug print
+        return self.get_subjects()  # Return the updated list of subjects
 
     def update_subject(self, updated_subject):
         for i, subject in enumerate(self.subjects):
@@ -43,6 +49,8 @@ class SubjectManager:
                 self.subjects[i] = updated_subject
                 break
         self.save_subjects()
+        print(f"Updated subject: {updated_subject}")  # Debug print
+        return self.get_subjects()  # Return the updated list of subjects
 
     def remove_subject_by_name(self, name):
         print(f"Removing subject: {name}")  # Debug print
