@@ -92,14 +92,30 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
 async def analyze_script(script_content, director_style):
     try:
         result = await core.analyze_script(script_content, director_style)
-        assert isinstance(result, str), f"analyze_script returned {type(result)}, expected str"
-        return result
+        formatted_result = format_shot_list(result)
+        return formatted_result
     except ScriptAnalysisError as e:
         logger.error(f"Script analysis failed: {str(e)}")
         return f"Error analyzing script: {str(e)}"
     except Exception as e:
         logger.exception("Unexpected error in analyze_script")
         return f"Unexpected error: {str(e)}"
+
+def format_shot_list(shot_list):
+    output = f"Suggested Style: {shot_list['suggested_style']}\n"
+    output += f"Style Prefix: {shot_list['style_prefix']}\n"
+    output += f"Style Suffix: {shot_list['style_suffix']}\n\n"
+    
+    for i, shot in enumerate(shot_list['shots'], 1):
+        output += f"Shot {i}:\n"
+        output += f"  Description: {shot['shot_description']}\n"
+        output += f"  Director's Notes: {shot['directors_notes']}\n"
+        output += f"  Camera Shot: {shot['camera_shot']}\n"
+        output += f"  Camera Move: {shot['camera_move']}\n"
+        output += f"  Camera Size: {shot['camera_size']}\n"
+        output += f"  Active Subject: {shot['active_subject']}\n\n"
+    
+    return output
 
 def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
     try:
