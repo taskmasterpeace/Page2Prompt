@@ -457,31 +457,12 @@ with gr.Blocks() as app:
             script_analysis_input = gr.Textbox(label="📜 Script to Analyze", lines=10)
             director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="🎭 Director Style")
             analyze_button = gr.Button("🎬 Generate Shot List")
-            shot_list_output = gr.JSON(label="📋 Generated Shot List")
-        
-            def apply_shot(shot_data):
-                return (
-                    shot_data.get("shot_description", ""),
-                    shot_data.get("directors_notes", ""),
-                    shot_data.get("camera_shot", ""),
-                    shot_data.get("camera_move", ""),
-                    shot_data.get("camera_size", ""),
-                    shot_data.get("active_subject", "")
-                )
-
-            apply_shot_button = gr.Button("Apply Selected Shot")
-            shot_selector = gr.Number(label="Shot Number", minimum=1, step=1)
+            shot_list_output = gr.Textbox(label="📋 Generated Shot List", lines=20)
 
             analyze_button.click(
-                lambda *args: asyncio.run(core.meta_chain.analyze_script(*args)),
+                lambda *args: asyncio.run(analyze_script(*args)),
                 inputs=[script_analysis_input, director_style_input], 
                 outputs=shot_list_output
-            )
-
-            apply_shot_button.click(
-                apply_shot,
-                inputs=[shot_selector],
-                outputs=[shot_description_input, directors_notes_input, camera_shot_input, camera_move_input, camera_size_input, active_subjects_input]
             )
         
         # Prompt Logs
@@ -504,3 +485,30 @@ def update_subjects_interface():
         "", "", "", False,
         "", "", "", False  # Add additional values to match the expected outputs
     )
+async def analyze_script(script_content, director_style):
+    try:
+        result = await core.analyze_script(script_content, director_style)
+        formatted_result = format_shot_list(result)
+        return formatted_result
+    except ScriptAnalysisError as e:
+        logger.error(f"Script analysis failed: {str(e)}")
+        return f"Error analyzing script: {str(e)}"
+    except Exception as e:
+        logger.exception("Unexpected error in analyze_script")
+        return f"Unexpected error: {str(e)}"
+
+def format_shot_list(shot_list):
+    output = f"Suggested Style: {shot_list['suggested_style']}\n"
+    output += f"Style Prefix: {shot_list['style_prefix']}\n"
+    output += f"Style Suffix: {shot_list['style_suffix']}\n\n"
+    
+    for i, shot in enumerate(shot_list['shots'], 1):
+        output += f"Shot {i}:\n"
+        output += f"  Description: {shot['shot_description']}\n"
+        output += f"  Director's Notes: {shot['directors_notes']}\n"
+        output += f"  Camera Shot: {shot['camera_shot']}\n"
+        output += f"  Camera Move: {shot['camera_move']}\n"
+        output += f"  Camera Size: {shot['camera_size']}\n"
+        output += f"  Active Subject: {shot['active_subject']}\n\n"
+    
+    return output
