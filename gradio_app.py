@@ -524,17 +524,21 @@ async def analyze_script(script_content, director_style):
         return f"Unexpected error: {str(e)}"
 
 def format_shot_list(shot_list):
-    output = f"Suggested Style: {shot_list['suggested_style']}\n"
-    output += f"Style Prefix: {shot_list['style_prefix']}\n"
-    output += f"Style Suffix: {shot_list['style_suffix']}\n\n"
-    
-    for i, shot in enumerate(shot_list['shots'], 1):
-        output += f"Shot {i}:\n"
-        output += f"  Description: {shot['shot_description']}\n"
-        output += f"  Director's Notes: {shot['directors_notes']}\n"
-        output += f"  Camera Shot: {shot['camera_shot']}\n"
-        output += f"  Camera Move: {shot['camera_move']}\n"
-        output += f"  Camera Size: {shot['camera_size']}\n"
-        output += f"  Active Subject: {shot['active_subject']}\n\n"
-    
+    if not isinstance(shot_list, dict) or not shot_list:
+        return "Error: Invalid or empty shot list received."
+    output = f"Suggested Style: {shot_list.get('suggested_style', 'N/A')}\n"
+    output += f"Style Prefix: {shot_list.get('style_prefix', 'N/A')}\n"
+    output += f"Style Suffix: {shot_list.get('style_suffix', 'N/A')}\n\n"
+    shots = shot_list.get('shots', [])
+    if not shots:
+        output += "No shots found in the shot list.\n"
+    else:
+        for i, shot in enumerate(shots, 1):
+            output += f"Shot {i}:\n"
+            output += f"  Description: {shot.get('shot_description', 'N/A')}\n"
+            output += f"  Director's Notes: {shot.get('directors_notes', 'N/A')}\n"
+            output += f"  Camera Shot: {shot.get('camera_shot', 'N/A')}\n"
+            output += f"  Camera Move: {shot.get('camera_move', 'N/A')}\n"
+            output += f"  Camera Size: {shot.get('camera_size', 'N/A')}\n"
+            output += f"  Active Subject: {shot.get('active_subject', 'N/A')}\n\n"
     return output
