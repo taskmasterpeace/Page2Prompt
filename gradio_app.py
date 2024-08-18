@@ -456,13 +456,32 @@ with gr.Blocks() as app:
         with gr.Tab("📊 Script Analysis"):
             script_analysis_input = gr.Textbox(label="📜 Script to Analyze", lines=10)
             director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="🎭 Director Style")
-            analyze_button = gr.Button("🔍 Analyze Script")
-            analysis_output = gr.Textbox(label="📊 Analysis Result")
-            
+            analyze_button = gr.Button("🎬 Generate Shot List")
+            shot_list_output = gr.JSON(label="📋 Generated Shot List")
+        
+            def apply_shot(shot_data):
+                return (
+                    shot_data.get("shot_description", ""),
+                    shot_data.get("directors_notes", ""),
+                    shot_data.get("camera_shot", ""),
+                    shot_data.get("camera_move", ""),
+                    shot_data.get("camera_size", ""),
+                    shot_data.get("active_subject", "")
+                )
+
+            apply_shot_button = gr.Button("Apply Selected Shot")
+            shot_selector = gr.Number(label="Shot Number", minimum=1, step=1)
+
             analyze_button.click(
-                lambda *args: asyncio.run(analyze_script(*args)),
+                lambda *args: asyncio.run(core.meta_chain.analyze_script(*args)),
                 inputs=[script_analysis_input, director_style_input], 
-                outputs=analysis_output
+                outputs=shot_list_output
+            )
+
+            apply_shot_button.click(
+                apply_shot,
+                inputs=[shot_selector],
+                outputs=[shot_description_input, directors_notes_input, camera_shot_input, camera_move_input, camera_size_input, active_subjects_input]
             )
         
         # Prompt Logs

@@ -20,13 +20,52 @@ class MetaChain:
         self.load_director_styles()
 
     def load_director_styles(self):
-        # Load predefined director styles
         self.director_styles.update({
-            "Alfred Hitchcock": "Suspenseful, psychological, innovative camera angles",
-            "Wes Anderson": "Symmetrical framing, pastel colors, quirky characters",
-            "Christopher Nolan": "Non-linear storytelling, practical effects, mind-bending concepts",
-            "Quentin Tarantino": "Non-linear narrative, pop culture references, stylized violence",
-            "Stanley Kubrick": "Symmetrical compositions, long takes, psychological themes"
+            "Alfred Hitchcock": {
+                "camera_angles": ["Dutch angle", "High angle", "Low angle"],
+                "lighting": "High contrast lighting with deep shadows",
+                "pacing": "Slow build-up with sudden bursts of tension",
+                "color_palette": "Muted colors with occasional bold accents",
+                "composition": "Off-center framing, use of foreground objects for depth",
+                "motifs": "Staircases, birds, blonde women",
+                "typical_shots": "Dolly zoom, point-of-view shots"
+            },
+            "Wes Anderson": {
+                "camera_angles": ["Symmetrical framing", "Center composition"],
+                "lighting": "Soft, warm lighting with pastel hues",
+                "pacing": "Deliberate and methodical with quirky interludes",
+                "color_palette": "Pastel colors with pops of vibrant hues",
+                "composition": "Symmetrical compositions, flat space",
+                "motifs": "Dysfunctional families, vintage aesthetics",
+                "typical_shots": "Overhead shots, slow-motion walking scenes"
+            },
+            "Christopher Nolan": {
+                "camera_angles": ["IMAX-friendly compositions", "Wide shots"],
+                "lighting": "Natural, high-contrast lighting",
+                "pacing": "Non-linear, intercut storylines",
+                "color_palette": "Cool tones with occasional warm accents",
+                "composition": "Practical effects, minimal CGI",
+                "motifs": "Time manipulation, moral ambiguity",
+                "typical_shots": "Rotating sets, practical stunts"
+            },
+            "Quentin Tarantino": {
+                "camera_angles": ["Low angle shots", "Trunk shots"],
+                "lighting": "Vibrant, stylized lighting",
+                "pacing": "Non-linear narrative with chapter-like structure",
+                "color_palette": "Bold, saturated colors",
+                "composition": "Close-ups of objects, feet",
+                "motifs": "Pop culture references, violence",
+                "typical_shots": "Long takes, Mexican standoffs"
+            },
+            "Stanley Kubrick": {
+                "camera_angles": ["One-point perspective", "Slow zoom"],
+                "lighting": "Natural light and practical sources",
+                "pacing": "Slow, deliberate with moments of intensity",
+                "color_palette": "Bold use of single colors in scenes",
+                "composition": "Symmetrical, geometric compositions",
+                "motifs": "Dehumanization, social commentary",
+                "typical_shots": "Steadicam tracking shots, extreme wide shots"
+            }
         })
 
     def initialize_llm(self, temperature: float = 0.7):
@@ -206,10 +245,80 @@ class MetaChain:
             logger.error(f"Error in generate_style_suffix: {str(e)}")
             return f"Error generating style suffix: {str(e)}"
 
-    async def analyze_script(self, script: str, director_style: str):
+    async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
-            # Placeholder for script analysis logic
-            # This should be implemented based on your specific requirements
-            return f"Analysis of script using {director_style} style:\n{script[:100]}..."
+            template = PromptTemplate(
+                input_variables=["script", "director_style"],
+                template="""
+                Analyze the following script using the directorial style of {director_style}. 
+                Generate a shot list with the following components for each significant moment or scene:
+
+                1. Shot Description: Describe the visual elements of the shot.
+                2. Director's Notes: Provide specific instructions or emphasis for the shot.
+                3. Camera Shot: Specify the type of shot (e.g., Close-up, Medium shot, Wide shot).
+                4. Camera Move: Describe any camera movement (e.g., Pan, Tilt, Dolly, Static).
+                5. Camera Size: Indicate the field of view (e.g., Extreme close-up, Full shot).
+                6. Active Subject: Identify the main subject or focus of the shot.
+
+                Also, provide:
+                7. Suggested Style: A one-word description of the overall visual style.
+                8. Style Prefix: A brief phrase describing the style's key visual characteristics.
+                9. Style Suffix: A list of 3-5 distinct visual elements that characterize this style, separated by semicolons.
+
+                Ensure that the shot list reflects {director_style}'s unique approach to filmmaking, 
+                considering elements like composition, lighting, pacing, color palette, 
+                recurring motifs, and typical shot choices.
+
+                Script:
+                {script}
+
+                Shot List:
+                """
+            )
+            
+            chain = RunnableSequence(template | self.llm)
+            result = await chain.ainvoke({"script": script, "director_style": director_style})
+            
+            # Parse the result into a structured format
+            shot_list = self._parse_shot_list(result.content)
+            
+            return shot_list
         except Exception as e:
             raise ScriptAnalysisError(str(e))
+
+    def _parse_shot_list(self, content: str) -> Dict[str, Any]:
+        lines = content.split('\n')
+        shot_list = {
+            "suggested_style": "",
+            "style_prefix": "",
+            "style_suffix": "",
+            "shots": []
+        }
+        current_shot = {}
+        
+        for line in lines:
+            if line.startswith("Suggested Style:"):
+                shot_list["suggested_style"] = line.split(":")[1].strip()
+            elif line.startswith("Style Prefix:"):
+                shot_list["style_prefix"] = line.split(":")[1].strip()
+            elif line.startswith("Style Suffix:"):
+                shot_list["style_suffix"] = line.split(":")[1].strip()
+            elif line.startswith("Shot Description:"):
+                if current_shot:
+                    shot_list["shots"].append(current_shot)
+                current_shot = {"shot_description": line.split(":")[1].strip()}
+            elif line.startswith("Director's Notes:"):
+                current_shot["directors_notes"] = line.split(":")[1].strip()
+            elif line.startswith("Camera Shot:"):
+                current_shot["camera_shot"] = line.split(":")[1].strip()
+            elif line.startswith("Camera Move:"):
+                current_shot["camera_move"] = line.split(":")[1].strip()
+            elif line.startswith("Camera Size:"):
+                current_shot["camera_size"] = line.split(":")[1].strip()
+            elif line.startswith("Active Subject:"):
+                current_shot["active_subject"] = line.split(":")[1].strip()
+        
+        if current_shot:
+            shot_list["shots"].append(current_shot)
+        
+        return shot_list
