@@ -7,25 +7,17 @@ class PromptManager:
         self.save_file = save_file
         self.prompts = self._load_prompts()
 
-    def save_prompt(self, prompt: Dict[str, str], name: str, style: str = "", highlighted_text: str = "", shot_description: str = "", metadata: Dict[str, Any] = None):
-        formatted_prompt = self.format_prompt({
-            "name": name,
-            "prompt": prompt,
-            "style": style,
-            "highlighted_text": highlighted_text,
-            "shot_description": shot_description,
-            "metadata": metadata
-        })
+    def save_prompt(self, prompt: Dict[str, Any], name: str):
+        formatted_prompt = self.format_prompt(name, prompt)
         self.prompts.append(formatted_prompt)
         self._save_prompts()
 
-    def format_prompt(self, prompt_dict: Dict[str, Any]) -> Dict[str, str]:
+    def format_prompt(self, name: str, prompt_dict: Dict[str, Any]) -> Dict[str, Any]:
         return {
-            "name": prompt_dict["name"],
-            "formatted_prompt": f"Style: {prompt_dict['style']}\n"
-                                f"Highlighted Text: {prompt_dict['highlighted_text']}\n"
-                                f"Shot Description: {prompt_dict['shot_description']}\n"
-                                f"Prompt: {prompt_dict['prompt']}"
+            "name": name,
+            "concise_prompt": prompt_dict.get("Concise Prompt", ""),
+            "normal_prompt": prompt_dict.get("Normal Prompt", ""),
+            "detailed_prompt": prompt_dict.get("Detailed Prompt", "")
         }
 
     def get_all_prompts(self):
