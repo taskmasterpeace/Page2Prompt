@@ -8,6 +8,11 @@ from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisEr
 # Import MetaChain at the end to avoid circular import
 from gradio_meta_chain import MetaChain
 
+import logging
+import re
+
+logger = logging.getLogger(__name__)
+
 class PromptForgeCore:
     def __init__(self):
         self.config = Config()
