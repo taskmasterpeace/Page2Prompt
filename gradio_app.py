@@ -176,6 +176,8 @@ with gr.Blocks() as app:
                 active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
             
             generate_button = gr.Button("🚀 Generate Prompt")
+            
+            feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
 
             with gr.Group():
                 gr.Markdown("## 🎨 Style")
