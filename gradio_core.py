@@ -4,6 +4,7 @@ from gradio_config import Config
 from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
+from gradio_subject_manager import SubjectManager
 
 # Import MetaChain at the end to avoid circular import
 from gradio_meta_chain import MetaChain
@@ -19,6 +20,7 @@ class PromptForgeCore:
         self.meta_chain = MetaChain(self)
         self.style_manager = StyleManager()
         self.prompt_logger = PromptLogger("prompt_log.json")
+        self.subject_manager = SubjectManager()
 
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", prompt_type: str = "normal", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
         try:

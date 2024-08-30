@@ -11,7 +11,7 @@ from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
 from gradio_core import PromptForgeCore
-from gradio_subject_manager import SubjectManager
+from gradio_core import PromptForgeCore
 from gradio_meta_chain import MetaChain
 
 
