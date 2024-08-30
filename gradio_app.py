@@ -11,7 +11,7 @@ from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
 from gradio_core import PromptForgeCore
-from subject_manager import SubjectManager
+from gradio_subject_manager import SubjectManager
 from gradio_meta_chain import MetaChain
 
 
@@ -19,12 +19,12 @@ from gradio_meta_chain import MetaChain
 config = Config()
 core = PromptForgeCore()
 prompt_manager = PromptManager()
-style_manager = StyleManager()
+style_manager = core.style_manager
 script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
 core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeCore instance
 prompt_logger = PromptLogger()
-subject_manager = SubjectManager()
+subject_manager = core.subject_manager
 
 # Load subjects
 subjects = subject_manager.get_subjects()
@@ -185,18 +185,56 @@ with gr.Blocks() as app:
                     style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix", scale=2)
                 with gr.Row():
                     save_style_button = gr.Button("💾 Save Style")
+                    update_style_button = gr.Button("🔄 Update Style")
+                    delete_style_button = gr.Button("🗑️ Delete Style")
                     generate_style_details_button = gr.Button("🔍 Generate Style Details")
                     generate_random_style_button = gr.Button("🎲 Generate Random Style")
                 director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
         
             def update_style_inputs(style_name):
-                prefix, suffix = style_manager.get_style(style_name)
-                return gr.Textbox.update(value=prefix), gr.Textbox.update(value=suffix)
+                style = style_manager.get_style(style_name)
+                return gr.Textbox.update(value=style['prefix']), gr.Textbox.update(value=style['suffix'])
 
             style_input.change(
                 update_style_inputs,
                 inputs=[style_input],
                 outputs=[style_prefix_input, style_suffix_input]
+            )
+
+            def save_style(style_name, prefix, suffix):
+                if not style_name:
+                    return "Error: Style name cannot be empty."
+                style_manager.add_style(style_name, prefix, suffix)
+                return f"Style '{style_name}' saved successfully."
+
+            def update_style(style_name, prefix, suffix):
+                if not style_name:
+                    return "Error: Style name cannot be empty."
+                style_manager.update_style(style_name, prefix, suffix)
+                return f"Style '{style_name}' updated successfully."
+
+            def delete_style(style_name):
+                if not style_name:
+                    return "Error: Style name cannot be empty."
+                style_manager.remove_style(style_name)
+                return f"Style '{style_name}' deleted successfully."
+
+            save_style_button.click(
+                save_style,
+                inputs=[style_input, style_prefix_input, style_suffix_input],
+                outputs=[feedback_area]
+            )
+
+            update_style_button.click(
+                update_style,
+                inputs=[style_input, style_prefix_input, style_suffix_input],
+                outputs=[feedback_area]
+            )
+
+            delete_style_button.click(
+                delete_style,
+                inputs=[style_input],
+                outputs=[feedback_area]
             )
             
             script_input = gr.Textbox(label="📜 Script", lines=10)
@@ -375,184 +413,9 @@ with gr.Blocks() as app:
                      subjects_list, generated_prompts, structured_prompt, generation_message]
         )
 
-        subjects = []
-
         def add_subject(name, category, description, active):
             new_subject = {"name": name, "category": category, "description": description, "active": active}
             subject_manager.add_subject(new_subject)
             return update_subjects_interface()
 
-        def add_subject(name, category, description, active):
-            new_subject = {"name": name, "category": category, "description": description, "active": active}
-            updated_subjects = subject_manager.add_subject(new_subject)
-            print(f"Added subject: {new_subject}")  # Debug print
-            return update_subjects_interface(updated_subjects)
-
-        def update_subject(name, category, description, active):
-            updated_subject = {"name": name, "category": category, "description": description, "active": active}
-            updated_subjects = subject_manager.update_subject(updated_subject)
-            return update_subjects_interface(updated_subjects)
-
-        def delete_subject(name):
-            try:
-                print(f"Deleting subject: {name}")  # Debug print
-                updated_subjects = subject_manager.remove_subject_by_name(name)
-                print(f"Updated subjects: {updated_subjects}")  # Debug print
-                return update_subjects_interface(updated_subjects)
-            except Exception as e:
-                print(f"Error in delete_subject: {e}")  # Debug print
-                return gr.update(), gr.update(), "", f"Error: {str(e)}", "", "", False
-
-        def update_subjects_interface(subjects):
-            subject_names = [s["name"] for s in subjects if s["name"].strip()]
-            return gr.update(choices=subject_names, value=None), gr.update(choices=subject_names, value=None), json.dumps(subjects, indent=2), "", "", "", False
-
-        add_subject_button.click(
-            add_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        edit_subject_button.click(
-            update_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        delete_subject_button.click(
-            delete_subject,
-            inputs=[subjects_dropdown],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        def update_subjects_interface():
-            subjects = subject_manager.get_subjects()
-            print("Subjects:", subjects)  # Added print statement
-            subject_names = [s["name"] for s in subjects]
-            return (
-                subject_names,  # Choices for the dropdown
-                None,  # Value for the dropdown (None to clear selection)
-                json.dumps(subjects, indent=2),
-                "", "", "", False
-            )
-
-        def load_subject(name):
-            subject = subject_manager.get_subject_by_name(name)
-            if subject:
-                return subject["name"], subject["category"], subject["description"], subject["active"]
-            return "", "", "", False
-
-        add_subject_button.click(
-            add_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        edit_subject_button.click(
-            update_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        delete_subject_button.click(
-            delete_subject,
-            inputs=[subjects_dropdown],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-        )
-
-        subjects_dropdown.change(
-            load_subject,
-            inputs=[subjects_dropdown],
-            outputs=[subject_name, subject_category, subject_description, subject_active]
-        )
-        
-        # Style-related event handlers
-        generate_random_style_button.click(
-            lambda: asyncio.run(generate_random_style_with_details()),
-            outputs=[style_prefix_input, style_suffix_input]
-        )
-        save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=feedback_area)
-        generate_style_details_button.click(
-            lambda prefix: asyncio.run(generate_style_details(prefix)),
-            inputs=[style_prefix_input],
-            outputs=style_suffix_input
-        )
-        
-        # Script Analysis
-        with gr.Tab("📊 Script Analysis"):
-            script_analysis_input = gr.Textbox(label="📜 Script to Analyze", lines=10)
-            director_style_input = gr.Dropdown(choices=core.get_director_styles(), label="🎭 Director Style")
-            analyze_button = gr.Button("🎬 Generate Shot List")
-            shot_list_output = gr.Textbox(label="📋 Generated Shot List", lines=20)
-
-            analyze_button.click(
-                lambda *args: asyncio.run(analyze_script(*args)),
-                inputs=[script_analysis_input, director_style_input], 
-                outputs=shot_list_output
-            )
-        
-        # Prompt Logs
-        with gr.Tab("📜 Prompt Logs"):
-            log_output = gr.JSON(label="📊 Prompt Generation Logs")
-            refresh_logs_button = gr.Button("🔄 Refresh Logs")
-            
-            refresh_logs_button.click(get_prompt_logs, inputs=None, outputs=log_output)
-
-    if __name__ == "__main__":
-        app.launch(share=True)
-def update_subjects_interface():
-    subjects = subject_manager.get_subjects()
-    print("Subjects:", subjects)  # Added print statement
-    subject_names = [s["name"] for s in subjects]
-    return (
-        gr.update(choices=subject_names, value=None),  # Update first dropdown
-        gr.update(choices=subject_names, value=None),  # Update second dropdown
-        json.dumps(subjects, indent=2),
-        "", "", "", False,
-        "", "", "", False  # Add additional values to match the expected outputs
-    )
-async def analyze_script(script_content, director_style):
-    try:
-        result = await core.analyze_script(script_content, director_style)
-        formatted_result = format_shot_list(result)
-        return formatted_result
-    except ScriptAnalysisError as e:
-        logger.error(f"Script analysis failed: {str(e)}")
-        return f"Error analyzing script: {str(e)}"
-    except Exception as e:
-        logger.exception("Unexpected error in analyze_script")
-        return f"Unexpected error: {str(e)}"
-
-def format_shot_list(analysis_result):
-    if not isinstance(analysis_result, dict) or not analysis_result:
-        return "Error: Invalid or empty analysis result received."
-    
-    output = "Script Analysis Results\n"
-    output += "=======================\n\n"
-    
-    # Initial Analysis
-    initial_analysis = analysis_result.get('initial_analysis', {})
-    output += f"Suggested Style: {initial_analysis.get('suggested_style', 'N/A')}\n"
-    output += f"Style Prefix: {initial_analysis.get('style_prefix', 'N/A')}\n"
-    output += f"Style Suffix: {initial_analysis.get('style_suffix', 'N/A')}\n\n"
-    
-    # Characters
-    characters = analysis_result.get('characters', [])
-    output += "Characters:\n"
-    for char in characters:
-        output += f"- {char}\n"
-    output += "\n"
-    
-    # Shot List
-    shot_list = analysis_result.get('shot_list', [])
-    if not shot_list:
-        output += "No shots found in the shot list.\n"
-    else:
-        output += "Shot List:\n"
-        for shot in shot_list:
-            output += f"Scene {shot['scene_number']}:\n"
-            output += f"  Description: {shot['shot_description']}\n"
-            output += f"  Characters: {', '.join(shot['characters'])}\n"
-            output += f"  Camera Work: {shot['camera_work']}\n\n"
-    
-    return output
+        def update_subject(name, category,
