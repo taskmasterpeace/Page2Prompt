@@ -420,6 +420,9 @@ with gr.Blocks() as app:
             subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
             return update_subjects_interface()
 
+if __name__ == "__main__":
+    app.launch()
+
         def delete_subject(name):
             subject_manager.delete_subject(name)
             return update_subjects_interface()
