@@ -466,4 +466,6 @@ with gr.Blocks() as app:
             outputs=[subject_name, subject_category, subject_description, subject_active]
         )
 
-        def update_subject(name, category,
+        def update_subject(name, category, description, active):
+            subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
+            return update_subjects_interface()
