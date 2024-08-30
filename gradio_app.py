@@ -523,22 +523,36 @@ async def analyze_script(script_content, director_style):
         logger.exception("Unexpected error in analyze_script")
         return f"Unexpected error: {str(e)}"
 
-def format_shot_list(shot_list):
-    if not isinstance(shot_list, dict) or not shot_list:
-        return "Error: Invalid or empty shot list received."
-    output = f"Suggested Style: {shot_list.get('suggested_style', 'N/A')}\n"
-    output += f"Style Prefix: {shot_list.get('style_prefix', 'N/A')}\n"
-    output += f"Style Suffix: {shot_list.get('style_suffix', 'N/A')}\n\n"
-    shots = shot_list.get('shots', [])
-    if not shots:
+def format_shot_list(analysis_result):
+    if not isinstance(analysis_result, dict) or not analysis_result:
+        return "Error: Invalid or empty analysis result received."
+    
+    output = "Script Analysis Results\n"
+    output += "=======================\n\n"
+    
+    # Initial Analysis
+    initial_analysis = analysis_result.get('initial_analysis', {})
+    output += f"Suggested Style: {initial_analysis.get('suggested_style', 'N/A')}\n"
+    output += f"Style Prefix: {initial_analysis.get('style_prefix', 'N/A')}\n"
+    output += f"Style Suffix: {initial_analysis.get('style_suffix', 'N/A')}\n\n"
+    
+    # Characters
+    characters = analysis_result.get('characters', [])
+    output += "Characters:\n"
+    for char in characters:
+        output += f"- {char}\n"
+    output += "\n"
+    
+    # Shot List
+    shot_list = analysis_result.get('shot_list', [])
+    if not shot_list:
         output += "No shots found in the shot list.\n"
     else:
-        for i, shot in enumerate(shots, 1):
-            output += f"Shot {i}:\n"
-            output += f"  Description: {shot.get('shot_description', 'N/A')}\n"
-            output += f"  Director's Notes: {shot.get('directors_notes', 'N/A')}\n"
-            output += f"  Camera Shot: {shot.get('camera_shot', 'N/A')}\n"
-            output += f"  Camera Move: {shot.get('camera_move', 'N/A')}\n"
-            output += f"  Camera Size: {shot.get('camera_size', 'N/A')}\n"
-            output += f"  Active Subject: {shot.get('active_subject', 'N/A')}\n\n"
+        output += "Shot List:\n"
+        for shot in shot_list:
+            output += f"Scene {shot['scene_number']}:\n"
+            output += f"  Description: {shot['shot_description']}\n"
+            output += f"  Characters: {', '.join(shot['characters'])}\n"
+            output += f"  Camera Work: {shot['camera_work']}\n\n"
+    
     return output
