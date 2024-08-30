@@ -418,4 +418,52 @@ with gr.Blocks() as app:
             subject_manager.add_subject(new_subject)
             return update_subjects_interface()
 
+        def update_subject(name, category, description, active):
+            subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
+            return update_subjects_interface()
+
+        def delete_subject(name):
+            subject_manager.delete_subject(name)
+            return update_subjects_interface()
+
+        def update_subjects_interface():
+            subjects = subject_manager.get_subjects()
+            subject_names = [s["name"] for s in subjects]
+            return (
+                gr.Dropdown.update(choices=subject_names, value=None),
+                gr.Dropdown.update(choices=subject_names, value=None),
+                json.dumps(subjects, indent=2),
+                "", "", "", False
+            )
+
+        def load_subject(name):
+            subject = subject_manager.get_subject_by_name(name)
+            if subject:
+                return subject["name"], subject["category"], subject["description"], subject["active"]
+            return "", "", "", False
+
+        add_subject_button.click(
+            add_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        edit_subject_button.click(
+            update_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        delete_subject_button.click(
+            delete_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        subjects_dropdown.change(
+            load_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subject_name, subject_category, subject_description, subject_active]
+        )
+
         def update_subject(name, category,
