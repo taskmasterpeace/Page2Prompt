@@ -308,24 +308,27 @@ with gr.Blocks() as app:
         update_result = update_subjects_interface()
         subject_displays = update_subject_displays()
         feedback = update_feedback(f"Subject '{subject_name}' active status updated")
-    
+
+        # Get the subject details
+        subject = subject_manager.get_subject_by_name(subject_name)
+
         # Create a list of 21 outputs, using gr.update() for components that don't need changes
         outputs = [
             update_result[0],  # subjects_dropdown
             update_result[1],  # subjects_dropdown (duplicate)
             update_result[2],  # subjects_list
-            gr.update(),  # subject_name
-            gr.update(),  # subject_category
-            gr.update(),  # subject_description
-            gr.update(),  # subject_active
-            gr.update(),  # subject_hairstyle
-            gr.update(),  # subject_clothing
-            gr.update(),  # subject_body_type
-            gr.update(),  # subject_accessories
-            gr.update(),  # subject_age
-            gr.update(),  # subject_height
-            gr.update(),  # subject_distinguishing_features
-            gr.update(),  # subject_scene_order
+            gr.update(value=subject.get('name', '')),  # subject_name
+            gr.update(value=subject.get('category', '')),  # subject_category
+            gr.update(value=subject.get('description', '')),  # subject_description
+            gr.update(value=is_active),  # subject_active
+            gr.update(value=subject.get('hairstyle', '')),  # subject_hairstyle
+            gr.update(value=subject.get('clothing', '')),  # subject_clothing
+            gr.update(value=subject.get('body_type', '')),  # subject_body_type
+            gr.update(value=subject.get('accessories', '')),  # subject_accessories
+            gr.update(value=subject.get('age', '')),  # subject_age
+            gr.update(value=subject.get('height', '')),  # subject_height
+            gr.update(value=subject.get('distinguishing_features', '')),  # subject_distinguishing_features
+            gr.update(value=subject.get('scene_order', '')),  # subject_scene_order
             subject_displays[0],  # person_subjects
             subject_displays[1],  # animal_subjects
             subject_displays[2],  # place_subjects
@@ -536,6 +539,45 @@ with gr.Blocks() as app:
             inputs=[subject_group],
             outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
         )
+
+    def create_toggle_handler(category):
+        def handler(subject_names):
+            for subject_name in subject_names:
+                subject_manager.toggle_subject_active(subject_name, True)
+            for subject in subject_manager.get_subjects():
+                if subject['category'] == category and subject['name'] not in subject_names:
+                    subject_manager.toggle_subject_active(subject['name'], False)
+            
+            update_result = update_subjects_interface()
+            subject_displays = update_subject_displays()
+            feedback = update_feedback(f"Subjects in {category} category updated")
+            
+            # Create a list of 21 outputs, using gr.update() for components that don't need changes
+            outputs = [
+                update_result[0],  # subjects_dropdown
+                update_result[1],  # subjects_dropdown (duplicate)
+                update_result[2],  # subjects_list
+                gr.update(),  # subject_name
+                gr.update(),  # subject_category
+                gr.update(),  # subject_description
+                gr.update(),  # subject_active
+                gr.update(),  # subject_hairstyle
+                gr.update(),  # subject_clothing
+                gr.update(),  # subject_body_type
+                gr.update(),  # subject_accessories
+                gr.update(),  # subject_age
+                gr.update(),  # subject_height
+                gr.update(),  # subject_distinguishing_features
+                gr.update(),  # subject_scene_order
+                subject_displays[0],  # person_subjects
+                subject_displays[1],  # animal_subjects
+                subject_displays[2],  # place_subjects
+                subject_displays[3],  # thing_subjects
+                subject_displays[4],  # other_subjects
+                feedback  # feedback_area
+            ]
+            return outputs
+        return handler
 
     subjects_dropdown.change(
         load_subject,
