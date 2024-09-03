@@ -40,71 +40,74 @@ def load_camera_work():
 camera_work = load_camera_work()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
-    start_time = time.time()
-    try:
-        logger.info("Starting generate_prompt_wrapper")
+def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
+    async def async_generate():
+        start_time = time.time()
+        try:
+            logger.info("Starting generate_prompt_wrapper")
 
-        active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
+            active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
 
-        def format_camera_work(shot, move, size):
-            camera_descriptions = []
-            if shot:
-                camera_descriptions.append(f"In a {shot},")
-            if move:
-                camera_descriptions.append(f"with a {move},")
-            if size:
-                camera_descriptions.append(f"framed as a {size},")
-            
-            if camera_descriptions:
-                return " ".join(camera_descriptions) + " we see"
-            return ""
+            def format_camera_work(shot, move, size):
+                camera_descriptions = []
+                if shot:
+                    camera_descriptions.append(f"In a {shot},")
+                if move:
+                    camera_descriptions.append(f"with a {move},")
+                if size:
+                    camera_descriptions.append(f"framed as a {size},")
+                
+                if camera_descriptions:
+                    return " ".join(camera_descriptions) + " we see"
+                return ""
 
-        camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
+            camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
 
-        meta_chain_start = time.time()
-        result = await core.meta_chain.generate_prompt(
-            style=style,
-            highlighted_text=highlighted_text,
-            shot_description=f"{camera_work_description} {shot_description}".strip(),
-            directors_notes=directors_notes,
-            script=script,
-            stick_to_script=stick_to_script,
-            end_parameters=end_parameters,
-            active_subjects=active_subjects_list,
-            full_script=script,
-            camera_shot=camera_shot,
-            camera_move=camera_move,
-            camera_size=camera_size
-        )
-        logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
+            meta_chain_start = time.time()
+            result = await core.meta_chain.generate_prompt(
+                style=style,
+                highlighted_text=highlighted_text,
+                shot_description=f"{camera_work_description} {shot_description}".strip(),
+                directors_notes=directors_notes,
+                script=script,
+                stick_to_script=stick_to_script,
+                end_parameters=end_parameters,
+                active_subjects=active_subjects_list,
+                full_script=script,
+                camera_shot=camera_shot,
+                camera_move=camera_move,
+                camera_size=camera_size
+            )
+            logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
 
-        if not isinstance(result, dict):
-            logger.error(f"Unexpected result type: {type(result)}")
-            return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), update_feedback("Error: Unexpected result type")
+            if not isinstance(result, dict):
+                logger.error(f"Unexpected result type: {type(result)}")
+                return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), update_feedback("Error: Unexpected result type")
 
-        concise = result.get('Concise Prompt', '')
-        normal = result.get('Normal Prompt', '')
-        detailed = result.get('Detailed Prompt', '')
+            concise = result.get('Concise Prompt', '')
+            normal = result.get('Normal Prompt', '')
+            detailed = result.get('Detailed Prompt', '')
 
-        def format_prompt(prefix, content, suffix):
-            prefix = prefix.strip() if prefix else ""
-            suffix = suffix.strip() if suffix else ""
-            parts = [part for part in [prefix, content, suffix] if part]
-            return " ".join(parts)
+            def format_prompt(prefix, content, suffix):
+                prefix = prefix.strip() if prefix else ""
+                suffix = suffix.strip() if suffix else ""
+                parts = [part for part in [prefix, content, suffix] if part]
+                return " ".join(parts)
 
-        all_prompts = f"Concise Prompt:\n{format_prompt(style_prefix, concise, style_suffix)}\n\nNormal Prompt:\n{format_prompt(style_prefix, normal, style_suffix)}\n\nDetailed Prompt:\n{format_prompt(style_prefix, detailed, style_suffix)}"
+            all_prompts = f"Concise Prompt:\n{format_prompt(style_prefix, concise, style_suffix)}\n\nNormal Prompt:\n{format_prompt(style_prefix, normal, style_suffix)}\n\nDetailed Prompt:\n{format_prompt(style_prefix, detailed, style_suffix)}"
 
-        logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
+            logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-        formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
-        return formatted_prompts, json.dumps(result, indent=2), update_feedback("Prompts generated successfully")
-    except Exception as e:
-        logger.exception("Unexpected error in generate_prompt_wrapper")
-        error_report = get_error_report()
-        return "", json.dumps({"error": str(e), "error_report": error_report}), update_feedback(f"Error: {str(e)}")
-    finally:
-        logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
+            formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
+            return formatted_prompts, json.dumps(result, indent=2), update_feedback("Prompts generated successfully")
+        except Exception as e:
+            logger.exception("Unexpected error in generate_prompt_wrapper")
+            error_report = get_error_report()
+            return "", json.dumps({"error": str(e), "error_report": error_report}), update_feedback(f"Error: {str(e)}")
+        finally:
+            logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
+
+    return asyncio.run(async_generate())
 
 def update_style_inputs(style_name):
     style = style_manager.get_style(style_name)
