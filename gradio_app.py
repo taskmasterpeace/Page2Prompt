@@ -305,7 +305,9 @@ with gr.Blocks() as app:
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
-        return update_subject_displays()
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        return update_result + subject_displays + (update_feedback(f"Subject '{subject_name}' active status updated"),)
 
     def delete_subject(name):
         subject_manager.delete_subject(name)
@@ -470,14 +472,16 @@ with gr.Blocks() as app:
             for subject in subject_manager.get_subjects():
                 if subject['category'] == category and subject['name'] not in subject_names:
                     subject_manager.toggle_subject_active(subject['name'], False)
-            return update_subject_displays()
+            update_result = update_subjects_interface()
+            subject_displays = update_subject_displays()
+            return update_result + subject_displays + (update_feedback(f"Subjects in {category} category updated"),)
         return handler
 
     for subject_group in [person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]:
         subject_group.change(
             create_toggle_handler(subject_group.label),
             inputs=[subject_group],
-            outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
         )
 
     subjects_dropdown.change(
