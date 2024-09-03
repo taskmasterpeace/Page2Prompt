@@ -3,6 +3,7 @@ import asyncio
 import json
 import time
 import csv
+import pyperclip
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
@@ -56,7 +57,7 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
                     camera_descriptions.append(f"with a {move},")
                 if size:
                     camera_descriptions.append(f"framed as a {size},")
-                
+                    
                 if camera_descriptions:
                     return " ".join(camera_descriptions) + " we see"
                 return ""
@@ -82,7 +83,7 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
+                return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type", json.dumps([])
 
             def format_prompt(prefix, content, suffix):
                 prefix = prefix.strip() if prefix else ""
@@ -98,13 +99,14 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
 
             structured_json = json.dumps(result, indent=2)
             generation_message = "Prompts generated successfully"
-            
-            return concise, normal, detailed, structured_json, generation_message
+            active_subjects_json = json.dumps(active_subjects_list, indent=2)
+                
+            return concise, normal, detailed, structured_json, generation_message, active_subjects_json
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
             error_message = f"Error: {str(e)}"
-            return error_message, error_message, error_message, json.dumps({"error": str(e), "error_report": error_report}), error_message
+            return error_message, error_message, error_message, json.dumps({"error": str(e), "error_report": error_report}), error_message, json.dumps([])
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
@@ -169,16 +171,27 @@ with gr.Blocks() as app:
                 with gr.Column(scale=1):
                     # Right column (Generated Prompts)
                     gr.Markdown("## 🖼️ Generated Prompts")
-                    concise_prompt = gr.Textbox(label="Concise Prompt", lines=5)
-                    normal_prompt = gr.Textbox(label="Normal Prompt", lines=10)
-                    detailed_prompt = gr.Textbox(label="Detailed Prompt", lines=15)
+                    with gr.Group():
+                        concise_prompt = gr.Textbox(label="Concise Prompt", lines=5)
+                        copy_concise_button = gr.Button("📋 Copy", scale=0.1)
+                    with gr.Group():
+                        normal_prompt = gr.Textbox(label="Normal Prompt", lines=10)
+                        copy_normal_button = gr.Button("📋 Copy", scale=0.1)
+                    with gr.Group():
+                        detailed_prompt = gr.Textbox(label="Detailed Prompt", lines=15)
+                        copy_detailed_button = gr.Button("📋 Copy", scale=0.1)
                     structured_prompt = gr.JSON(label="Structured Prompt")
                     generation_message = gr.Textbox(label="Generation Message")
             
                     with gr.Row():
                         save_button = gr.Button("💾 Save Prompts")
-                        copy_button = gr.Button("📋 Copy Prompts")
+                        copy_all_button = gr.Button("📋 Copy All Prompts")
+                        send_button = gr.Button("📤 Send Prompts")
                         clear_button = gr.Button("🧹 Clear All")
+
+            # Add a section to display active subjects
+            with gr.Row():
+                active_subjects_display = gr.JSON(label="Active Subjects")
             
         with gr.TabItem("Subject Management"):
             with gr.Row():
@@ -330,6 +343,27 @@ with gr.Blocks() as app:
     update_style_button.click(update_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
     delete_style_button.click(delete_style, inputs=[style_input], outputs=[feedback_area])
 
+    # Add these functions to handle copying and sending prompts
+    def copy_prompt(prompt):
+        pyperclip.copy(prompt)
+        return update_feedback("Prompt copied to clipboard")
+
+    def copy_all_prompts(concise, normal, detailed):
+        all_prompts = f"Concise Prompt:\n{concise}\n\nNormal Prompt:\n{normal}\n\nDetailed Prompt:\n{detailed}"
+        pyperclip.copy(all_prompts)
+        return update_feedback("All prompts copied to clipboard")
+
+    def send_prompts(concise, normal, detailed):
+        # Placeholder function - implement actual sending logic in the future
+        return update_feedback("Prompts sent successfully")
+
+    # Connect the new buttons to their respective functions
+    copy_concise_button.click(copy_prompt, inputs=[concise_prompt], outputs=[feedback_area])
+    copy_normal_button.click(copy_prompt, inputs=[normal_prompt], outputs=[feedback_area])
+    copy_detailed_button.click(copy_prompt, inputs=[detailed_prompt], outputs=[feedback_area])
+    copy_all_button.click(copy_all_prompts, inputs=[concise_prompt, normal_prompt, detailed_prompt], outputs=[feedback_area])
+    send_button.click(send_prompts, inputs=[concise_prompt, normal_prompt, detailed_prompt], outputs=[feedback_area])
+
     generate_button.click(
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input,
@@ -337,7 +371,7 @@ with gr.Blocks() as app:
                 end_parameters_input, subjects_dropdown,
                 camera_shot_input, camera_move_input, camera_size_input, 
                 concise_prompt, style_prefix_input, style_suffix_input, director_style_input],
-        outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
+        outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message, active_subjects_display]
     )
 
     add_subject_button.click(
