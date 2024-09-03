@@ -188,6 +188,14 @@ with gr.Blocks() as app:
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
                     subject_active = gr.Checkbox(label="Active in Scene")
+                    subject_hairstyle = gr.Textbox(label="Hairstyle")
+                    subject_clothing = gr.Textbox(label="Clothing")
+                    subject_body_type = gr.Textbox(label="Body Type")
+                    subject_accessories = gr.Textbox(label="Accessories")
+                    subject_age = gr.Number(label="Age")
+                    subject_height = gr.Textbox(label="Height")
+                    subject_distinguishing_features = gr.Textbox(label="Distinguishing Features")
+                    subject_scene_order = gr.Number(label="Scene Order")
                 
                     with gr.Row():
                         add_subject_button = gr.Button("➕ Add Subject")
@@ -196,6 +204,10 @@ with gr.Blocks() as app:
                 
                 with gr.Column(scale=1):
                     subjects_list = gr.JSON(label="Added Subjects")
+                    
+                    with gr.Row():
+                        sort_by_scene_order_button = gr.Button("Sort by Scene Order")
+                        sort_by_character_button = gr.Button("Sort by Character")
 
         with gr.TabItem("Shot List"):
             gr.Markdown("## 📋 Shot List")

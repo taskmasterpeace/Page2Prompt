@@ -16,8 +16,8 @@ class SubjectManager:
         return subjects
 
     def save_subjects(self):
+        fieldnames = ['name', 'category', 'description', 'active', 'hairstyle', 'clothing', 'body_type', 'accessories', 'age', 'height', 'distinguishing_features', 'scene_order']
         with open(self.filename, 'w', newline='') as f:
-            fieldnames = ['name', 'category', 'description', 'active']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for subject in self.subjects:
@@ -64,11 +64,14 @@ class SubjectManager:
         
         description = subject['description']
         if shot_type == 'close-up':
-            # Focus on facial features or detailed characteristics
-            return " ".join(description.split()[:20])  # First 20 words
+            return f"{description} {subject.get('hairstyle', '')} {subject.get('distinguishing_features', '')}"
         elif shot_type == 'medium':
-            # Include upper body details
-            return " ".join(description.split()[:30])  # First 30 words
+            return f"{description} {subject.get('clothing', '')} {subject.get('accessories', '')}"
         else:  # wide shot
-            # General appearance and positioning
-            return " ".join(description.split()[:10])  # First 10 words
+            return f"{subject.get('body_type', '')} {subject.get('height', '')} {subject.get('age', '')}-year-old"
+
+    def get_subjects_by_scene_order(self):
+        return sorted(self.subjects, key=lambda x: int(x.get('scene_order', 0)))
+
+    def get_subjects_by_character(self):
+        return sorted(self.subjects, key=lambda x: x['name'])
