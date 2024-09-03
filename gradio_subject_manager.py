@@ -82,3 +82,6 @@ class SubjectManager:
 
     def get_subjects_by_character(self):
         return sorted(self.subjects, key=lambda x: x['name'])
+
+    def get_subjects_by_category(self, category):
+        return [subject['name'] for subject in self.subjects if subject['category'] == category]

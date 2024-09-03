@@ -139,13 +139,13 @@ with gr.Blocks() as app:
                     with gr.Group():
                         gr.Markdown("## 👥 Subjects")
                         with gr.Row():
-                            person_subjects = gr.CheckboxGroup(label="People", choices=[])
-                            animal_subjects = gr.CheckboxGroup(label="Animals", choices=[])
+                            person_subjects = gr.CheckboxGroup(label="People", choices=subject_manager.get_subjects_by_category("Person"))
+                            animal_subjects = gr.CheckboxGroup(label="Animals", choices=subject_manager.get_subjects_by_category("Animal"))
                         with gr.Row():
-                            place_subjects = gr.CheckboxGroup(label="Places", choices=[])
-                            thing_subjects = gr.CheckboxGroup(label="Things", choices=[])
+                            place_subjects = gr.CheckboxGroup(label="Places", choices=subject_manager.get_subjects_by_category("Place"))
+                            thing_subjects = gr.CheckboxGroup(label="Things", choices=subject_manager.get_subjects_by_category("Thing"))
                         with gr.Row():
-                            other_subjects = gr.CheckboxGroup(label="Other", choices=[])
+                            other_subjects = gr.CheckboxGroup(label="Other", choices=subject_manager.get_subjects_by_category("Other"))
             
                     generate_button = gr.Button("🚀 Generate Prompt")
                     
@@ -211,7 +211,7 @@ with gr.Blocks() as app:
             with gr.Row():
                 with gr.Column(scale=1):
                     gr.Markdown("## 👤 Subject Details")
-                    subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True, value=subject_names[0] if subject_names else None)
+                    subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
                     subject_name = gr.Textbox(label="Subject Name")
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
@@ -350,13 +350,16 @@ with gr.Blocks() as app:
         subjects = subject_manager.get_subjects()
         subject_names = [s["name"] for s in subjects]
         categories = list(set(s["category"] for s in subjects))
-        current_value = subjects_dropdown.value if subjects_dropdown.value in subject_names else (subject_names[0] if subject_names else None)
         return (
-            gr.update(choices=subject_names, value=current_value),
-            gr.update(choices=subject_names, value=current_value),
+            gr.update(choices=subject_names),
+            gr.update(choices=subject_names),
             json.dumps(subjects, indent=2),
-            "", gr.update(choices=categories, value=None), "", False, "", "", "", "", "", "", "", "",
-            *update_subject_displays()
+            "", gr.update(choices=categories), "", False, "", "", "", "", "", "", "", "",
+            gr.update(choices=subject_manager.get_subjects_by_category("Person")),
+            gr.update(choices=subject_manager.get_subjects_by_category("Animal")),
+            gr.update(choices=subject_manager.get_subjects_by_category("Place")),
+            gr.update(choices=subject_manager.get_subjects_by_category("Thing")),
+            gr.update(choices=subject_manager.get_subjects_by_category("Other"))
         )
 
     def update_subject_displays():
