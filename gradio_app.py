@@ -307,7 +307,33 @@ with gr.Blocks() as app:
         subject_manager.toggle_subject_active(subject_name, is_active)
         update_result = update_subjects_interface()
         subject_displays = update_subject_displays()
-        return update_result + subject_displays + (update_feedback(f"Subject '{subject_name}' active status updated"),)
+        feedback = update_feedback(f"Subject '{subject_name}' active status updated")
+    
+        # Create a list of 21 outputs, using gr.update() for components that don't need changes
+        outputs = [
+            update_result[0],  # subjects_dropdown
+            update_result[1],  # subjects_dropdown (duplicate)
+            update_result[2],  # subjects_list
+            gr.update(),  # subject_name
+            gr.update(),  # subject_category
+            gr.update(),  # subject_description
+            gr.update(),  # subject_active
+            gr.update(),  # subject_hairstyle
+            gr.update(),  # subject_clothing
+            gr.update(),  # subject_body_type
+            gr.update(),  # subject_accessories
+            gr.update(),  # subject_age
+            gr.update(),  # subject_height
+            gr.update(),  # subject_distinguishing_features
+            gr.update(),  # subject_scene_order
+            subject_displays[0],  # person_subjects
+            subject_displays[1],  # animal_subjects
+            subject_displays[2],  # place_subjects
+            subject_displays[3],  # thing_subjects
+            subject_displays[4],  # other_subjects
+            feedback  # feedback_area
+        ]
+        return outputs
 
     def delete_subject(name):
         subject_manager.delete_subject(name)
@@ -472,9 +498,36 @@ with gr.Blocks() as app:
             for subject in subject_manager.get_subjects():
                 if subject['category'] == category and subject['name'] not in subject_names:
                     subject_manager.toggle_subject_active(subject['name'], False)
+            
             update_result = update_subjects_interface()
             subject_displays = update_subject_displays()
-            return update_result + subject_displays + (update_feedback(f"Subjects in {category} category updated"),)
+            feedback = update_feedback(f"Subjects in {category} category updated")
+            
+            # Create a list of 21 outputs, using gr.update() for components that don't need changes
+            outputs = [
+                update_result[0],  # subjects_dropdown
+                update_result[1],  # subjects_dropdown (duplicate)
+                update_result[2],  # subjects_list
+                gr.update(),  # subject_name
+                gr.update(),  # subject_category
+                gr.update(),  # subject_description
+                gr.update(),  # subject_active
+                gr.update(),  # subject_hairstyle
+                gr.update(),  # subject_clothing
+                gr.update(),  # subject_body_type
+                gr.update(),  # subject_accessories
+                gr.update(),  # subject_age
+                gr.update(),  # subject_height
+                gr.update(),  # subject_distinguishing_features
+                gr.update(),  # subject_scene_order
+                subject_displays[0],  # person_subjects
+                subject_displays[1],  # animal_subjects
+                subject_displays[2],  # place_subjects
+                subject_displays[3],  # thing_subjects
+                subject_displays[4],  # other_subjects
+                feedback  # feedback_area
+            ]
+            return outputs
         return handler
 
     for subject_group in [person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]:
