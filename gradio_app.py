@@ -93,12 +93,14 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
             formatted_prompts = "\n\n".join([f"**{k}:**\n{format_prompt(style_prefix, v, style_suffix)}" for k, v in result.items()])
             
             import re
-            prompts = re.split(r'\*\*(.*?)\*\*:', formatted_prompts)
-            prompts = [p.strip() for p in prompts if p.strip()]
-            
-            concise = prompts[1] if len(prompts) > 1 else ""
-            normal = prompts[3] if len(prompts) > 3 else ""
-            detailed = prompts[5] if len(prompts) > 5 else ""
+            prompt_dict = {}
+            matches = re.findall(r'\*\*(.*?)\*\*:\s*([\s\S]*?)(?=\n\n\*\*|$)', formatted_prompts)
+            for key, value in matches:
+                prompt_dict[key.strip()] = value.strip()
+
+            concise = prompt_dict.get('Concise Prompt', "")
+            normal = prompt_dict.get('Normal Prompt', "")
+            detailed = prompt_dict.get('Detailed Prompt', "")
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
