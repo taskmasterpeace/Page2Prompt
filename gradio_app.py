@@ -81,7 +81,7 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
 
         if not isinstance(result, dict):
             logger.error(f"Unexpected result type: {type(result)}")
-            return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
+            return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), update_feedback("Error: Unexpected result type")
 
         concise = result.get('Concise Prompt', '')
         normal = result.get('Normal Prompt', '')
@@ -98,11 +98,11 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
         logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
         formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
-        return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
+        return formatted_prompts, json.dumps(result, indent=2), update_feedback("Prompts generated successfully")
     except Exception as e:
         logger.exception("Unexpected error in generate_prompt_wrapper")
         error_report = get_error_report()
-        return "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
+        return "", json.dumps({"error": str(e), "error_report": error_report}), update_feedback(f"Error: {str(e)}")
     finally:
         logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
@@ -125,8 +125,6 @@ with gr.Blocks() as app:
             
             generate_button = gr.Button("🚀 Generate Prompt")
             
-            feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
-
             with gr.Group():
                 gr.Markdown("## 🎨 Style")
                 with gr.Row():
@@ -147,23 +145,26 @@ with gr.Blocks() as app:
                 outputs=[style_prefix_input, style_suffix_input]
             )
 
+            def update_feedback(message):
+                return gr.update(value=message)
+
             def save_style(style_name, prefix, suffix):
                 if not style_name:
-                    return "Error: Style name cannot be empty."
+                    return update_feedback("Error: Style name cannot be empty.")
                 style_manager.add_style(style_name, prefix, suffix)
-                return f"Style '{style_name}' saved successfully."
+                return update_feedback(f"Style '{style_name}' saved successfully.")
 
             def update_style(style_name, prefix, suffix):
                 if not style_name:
-                    return "Error: Style name cannot be empty."
+                    return update_feedback("Error: Style name cannot be empty.")
                 style_manager.add_style(style_name, prefix, suffix)
-                return f"Style '{style_name}' updated successfully."
+                return update_feedback(f"Style '{style_name}' updated successfully.")
 
             def delete_style(style_name):
                 if not style_name:
-                    return "Error: Style name cannot be empty."
+                    return update_feedback("Error: Style name cannot be empty.")
                 style_manager.remove_style(style_name)
-                return f"Style '{style_name}' deleted successfully."
+                return update_feedback(f"Style '{style_name}' deleted successfully.")
 
             save_style_button.click(
                 save_style,
@@ -227,8 +228,6 @@ with gr.Blocks() as app:
             
                 subjects_list = gr.JSON(label="Added Subjects")
     
-    feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
-    
     generate_button.click(
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input,
@@ -246,6 +245,10 @@ with gr.Blocks() as app:
         with gr.Row():
             debug_button = gr.Button("Show Debug Info")
             clear_debug_button = gr.Button("Clear Debug Info")
+
+    # Add a single feedback area at the bottom
+    with gr.Row():
+        feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
 
         def show_debug_info():
             return get_error_report()
@@ -271,34 +274,35 @@ with gr.Blocks() as app:
 
         save_button.click(
             save_prompt_with_name, 
-            inputs=[generated_prompts, structured_prompt]
+            inputs=[generated_prompts, structured_prompt],
+            outputs=[feedback_area]
         )
         
-        copy_button.click(lambda x: gr.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
+        copy_button.click(lambda x: update_feedback(f"Copied to clipboard: {json.dumps(x, indent=2)[:100]}..."), inputs=[structured_prompt], outputs=[feedback_area])
         
         def clear_all():
-            return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
+            return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "", update_feedback("All fields cleared"))
         
         clear_button.click(
             clear_all,
             outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
                      script_input, stick_to_script_input, camera_shot_input, camera_move_input,
                      end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
-                     subjects_list, generated_prompts, structured_prompt, generation_message]
+                     subjects_list, generated_prompts, structured_prompt, generation_message, feedback_area]
         )
 
         def add_subject(name, category, description, active):
             new_subject = {"name": name, "category": category, "description": description, "active": active}
             subject_manager.add_subject(new_subject)
-            return update_subjects_interface()
+            return update_subjects_interface() + (update_feedback(f"Subject '{name}' added successfully"),)
 
         def update_subject(name, category, description, active):
             subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
-            return update_subjects_interface()
+            return update_subjects_interface() + (update_feedback(f"Subject '{name}' updated successfully"),)
 
         def delete_subject(name):
             subject_manager.delete_subject(name)
-            return update_subjects_interface()
+            return update_subjects_interface() + (update_feedback(f"Subject '{name}' deleted successfully"),)
 
         def update_subjects_interface():
             subjects = subject_manager.get_subjects()
@@ -313,31 +317,31 @@ with gr.Blocks() as app:
         def load_subject(name):
             subject = subject_manager.get_subject_by_name(name)
             if subject:
-                return subject["name"], subject["category"], subject["description"], subject["active"]
-            return "", "", "", False
+                return subject["name"], subject["category"], subject["description"], subject["active"], update_feedback(f"Loaded subject: {name}")
+            return "", "", "", False, update_feedback("Subject not found")
 
         add_subject_button.click(
             add_subject,
             inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
         )
 
         edit_subject_button.click(
             update_subject,
             inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
         )
 
         delete_subject_button.click(
             delete_subject,
             inputs=[subjects_dropdown],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
         )
 
         subjects_dropdown.change(
             load_subject,
             inputs=[subjects_dropdown],
-            outputs=[subject_name, subject_category, subject_description, subject_active]
+            outputs=[subject_name, subject_category, subject_description, subject_active, feedback_area]
         )
 
 if __name__ == "__main__":
