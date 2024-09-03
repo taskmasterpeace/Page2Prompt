@@ -476,7 +476,14 @@ with gr.Blocks() as app:
     subject_active.change(
         toggle_subject_active,
         inputs=[subjects_dropdown, subject_active],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+        outputs=[
+            subjects_dropdown, subjects_dropdown, subjects_list, 
+            subject_name, subject_category, subject_description, subject_active, 
+            subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, 
+            subject_age, subject_height, subject_distinguishing_features, subject_scene_order, 
+            person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, 
+            feedback_area
+        ]
     )
 
     delete_subject_button.click(
