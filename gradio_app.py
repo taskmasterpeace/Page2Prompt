@@ -161,6 +161,25 @@ with gr.Blocks() as app:
                             delete_style_button = gr.Button("🗑️ Delete Style")
                             generate_style_details_button = gr.Button("🔍 Generate Style Details")
                             generate_random_style_button = gr.Button("🎲 Generate Random Style")
+
+                            async def generate_style_details(prefix):
+                                return await meta_chain.generate_style_suffix(prefix)
+
+                            async def generate_random_style():
+                                random_prefix = "A random artistic style"  # You can make this more sophisticated
+                                suffix = await meta_chain.generate_style_suffix(random_prefix)
+                                return random_prefix, suffix
+
+                            generate_style_details_button.click(
+                                generate_style_details,
+                                inputs=[style_prefix_input],
+                                outputs=[style_suffix_input]
+                            )
+
+                            generate_random_style_button.click(
+                                generate_random_style,
+                                outputs=[style_prefix_input, style_suffix_input]
+                            )
                         director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
                 
                     style_input.change(

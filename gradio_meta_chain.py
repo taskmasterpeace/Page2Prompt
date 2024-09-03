@@ -236,7 +236,7 @@ class MetaChain:
         try:
             template = PromptTemplate(
                 input_variables=["style_prefix"],
-                template="Based on the style prefix '{style_prefix}', write 5 distinct visual descriptions characteristics of the style prefix. Write the words out seperated by semi colons Like this. X;X;X;X;X  Each characteristic should be a single word followed by a colon. Focus only on visual aspects, not story-related elements."
+                template="Based on the style prefix '{style_prefix}', generate 5 distinct visual characteristics of this style. Each characteristic should be a single word or short phrase. Separate them with semicolons. Focus only on visual aspects, not story-related elements. Format: characteristic1;characteristic2;characteristic3;characteristic4;characteristic5"
             )
             chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"style_prefix": style_prefix})
