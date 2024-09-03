@@ -288,7 +288,7 @@ with gr.Blocks() as app:
             "name": name,
             "category": category,
             "description": description,
-            "active": active,
+            "active": str(active),
             "hairstyle": hairstyle,
             "clothing": clothing,
             "body_type": body_type,
@@ -303,6 +303,12 @@ with gr.Blocks() as app:
         subject_displays = update_subject_displays()
         return update_result + subject_displays + (update_feedback(f"Subject '{name}' updated successfully"),)
 
+    def toggle_subject_active(subject_name, is_active):
+        subject_manager.toggle_subject_active(subject_name, is_active)
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        return update_result + subject_displays + (update_feedback(f"Subject '{subject_name}' active status updated"),)
+
     def delete_subject(name):
         subject_manager.delete_subject(name)
         update_result = update_subjects_interface()
@@ -312,11 +318,12 @@ with gr.Blocks() as app:
     def update_subjects_interface():
         subjects = subject_manager.get_subjects()
         subject_names = [s["name"] for s in subjects]
+        categories = list(set(s["category"] for s in subjects))
         return (
             gr.update(choices=subject_names, value=None),
             gr.update(choices=subject_names, value=None),
             json.dumps(subjects, indent=2),
-            "", "", "", False, "", "", "", "", "", "", "", "",
+            "", gr.update(choices=categories, value=None), "", False, "", "", "", "", "", "", "", "",
             *update_subject_displays()
         )
 
@@ -427,6 +434,12 @@ with gr.Blocks() as app:
     edit_subject_button.click(
         update_subject,
         inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+    )
+
+    subject_active.change(
+        toggle_subject_active,
+        inputs=[subject_name, subject_active],
         outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
