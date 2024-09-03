@@ -82,11 +82,7 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
 
             if not isinstance(result, dict):
                 logger.error(f"Unexpected result type: {type(result)}")
-                return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), update_feedback("Error: Unexpected result type")
-
-            concise = result.get('Concise Prompt', '')
-            normal = result.get('Normal Prompt', '')
-            detailed = result.get('Detailed Prompt', '')
+                return "", "", "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
 
             def format_prompt(prefix, content, suffix):
                 prefix = prefix.strip() if prefix else ""
@@ -94,16 +90,27 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
                 parts = [part for part in [prefix, content, suffix] if part]
                 return " ".join(parts)
 
-            all_prompts = f"Concise Prompt:\n{format_prompt(style_prefix, concise, style_suffix)}\n\nNormal Prompt:\n{format_prompt(style_prefix, normal, style_suffix)}\n\nDetailed Prompt:\n{format_prompt(style_prefix, detailed, style_suffix)}"
+            formatted_prompts = "\n\n".join([f"**{k}:**\n{format_prompt(style_prefix, v, style_suffix)}" for k, v in result.items()])
+            
+            import re
+            prompts = re.split(r'\*\*(.*?)\*\*:', formatted_prompts)
+            prompts = [p.strip() for p in prompts if p.strip()]
+            
+            concise = prompts[1] if len(prompts) > 1 else ""
+            normal = prompts[3] if len(prompts) > 3 else ""
+            detailed = prompts[5] if len(prompts) > 5 else ""
 
             logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
 
-            formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
-            return formatted_prompts, json.dumps(result, indent=2), update_feedback("Prompts generated successfully")
+            structured_json = json.dumps(result, indent=2)
+            generation_message = "Prompts generated successfully"
+            
+            return concise, normal, detailed, structured_json, generation_message
         except Exception as e:
             logger.exception("Unexpected error in generate_prompt_wrapper")
             error_report = get_error_report()
-            return "", json.dumps({"error": str(e), "error_report": error_report}), update_feedback(f"Error: {str(e)}")
+            error_message = f"Error: {str(e)}"
+            return error_message, error_message, error_message, json.dumps({"error": str(e), "error_report": error_report}), error_message
         finally:
             logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
