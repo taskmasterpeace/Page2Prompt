@@ -28,6 +28,8 @@ subject_manager = core.subject_manager
 # Load subjects
 subjects = subject_manager.get_subjects()
 subject_names = [s["name"] for s in subjects]
+if not subject_names:
+    subject_names = ["No subjects available"]
 
 # Load camera work options from CSV
 def load_camera_work():
@@ -209,7 +211,7 @@ with gr.Blocks() as app:
             with gr.Row():
                 with gr.Column(scale=1):
                     gr.Markdown("## 👤 Subject Details")
-                    subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
+                    subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True, value=subject_names[0] if subject_names else None)
                     subject_name = gr.Textbox(label="Subject Name")
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
@@ -651,4 +653,5 @@ with gr.Blocks() as app:
     clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
 
 if __name__ == "__main__":
+    print("Loaded subjects:", subject_names)
     app.launch()
