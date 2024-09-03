@@ -41,13 +41,14 @@ def load_camera_work():
 camera_work = load_camera_work()
 
 @debug_func
-def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
+def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
     async def async_generate():
         start_time = time.time()
         try:
             logger.info("Starting generate_prompt_wrapper")
 
-            active_subjects_list = subject_manager.get_active_subjects()
+            active_subjects = person_subjects + animal_subjects + place_subjects + thing_subjects + other_subjects
+            active_subjects_list = [s for s in subject_manager.get_subjects() if s["name"] in active_subjects]
 
             def format_camera_work(shot, move, size):
                 camera_descriptions = []
@@ -132,7 +133,18 @@ with gr.Blocks() as app:
                         gr.Markdown("## 📝 Shot Details")
                         shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
                         directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
-                    
+            
+                    with gr.Group():
+                        gr.Markdown("## 👥 Subjects")
+                        with gr.Row():
+                            person_subjects = gr.CheckboxGroup(label="People", choices=[])
+                            animal_subjects = gr.CheckboxGroup(label="Animals", choices=[])
+                        with gr.Row():
+                            place_subjects = gr.CheckboxGroup(label="Places", choices=[])
+                            thing_subjects = gr.CheckboxGroup(label="Things", choices=[])
+                        with gr.Row():
+                            other_subjects = gr.CheckboxGroup(label="Other", choices=[])
+            
                     generate_button = gr.Button("🚀 Generate Prompt")
                     
                     with gr.Group():
@@ -298,8 +310,36 @@ with gr.Blocks() as app:
             gr.update(choices=subject_names, value=None),
             gr.update(choices=subject_names, value=None),
             json.dumps(subjects, indent=2),
-            "", "", "", False, "", "", "", "", "", "", "", ""
+            "", "", "", False, "", "", "", "", "", "", "", "",
+            *update_subject_displays()
         )
+
+    def update_subject_displays():
+        subjects = subject_manager.get_subjects()
+        people = [s["name"] for s in subjects if s["category"] == "Person"]
+        animals = [s["name"] for s in subjects if s["category"] == "Animal"]
+        places = [s["name"] for s in subjects if s["category"] == "Place"]
+        things = [s["name"] for s in subjects if s["category"] == "Thing"]
+        others = [s["name"] for s in subjects if s["category"] == "Other"]
+    
+        active_subjects = subject_manager.get_active_subjects()
+        active_names = [s["name"] for s in active_subjects]
+    
+        return (
+            gr.update(choices=people, value=[name for name in active_names if name in people]),
+            gr.update(choices=animals, value=[name for name in active_names if name in animals]),
+            gr.update(choices=places, value=[name for name in active_names if name in places]),
+            gr.update(choices=things, value=[name for name in active_names if name in things]),
+            gr.update(choices=others, value=[name for name in active_names if name in others])
+        )
+
+    def toggle_subject_active(person_active, animal_active, place_active, thing_active, other_active):
+        all_active = person_active + animal_active + place_active + thing_active + other_active
+        for subject in subject_manager.get_subjects():
+            subject_manager.toggle_subject_active(subject["name"])
+            if subject["name"] in all_active:
+                subject_manager.toggle_subject_active(subject["name"])
+        return update_subject_displays()
 
     def load_subject(name):
         subject = subject_manager.get_subject_by_name(name)
@@ -368,7 +408,7 @@ with gr.Blocks() as app:
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
-                end_parameters_input, subjects_dropdown,
+                end_parameters_input, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects,
                 camera_shot_input, camera_move_input, camera_size_input, 
                 concise_prompt, style_prefix_input, style_suffix_input, director_style_input],
         outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message, active_subjects_display]
@@ -377,20 +417,28 @@ with gr.Blocks() as app:
     add_subject_button.click(
         add_subject,
         inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
     )
 
     edit_subject_button.click(
         update_subject,
         inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
     )
 
     delete_subject_button.click(
         delete_subject,
         inputs=[subjects_dropdown],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
     )
+
+    # Add this new event handler for toggling subject active status
+    for subject_group in [person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]:
+        subject_group.change(
+            toggle_subject_active,
+            inputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects],
+            outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
+        )
 
     subjects_dropdown.change(
         load_subject,
