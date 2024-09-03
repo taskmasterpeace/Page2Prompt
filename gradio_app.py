@@ -377,7 +377,38 @@ with gr.Blocks() as app:
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
-        return update_subject_displays()
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        feedback = update_feedback(f"Subject '{subject_name}' active status updated")
+
+        # Get the subject details
+        subject = subject_manager.get_subject_by_name(subject_name)
+
+        # Create a list of 21 outputs, using gr.update() for components that don't need changes
+        outputs = [
+            gr.update(choices=update_result[0].choices, value=update_result[0].value),  # subjects_dropdown
+            gr.update(choices=update_result[1].choices, value=update_result[1].value),  # subjects_dropdown (duplicate)
+            gr.update(value=update_result[2]),  # subjects_list
+            gr.update(value=subject.get('name', '')),  # subject_name
+            gr.update(value=subject.get('category', '')),  # subject_category
+            gr.update(value=subject.get('description', '')),  # subject_description
+            gr.update(value=is_active),  # subject_active
+            gr.update(value=subject.get('hairstyle', '')),  # subject_hairstyle
+            gr.update(value=subject.get('clothing', '')),  # subject_clothing
+            gr.update(value=subject.get('body_type', '')),  # subject_body_type
+            gr.update(value=subject.get('accessories', '')),  # subject_accessories
+            gr.update(value=subject.get('age', '')),  # subject_age
+            gr.update(value=subject.get('height', '')),  # subject_height
+            gr.update(value=subject.get('distinguishing_features', '')),  # subject_distinguishing_features
+            gr.update(value=subject.get('scene_order', '')),  # subject_scene_order
+            gr.update(choices=subject_displays[0].choices, value=subject_displays[0].value),  # person_subjects
+            gr.update(choices=subject_displays[1].choices, value=subject_displays[1].value),  # animal_subjects
+            gr.update(choices=subject_displays[2].choices, value=subject_displays[2].value),  # place_subjects
+            gr.update(choices=subject_displays[3].choices, value=subject_displays[3].value),  # thing_subjects
+            gr.update(choices=subject_displays[4].choices, value=subject_displays[4].value),  # other_subjects
+            gr.update(value=feedback)  # feedback_area
+        ]
+        return outputs
 
     def update_subject_active_status(*active_subjects):
         all_active = []
