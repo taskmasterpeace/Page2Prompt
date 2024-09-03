@@ -348,7 +348,7 @@ with gr.Blocks() as app:
         subjects = subject_manager.get_subjects()
         subject_names = [s["name"] for s in subjects]
         categories = list(set(s["category"] for s in subjects))
-        current_value = subjects_dropdown.value if subjects_dropdown.value in subject_names else None
+        current_value = subjects_dropdown.value if subjects_dropdown.value in subject_names else (subject_names[0] if subject_names else None)
         return (
             gr.update(choices=subject_names, value=current_value),
             gr.update(choices=subject_names, value=current_value),
@@ -390,18 +390,18 @@ with gr.Blocks() as app:
             gr.update(choices=update_result[0], value=None),  # subjects_dropdown
             gr.update(choices=update_result[1], value=None),  # subjects_dropdown (duplicate)
             gr.update(value=update_result[2]),  # subjects_list
-            gr.update(value=subject.get('name', '')),  # subject_name
-            gr.update(value=subject.get('category', '')),  # subject_category
-            gr.update(value=subject.get('description', '')),  # subject_description
+            gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
+            gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
+            gr.update(value=subject.get('description', '') if subject else ''),  # subject_description
             gr.update(value=is_active),  # subject_active
-            gr.update(value=subject.get('hairstyle', '')),  # subject_hairstyle
-            gr.update(value=subject.get('clothing', '')),  # subject_clothing
-            gr.update(value=subject.get('body_type', '')),  # subject_body_type
-            gr.update(value=subject.get('accessories', '')),  # subject_accessories
-            gr.update(value=subject.get('age', '')),  # subject_age
-            gr.update(value=subject.get('height', '')),  # subject_height
-            gr.update(value=subject.get('distinguishing_features', '')),  # subject_distinguishing_features
-            gr.update(value=subject.get('scene_order', '')),  # subject_scene_order
+            gr.update(value=subject.get('hairstyle', '') if subject else ''),  # subject_hairstyle
+            gr.update(value=subject.get('clothing', '') if subject else ''),  # subject_clothing
+            gr.update(value=subject.get('body_type', '') if subject else ''),  # subject_body_type
+            gr.update(value=subject.get('accessories', '') if subject else ''),  # subject_accessories
+            gr.update(value=subject.get('age', '') if subject else ''),  # subject_age
+            gr.update(value=subject.get('height', '') if subject else ''),  # subject_height
+            gr.update(value=subject.get('distinguishing_features', '') if subject else ''),  # subject_distinguishing_features
+            gr.update(value=subject.get('scene_order', '') if subject else ''),  # subject_scene_order
             gr.update(choices=subject_displays[0], value=[]),  # person_subjects
             gr.update(choices=subject_displays[1], value=[]),  # animal_subjects
             gr.update(choices=subject_displays[2], value=[]),  # place_subjects
