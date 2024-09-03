@@ -314,8 +314,8 @@ with gr.Blocks() as app:
 
         # Create a list of 21 outputs, using gr.update() for components that don't need changes
         outputs = [
-            gr.update(choices=update_result[0].choices, value=update_result[0].value),  # subjects_dropdown
-            gr.update(choices=update_result[1].choices, value=update_result[1].value),  # subjects_dropdown (duplicate)
+            gr.update(choices=update_result[0], value=None),  # subjects_dropdown
+            gr.update(choices=update_result[1], value=None),  # subjects_dropdown (duplicate)
             gr.update(value=update_result[2]),  # subjects_list
             gr.update(value=subject.get('name', '')),  # subject_name
             gr.update(value=subject.get('category', '')),  # subject_category
@@ -329,11 +329,11 @@ with gr.Blocks() as app:
             gr.update(value=subject.get('height', '')),  # subject_height
             gr.update(value=subject.get('distinguishing_features', '')),  # subject_distinguishing_features
             gr.update(value=subject.get('scene_order', '')),  # subject_scene_order
-            gr.update(choices=subject_displays[0].choices, value=subject_displays[0].value),  # person_subjects
-            gr.update(choices=subject_displays[1].choices, value=subject_displays[1].value),  # animal_subjects
-            gr.update(choices=subject_displays[2].choices, value=subject_displays[2].value),  # place_subjects
-            gr.update(choices=subject_displays[3].choices, value=subject_displays[3].value),  # thing_subjects
-            gr.update(choices=subject_displays[4].choices, value=subject_displays[4].value),  # other_subjects
+            gr.update(choices=subject_displays[0], value=[]),  # person_subjects
+            gr.update(choices=subject_displays[1], value=[]),  # animal_subjects
+            gr.update(choices=subject_displays[2], value=[]),  # place_subjects
+            gr.update(choices=subject_displays[3], value=[]),  # thing_subjects
+            gr.update(choices=subject_displays[4], value=[]),  # other_subjects
             gr.update(value=feedback)  # feedback_area
         ]
         return outputs
