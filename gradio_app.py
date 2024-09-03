@@ -352,6 +352,15 @@ with gr.Blocks() as app:
             subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
         return update_subject_displays()
 
+    def update_subject_active_status(*active_subjects):
+        all_active = []
+        for subject_group in active_subjects:
+            if isinstance(subject_group, list):
+                all_active.extend(subject_group)
+        for subject in subject_manager.get_subjects():
+            subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
+        return update_subject_displays()
+
     def load_subject(name):
         subject = subject_manager.get_subject_by_name(name)
         if subject:
@@ -452,7 +461,7 @@ with gr.Blocks() as app:
     # Add this new event handler for toggling subject active status
     for subject_group in [person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]:
         subject_group.change(
-            toggle_subject_active,
+            update_subject_active_status,
             inputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects],
             outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
         )
