@@ -11,18 +11,16 @@ from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import MetaChainException, PromptGenerationError, ScriptAnalysisError
 from debug_utils import logger, debug_func, get_error_report
 from gradio_core import PromptForgeCore
-from gradio_core import PromptForgeCore
 from gradio_meta_chain import MetaChain
-
 
 # Initialize components
 config = Config()
 core = PromptForgeCore()
 prompt_manager = PromptManager()
-style_manager = core.style_manager
+style_manager = StyleManager("styles.csv")
 script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
-core.meta_chain = meta_chain  # Set the meta_chain attribute of the PromptForgeCore instance
+core.meta_chain = meta_chain
 prompt_logger = PromptLogger()
 subject_manager = core.subject_manager
 
@@ -42,27 +40,33 @@ def load_camera_work():
 camera_work = load_camera_work()
 
 @debug_func
-async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts):
+async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
+    start_time = time.time()
     try:
-        # Validate and parse active_subjects
-        active_subjects_list = []
-        if active_subjects:
-            for subject in active_subjects.split(','):
-                parts = subject.strip().split(':')
-                if len(parts) == 2:
-                    name_category, description = parts
-                    name, category = name_category.strip().split('(')
-                    category = category.strip(')')
-                    active_subjects_list.append({
-                        "name": name.strip(),
-                        "category": category.strip(),
-                        "description": description.strip()
-                    })
-        
+        logger.info("Starting generate_prompt_wrapper")
+
+        active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
+
+        def format_camera_work(shot, move, size):
+            camera_descriptions = []
+            if shot:
+                camera_descriptions.append(f"In a {shot},")
+            if move:
+                camera_descriptions.append(f"with a {move},")
+            if size:
+                camera_descriptions.append(f"framed as a {size},")
+            
+            if camera_descriptions:
+                return " ".join(camera_descriptions) + " we see"
+            return ""
+
+        camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
+
+        meta_chain_start = time.time()
         result = await core.meta_chain.generate_prompt(
             style=style,
             highlighted_text=highlighted_text,
-            shot_description=shot_description,
+            shot_description=f"{camera_work_description} {shot_description}".strip(),
             directors_notes=directors_notes,
             script=script,
             stick_to_script=stick_to_script,
@@ -70,97 +74,41 @@ async def generate_prompt_wrapper(style, highlighted_text, shot_description, dir
             active_subjects=active_subjects_list,
             full_script=script,
             camera_shot=camera_shot,
-            camera_move=camera_move
+            camera_move=camera_move,
+            camera_size=camera_size
         )
-        prompt_logger.log_prompt(result)
-        
-        # Format the prompts
-        concise = result.get("Concise Prompt", "")
-        normal = result.get("Normal Prompt", "")
-        detailed = result.get("Detailed Prompt", "")
-        formatted_prompts = f"**Concise Prompt:**\n{concise}\n\n**Normal Prompt:**\n{normal}\n\n**Detailed Prompt:**\n{detailed}"
-        
-        # Append new prompts to existing prompts
-        updated_prompts = existing_prompts + "\n\n" + formatted_prompts if existing_prompts else formatted_prompts
-        
-        return updated_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
+        logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
+
+        if not isinstance(result, dict):
+            logger.error(f"Unexpected result type: {type(result)}")
+            return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
+
+        concise = result.get('Concise Prompt', '')
+        normal = result.get('Normal Prompt', '')
+        detailed = result.get('Detailed Prompt', '')
+
+        def format_prompt(prefix, content, suffix):
+            prefix = prefix.strip() if prefix else ""
+            suffix = suffix.strip() if suffix else ""
+            parts = [part for part in [prefix, content, suffix] if part]
+            return " ".join(parts)
+
+        all_prompts = f"Concise Prompt:\n{format_prompt(style_prefix, concise, style_suffix)}\n\nNormal Prompt:\n{format_prompt(style_prefix, normal, style_suffix)}\n\nDetailed Prompt:\n{format_prompt(style_prefix, detailed, style_suffix)}"
+
+        logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
+
+        formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
+        return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
     except Exception as e:
         logger.exception("Unexpected error in generate_prompt_wrapper")
-        return json.dumps({"error": str(e)}, indent=2)
+        error_report = get_error_report()
+        return "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
+    finally:
+        logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
 
-@debug_func
-async def analyze_script(script_content, director_style):
-    try:
-        logger.info(f"Analyzing script with director style: {director_style}")
-        result = await core.analyze_script(script_content, director_style)
-        logger.info(f"Analysis result: {result}")
-        formatted_result = format_shot_list(result)
-        logger.info(f"Formatted result: {formatted_result}")
-        return formatted_result
-    except ScriptAnalysisError as e:
-        logger.error(f"Script analysis failed: {str(e)}")
-        return f"Error analyzing script: {str(e)}"
-    except Exception as e:
-        logger.exception("Unexpected error in analyze_script")
-        return f"Unexpected error: {str(e)}"
-
-def format_shot_list(shot_list):
-    if not isinstance(shot_list, dict):
-        return f"Error: Unexpected shot_list format. Received: {type(shot_list)}"
-
-    output = f"Suggested Style: {shot_list.get('suggested_style', 'N/A')}\n"
-    output += f"Style Prefix: {shot_list.get('style_prefix', 'N/A')}\n"
-    output += f"Style Suffix: {shot_list.get('style_suffix', 'N/A')}\n\n"
-    
-    shots = shot_list.get('shots', [])
-    if not shots:
-        output += "No shots found in the shot list.\n"
-    else:
-        for i, shot in enumerate(shots, 1):
-            output += f"Shot {i}:\n"
-            output += f"  Description: {shot.get('shot_description', 'N/A')}\n"
-            output += f"  Director's Notes: {shot.get('directors_notes', 'N/A')}\n"
-            output += f"  Camera Shot: {shot.get('camera_shot', 'N/A')}\n"
-            output += f"  Camera Move: {shot.get('camera_move', 'N/A')}\n"
-            output += f"  Camera Size: {shot.get('camera_size', 'N/A')}\n"
-            output += f"  Active Subject: {shot.get('active_subject', 'N/A')}\n\n"
-    
-    return output
-
-def save_prompt(concise_prompt, normal_prompt, detailed_prompt, name):
-    try:
-        prompt_manager.save_prompt({
-            "concise": concise_prompt,
-            "normal": normal_prompt,
-            "detailed": detailed_prompt
-        }, name, "", "", "", {})
-        return f"Prompts '{name}' saved successfully."
-    except Exception as e:
-        return f"Error saving prompts: {str(e)}"
-
-def get_prompt_logs():
-    return prompt_logger.get_logs()
-
-import random
-
-def generate_random_style():
-    adjectives = ["Vibrant", "Moody", "Ethereal", "Gritty", "Whimsical", "Minimalist", "Surreal", "Nostalgic", "Futuristic", "Retro"]
-    nouns = ["Cityscape", "Nature", "Portrait", "Abstract", "Still Life", "Landscape", "Architecture", "Street Scene", "Macro", "Fantasy"]
-    return f"{random.choice(adjectives)} {random.choice(nouns)}"
-
-def save_style(style_name, prefix, suffix):
-    if not style_name:
-        return "Error: Style name cannot be empty."
-    style_manager.add_style(style_name, prefix, suffix)
-    return f"Style '{style_name}' saved successfully."
-
-async def generate_style_details(prefix):
-    return await core.meta_chain.generate_style_suffix(prefix)
-
-async def generate_random_style_with_details():
-    prefix = generate_random_style()
-    suffix = await generate_style_details(prefix)
-    return prefix, suffix
+def update_style_inputs(style_name):
+    style = style_manager.get_style(style_name)
+    return gr.update(value=style['prefix']), gr.update(value=style['suffix'])
 
 # Define Gradio interface
 with gr.Blocks() as app:
@@ -193,10 +141,6 @@ with gr.Blocks() as app:
                     generate_random_style_button = gr.Button("🎲 Generate Random Style")
                 director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
         
-            def update_style_inputs(style_name):
-                style = style_manager.get_style(style_name)
-                return gr.Textbox.update(value=style['prefix']), gr.Textbox.update(value=style['suffix'])
-
             style_input.change(
                 update_style_inputs,
                 inputs=[style_input],
@@ -212,7 +156,7 @@ with gr.Blocks() as app:
             def update_style(style_name, prefix, suffix):
                 if not style_name:
                     return "Error: Style name cannot be empty."
-                style_manager.update_style(style_name, prefix, suffix)
+                style_manager.add_style(style_name, prefix, suffix)
                 return f"Style '{style_name}' updated successfully."
 
             def delete_style(style_name):
@@ -251,8 +195,6 @@ with gr.Blocks() as app:
                     camera_size_input = gr.Dropdown(label="📏 Camera Size", choices=[size['display'] for size in camera_work['size']])
             
             end_parameters_input = gr.Textbox(label="🔧 End Parameters")
-            
-            # Removed predictability_input
 
         with gr.Column(scale=1):
             # Right column (Generated Prompts)
@@ -287,72 +229,6 @@ with gr.Blocks() as app:
     
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    async def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, active_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
-        start_time = time.time()
-        try:
-            logger.info("Starting generate_prompt_wrapper")
-
-            active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
-
-            def format_camera_work(shot, move, size):
-                camera_descriptions = []
-                if shot:
-                    camera_descriptions.append(f"In a {shot},")
-                if move:
-                    camera_descriptions.append(f"with a {move},")
-                if size:
-                    camera_descriptions.append(f"framed as a {size},")
-                
-                if camera_descriptions:
-                    return " ".join(camera_descriptions) + " we see"
-                return ""
-
-            camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
-
-            meta_chain_start = time.time()
-            result = await core.meta_chain.generate_prompt(
-                style=style,
-                highlighted_text=highlighted_text,
-                shot_description=f"{camera_work_description} {shot_description}".strip(),
-                directors_notes=directors_notes,
-                script=script,
-                stick_to_script=stick_to_script,
-                end_parameters=end_parameters,
-                active_subjects=active_subjects_list,
-                full_script=script,
-                camera_shot=camera_shot,
-                camera_move=camera_move,
-                camera_size=camera_size
-            )
-            logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
-
-            if not isinstance(result, dict):
-                logger.error(f"Unexpected result type: {type(result)}")
-                return "", json.dumps({"error": f"Unexpected result type {type(result)}"}), "Error: Unexpected result type"
-
-            concise = result.get('Concise Prompt', '')
-            normal = result.get('Normal Prompt', '')
-            detailed = result.get('Detailed Prompt', '')
-
-            def format_prompt(prefix, content, suffix):
-                prefix = prefix.strip() if prefix else ""
-                suffix = suffix.strip() if suffix else ""
-                parts = [part for part in [prefix, content, suffix] if part]
-                return " ".join(parts)
-
-            all_prompts = f"Concise Prompt:\n{format_prompt(style_prefix, concise, style_suffix)}\n\nNormal Prompt:\n{format_prompt(style_prefix, normal, style_suffix)}\n\nDetailed Prompt:\n{format_prompt(style_prefix, detailed, style_suffix)}"
-
-            logger.info(f"Prompts generated - Concise: {concise[:50]}..., Normal: {normal[:50]}..., Detailed: {detailed[:50]}...")
-
-            formatted_prompts = f"**Concise Prompt:**\n{format_prompt(style_prefix, concise, style_suffix)}\n\n**Normal Prompt:**\n{format_prompt(style_prefix, normal, style_suffix)}\n\n**Detailed Prompt:**\n{format_prompt(style_prefix, detailed, style_suffix)}"
-            return formatted_prompts, json.dumps(result, indent=2), "Prompts generated successfully"
-        except Exception as e:
-            logger.exception("Unexpected error in generate_prompt_wrapper")
-            error_report = get_error_report()
-            return "", json.dumps({"error": str(e), "error_report": error_report}), f"Error: {str(e)}"
-        finally:
-            logger.info(f"generate_prompt_wrapper took {time.time() - start_time:.2f} seconds total")
-
     generate_button.click(
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input,
@@ -398,7 +274,7 @@ with gr.Blocks() as app:
             inputs=[generated_prompts, structured_prompt]
         )
         
-        copy_button.click(lambda x: gr.Textbox.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
+        copy_button.click(lambda x: gr.update(value=json.dumps(x, indent=2)), inputs=[structured_prompt], outputs=[feedback_area])
         
         def clear_all():
             return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "")
@@ -420,53 +296,49 @@ with gr.Blocks() as app:
             subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
             return update_subjects_interface()
 
+        def delete_subject(name):
+            subject_manager.delete_subject(name)
+            return update_subjects_interface()
+
+        def update_subjects_interface():
+            subjects = subject_manager.get_subjects()
+            subject_names = [s["name"] for s in subjects]
+            return (
+                gr.update(choices=subject_names, value=None),
+                gr.update(choices=subject_names, value=None),
+                json.dumps(subjects, indent=2),
+                "", "", "", False
+            )
+
+        def load_subject(name):
+            subject = subject_manager.get_subject_by_name(name)
+            if subject:
+                return subject["name"], subject["category"], subject["description"], subject["active"]
+            return "", "", "", False
+
+        add_subject_button.click(
+            add_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        edit_subject_button.click(
+            update_subject,
+            inputs=[subject_name, subject_category, subject_description, subject_active],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        delete_subject_button.click(
+            delete_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
+        )
+
+        subjects_dropdown.change(
+            load_subject,
+            inputs=[subjects_dropdown],
+            outputs=[subject_name, subject_category, subject_description, subject_active]
+        )
+
 if __name__ == "__main__":
     app.launch()
-
-def delete_subject(name):
-    subject_manager.delete_subject(name)
-    return update_subjects_interface()
-
-def update_subjects_interface():
-    subjects = subject_manager.get_subjects()
-    subject_names = [s["name"] for s in subjects]
-    return (
-        gr.Dropdown.update(choices=subject_names, value=None),
-        gr.Dropdown.update(choices=subject_names, value=None),
-        json.dumps(subjects, indent=2),
-        "", "", "", False
-    )
-
-def load_subject(name):
-    subject = subject_manager.get_subject_by_name(name)
-    if subject:
-        return subject["name"], subject["category"], subject["description"], subject["active"]
-    return "", "", "", False
-
-add_subject_button.click(
-    add_subject,
-    inputs=[subject_name, subject_category, subject_description, subject_active],
-    outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-)
-
-edit_subject_button.click(
-    update_subject,
-    inputs=[subject_name, subject_category, subject_description, subject_active],
-    outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-)
-
-delete_subject_button.click(
-    delete_subject,
-    inputs=[subjects_dropdown],
-    outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active]
-)
-
-subjects_dropdown.change(
-    load_subject,
-    inputs=[subjects_dropdown],
-    outputs=[subject_name, subject_category, subject_description, subject_active]
-)
-
-def update_subject(name, category, description, active):
-    subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
-    return update_subjects_interface()
