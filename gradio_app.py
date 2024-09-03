@@ -326,19 +326,17 @@ with gr.Blocks() as app:
         active_names = [s["name"] for s in active_subjects]
     
         return (
-            gr.update(choices=people, value=[name for name in active_names if name in people]),
-            gr.update(choices=animals, value=[name for name in active_names if name in animals]),
-            gr.update(choices=places, value=[name for name in active_names if name in places]),
-            gr.update(choices=things, value=[name for name in active_names if name in things]),
-            gr.update(choices=others, value=[name for name in active_names if name in others])
+            gr.CheckboxGroup.update(choices=people, value=[name for name in active_names if name in people]),
+            gr.CheckboxGroup.update(choices=animals, value=[name for name in active_names if name in animals]),
+            gr.CheckboxGroup.update(choices=places, value=[name for name in active_names if name in places]),
+            gr.CheckboxGroup.update(choices=things, value=[name for name in active_names if name in things]),
+            gr.CheckboxGroup.update(choices=others, value=[name for name in active_names if name in others])
         )
 
     def toggle_subject_active(person_active, animal_active, place_active, thing_active, other_active):
         all_active = person_active + animal_active + place_active + thing_active + other_active
         for subject in subject_manager.get_subjects():
-            subject_manager.toggle_subject_active(subject["name"])
-            if subject["name"] in all_active:
-                subject_manager.toggle_subject_active(subject["name"])
+            subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
         return update_subject_displays()
 
     def load_subject(name):
