@@ -46,7 +46,7 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
         try:
             logger.info("Starting generate_prompt_wrapper")
 
-            active_subjects_list = [subject.strip() for subject in active_subjects.split(',')] if active_subjects else []
+            active_subjects_list = subject_manager.get_active_subjects()
 
             def format_camera_work(shot, move, size):
                 camera_descriptions = []
@@ -120,128 +120,192 @@ with gr.Blocks() as app:
     # Define feedback_area at the beginning
     feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
     
-    with gr.Row():
-        with gr.Column(scale=1):
-            # Left column (Input)
-            with gr.Group():
-                gr.Markdown("## 📝 Shot Details")
-                shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
-                directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
-                active_subjects_input = gr.Textbox(label="👥 Active Subjects (comma-separated)")
-            
-            generate_button = gr.Button("🚀 Generate Prompt")
-            
-            with gr.Group():
-                gr.Markdown("## 🎨 Style")
-                with gr.Row():
-                    style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style", scale=1)
-                    style_prefix_input = gr.Textbox(label="Style Prefix", placeholder="Enter style name/details", scale=2)
-                    style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix", scale=2)
-                with gr.Row():
-                    save_style_button = gr.Button("💾 Save Style")
-                    update_style_button = gr.Button("🔄 Update Style")
-                    delete_style_button = gr.Button("🗑️ Delete Style")
-                    generate_style_details_button = gr.Button("🔍 Generate Style Details")
-                    generate_random_style_button = gr.Button("🎲 Generate Random Style")
-                director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
-        
-            style_input.change(
-                update_style_inputs,
-                inputs=[style_input],
-                outputs=[style_prefix_input, style_suffix_input]
-            )
-
-            def update_feedback(message):
-                return gr.update(value=message)
-
-            def save_style(style_name, prefix, suffix):
-                if not style_name:
-                    return update_feedback("Error: Style name cannot be empty.")
-                style_manager.add_style(style_name, prefix, suffix)
-                return update_feedback(f"Style '{style_name}' saved successfully.")
-
-            def update_style(style_name, prefix, suffix):
-                if not style_name:
-                    return update_feedback("Error: Style name cannot be empty.")
-                style_manager.add_style(style_name, prefix, suffix)
-                return update_feedback(f"Style '{style_name}' updated successfully.")
-
-            def delete_style(style_name):
-                if not style_name:
-                    return update_feedback("Error: Style name cannot be empty.")
-                style_manager.remove_style(style_name)
-                return update_feedback(f"Style '{style_name}' deleted successfully.")
-
-            save_style_button.click(
-                save_style,
-                inputs=[style_input, style_prefix_input, style_suffix_input],
-                outputs=[feedback_area]
-            )
-
-            update_style_button.click(
-                update_style,
-                inputs=[style_input, style_prefix_input, style_suffix_input],
-                outputs=[feedback_area]
-            )
-
-            delete_style_button.click(
-                delete_style,
-                inputs=[style_input],
-                outputs=[feedback_area]
-            )
-            
-            script_input = gr.Textbox(label="📜 Script", lines=10)
-            stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
-            highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
-            
-            with gr.Group():
-                gr.Markdown("## 📷 Camera Settings")
-                with gr.Row():
-                    camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=[shot['display'] for shot in camera_work['shot']])
-                    camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=[move['display'] for move in camera_work['move']])
-                    camera_size_input = gr.Dropdown(label="📏 Camera Size", choices=[size['display'] for size in camera_work['size']])
-            
-            end_parameters_input = gr.Textbox(label="🔧 End Parameters")
-
-        with gr.Column(scale=1):
-            # Right column (Generated Prompts)
-            gr.Markdown("## 🖼️ Generated Prompts")
-            generated_prompts = gr.Textbox(label="Generated Prompts", lines=15)
-            structured_prompt = gr.JSON(label="Structured Prompt")
-            generation_message = gr.Textbox(label="Generation Message")
-    
+    with gr.Tabs():
+        with gr.TabItem("Script & Prompt Generation"):
             with gr.Row():
-                save_button = gr.Button("💾 Save Prompts")
-                copy_button = gr.Button("📋 Copy Prompts")
-                clear_button = gr.Button("🧹 Clear All")
-    
-            feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
+                with gr.Column(scale=1):
+                    # Left column (Input)
+                    with gr.Group():
+                        gr.Markdown("## 📝 Shot Details")
+                        shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
+                        directors_notes_input = gr.Textbox(label="🎭 Director's Notes", lines=3)
+                    
+                    generate_button = gr.Button("🚀 Generate Prompt")
+                    
+                    with gr.Group():
+                        gr.Markdown("## 🎨 Style")
+                        with gr.Row():
+                            style_input = gr.Dropdown(choices=style_manager.get_style_names(), label="Style", scale=1)
+                            style_prefix_input = gr.Textbox(label="Style Prefix", placeholder="Enter style name/details", scale=2)
+                            style_suffix_input = gr.Textbox(label="Style Suffix", placeholder="Enter style suffix", scale=2)
+                        with gr.Row():
+                            save_style_button = gr.Button("💾 Save Style")
+                            update_style_button = gr.Button("🔄 Update Style")
+                            delete_style_button = gr.Button("🗑️ Delete Style")
+                            generate_style_details_button = gr.Button("🔍 Generate Style Details")
+                            generate_random_style_button = gr.Button("🎲 Generate Random Style")
+                        director_style_input = gr.Dropdown(choices=["Default"] + list(meta_chain.director_styles.keys()), label="🎬 Director's Style")
+                
+                    style_input.change(
+                        update_style_inputs,
+                        inputs=[style_input],
+                        outputs=[style_prefix_input, style_suffix_input]
+                    )
+                    
+                    script_input = gr.Textbox(label="📜 Script", lines=10)
+                    stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
+                    highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
+                    
+                    with gr.Group():
+                        gr.Markdown("## 📷 Camera Settings")
+                        with gr.Row():
+                            camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=[shot['display'] for shot in camera_work['shot']])
+                            camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=[move['display'] for move in camera_work['move']])
+                            camera_size_input = gr.Dropdown(label="📏 Camera Size", choices=[size['display'] for size in camera_work['size']])
+                    
+                    end_parameters_input = gr.Textbox(label="🔧 End Parameters")
+
+                with gr.Column(scale=1):
+                    # Right column (Generated Prompts)
+                    gr.Markdown("## 🖼️ Generated Prompts")
+                    concise_prompt = gr.Textbox(label="Concise Prompt", lines=5)
+                    normal_prompt = gr.Textbox(label="Normal Prompt", lines=10)
+                    detailed_prompt = gr.Textbox(label="Detailed Prompt", lines=15)
+                    structured_prompt = gr.JSON(label="Structured Prompt")
+                    generation_message = gr.Textbox(label="Generation Message")
             
-            with gr.Group():
-                gr.Markdown("## 👤 Subject Details")
-                subjects = subject_manager.get_subjects()
-                subject_names = [s["name"] for s in subjects]
-                subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
-                subject_name = gr.Textbox(label="Subject Name")
-                subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
-                subject_description = gr.Textbox(label="Subject Description", lines=3)
-                subject_active = gr.Checkbox(label="Active in Scene")
+                    with gr.Row():
+                        save_button = gr.Button("💾 Save Prompts")
+                        copy_button = gr.Button("📋 Copy Prompts")
+                        clear_button = gr.Button("🧹 Clear All")
             
-                with gr.Row():
-                    add_subject_button = gr.Button("➕ Add Subject")
-                    edit_subject_button = gr.Button("✏️ Update Subject")
-                    delete_subject_button = gr.Button("🗑️ Delete Subject")
-            
-                subjects_list = gr.JSON(label="Added Subjects")
-    
+        with gr.TabItem("Subject Management"):
+            with gr.Row():
+                with gr.Column(scale=1):
+                    gr.Markdown("## 👤 Subject Details")
+                    subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
+                    subject_name = gr.Textbox(label="Subject Name")
+                    subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
+                    subject_description = gr.Textbox(label="Subject Description", lines=3)
+                    subject_active = gr.Checkbox(label="Active in Scene")
+                
+                    with gr.Row():
+                        add_subject_button = gr.Button("➕ Add Subject")
+                        edit_subject_button = gr.Button("✏️ Update Subject")
+                        delete_subject_button = gr.Button("🗑️ Delete Subject")
+                
+                with gr.Column(scale=1):
+                    subjects_list = gr.JSON(label="Added Subjects")
+
+        with gr.TabItem("Shot List"):
+            gr.Markdown("## 📋 Shot List")
+            shot_list_input = gr.Textbox(label="Enter Shot List (JSON format)", lines=10)
+            update_shot_list_button = gr.Button("Update Shot List")
+            shot_list_display = gr.JSON(label="Current Shot List")
+
+    # Event handlers and utility functions
+    def update_feedback(message):
+        return gr.update(value=message)
+
+    def save_style(style_name, prefix, suffix):
+        if not style_name:
+            return update_feedback("Error: Style name cannot be empty.")
+        style_manager.add_style(style_name, prefix, suffix)
+        return update_feedback(f"Style '{style_name}' saved successfully.")
+
+    def update_style(style_name, prefix, suffix):
+        if not style_name:
+            return update_feedback("Error: Style name cannot be empty.")
+        style_manager.add_style(style_name, prefix, suffix)
+        return update_feedback(f"Style '{style_name}' updated successfully.")
+
+    def delete_style(style_name):
+        if not style_name:
+            return update_feedback("Error: Style name cannot be empty.")
+        style_manager.remove_style(style_name)
+        return update_feedback(f"Style '{style_name}' deleted successfully.")
+
+    def add_subject(name, category, description, active):
+        new_subject = {"name": name, "category": category, "description": description, "active": active}
+        subject_manager.add_subject(new_subject)
+        return update_subjects_interface() + (update_feedback(f"Subject '{name}' added successfully"),)
+
+    def update_subject(name, category, description, active):
+        subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
+        return update_subjects_interface() + (update_feedback(f"Subject '{name}' updated successfully"),)
+
+    def delete_subject(name):
+        subject_manager.delete_subject(name)
+        return update_subjects_interface() + (update_feedback(f"Subject '{name}' deleted successfully"),)
+
+    def update_subjects_interface():
+        subjects = subject_manager.get_subjects()
+        subject_names = [s["name"] for s in subjects]
+        return (
+            gr.update(choices=subject_names, value=None),
+            gr.update(choices=subject_names, value=None),
+            json.dumps(subjects, indent=2),
+            "", "", "", False
+        )
+
+    def load_subject(name):
+        subject = subject_manager.get_subject_by_name(name)
+        if subject:
+            return subject["name"], subject["category"], subject["description"], subject["active"] == 'True', update_feedback(f"Loaded subject: {name}")
+        return "", "", "", False, update_feedback("Subject not found")
+
+    def update_shot_list(shot_list_json):
+        try:
+            shot_list = json.loads(shot_list_json)
+            # Here you would typically update your shot list in your backend
+            # For now, we'll just echo it back
+            return json.dumps(shot_list, indent=2), update_feedback("Shot list updated successfully")
+        except json.JSONDecodeError:
+            return "", update_feedback("Error: Invalid JSON format")
+
+    # Connect event handlers
+    save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
+    update_style_button.click(update_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
+    delete_style_button.click(delete_style, inputs=[style_input], outputs=[feedback_area])
+
     generate_button.click(
         generate_prompt_wrapper,
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
-                end_parameters_input, active_subjects_input,
-                camera_shot_input, camera_move_input, camera_size_input, generated_prompts,
-                style_prefix_input, style_suffix_input, director_style_input],
-        outputs=[generated_prompts, structured_prompt, generation_message]
+                end_parameters_input, subjects_dropdown,
+                camera_shot_input, camera_move_input, camera_size_input, 
+                concise_prompt, style_prefix_input, style_suffix_input, director_style_input],
+        outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message]
+    )
+
+    add_subject_button.click(
+        add_subject,
+        inputs=[subject_name, subject_category, subject_description, subject_active],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+    )
+
+    edit_subject_button.click(
+        update_subject,
+        inputs=[subject_name, subject_category, subject_description, subject_active],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+    )
+
+    delete_subject_button.click(
+        delete_subject,
+        inputs=[subjects_dropdown],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+    )
+
+    subjects_dropdown.change(
+        load_subject,
+        inputs=[subjects_dropdown],
+        outputs=[subject_name, subject_category, subject_description, subject_active, feedback_area]
+    )
+
+    update_shot_list_button.click(
+        update_shot_list,
+        inputs=[shot_list_input],
+        outputs=[shot_list_display, feedback_area]
     )
 
     # Debug information section
@@ -252,103 +316,14 @@ with gr.Blocks() as app:
             debug_button = gr.Button("Show Debug Info")
             clear_debug_button = gr.Button("Clear Debug Info")
 
-    # Add a single feedback area at the bottom
-    with gr.Row():
-        feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
+    def show_debug_info():
+        return get_error_report()
 
-        def show_debug_info():
-            return get_error_report()
+    def clear_debug_info():
+        return ""
 
-        def clear_debug_info():
-            return ""
-
-        debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
-        clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
-        
-        def save_prompt_with_name(generated_prompts, structured_prompt):
-            name = gr.Textbox(label="Enter a name for this prompt set", interactive=True)
-            save_button = gr.Button("Save")
-            
-            def do_save(name, generated_prompts, structured_prompt):
-                if not name:
-                    return "Please enter a name for the prompt set."
-                prompt_data = json.loads(structured_prompt)
-                prompt_manager.save_prompt(prompt_data, name)
-                return f"Prompt set '{name}' saved successfully."
-            
-            save_button.click(do_save, inputs=[name, generated_prompts, structured_prompt], outputs=feedback_area)
-
-        save_button.click(
-            save_prompt_with_name, 
-            inputs=[generated_prompts, structured_prompt],
-            outputs=[feedback_area]
-        )
-        
-        copy_button.click(lambda x: update_feedback(f"Copied to clipboard: {json.dumps(x, indent=2)[:100]}..."), inputs=[structured_prompt], outputs=[feedback_area])
-        
-        def clear_all():
-            return ("", "", "", "", "", False, "", "", "", "", "", "", "", "", "", "", update_feedback("All fields cleared"))
-        
-        clear_button.click(
-            clear_all,
-            outputs=[style_input, shot_description_input, directors_notes_input, highlighted_text_input,
-                     script_input, stick_to_script_input, camera_shot_input, camera_move_input,
-                     end_parameters_input, active_subjects_input, style_prefix_input, style_suffix_input,
-                     subjects_list, generated_prompts, structured_prompt, generation_message, feedback_area]
-        )
-
-        def add_subject(name, category, description, active):
-            new_subject = {"name": name, "category": category, "description": description, "active": active}
-            subject_manager.add_subject(new_subject)
-            return update_subjects_interface() + (update_feedback(f"Subject '{name}' added successfully"),)
-
-        def update_subject(name, category, description, active):
-            subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
-            return update_subjects_interface() + (update_feedback(f"Subject '{name}' updated successfully"),)
-
-        def delete_subject(name):
-            subject_manager.delete_subject(name)
-            return update_subjects_interface() + (update_feedback(f"Subject '{name}' deleted successfully"),)
-
-        def update_subjects_interface():
-            subjects = subject_manager.get_subjects()
-            subject_names = [s["name"] for s in subjects]
-            return (
-                gr.update(choices=subject_names, value=None),
-                gr.update(choices=subject_names, value=None),
-                json.dumps(subjects, indent=2),
-                "", "", "", False
-            )
-
-        def load_subject(name):
-            subject = subject_manager.get_subject_by_name(name)
-            if subject:
-                return subject["name"], subject["category"], subject["description"], subject["active"], update_feedback(f"Loaded subject: {name}")
-            return "", "", "", False, update_feedback("Subject not found")
-
-        add_subject_button.click(
-            add_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
-        )
-
-        edit_subject_button.click(
-            update_subject,
-            inputs=[subject_name, subject_category, subject_description, subject_active],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
-        )
-
-        delete_subject_button.click(
-            delete_subject,
-            inputs=[subjects_dropdown],
-            outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
-        )
-
-        subjects_dropdown.change(
-            load_subject,
-            inputs=[subjects_dropdown],
-            outputs=[subject_name, subject_category, subject_description, subject_active, feedback_area]
-        )
+    debug_button.click(show_debug_info, inputs=[], outputs=[debug_output])
+    clear_debug_button.click(clear_debug_info, inputs=[], outputs=[debug_output])
 
 if __name__ == "__main__":
     app.launch()
