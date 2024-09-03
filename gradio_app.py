@@ -305,9 +305,7 @@ with gr.Blocks() as app:
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
-        update_result = update_subjects_interface()
-        subject_displays = update_subject_displays()
-        return update_result + subject_displays + (update_feedback(f"Subject '{subject_name}' active status updated"),)
+        return update_subject_displays()
 
     def delete_subject(name):
         subject_manager.delete_subject(name)
@@ -466,12 +464,17 @@ with gr.Blocks() as app:
 
     # Add individual event handlers for each subject checkbox
     def create_toggle_handler(category):
-        def handler(subject_name, is_checked):
-            return toggle_subject_active(subject_name, is_checked)
+        def handler(subject_names):
+            for subject_name in subject_names:
+                subject_manager.toggle_subject_active(subject_name, True)
+            for subject in subject_manager.get_subjects():
+                if subject['category'] == category and subject['name'] not in subject_names:
+                    subject_manager.toggle_subject_active(subject['name'], False)
+            return update_subject_displays()
         return handler
 
     for subject_group in [person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]:
-        subject_group.select(
+        subject_group.change(
             create_toggle_handler(subject_group.label),
             inputs=[subject_group],
             outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
