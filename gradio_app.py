@@ -114,6 +114,9 @@ def update_style_inputs(style_name):
 with gr.Blocks() as app:
     gr.Markdown("# 🎬 Page 2 Prompt - Bring Your Script to Life")
     
+    # Define feedback_area at the beginning
+    feedback_area = gr.Textbox(label="💬 Feedback", interactive=False)
+    
     with gr.Row():
         with gr.Column(scale=1):
             # Left column (Input)
