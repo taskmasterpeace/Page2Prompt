@@ -282,8 +282,15 @@ class MetaChain:
             # Parse the result into a structured format
             shot_list = self._parse_shot_list(result.content)
             
+            # Add default values if they're missing
+            shot_list.setdefault('suggested_style', 'N/A')
+            shot_list.setdefault('style_prefix', 'N/A')
+            shot_list.setdefault('style_suffix', 'N/A')
+            shot_list.setdefault('shots', [])
+            
             return shot_list
         except Exception as e:
+            logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
 
     def _parse_shot_list(self, content: str) -> Dict[str, Any]:
