@@ -237,13 +237,40 @@ with gr.Blocks() as app:
         style_manager.remove_style(style_name)
         return update_feedback(f"Style '{style_name}' deleted successfully.")
 
-    def add_subject(name, category, description, active):
-        new_subject = {"name": name, "category": category, "description": description, "active": active}
+    def add_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
+        new_subject = {
+            "name": name,
+            "category": category,
+            "description": description,
+            "active": active,
+            "hairstyle": hairstyle,
+            "clothing": clothing,
+            "body_type": body_type,
+            "accessories": accessories,
+            "age": age,
+            "height": height,
+            "distinguishing_features": distinguishing_features,
+            "scene_order": scene_order
+        }
         subject_manager.add_subject(new_subject)
         return update_subjects_interface() + (update_feedback(f"Subject '{name}' added successfully"),)
 
-    def update_subject(name, category, description, active):
-        subject_manager.update_subject({"name": name, "category": category, "description": description, "active": active})
+    def update_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
+        updated_subject = {
+            "name": name,
+            "category": category,
+            "description": description,
+            "active": active,
+            "hairstyle": hairstyle,
+            "clothing": clothing,
+            "body_type": body_type,
+            "accessories": accessories,
+            "age": age,
+            "height": height,
+            "distinguishing_features": distinguishing_features,
+            "scene_order": scene_order
+        }
+        subject_manager.update_subject(updated_subject)
         return update_subjects_interface() + (update_feedback(f"Subject '{name}' updated successfully"),)
 
     def delete_subject(name):
@@ -257,14 +284,36 @@ with gr.Blocks() as app:
             gr.update(choices=subject_names, value=None),
             gr.update(choices=subject_names, value=None),
             json.dumps(subjects, indent=2),
-            "", "", "", False
+            "", "", "", False, "", "", "", "", "", "", "", ""
         )
 
     def load_subject(name):
         subject = subject_manager.get_subject_by_name(name)
         if subject:
-            return subject["name"], subject["category"], subject["description"], subject["active"] == 'True', update_feedback(f"Loaded subject: {name}")
-        return "", "", "", False, update_feedback("Subject not found")
+            return (
+                subject["name"],
+                subject["category"],
+                subject["description"],
+                subject["active"] == 'True',
+                subject.get("hairstyle", ""),
+                subject.get("clothing", ""),
+                subject.get("body_type", ""),
+                subject.get("accessories", ""),
+                subject.get("age", ""),
+                subject.get("height", ""),
+                subject.get("distinguishing_features", ""),
+                subject.get("scene_order", ""),
+                update_feedback(f"Loaded subject: {name}")
+            )
+        return "", "", "", False, "", "", "", "", "", "", "", "", update_feedback("Subject not found")
+
+    def sort_subjects_by_scene_order():
+        sorted_subjects = subject_manager.get_subjects_by_scene_order()
+        return json.dumps(sorted_subjects, indent=2)
+
+    def sort_subjects_by_character():
+        sorted_subjects = subject_manager.get_subjects_by_character()
+        return json.dumps(sorted_subjects, indent=2)
 
     def update_shot_list(shot_list_json):
         try:
@@ -292,27 +341,30 @@ with gr.Blocks() as app:
 
     add_subject_button.click(
         add_subject,
-        inputs=[subject_name, subject_category, subject_description, subject_active],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+        inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
     )
 
     edit_subject_button.click(
         update_subject,
-        inputs=[subject_name, subject_category, subject_description, subject_active],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+        inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
     )
 
     delete_subject_button.click(
         delete_subject,
         inputs=[subjects_dropdown],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, feedback_area]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
     )
 
     subjects_dropdown.change(
         load_subject,
         inputs=[subjects_dropdown],
-        outputs=[subject_name, subject_category, subject_description, subject_active, feedback_area]
+        outputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area]
     )
+
+    sort_by_scene_order_button.click(sort_subjects_by_scene_order, outputs=[subjects_list])
+    sort_by_character_button.click(sort_subjects_by_character, outputs=[subjects_list])
 
     update_shot_list_button.click(
         update_shot_list,
