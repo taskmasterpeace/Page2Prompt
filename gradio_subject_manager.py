@@ -85,3 +85,6 @@ class SubjectManager:
 
     def get_subjects_by_category(self, category):
         return [subject['name'] for subject in self.subjects if subject['category'] == category]
+
+    def get_all_subject_names(self):
+        return [subject['name'] for subject in self.subjects]

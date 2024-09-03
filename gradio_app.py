@@ -147,6 +147,9 @@ with gr.Blocks() as app:
                         with gr.Row():
                             other_subjects = gr.CheckboxGroup(label="Other", choices=subject_manager.get_subjects_by_category("Other"))
             
+                    # Add this line to create a dropdown with all subject names
+                    all_subjects_dropdown = gr.Dropdown(label="All Subjects", choices=subject_manager.get_all_subject_names())
+            
                     generate_button = gr.Button("🚀 Generate Prompt")
                     
                     with gr.Group():
@@ -335,8 +338,8 @@ with gr.Blocks() as app:
 
         # Create a list of 21 outputs, using gr.update() for components that don't need changes
         outputs = [
-            gr.update(choices=update_result[0], value=None),  # subjects_dropdown
-            gr.update(choices=update_result[1], value=None),  # subjects_dropdown (duplicate)
+            update_result[0],  # subjects_dropdown
+            update_result[1],  # subjects_dropdown (duplicate)
             gr.update(value=update_result[2]),  # subjects_list
             gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
             gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
@@ -350,11 +353,11 @@ with gr.Blocks() as app:
             gr.update(value=subject.get('height', '') if subject else ''),  # subject_height
             gr.update(value=subject.get('distinguishing_features', '') if subject else ''),  # subject_distinguishing_features
             gr.update(value=subject.get('scene_order', '') if subject else ''),  # subject_scene_order
-            gr.update(choices=subject_displays[0], value=[]),  # person_subjects
-            gr.update(choices=subject_displays[1], value=[]),  # animal_subjects
-            gr.update(choices=subject_displays[2], value=[]),  # place_subjects
-            gr.update(choices=subject_displays[3], value=[]),  # thing_subjects
-            gr.update(choices=subject_displays[4], value=[]),  # other_subjects
+            subject_displays[0],  # person_subjects
+            subject_displays[1],  # animal_subjects
+            subject_displays[2],  # place_subjects
+            subject_displays[3],  # thing_subjects
+            subject_displays[4],  # other_subjects
             gr.update(value=feedback)  # feedback_area
         ]
         return outputs
@@ -370,15 +373,15 @@ with gr.Blocks() as app:
         subject_names = [s["name"] for s in subjects]
         categories = list(set(s["category"] for s in subjects))
         return (
-            gr.update(choices=subject_names),
-            gr.update(choices=subject_names),
+            gr.update(choices=subject_names, value=None),
+            gr.update(choices=subject_names, value=None),
             json.dumps(subjects, indent=2),
             "", gr.update(choices=categories), "", False, "", "", "", "", "", "", "", "",
-            gr.update(choices=subject_manager.get_subjects_by_category("Person")),
-            gr.update(choices=subject_manager.get_subjects_by_category("Animal")),
-            gr.update(choices=subject_manager.get_subjects_by_category("Place")),
-            gr.update(choices=subject_manager.get_subjects_by_category("Thing")),
-            gr.update(choices=subject_manager.get_subjects_by_category("Other"))
+            gr.update(choices=subject_manager.get_subjects_by_category("Person"), value=[]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Animal"), value=[]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Place"), value=[]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Thing"), value=[]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Other"), value=[])
         )
 
     def update_subject_displays():
