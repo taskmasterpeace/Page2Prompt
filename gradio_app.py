@@ -658,8 +658,7 @@ with gr.Blocks() as app:
     )
 
     # Debug information section
-    with gr.Group():
-        gr.Markdown("## 🐛 Debug Information")
+    with gr.Accordion("🐛 Debug Information", open=False):
         debug_output = gr.Textbox(label="Debug Information", lines=10)
         with gr.Row():
             debug_button = gr.Button("Show Debug Info")
