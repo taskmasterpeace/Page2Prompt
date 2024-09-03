@@ -279,7 +279,9 @@ with gr.Blocks() as app:
             "scene_order": scene_order
         }
         subject_manager.add_subject(new_subject)
-        return update_subjects_interface() + (update_feedback(f"Subject '{name}' added successfully"),)
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        return update_result + subject_displays + (update_feedback(f"Subject '{name}' added successfully"),)
 
     def update_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
         updated_subject = {
@@ -297,11 +299,15 @@ with gr.Blocks() as app:
             "scene_order": scene_order
         }
         subject_manager.update_subject(updated_subject)
-        return update_subjects_interface() + (update_feedback(f"Subject '{name}' updated successfully"),)
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        return update_result + subject_displays + (update_feedback(f"Subject '{name}' updated successfully"),)
 
     def delete_subject(name):
         subject_manager.delete_subject(name)
-        return update_subjects_interface() + (update_feedback(f"Subject '{name}' deleted successfully"),)
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        return update_result + subject_displays + (update_feedback(f"Subject '{name}' deleted successfully"),)
 
     def update_subjects_interface():
         subjects = subject_manager.get_subjects()
@@ -326,11 +332,11 @@ with gr.Blocks() as app:
         active_names = [s["name"] for s in active_subjects]
     
         return (
-            gr.CheckboxGroup.update(choices=people, value=[name for name in active_names if name in people]),
-            gr.CheckboxGroup.update(choices=animals, value=[name for name in active_names if name in animals]),
-            gr.CheckboxGroup.update(choices=places, value=[name for name in active_names if name in places]),
-            gr.CheckboxGroup.update(choices=things, value=[name for name in active_names if name in things]),
-            gr.CheckboxGroup.update(choices=others, value=[name for name in active_names if name in others])
+            gr.update(choices=people, value=[name for name in active_names if name in people]),
+            gr.update(choices=animals, value=[name for name in active_names if name in animals]),
+            gr.update(choices=places, value=[name for name in active_names if name in places]),
+            gr.update(choices=things, value=[name for name in active_names if name in things]),
+            gr.update(choices=others, value=[name for name in active_names if name in others])
         )
 
     def toggle_subject_active(person_active, animal_active, place_active, thing_active, other_active):
@@ -415,19 +421,19 @@ with gr.Blocks() as app:
     add_subject_button.click(
         add_subject,
         inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
     edit_subject_button.click(
         update_subject,
         inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
     delete_subject_button.click(
         delete_subject,
         inputs=[subjects_dropdown],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, feedback_area, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects]
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
     # Add this new event handler for toggling subject active status
