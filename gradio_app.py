@@ -50,7 +50,7 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
             logger.info("Starting generate_prompt_wrapper")
 
             active_subjects = person_subjects + animal_subjects + place_subjects + thing_subjects + other_subjects
-            active_subjects_list = [s for s in subject_manager.get_subjects() if s["name"] in active_subjects]
+            active_subjects_list = subject_manager.get_active_subjects()
 
             def format_camera_work(shot, move, size):
                 camera_descriptions = []
@@ -329,10 +329,10 @@ with gr.Blocks() as app:
                 "clothing": clothing,
                 "body_type": body_type,
                 "accessories": accessories,
-                "age": age,
+                "age": str(age) if age is not None else "",  # Convert age to string
                 "height": height,
                 "distinguishing_features": distinguishing_features,
-                "scene_order": scene_order
+                "scene_order": str(scene_order) if scene_order is not None else ""  # Convert scene_order to string
             }
             subject_manager.update_subject(updated_subject)
             update_result = update_subjects_interface()
@@ -469,11 +469,12 @@ with gr.Blocks() as app:
             if isinstance(subject_group, list):
                 all_active.extend(subject_group)
         for subject in subject_manager.get_subjects():
-            subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
+            is_active = subject["name"] in all_active
+            subject_manager.toggle_subject_active(subject["name"], is_active)
         subject_manager.save_subjects()  # Save the changes to the CSV file
         subject_displays = update_subject_displays()
         feedback = update_feedback("Subject active status updated")
-        return subject_displays + (feedback,)
+        return subject_displays + (gr.update(value=json.dumps(subject_manager.get_active_subjects(), indent=2)),) + (feedback,)
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
