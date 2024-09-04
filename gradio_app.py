@@ -148,7 +148,7 @@ with gr.Blocks() as app:
                             other_subjects = gr.CheckboxGroup(label="Other", choices=subject_manager.get_subjects_by_category("Other"))
             
                     # Add this line to create a dropdown with all subject names
-                    all_subjects_dropdown = gr.Dropdown(label="All Subjects", choices=subject_manager.get_all_subject_names())
+                    all_subjects_dropdown = gr.Dropdown(label="All Subjects", choices=subject_manager.get_all_subject_names(), multiselect=True)
             
                     generate_button = gr.Button("🚀 Generate Prompt")
                     
@@ -237,7 +237,7 @@ with gr.Blocks() as app:
                     subject_name = gr.Textbox(label="Subject Name")
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
-                    subject_active = gr.Checkbox(label="Active in Scene")
+                    # Removed the subject_active checkbox
                     subject_hairstyle = gr.Textbox(label="Hairstyle")
                     subject_clothing = gr.Textbox(label="Clothing")
                     subject_body_type = gr.Textbox(label="Body Type")
@@ -287,13 +287,13 @@ with gr.Blocks() as app:
         style_manager.remove_style(style_name)
         return update_feedback(f"Style '{style_name}' deleted successfully.")
 
-    def add_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
+    def add_subject(name, category, description, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
         try:
             new_subject = {
                 "name": name,
                 "category": category,
                 "description": description,
-                "active": active,
+                "active": "False",  # Set to False by default
                 "hairstyle": hairstyle,
                 "clothing": clothing,
                 "body_type": body_type,
@@ -307,11 +307,11 @@ with gr.Blocks() as app:
             if success:
                 return refresh_all_subject_components() + (gr.update(value=message),)
             else:
-                return [gr.update() for _ in range(20)] + [gr.update(value=message)]
+                return [gr.update() for _ in range(19)] + [gr.update(value=message)]
         except Exception as e:
             error_message = f"Error adding subject: {str(e)}"
             logger.exception(error_message)
-            return [gr.update() for _ in range(20)] + [gr.update(value=error_message)]
+            return [gr.update() for _ in range(19)] + [gr.update(value=error_message)]
 
     def refresh_all_subject_components():
         update_result = update_subjects_interface()
@@ -455,38 +455,12 @@ with gr.Blocks() as app:
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
+        subject_manager.save_subjects()  # Save the changes to the CSV file
         update_result = update_subjects_interface()
         subject_displays = update_subject_displays()
         feedback = update_feedback(f"Subject '{subject_name}' active status updated")
 
-        # Get the subject details
-        subject = subject_manager.get_subject_by_name(subject_name)
-
-        # Create a list of 21 outputs, using gr.update() for components that don't need changes
-        outputs = [
-            update_result[0],  # subjects_dropdown
-            update_result[1],  # subjects_dropdown (duplicate)
-            gr.update(value=update_result[2]),  # subjects_list
-            gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
-            gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
-            gr.update(value=subject.get('description', '') if subject else ''),  # subject_description
-            gr.update(value=is_active),  # subject_active
-            gr.update(value=subject.get('hairstyle', '') if subject else ''),  # subject_hairstyle
-            gr.update(value=subject.get('clothing', '') if subject else ''),  # subject_clothing
-            gr.update(value=subject.get('body_type', '') if subject else ''),  # subject_body_type
-            gr.update(value=subject.get('accessories', '') if subject else ''),  # subject_accessories
-            gr.update(value=subject.get('age', '') if subject else ''),  # subject_age
-            gr.update(value=subject.get('height', '') if subject else ''),  # subject_height
-            gr.update(value=subject.get('distinguishing_features', '') if subject else ''),  # subject_distinguishing_features
-            gr.update(value=subject.get('scene_order', '') if subject else ''),  # subject_scene_order
-            update_result[15],  # person_subjects
-            update_result[16],  # animal_subjects
-            update_result[17],  # place_subjects
-            update_result[18],  # thing_subjects
-            update_result[19],  # other_subjects
-            gr.update(value=feedback)  # feedback_area
-        ]
-        return outputs
+        return subject_displays + (feedback,)
 
     def update_subject_active_status(*active_subjects):
         all_active = []
@@ -496,7 +470,9 @@ with gr.Blocks() as app:
         for subject in subject_manager.get_subjects():
             subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
         subject_manager.save_subjects()  # Save the changes to the CSV file
-        return update_subject_displays() + (gr.update(),) * 15  # Add updates for other components
+        subject_displays = update_subject_displays()
+        feedback = update_feedback("Subject active status updated")
+        return subject_displays + (feedback,)
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
@@ -609,27 +585,20 @@ with gr.Blocks() as app:
 
     add_subject_button.click(
         add_subject,
-        inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+        inputs=[subject_name, subject_category, subject_description, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
     edit_subject_button.click(
         update_subject,
-        inputs=[subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+        inputs=[subject_name, subject_category, subject_description, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order],
+        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
-    subject_active.change(
-        toggle_subject_active,
-        inputs=[subjects_dropdown, subject_active],
-        outputs=[
-            subjects_dropdown, subjects_dropdown, subjects_list, 
-            subject_name, subject_category, subject_description, subject_active, 
-            subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, 
-            subject_age, subject_height, subject_distinguishing_features, subject_scene_order, 
-            person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, 
-            feedback_area
-        ]
+    all_subjects_dropdown.change(
+        update_active_subjects,
+        inputs=[all_subjects_dropdown],
+        outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
     )
 
     delete_subject_button.click(
@@ -789,3 +758,10 @@ if __name__ == "__main__":
             document.addEventListener('DOMContentLoaded', addDeleteConfirmation);
             """
         )
+    def update_active_subjects(selected_subjects):
+        for subject in subject_manager.get_subjects():
+            subject_manager.toggle_subject_active(subject["name"], subject["name"] in selected_subjects)
+        subject_manager.save_subjects()
+        subject_displays = update_subject_displays()
+        feedback = update_feedback("Active subjects updated")
+        return subject_displays + (feedback,)
