@@ -372,16 +372,17 @@ with gr.Blocks() as app:
         subjects = subject_manager.get_subjects()
         subject_names = [s["name"] for s in subjects]
         categories = list(set(s["category"] for s in subjects))
+        active_subjects = subject_manager.get_active_subjects()
         return (
             gr.update(choices=subject_names, value=None),
             gr.update(choices=subject_names, value=None),
             json.dumps(subjects, indent=2),
             "", gr.update(choices=categories), "", False, "", "", "", "", "", "", "", "",
-            gr.update(choices=subject_manager.get_subjects_by_category("Person"), value=[]),
-            gr.update(choices=subject_manager.get_subjects_by_category("Animal"), value=[]),
-            gr.update(choices=subject_manager.get_subjects_by_category("Place"), value=[]),
-            gr.update(choices=subject_manager.get_subjects_by_category("Thing"), value=[]),
-            gr.update(choices=subject_manager.get_subjects_by_category("Other"), value=[])
+            gr.update(choices=subject_manager.get_subjects_by_category("Person"), value=[s["name"] for s in active_subjects if s["category"] == "Person"]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Animal"), value=[s["name"] for s in active_subjects if s["category"] == "Animal"]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Place"), value=[s["name"] for s in active_subjects if s["category"] == "Place"]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Thing"), value=[s["name"] for s in active_subjects if s["category"] == "Thing"]),
+            gr.update(choices=subject_manager.get_subjects_by_category("Other"), value=[s["name"] for s in active_subjects if s["category"] == "Other"])
         )
 
     def update_subject_displays():
@@ -414,8 +415,8 @@ with gr.Blocks() as app:
 
         # Create a list of 21 outputs, using gr.update() for components that don't need changes
         outputs = [
-            gr.update(choices=update_result[0], value=None),  # subjects_dropdown
-            gr.update(choices=update_result[1], value=None),  # subjects_dropdown (duplicate)
+            update_result[0],  # subjects_dropdown
+            update_result[1],  # subjects_dropdown (duplicate)
             gr.update(value=update_result[2]),  # subjects_list
             gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
             gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
@@ -429,11 +430,11 @@ with gr.Blocks() as app:
             gr.update(value=subject.get('height', '') if subject else ''),  # subject_height
             gr.update(value=subject.get('distinguishing_features', '') if subject else ''),  # subject_distinguishing_features
             gr.update(value=subject.get('scene_order', '') if subject else ''),  # subject_scene_order
-            gr.update(choices=subject_displays[0], value=[]),  # person_subjects
-            gr.update(choices=subject_displays[1], value=[]),  # animal_subjects
-            gr.update(choices=subject_displays[2], value=[]),  # place_subjects
-            gr.update(choices=subject_displays[3], value=[]),  # thing_subjects
-            gr.update(choices=subject_displays[4], value=[]),  # other_subjects
+            update_result[15],  # person_subjects
+            update_result[16],  # animal_subjects
+            update_result[17],  # place_subjects
+            update_result[18],  # thing_subjects
+            update_result[19],  # other_subjects
             gr.update(value=feedback)  # feedback_area
         ]
         return outputs
@@ -562,16 +563,13 @@ with gr.Blocks() as app:
     # Add individual event handlers for each subject checkbox
     def create_toggle_handler(category):
         def handler(subject_names):
-            for subject_name in subject_names:
-                subject_manager.toggle_subject_active(subject_name, True)
             for subject in subject_manager.get_subjects():
-                if subject['category'] == category and subject['name'] not in subject_names:
-                    subject_manager.toggle_subject_active(subject['name'], False)
-            
+                if subject['category'] == category:
+                    subject_manager.toggle_subject_active(subject['name'], subject['name'] in subject_names)
+        
             update_result = update_subjects_interface()
-            subject_displays = update_subject_displays()
             feedback = update_feedback(f"Subjects in {category} category updated")
-            
+        
             # Create a list of 21 outputs, using gr.update() for components that don't need changes
             outputs = [
                 update_result[0],  # subjects_dropdown
@@ -589,11 +587,11 @@ with gr.Blocks() as app:
                 gr.update(),  # subject_height
                 gr.update(),  # subject_distinguishing_features
                 gr.update(),  # subject_scene_order
-                subject_displays[0],  # person_subjects
-                subject_displays[1],  # animal_subjects
-                subject_displays[2],  # place_subjects
-                subject_displays[3],  # thing_subjects
-                subject_displays[4],  # other_subjects
+                update_result[15],  # person_subjects
+                update_result[16],  # animal_subjects
+                update_result[17],  # place_subjects
+                update_result[18],  # thing_subjects
+                update_result[19],  # other_subjects
                 feedback  # feedback_area
             ]
             return outputs

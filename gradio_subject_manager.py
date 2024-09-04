@@ -53,7 +53,7 @@ class SubjectManager:
     def toggle_subject_active(self, name, is_active):
         for subject in self.subjects:
             if subject['name'] == name:
-                subject['active'] = str(is_active)
+                subject['active'] = str(is_active).lower()
                 break
         self.save_subjects()
 
