@@ -1,4 +1,3 @@
 name,category,description,active,hairstyle,clothing,body_type,accessories,age,height,distinguishing_features,scene_order
-Bruce,Person,Wears a black football helmet anywhere he goes. ,true,,a red and white jersery with the number 3,,nike boots,,,,
-Harold,Person,"A man who always wears a green hat,",false,,,,,,,,
-Bruce,Person,Wears a black football helmet anywhere he goes. ,True,,a red and white jersery with the number 3,,nike boots,,,,
+Bruce,Person,Wears a black football helmet anywhere he goes.,true,short brown hair,a red and white jersey with the number 3,athletic,black football helmet; nike boots,25,6'2",scar on left cheek,1
+Harold,Person,A man who always wears a green hat.,true,bald,casual button-up shirt and khakis,average,green hat,45,5'10",thick mustache,2
