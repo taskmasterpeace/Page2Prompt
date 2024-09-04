@@ -1,5 +1,8 @@
 import csv
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 class SubjectManager:
     def __init__(self, filename: str = "subjects.csv"):
@@ -17,20 +20,29 @@ class SubjectManager:
 
     def save_subjects(self):
         fieldnames = ['name', 'category', 'description', 'active', 'hairstyle', 'clothing', 'body_type', 'accessories', 'age', 'height', 'distinguishing_features', 'scene_order']
-        with open(self.filename, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            for subject in self.subjects:
-                writer.writerow(subject)
+        try:
+            with open(self.filename, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for subject in self.subjects:
+                    writer.writerow(subject)
+            logger.info(f"Subjects saved successfully to {self.filename}")
+        except Exception as e:
+            logger.exception(f"Error saving subjects to {self.filename}: {str(e)}")
+            raise
 
     def add_subject(self, subject):
-        # Check if a subject with the same name already exists (case-insensitive)
-        if not any(s['name'].lower() == subject['name'].lower() for s in self.subjects):
-            self.subjects.append(subject)
-            self.save_subjects()
-            return True, f"Subject '{subject['name']}' added successfully."
-        else:
-            return False, f"Subject '{subject['name']}' already exists. Use update_subject to modify it."
+        try:
+            # Check if a subject with the same name already exists (case-insensitive)
+            if not any(s['name'].lower() == subject['name'].lower() for s in self.subjects):
+                self.subjects.append(subject)
+                self.save_subjects()
+                return True, f"Subject '{subject['name']}' added successfully."
+            else:
+                return False, f"Subject '{subject['name']}' already exists. Use update_subject to modify it."
+        except Exception as e:
+            logger.exception(f"Error adding subject: {str(e)}")
+            return False, f"Error adding subject: {str(e)}"
 
     def update_subject(self, updated_subject):
         for i, subject in enumerate(self.subjects):

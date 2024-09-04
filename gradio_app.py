@@ -288,25 +288,30 @@ with gr.Blocks() as app:
         return update_feedback(f"Style '{style_name}' deleted successfully.")
 
     def add_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
-        new_subject = {
-            "name": name,
-            "category": category,
-            "description": description,
-            "active": active,
-            "hairstyle": hairstyle,
-            "clothing": clothing,
-            "body_type": body_type,
-            "accessories": accessories,
-            "age": age,
-            "height": height,
-            "distinguishing_features": distinguishing_features,
-            "scene_order": scene_order
-        }
-        success, message = subject_manager.add_subject(new_subject)
-        if success:
-            return refresh_all_subject_components() + (gr.update(value=message),)
-        else:
-            return [gr.update() for _ in range(20)] + [gr.update(value=message)]
+        try:
+            new_subject = {
+                "name": name,
+                "category": category,
+                "description": description,
+                "active": active,
+                "hairstyle": hairstyle,
+                "clothing": clothing,
+                "body_type": body_type,
+                "accessories": accessories,
+                "age": age,
+                "height": height,
+                "distinguishing_features": distinguishing_features,
+                "scene_order": scene_order
+            }
+            success, message = subject_manager.add_subject(new_subject)
+            if success:
+                return refresh_all_subject_components() + (gr.update(value=message),)
+            else:
+                return [gr.update() for _ in range(20)] + [gr.update(value=message)]
+        except Exception as e:
+            error_message = f"Error adding subject: {str(e)}"
+            logger.exception(error_message)
+            return [gr.update() for _ in range(20)] + [gr.update(value=error_message)]
 
     def refresh_all_subject_components():
         update_result = update_subjects_interface()
