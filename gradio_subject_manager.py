@@ -24,8 +24,12 @@ class SubjectManager:
                 writer.writerow(subject)
 
     def add_subject(self, subject):
-        self.subjects.append(subject)
-        self.save_subjects()
+        # Check if a subject with the same name already exists
+        if not any(s['name'] == subject['name'] for s in self.subjects):
+            self.subjects.append(subject)
+            self.save_subjects()
+        else:
+            print(f"Subject '{subject['name']}' already exists. Use update_subject to modify it.")
 
     def update_subject(self, updated_subject):
         for i, subject in enumerate(self.subjects):

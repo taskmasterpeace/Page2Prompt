@@ -446,7 +446,44 @@ with gr.Blocks() as app:
                 all_active.extend(subject_group)
         for subject in subject_manager.get_subjects():
             subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
+        subject_manager.save_subjects()  # Save the changes to the CSV file
         return update_subject_displays()
+
+    def toggle_subject_active(subject_name, is_active):
+        subject_manager.toggle_subject_active(subject_name, is_active)
+        subject_manager.save_subjects()  # Save the changes to the CSV file
+        update_result = update_subjects_interface()
+        subject_displays = update_subject_displays()
+        feedback = update_feedback(f"Subject '{subject_name}' active status updated")
+
+        # Get the subject details
+        subject = subject_manager.get_subject_by_name(subject_name)
+
+        # Create a list of outputs, using gr.update() for components that don't need changes
+        outputs = [
+            update_result[0],  # subjects_dropdown
+            update_result[1],  # subjects_dropdown (duplicate)
+            gr.update(value=update_result[2]),  # subjects_list
+            gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
+            gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
+            gr.update(value=subject.get('description', '') if subject else ''),  # subject_description
+            gr.update(value=is_active),  # subject_active
+            gr.update(value=subject.get('hairstyle', '') if subject else ''),  # subject_hairstyle
+            gr.update(value=subject.get('clothing', '') if subject else ''),  # subject_clothing
+            gr.update(value=subject.get('body_type', '') if subject else ''),  # subject_body_type
+            gr.update(value=subject.get('accessories', '') if subject else ''),  # subject_accessories
+            gr.update(value=subject.get('age', '') if subject else ''),  # subject_age
+            gr.update(value=subject.get('height', '') if subject else ''),  # subject_height
+            gr.update(value=subject.get('distinguishing_features', '') if subject else ''),  # subject_distinguishing_features
+            gr.update(value=subject.get('scene_order', '') if subject else ''),  # subject_scene_order
+            subject_displays[0],  # person_subjects
+            subject_displays[1],  # animal_subjects
+            subject_displays[2],  # place_subjects
+            subject_displays[3],  # thing_subjects
+            subject_displays[4],  # other_subjects
+            gr.update(value=feedback)  # feedback_area
+        ]
+        return outputs
 
     def load_subject(name):
         subject = subject_manager.get_subject_by_name(name)
