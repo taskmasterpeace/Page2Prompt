@@ -319,13 +319,13 @@ with gr.Blocks() as app:
         all_subjects_list = gr.update(choices=subject_manager.get_all_subject_names())
         return update_result + subject_displays + (all_subjects_list, update_feedback("Subject added and all components refreshed"),)
 
-    def update_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
+    def update_subject(name, category, description, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
         try:
             updated_subject = {
                 "name": name,
                 "category": category,
                 "description": description,
-                "active": str(active),
+                "active": "False",  # Set to False by default when updating
                 "hairstyle": hairstyle,
                 "clothing": clothing,
                 "body_type": body_type,
@@ -338,10 +338,12 @@ with gr.Blocks() as app:
             subject_manager.update_subject(updated_subject)
             update_result = update_subjects_interface()
             subject_displays = update_subject_displays()
-            return update_result + subject_displays + (update_feedback(f"Subject '{name}' updated successfully"),)
+            feedback = update_feedback(f"Subject '{name}' updated successfully")
+            return update_result + subject_displays + (feedback,)
         except Exception as e:
             logger.exception(f"Error updating subject: {str(e)}")
-            return [gr.update() for _ in range(20)] + [update_feedback(f"Error updating subject: {str(e)}")]
+            error_feedback = update_feedback(f"Error updating subject: {str(e)}")
+            return [gr.update() for _ in range(19)] + [error_feedback]
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
