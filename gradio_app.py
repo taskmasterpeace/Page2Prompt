@@ -234,7 +234,7 @@ with gr.Blocks() as app:
                 with gr.Column(scale=1):
                     gr.Markdown("## 👤 Subject Details")
                     subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
-                    subject_name = gr.Textbox(label="Subject Name")
+                    subject_name = gr.Textbox(label="Subject Name", allow_custom_value=True)
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
                     subject_active = gr.Checkbox(label="Active in Scene")
@@ -320,24 +320,28 @@ with gr.Blocks() as app:
         return update_result + subject_displays + (all_subjects_list, update_feedback("Subject added and all components refreshed"),)
 
     def update_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
-        updated_subject = {
-            "name": name,
-            "category": category,
-            "description": description,
-            "active": str(active),
-            "hairstyle": hairstyle,
-            "clothing": clothing,
-            "body_type": body_type,
-            "accessories": accessories,
-            "age": age,
-            "height": height,
-            "distinguishing_features": distinguishing_features,
-            "scene_order": scene_order
-        }
-        subject_manager.update_subject(updated_subject)
-        update_result = update_subjects_interface()
-        subject_displays = update_subject_displays()
-        return update_result + subject_displays + (update_feedback(f"Subject '{name}' updated successfully"),)
+        try:
+            updated_subject = {
+                "name": name,
+                "category": category,
+                "description": description,
+                "active": str(active),
+                "hairstyle": hairstyle,
+                "clothing": clothing,
+                "body_type": body_type,
+                "accessories": accessories,
+                "age": age,
+                "height": height,
+                "distinguishing_features": distinguishing_features,
+                "scene_order": scene_order
+            }
+            subject_manager.update_subject(updated_subject)
+            update_result = update_subjects_interface()
+            subject_displays = update_subject_displays()
+            return update_result + subject_displays + (update_feedback(f"Subject '{name}' updated successfully"),)
+        except Exception as e:
+            logger.exception(f"Error updating subject: {str(e)}")
+            return [gr.update() for _ in range(20)] + [update_feedback(f"Error updating subject: {str(e)}")]
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
@@ -492,7 +496,7 @@ with gr.Blocks() as app:
         for subject in subject_manager.get_subjects():
             subject_manager.toggle_subject_active(subject["name"], subject["name"] in all_active)
         subject_manager.save_subjects()  # Save the changes to the CSV file
-        return update_subject_displays()
+        return update_subject_displays() + (gr.update(),) * 15  # Add updates for other components
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
@@ -659,7 +663,7 @@ with gr.Blocks() as app:
             update_result = update_subjects_interface()
             feedback = update_feedback(f"Subjects in {category} category updated")
         
-            # Create a list of 21 outputs, using gr.update() for components that don't need changes
+            # Create a list of outputs, using gr.update() for components that don't need changes
             outputs = [
                 update_result[0],  # subjects_dropdown
                 update_result[1],  # subjects_dropdown (duplicate)
@@ -676,11 +680,11 @@ with gr.Blocks() as app:
                 gr.update(),  # subject_height
                 gr.update(),  # subject_distinguishing_features
                 gr.update(),  # subject_scene_order
-                update_result[15],  # person_subjects
-                update_result[16],  # animal_subjects
-                update_result[17],  # place_subjects
-                update_result[18],  # thing_subjects
-                update_result[19],  # other_subjects
+                gr.update(value=update_result[15]),  # person_subjects
+                gr.update(value=update_result[16]),  # animal_subjects
+                gr.update(value=update_result[17]),  # place_subjects
+                gr.update(value=update_result[18]),  # thing_subjects
+                gr.update(value=update_result[19]),  # other_subjects
                 feedback  # feedback_area
             ]
             return outputs
