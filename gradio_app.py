@@ -234,7 +234,7 @@ with gr.Blocks() as app:
                 with gr.Column(scale=1):
                     gr.Markdown("## 👤 Subject Details")
                     subjects_dropdown = gr.Dropdown(label="Select Subject", choices=subject_names, allow_custom_value=True)
-                    subject_name = gr.Textbox(label="Subject Name", allow_custom_value=True)
+                    subject_name = gr.Textbox(label="Subject Name")
                     subject_category = gr.Dropdown(label="Subject Category", choices=["Person", "Animal", "Place", "Thing", "Other"])
                     subject_description = gr.Textbox(label="Subject Description", lines=3)
                     subject_active = gr.Checkbox(label="Active in Scene")
