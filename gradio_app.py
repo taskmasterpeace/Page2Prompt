@@ -302,8 +302,11 @@ with gr.Blocks() as app:
             "distinguishing_features": distinguishing_features,
             "scene_order": scene_order
         }
-        subject_manager.add_subject(new_subject)
-        return refresh_all_subject_components()
+        success, message = subject_manager.add_subject(new_subject)
+        if success:
+            return refresh_all_subject_components() + (gr.update(value=message),)
+        else:
+            return [gr.update() for _ in range(20)] + [gr.update(value=message)]
 
     def refresh_all_subject_components():
         update_result = update_subjects_interface()
@@ -370,7 +373,9 @@ with gr.Blocks() as app:
         subject_manager.delete_subject(name)
         update_result = update_subjects_interface()
         subject_displays = update_subject_displays()
-        return update_result + subject_displays + (update_feedback(f"Subject '{name}' deleted successfully"),)
+        all_subjects_list = gr.update(choices=subject_manager.get_all_subject_names())
+        feedback = update_feedback(f"Subject '{name}' deleted successfully")
+        return update_result + subject_displays + (all_subjects_list, feedback)
 
     def update_subjects_interface():
         subjects = subject_manager.get_subjects()
