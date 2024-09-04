@@ -325,7 +325,6 @@ with gr.Blocks() as app:
                 "name": name,
                 "category": category,
                 "description": description,
-                "active": "False",  # Set to False by default when updating
                 "hairstyle": hairstyle,
                 "clothing": clothing,
                 "body_type": body_type,
