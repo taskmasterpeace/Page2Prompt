@@ -303,9 +303,13 @@ with gr.Blocks() as app:
             "scene_order": scene_order
         }
         subject_manager.add_subject(new_subject)
+        return refresh_all_subject_components()
+
+    def refresh_all_subject_components():
         update_result = update_subjects_interface()
         subject_displays = update_subject_displays()
-        return update_result + subject_displays + (update_feedback(f"Subject '{name}' added successfully"),)
+        all_subjects_list = gr.update(choices=subject_manager.get_all_subject_names())
+        return update_result + subject_displays + (all_subjects_list, update_feedback("Subject added and all components refreshed"),)
 
     def update_subject(name, category, description, active, hairstyle, clothing, body_type, accessories, age, height, distinguishing_features, scene_order):
         updated_subject = {
