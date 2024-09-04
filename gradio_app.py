@@ -4,6 +4,7 @@ import json
 import time
 import csv
 import pyperclip
+import pandas as pd
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
