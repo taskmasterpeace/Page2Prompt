@@ -464,17 +464,21 @@ with gr.Blocks() as app:
         return subject_displays + (feedback,)
 
     def update_subject_active_status(*active_subjects):
-        all_active = []
+        all_active = set()
         for subject_group in active_subjects:
             if isinstance(subject_group, list):
-                all_active.extend(subject_group)
+                all_active.update(subject_group)
+    
         for subject in subject_manager.get_subjects():
             is_active = subject["name"] in all_active
             subject_manager.toggle_subject_active(subject["name"], is_active)
+    
         subject_manager.save_subjects()  # Save the changes to the CSV file
         subject_displays = update_subject_displays()
+        active_subjects_json = json.dumps(subject_manager.get_active_subjects(), indent=2)
         feedback = update_feedback("Subject active status updated")
-        return subject_displays + (gr.update(value=json.dumps(subject_manager.get_active_subjects(), indent=2)),) + (feedback,)
+    
+        return subject_displays + (gr.update(value=active_subjects_json), feedback)
 
     def toggle_subject_active(subject_name, is_active):
         subject_manager.toggle_subject_active(subject_name, is_active)
@@ -494,7 +498,6 @@ with gr.Blocks() as app:
             gr.update(value=subject.get('name', '') if subject else ''),  # subject_name
             gr.update(value=subject.get('category', '') if subject else ''),  # subject_category
             gr.update(value=subject.get('description', '') if subject else ''),  # subject_description
-            gr.update(value=is_active),  # subject_active
             gr.update(value=subject.get('hairstyle', '') if subject else ''),  # subject_hairstyle
             gr.update(value=subject.get('clothing', '') if subject else ''),  # subject_clothing
             gr.update(value=subject.get('body_type', '') if subject else ''),  # subject_body_type
@@ -665,7 +668,7 @@ with gr.Blocks() as app:
         subject_group.change(
             update_subject_active_status,
             inputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects],
-            outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+            outputs=[person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, active_subjects_display, feedback_area]
         )
 
     def create_toggle_handler(category):

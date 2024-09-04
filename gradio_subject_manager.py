@@ -73,9 +73,12 @@ class SubjectManager:
     def toggle_subject_active(self, name, is_active):
         for subject in self.subjects:
             if subject['name'] == name:
-                subject['active'] = str(is_active).lower()
+                subject['active'] = 'True' if is_active else 'False'
                 break
         self.save_subjects()
+
+    def get_active_subjects(self):
+        return [s for s in self.subjects if s.get('active') == 'True']
 
     def update_subject(self, updated_subject):
         for i, subject in enumerate(self.subjects):
