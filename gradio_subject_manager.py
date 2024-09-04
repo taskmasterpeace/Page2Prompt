@@ -40,7 +40,10 @@ class SubjectManager:
         self.save_subjects()
 
     def delete_subject(self, name):
+        original_count = len(self.subjects)
         self.subjects = [s for s in self.subjects if s['name'].lower() != name.lower()]
+        if len(self.subjects) == original_count:
+            raise ValueError(f"Subject '{name}' not found")
         self.save_subjects()
 
     def get_subjects(self):

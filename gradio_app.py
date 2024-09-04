@@ -250,7 +250,7 @@ with gr.Blocks() as app:
                     with gr.Row():
                         add_subject_button = gr.Button("➕ Add Subject")
                         edit_subject_button = gr.Button("✏️ Update Subject")
-                        delete_subject_button = gr.Button("🗑️ Delete Subject")
+                        delete_subject_button = gr.Button("🗑️ Delete Subject", elem_id="delete_subject_button")
                 
                 with gr.Column(scale=1):
                     subjects_list = gr.JSON(label="Added Subjects")
@@ -370,12 +370,43 @@ with gr.Blocks() as app:
         return outputs
 
     def delete_subject(name):
-        subject_manager.delete_subject(name)
-        update_result = update_subjects_interface()
-        subject_displays = update_subject_displays()
-        all_subjects_list = gr.update(choices=subject_manager.get_all_subject_names())
-        feedback = update_feedback(f"Subject '{name}' deleted successfully")
-        return update_result + subject_displays + (all_subjects_list, feedback)
+        try:
+            subject_manager.delete_subject(name)
+            update_result = update_subjects_interface()
+            subject_displays = update_subject_displays()
+            all_subjects_list = gr.update(choices=subject_manager.get_all_subject_names())
+            feedback = update_feedback(f"Subject '{name}' deleted successfully")
+        
+            # Create a list of outputs for all components that need updating
+            outputs = [
+                update_result[0],  # subjects_dropdown
+                update_result[1],  # subjects_dropdown (duplicate)
+                gr.update(value=update_result[2]),  # subjects_list
+                gr.update(value=""),  # subject_name
+                gr.update(value=""),  # subject_category
+                gr.update(value=""),  # subject_description
+                gr.update(value=False),  # subject_active
+                gr.update(value=""),  # subject_hairstyle
+                gr.update(value=""),  # subject_clothing
+                gr.update(value=""),  # subject_body_type
+                gr.update(value=""),  # subject_accessories
+                gr.update(value=""),  # subject_age
+                gr.update(value=""),  # subject_height
+                gr.update(value=""),  # subject_distinguishing_features
+                gr.update(value=""),  # subject_scene_order
+                subject_displays[0],  # person_subjects
+                subject_displays[1],  # animal_subjects
+                subject_displays[2],  # place_subjects
+                subject_displays[3],  # thing_subjects
+                subject_displays[4],  # other_subjects
+                all_subjects_list,  # all_subjects_dropdown
+                feedback  # feedback_area
+            ]
+            return outputs
+        except Exception as e:
+            error_message = f"Error deleting subject '{name}': {str(e)}"
+            logger.error(error_message)
+            return [gr.update() for _ in range(21)] + [gr.update(value=error_message)]
 
     def update_subjects_interface():
         subjects = subject_manager.get_subjects()
@@ -595,7 +626,14 @@ with gr.Blocks() as app:
     delete_subject_button.click(
         delete_subject,
         inputs=[subjects_dropdown],
-        outputs=[subjects_dropdown, subjects_dropdown, subjects_list, subject_name, subject_category, subject_description, subject_active, subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, subject_age, subject_height, subject_distinguishing_features, subject_scene_order, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, feedback_area]
+        outputs=[
+            subjects_dropdown, subjects_dropdown, subjects_list, 
+            subject_name, subject_category, subject_description, subject_active, 
+            subject_hairstyle, subject_clothing, subject_body_type, subject_accessories, 
+            subject_age, subject_height, subject_distinguishing_features, subject_scene_order, 
+            person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, 
+            all_subjects_dropdown, feedback_area
+        ]
     )
 
     # Add this new event handler for toggling subject active status
@@ -723,3 +761,22 @@ with gr.Blocks() as app:
 if __name__ == "__main__":
     print("Loaded subjects:", subject_names)
     app.launch()
+
+    # Add this block at the end of the file
+    if __name__ == "__main__":
+        app.load(
+            js="""
+            function addDeleteConfirmation() {
+                const deleteButton = document.getElementById('delete_subject_button');
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', function(event) {
+                        if (!confirm('Are you sure you want to delete this subject?')) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    });
+                }
+            }
+            document.addEventListener('DOMContentLoaded', addDeleteConfirmation);
+            """
+        )
