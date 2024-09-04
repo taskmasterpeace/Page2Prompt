@@ -80,29 +80,48 @@ class PromptForgeCore:
         return list(characters)
 
     def _generate_shot_list(self, scenes, characters, director_style):
-        # Implement shot list generation logic
-        # This is a placeholder implementation
         shot_list = []
-        for scene in scenes:
-            shot_list.append({
-                "scene_number": scene["scene_number"],
-                "shot_description": f"Wide shot of the scene",
-                "characters": [char for char in characters if char in scene["content"]],
-                "camera_work": self._get_camera_work(director_style)
-            })
+        style_info = self.meta_chain.director_styles.get(director_style, {})
+        
+        for scene_num, scene in enumerate(scenes, 1):
+            scene_characters = [char for char in characters if char in scene["content"]]
+            scene_shots = self._generate_scene_shots(scene_num, scene_characters, style_info)
+            shot_list.extend(scene_shots)
+        
         return shot_list
 
+    def _generate_scene_shots(self, scene_num, characters, style_info):
+        shots = [
+            {
+                "scene_number": scene_num,
+                "shot_number": 1,
+                "shot_description": f"Establishing shot: {style_info.get('composition', 'Standard composition')}",
+                "characters": ', '.join(characters),
+                "camera_work": f"{style_info.get('camera_angles', ['Wide shot'])[0]}, {style_info.get('lighting', 'Standard lighting')}",
+                "completed": False
+            },
+            {
+                "scene_number": scene_num,
+                "shot_number": 2,
+                "shot_description": f"Character interaction: Focus on {', '.join(characters[:2])}",
+                "characters": ', '.join(characters[:2]),
+                "camera_work": f"{style_info.get('camera_angles', ['Medium shot'])[1] if len(style_info.get('camera_angles', [])) > 1 else 'Medium shot'}, {style_info.get('typical_shots', ['Standard shot'])[0]}",
+                "completed": False
+            },
+            {
+                "scene_number": scene_num,
+                "shot_number": 3,
+                "shot_description": f"Detail shot: Emphasize {style_info.get('motifs', ['key elements'])[0]}",
+                "characters": "N/A",
+                "camera_work": f"{style_info.get('camera_angles', ['Close-up'])[2] if len(style_info.get('camera_angles', [])) > 2 else 'Close-up'}, {style_info.get('pacing', 'Standard pacing')}",
+                "completed": False
+            }
+        ]
+        return shots
+
     def _get_camera_work(self, director_style):
-        # Implement logic to determine camera work based on director's style
-        # This is a placeholder implementation
-        camera_works = {
-            "Alfred Hitchcock": "Slow, suspenseful tracking shot",
-            "Wes Anderson": "Symmetrical, static wide shot",
-            "Christopher Nolan": "Dynamic, IMAX-friendly composition",
-            "Quentin Tarantino": "Long take with multiple character interactions",
-            "Stanley Kubrick": "Slow zoom with one-point perspective"
-        }
-        return camera_works.get(director_style, "Standard shot composition")
+        style_info = self.meta_chain.director_styles.get(director_style, {})
+        return f"{style_info.get('typical_shots', ['Standard shot'])[0]}, {style_info.get('lighting', 'Standard lighting')}, {style_info.get('pacing', 'Standard pacing')}"
 
     def get_director_styles(self):
         return list(self.meta_chain.director_styles.keys())

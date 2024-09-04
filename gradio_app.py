@@ -261,9 +261,22 @@ with gr.Blocks() as app:
 
         with gr.TabItem("Shot List"):
             gr.Markdown("## 📋 Shot List")
-            shot_list_input = gr.Textbox(label="Enter Shot List (JSON format)", lines=10)
-            update_shot_list_button = gr.Button("Update Shot List")
-            shot_list_display = gr.JSON(label="Current Shot List")
+            with gr.Row():
+                script_input_for_shot_list = gr.Textbox(label="Script for Shot List", lines=10)
+                director_style_for_shot_list = gr.Dropdown(label="Director's Style", choices=core.get_director_styles())
+    
+            generate_shot_list_button = gr.Button("Generate Shot List")
+    
+            shot_list_display = gr.DataFrame(
+                headers=["Scene", "Shot", "Description", "Characters", "Camera Work", "Completed"],
+                datatype=["number", "number", "str", "str", "str", "bool"],
+                label="Shot List",
+                interactive=True
+            )
+    
+            with gr.Row():
+                export_shot_list_button = gr.Button("Export Shot List")
+                import_shot_list_button = gr.UploadButton("Import Shot List", file_types=["csv", "json"])
 
     # Event handlers and utility functions
     def update_feedback(message):
@@ -543,14 +556,36 @@ with gr.Blocks() as app:
         sorted_subjects = subject_manager.get_subjects_by_character()
         return json.dumps(sorted_subjects, indent=2)
 
-    def update_shot_list(shot_list_json):
+    def generate_shot_list(script, director_style):
         try:
-            shot_list = json.loads(shot_list_json)
-            # Here you would typically update your shot list in your backend
-            # For now, we'll just echo it back
-            return json.dumps(shot_list, indent=2), update_feedback("Shot list updated successfully")
-        except json.JSONDecodeError:
-            return "", update_feedback("Error: Invalid JSON format")
+            analysis_result = asyncio.run(core.analyze_script(script, director_style))
+            shot_list = analysis_result['shots']
+            return pd.DataFrame(shot_list), update_feedback("Shot list generated successfully")
+        except Exception as e:
+            return None, update_feedback(f"Error generating shot list: {str(e)}")
+
+    def export_shot_list(shot_list):
+        try:
+            csv_content = shot_list.to_csv(index=False)
+            return gr.File.update(value=csv_content, visible=True), update_feedback("Shot list exported successfully")
+        except Exception as e:
+            return None, update_feedback(f"Error exporting shot list: {str(e)}")
+
+    def import_shot_list(file):
+        try:
+            if file.name.endswith('.csv'):
+                df = pd.read_csv(file.name)
+            elif file.name.endswith('.json'):
+                df = pd.read_json(file.name)
+            else:
+                return None, update_feedback("Unsupported file format. Please use CSV or JSON.")
+            return df, update_feedback("Shot list imported successfully")
+        except Exception as e:
+            return None, update_feedback(f"Error importing shot list: {str(e)}")
+
+    def update_shot_list(shot_list, row, col, value):
+        shot_list.iloc[row, col] = value
+        return shot_list, update_feedback("Shot list updated successfully")
 
     # Connect event handlers
     save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
@@ -719,9 +754,27 @@ with gr.Blocks() as app:
     sort_by_scene_order_button.click(sort_subjects_by_scene_order, outputs=[subjects_list])
     sort_by_character_button.click(sort_subjects_by_character, outputs=[subjects_list])
 
-    update_shot_list_button.click(
+    generate_shot_list_button.click(
+        generate_shot_list,
+        inputs=[script_input_for_shot_list, director_style_for_shot_list],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    export_shot_list_button.click(
+        export_shot_list,
+        inputs=[shot_list_display],
+        outputs=[gr.File(label="Download CSV"), feedback_area]
+    )
+
+    import_shot_list_button.upload(
+        import_shot_list,
+        inputs=[import_shot_list_button],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    shot_list_display.edit(
         update_shot_list,
-        inputs=[shot_list_input],
+        inputs=[shot_list_display],
         outputs=[shot_list_display, feedback_area]
     )
 

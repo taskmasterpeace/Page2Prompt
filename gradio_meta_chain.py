@@ -250,24 +250,24 @@ class MetaChain:
             template = PromptTemplate(
                 input_variables=["script", "director_style"],
                 template="""
-                Analyze the following script using the directorial style of {director_style}. 
-                Generate a shot list with the following components for each significant moment or scene:
+                As an expert prompt engineer and cinematographer, analyze the following script using the directorial style of {director_style}. 
+                Generate a comprehensive shot list that aligns with the Page2Prompt application's functionality and the director's unique approach.
 
-                1. Shot Description: Describe the visual elements of the shot.
-                2. Director's Notes: Provide specific instructions or emphasis for the shot.
-                3. Camera Shot: Specify the type of shot (e.g., Close-up, Medium shot, Wide shot).
-                4. Camera Move: Describe any camera movement (e.g., Pan, Tilt, Dolly, Static).
-                5. Camera Size: Indicate the field of view (e.g., Extreme close-up, Full shot).
-                6. Active Subject: Identify the main subject or focus of the shot.
+                For each significant moment or scene, provide:
+
+                1. Scene Number: Numerical identifier for the scene.
+                2. Shot Number: Numerical identifier for the shot within the scene.
+                3. Shot Description: Concise description of the visual elements, considering the director's style.
+                4. Characters: Main characters present in the shot.
+                5. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
+                6. Completed: Always set to False initially.
 
                 Also, provide:
-                7. Suggested Style: A one-word description of the overall visual style.
-                8. Style Prefix: A brief phrase describing the style's key visual characteristics.
-                9. Style Suffix: A list of 3-5 distinct visual elements that characterize this style, separated by semicolons.
+                7. Suggested Style: A concise description of the overall visual style.
+                8. Style Prefix: A brief phrase encapsulating the style's key visual characteristics.
+                9. Style Suffix: 3-5 distinct visual elements that define this style, separated by semicolons.
 
-                Ensure that the shot list reflects {director_style}'s unique approach to filmmaking, 
-                considering elements like composition, lighting, pacing, color palette, 
-                recurring motifs, and typical shot choices.
+                Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
                 Script:
                 {script}
@@ -282,16 +282,32 @@ class MetaChain:
             # Parse the result into a structured format
             shot_list = self._parse_shot_list(result.content)
             
-            # Add default values if they're missing
-            shot_list.setdefault('suggested_style', 'N/A')
-            shot_list.setdefault('style_prefix', 'N/A')
-            shot_list.setdefault('style_suffix', 'N/A')
-            shot_list.setdefault('shots', [])
+            # Generate additional shots using the core's method
+            core_shots = self.core._generate_shot_list(
+                self.core._extract_scenes(script),
+                self.core._extract_characters(script),
+                director_style
+            )
+            
+            # Merge AI-generated shots with core-generated shots
+            shot_list['shots'] = self._merge_shot_lists(shot_list.get('shots', []), core_shots)
             
             return shot_list
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
+
+    def _merge_shot_lists(self, ai_shots, core_shots):
+        # Merge and deduplicate shots from both sources
+        merged_shots = ai_shots + core_shots
+        seen = set()
+        unique_shots = []
+        for shot in merged_shots:
+            key = (shot['scene_number'], shot['shot_number'])
+            if key not in seen:
+                seen.add(key)
+                unique_shots.append(shot)
+        return sorted(unique_shots, key=lambda x: (x['scene_number'], x['shot_number']))
 
     def _parse_shot_list(self, content: str) -> Dict[str, Any]:
         lines = content.split('\n')
