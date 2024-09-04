@@ -559,10 +559,25 @@ with gr.Blocks() as app:
 
     def generate_shot_list(script, director_style):
         try:
+            logger.info(f"Generating shot list for director style: {director_style}")
+            logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
+        
             analysis_result = asyncio.run(core.analyze_script(script, director_style))
-            shot_list = analysis_result['shots']
-            return pd.DataFrame(shot_list), update_feedback("Shot list generated successfully")
+            logger.info("Script analysis completed")
+        
+            if 'shot_list' not in analysis_result:
+                logger.error("Shot list not found in analysis result")
+                return None, update_feedback("Error: Shot list not found in analysis result")
+        
+            shot_list = analysis_result['shot_list']
+            logger.info(f"Generated shot list with {len(shot_list)} shots")
+        
+            df = pd.DataFrame(shot_list)
+            logger.debug(f"DataFrame created with columns: {df.columns}")
+        
+            return df, update_feedback("Shot list generated successfully")
         except Exception as e:
+            logger.exception("Error in generate_shot_list function")
             return None, update_feedback(f"Error generating shot list: {str(e)}")
 
     def export_shot_list(shot_list):
