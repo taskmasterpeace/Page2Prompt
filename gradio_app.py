@@ -584,8 +584,7 @@ with gr.Blocks() as app:
         except Exception as e:
             return None, update_feedback(f"Error importing shot list: {str(e)}")
 
-    def update_shot_list(shot_list, row, col, value):
-        shot_list.iloc[row, col] = value
+    def update_shot_list(shot_list):
         return shot_list, update_feedback("Shot list updated successfully")
 
     # Connect event handlers
@@ -773,7 +772,7 @@ with gr.Blocks() as app:
         outputs=[shot_list_display, feedback_area]
     )
 
-    shot_list_display.edit(
+    shot_list_display.change(
         update_shot_list,
         inputs=[shot_list_display],
         outputs=[shot_list_display, feedback_area]
