@@ -260,6 +260,17 @@ class MetaChain:
 
     class ShotList(BaseModel):
         shots: List[Shot]
+        scene_number: int
+        shot_number: int
+        script_content: str
+        shot_description: str
+        characters: List[str]
+        camera_work: str
+        shot_type: str
+        completed: bool = False
+
+    class ShotList(BaseModel):
+        shots: List[Shot]
 
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
