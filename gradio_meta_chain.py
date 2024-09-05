@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import time
+import re
 from typing import Dict, List, Optional, Union, Any
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
@@ -12,6 +13,22 @@ from gradio_core import save_debug_output
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+def clean_json_string(json_string: str) -> str:
+    """
+    Remove markdown formatting and clean the JSON string.
+    """
+    # Remove markdown code block indicators
+    json_string = re.sub(r'^```json\s*', '', json_string, flags=re.MULTILINE)
+    json_string = re.sub(r'\s*```$', '', json_string, flags=re.MULTILINE)
+    
+    # Remove any leading/trailing whitespace
+    json_string = json_string.strip()
+    
+    # Handle potential YAML-style start of the document
+    json_string = re.sub(r'^---\s*', '', json_string)
+    
+    return json_string
 
 class Shot(BaseModel):
     scene_number: int
@@ -336,20 +353,37 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
+            # Clean the JSON string
+            cleaned_content = clean_json_string(result.content)
+            
             # Attempt to parse the JSON
             try:
-                shot_list_dict = json.loads(result.content.strip())
+                shot_list_dict = json.loads(cleaned_content)
             except json.JSONDecodeError as e:
                 logger.error(f"JSON parsing error: {str(e)}")
-                logger.error(f"Problematic content: {result.content}")
+                logger.error(f"Problematic content: {cleaned_content}")
                 raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
         
             # Validate the structure of the parsed JSON
             if not isinstance(shot_list_dict, dict) or 'shots' not in shot_list_dict:
                 raise ValueError("Parsed JSON does not have the expected structure")
         
-            # Directly return the shot list without additional processing
-            return shot_list_dict
+            # Convert the shot list to the required format
+            shot_list = []
+            for shot in shot_list_dict['shots']:
+                shot_list.append({
+                    'Scene': shot.get('scene_number', ''),
+                    'Shot': shot.get('shot_number', ''),
+                    'Script Content': shot.get('script_content', ''),
+                    'Shot Description': shot.get('shot_description', ''),
+                    'Characters': ', '.join(shot.get('characters', [])),
+                    'Camera Work': shot.get('camera_work', ''),
+                    'Shot Type': shot.get('shot_type', ''),
+                    'Completed': shot.get('completed', False)
+                })
+
+            return shot_list
+
         except ValueError as e:
             logger.exception(f"Value error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))

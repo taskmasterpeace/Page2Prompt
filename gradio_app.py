@@ -598,25 +598,13 @@ with gr.Blocks() as app:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
-            analysis_result = asyncio.run(core.analyze_script(script, director_style))
-            logger.info("Script analysis completed")
-            logger.debug(f"Raw analysis result: {analysis_result}")  # Log the raw result for debugging
-
-            if not isinstance(analysis_result, dict) or 'shots' not in analysis_result:
-                logger.error("Invalid analysis result structure")
-                return None, update_feedback("Error: Invalid analysis result structure")
-
-            shot_list = analysis_result['shots']
-            if not isinstance(shot_list, list):
-                logger.error("Shot list is not a valid list")
-                return None, update_feedback("Error: Shot list is not a valid list")
-
+            shot_list = asyncio.run(core.analyze_script(script, director_style))
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
-                shot['Shot Type'] = shot_type if shot_type != "AI Suggest" else shot.get('Shot Type', '')
-                # Update camera work based on user selections
+                if shot_type != "AI Suggest":
+                    shot['Shot Type'] = shot_type
                 camera_work = []
                 if camera_angle != "AI Suggest":
                     camera_work.append(camera_angle)
@@ -630,18 +618,7 @@ with gr.Blocks() as app:
                     shot['Camera Work'] = ', '.join(camera_work)
 
             df = pd.DataFrame(shot_list)
-            logger.debug(f"Original DataFrame columns: {df.columns}")
-
-            # Ensure all expected columns are present
-            expected_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
-            for col in expected_columns:
-                if col not in df.columns:
-                    df[col] = ""
-
-            # Reorder columns to match expected order
-            df = df[expected_columns]
-
-            logger.debug(f"Final DataFrame columns: {df.columns}")
+            logger.debug(f"DataFrame columns: {df.columns}")
 
             return df, update_feedback("Shot list generated successfully")
         except Exception as e:
