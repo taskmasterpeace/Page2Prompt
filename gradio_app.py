@@ -593,12 +593,12 @@ with gr.Blocks() as app:
         sorted_subjects = subject_manager.get_subjects_by_character()
         return json.dumps(sorted_subjects, indent=2)
 
-    def generate_shot_list(script, director_style, shot_type, camera_angle, camera_movement, framing, depth_of_field):
+    async def generate_shot_list(script, director_style, shot_type, camera_angle, camera_movement, framing, depth_of_field):
         try:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
-            shot_list = asyncio.run(core.analyze_script(script, director_style))
+            shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
@@ -619,6 +619,15 @@ with gr.Blocks() as app:
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
+
+            # Ensure the DataFrame has all required columns
+            required_columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            for col in required_columns:
+                if col not in df.columns:
+                    df[col] = ""  # Add empty column if missing
+
+            # Reorder columns to match the required order
+            df = df[required_columns]
 
             return df, update_feedback("Shot list generated successfully")
         except Exception as e:
