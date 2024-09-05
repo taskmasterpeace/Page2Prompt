@@ -1,13 +1,12 @@
 import asyncio
+import os
+import logging
 from typing import Dict, List, Any, Optional
 from gradio_config import Config
 from gradio_styles import StyleManager
 from gradio_prompt_log import PromptLogger
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 from gradio_subject_manager import SubjectManager
-
-import logging
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +22,15 @@ class PromptForgeCore:
         self.meta_chain = meta_chain
 
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", prompt_type: str = "normal", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
+        # ... (rest of the method implementation)
+
+def save_debug_output(content, filename="debug_output.txt"):
+    debug_dir = "debug_logs"
+    if not os.path.exists(debug_dir):
+        os.makedirs(debug_dir)
+    with open(os.path.join(debug_dir, filename), "w", encoding="utf-8") as f:
+        f.write(content)
+    logger.info(f"Debug output saved to {filename}")
         try:
             result = await self.meta_chain.generate_prompt(
                 style=style,
