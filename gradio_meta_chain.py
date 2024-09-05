@@ -346,8 +346,8 @@ class MetaChain:
             # Save raw output for debugging
             save_debug_output(result.content, f"raw_llm_output_{int(time.time())}.txt")
         
-            # Log the raw content
-            logger.debug(f"Raw content received: {result.content}")
+            # Log the raw content and its type
+            logger.debug(f"Result type: {type(result.content)}, content: {result.content}")
         
             # Check if content is empty
             if not result.content.strip():
@@ -358,11 +358,18 @@ class MetaChain:
             
             # Attempt to parse the JSON
             try:
-                shot_list_dict = json.loads(cleaned_content)
+                if isinstance(cleaned_content, list):
+                    shot_list_dict = {"shots": cleaned_content}
+                else:
+                    shot_list_dict = json.loads(cleaned_content)
             except json.JSONDecodeError as e:
                 logger.error(f"JSON parsing error: {str(e)}")
                 logger.error(f"Problematic content: {cleaned_content}")
                 raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
+            except TypeError as e:
+                logger.error(f"Type error: {str(e)}")
+                logger.error(f"Problematic content type: {type(cleaned_content)}")
+                raise ScriptAnalysisError(f"Unexpected data type: {str(e)}")
         
             # Validate the structure of the parsed JSON
             if not isinstance(shot_list_dict, dict) or 'shots' not in shot_list_dict:
