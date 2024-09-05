@@ -329,17 +329,32 @@ class MetaChain:
             # Save raw output for debugging
             save_debug_output(result.content, f"raw_llm_output_{int(time.time())}.txt")
         
-            # Parse the result into a structured format
-            shot_list_dict = json.loads(result.content.strip())
-            
+            # Log the raw content
+            logger.debug(f"Raw content received: {result.content}")
+        
+            # Check if content is empty
+            if not result.content.strip():
+                raise ValueError("Received empty content from LLM")
+        
+            # Attempt to parse the JSON
+            try:
+                shot_list_dict = json.loads(result.content.strip())
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON parsing error: {str(e)}")
+                logger.error(f"Problematic content: {result.content}")
+                raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
+        
+            # Validate the structure of the parsed JSON
+            if not isinstance(shot_list_dict, dict) or 'shots' not in shot_list_dict:
+                raise ValueError("Parsed JSON does not have the expected structure")
+        
             # Directly return the shot list without additional processing
             return shot_list_dict
-        except json.JSONDecodeError as e:
-            logger.exception(f"JSON parsing error in analyze_script: {str(e)}")
-            logger.debug(f"Raw content causing JSON error: {result.content}")
-            raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
+        except ValueError as e:
+            logger.exception(f"Value error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(str(e))
         except Exception as e:
-            logger.exception(f"Error in analyze_script: {str(e)}")
+            logger.exception(f"Unexpected error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
 
     def _merge_shot_lists(self, ai_shots, core_shots):
