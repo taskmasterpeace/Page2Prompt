@@ -7,11 +7,25 @@ from langchain_core.runnables import RunnableSequence
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 from gradio_config import get_openai_api_key
 from pydantic import BaseModel
+from typing import List
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 import time
+
+class Shot(BaseModel):
+    scene_number: int
+    shot_number: int
+    script_content: str
+    shot_description: str
+    characters: List[str]
+    camera_work: str
+    shot_type: str
+    completed: bool = False
+
+class ShotList(BaseModel):
+    shots: List[Shot]
 
 class MetaChain:
     def __init__(self, core):

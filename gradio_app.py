@@ -22,7 +22,7 @@ prompt_manager = PromptManager()
 style_manager = StyleManager("styles.csv")
 script_analyzer = ScriptAnalyzer()
 meta_chain = MetaChain(core)
-core.meta_chain = meta_chain
+core.set_meta_chain(meta_chain)
 prompt_logger = PromptLogger()
 subject_manager = core.subject_manager
 
