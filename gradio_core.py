@@ -32,10 +32,12 @@ def save_debug_output(content, filename="debug_output.txt"):
     with open(os.path.join(debug_dir, filename), "w", encoding="utf-8") as f:
         f.write(content)
     logger.info(f"Debug output saved to {filename}")
-        try:
-            result = await self.meta_chain.generate_prompt(
-                style=style,
-                prompt_type=prompt_type,
+
+async def generate_prompt(self, style, prompt_type, **kwargs):
+    try:
+        result = await self.meta_chain.generate_prompt(
+            style=style,
+            prompt_type=prompt_type,
                 highlighted_text=highlighted_text,
                 shot_description=shot_description,
                 directors_notes=directors_notes,
