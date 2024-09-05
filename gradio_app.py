@@ -615,48 +615,35 @@ with gr.Blocks() as app:
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
-                shot['shot_type'] = shot_type if shot_type != "AI Suggest" else shot.get('shot_type', '')
-                shot['camera_angle'] = camera_angle if camera_angle != "AI Suggest" else shot.get('camera_angle', '')
-                shot['camera_movement'] = camera_movement if camera_movement != "AI Suggest" else shot.get('camera_movement', '')
-                shot['framing'] = framing if framing != "AI Suggest" else shot.get('framing', '')
-                shot['depth_of_field'] = depth_of_field if depth_of_field != "AI Suggest" else shot.get('depth_of_field', '')
+                shot['Shot Type'] = shot_type if shot_type != "AI Suggest" else shot.get('Shot Type', '')
+                # Update camera work based on user selections
+                camera_work = []
+                if camera_angle != "AI Suggest":
+                    camera_work.append(camera_angle)
+                if camera_movement != "AI Suggest":
+                    camera_work.append(camera_movement)
+                if framing != "AI Suggest":
+                    camera_work.append(framing)
+                if depth_of_field != "AI Suggest":
+                    camera_work.append(depth_of_field)
+                if camera_work:
+                    shot['Camera Work'] = ', '.join(camera_work)
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"Original DataFrame columns: {df.columns}")
-    
-            # Define the expected columns and their mappings
-            expected_columns = {
-                "scene_number": "Scene",
-                "shot_number": "Shot",
-                "script_content": "Script Content",
-                "shot_description": "Shot Description",
-                "characters": "Characters",
-                "camera_work": "Camera Work",
-                "shot_type": "Shot Type",
-                "completed": "Completed"
-            }
-    
-            # Create a new DataFrame with only the expected columns
-            new_df = pd.DataFrame()
-            for original_col, new_col in expected_columns.items():
-                if original_col in df.columns:
-                    new_df[new_col] = df[original_col]
-                else:
-                    new_df[new_col] = ""  # Add an empty column if the expected column is missing
-                    logger.warning(f"Expected column '{original_col}' not found in the shot list")
-    
-            # Convert characters list to string
-            new_df['Characters'] = new_df['Characters'].apply(lambda x: ', '.join(x) if isinstance(x, list) else str(x))
-    
-            # Ensure all columns are present and in the correct order
-            for col in expected_columns.values():
-                if col not in new_df.columns:
-                    new_df[col] = ""
-            new_df = new_df[list(expected_columns.values())]
-    
-            logger.debug(f"Final DataFrame columns: {new_df.columns}")
 
-            return new_df, update_feedback("Shot list generated successfully")
+            # Ensure all expected columns are present
+            expected_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            for col in expected_columns:
+                if col not in df.columns:
+                    df[col] = ""
+
+            # Reorder columns to match expected order
+            df = df[expected_columns]
+
+            logger.debug(f"Final DataFrame columns: {df.columns}")
+
+            return df, update_feedback("Shot list generated successfully")
         except Exception as e:
             logger.exception("Error in generate_shot_list function")
             return None, update_feedback(f"Error generating shot list: {str(e)}")

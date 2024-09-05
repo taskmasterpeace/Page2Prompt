@@ -2,6 +2,7 @@ import asyncio
 import os
 import logging
 import re
+import json
 from typing import Dict, List, Any, Optional
 from gradio_config import Config
 from gradio_styles import StyleManager
@@ -28,6 +29,39 @@ class PromptForgeCore:
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", prompt_type: str = "normal", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
         # ... (rest of the method implementation)
         pass
+
+    async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
+        try:
+            if self.meta_chain is None:
+                raise ValueError("MetaChain is not initialized")
+            
+            result = await self.meta_chain.analyze_script(script, director_style)
+            
+            # Parse the JSON result
+            shot_list = json.loads(result)
+            
+            # Convert the shot list to the format expected by the DataFrame
+            formatted_shots = []
+            for shot in shot_list['shots']:
+                formatted_shot = {
+                    "Scene": shot['scene_number'],
+                    "Shot": shot['shot_number'],
+                    "Script Content": shot['script_content'],
+                    "Shot Description": shot['shot_description'],
+                    "Characters": ', '.join(shot['characters']),
+                    "Camera Work": shot['camera_work'],
+                    "Shot Type": shot['shot_type'],
+                    "Completed": shot['completed']
+                }
+                formatted_shots.append(formatted_shot)
+            
+            return {"shots": formatted_shots}
+        except json.JSONDecodeError as e:
+            logger.exception(f"JSON parsing error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
+        except Exception as e:
+            logger.exception(f"Error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(str(e))
 
 def save_debug_output(content, filename="debug_output.txt"):
     debug_dir = "debug_logs"
