@@ -318,28 +318,34 @@ class MetaChain:
             "shots": []
         }
         current_shot = {}
+        current_scene = ""
         
         for line in lines:
+            line = line.strip()
             if line.startswith("Suggested Style:"):
-                shot_list["suggested_style"] = line.split(":")[1].strip()
+                shot_list["suggested_style"] = line.split(":", 1)[1].strip()
             elif line.startswith("Style Prefix:"):
-                shot_list["style_prefix"] = line.split(":")[1].strip()
+                shot_list["style_prefix"] = line.split(":", 1)[1].strip()
             elif line.startswith("Style Suffix:"):
-                shot_list["style_suffix"] = line.split(":")[1].strip()
+                shot_list["style_suffix"] = line.split(":", 1)[1].strip()
+            elif line.startswith("Scene"):
+                current_scene = line
             elif line.startswith("Scene Number:"):
                 if current_shot:
                     shot_list["shots"].append(current_shot)
-                current_shot = {"scene_number": line.split(":")[1].strip()}
+                current_shot = {"scene_number": line.split(":", 1)[1].strip()}
             elif line.startswith("Shot Number:"):
-                current_shot["shot_number"] = line.split(":")[1].strip()
+                current_shot["shot_number"] = line.split(":", 1)[1].strip()
             elif line.startswith("Shot Description:"):
-                current_shot["shot_description"] = line.split(":")[1].strip()
+                current_shot["shot_description"] = line.split(":", 1)[1].strip()
             elif line.startswith("Characters:"):
-                current_shot["characters"] = line.split(":")[1].strip()
+                current_shot["characters"] = line.split(":", 1)[1].strip()
             elif line.startswith("Camera Work:"):
-                current_shot["camera_work"] = line.split(":")[1].strip()
+                current_shot["camera_work"] = line.split(":", 1)[1].strip()
             elif line.startswith("Completed:"):
-                current_shot["completed"] = line.split(":")[1].strip().lower() == "true"
+                current_shot["completed"] = line.split(":", 1)[1].strip().lower() == "true"
+            elif current_scene and not line.startswith(("Scene Number:", "Shot Number:", "Shot Description:", "Characters:", "Camera Work:", "Completed:")):
+                current_shot["scene_description"] = current_scene
         
         if current_shot:
             shot_list["shots"].append(current_shot)
