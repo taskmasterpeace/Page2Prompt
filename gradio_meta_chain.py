@@ -248,6 +248,7 @@ class MetaChain:
     from pydantic import BaseModel
     from typing import List, Optional, Dict, Any
     import json
+    import json
     from pydantic import BaseModel
 
     class Shot(BaseModel):
@@ -261,7 +262,7 @@ class MetaChain:
         completed: bool = False
 
     class ShotList(BaseModel):
-        shots: List['Shot']
+        shots: List[Shot]
 
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
