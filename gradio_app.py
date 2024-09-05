@@ -602,7 +602,13 @@ with gr.Blocks() as app:
                     logger.warning(f"Expected column '{original_col}' not found in the shot list")
         
             # Convert characters list to string
-            new_df['Characters'] = new_df['Characters'].apply(lambda x: ', '.join(x) if isinstance(x, list) else x)
+            new_df['Characters'] = new_df['Characters'].apply(lambda x: ', '.join(x) if isinstance(x, list) else str(x))
+        
+            # Ensure all columns are present and in the correct order
+            for col in expected_columns.values():
+                if col not in new_df.columns:
+                    new_df[col] = ""
+            new_df = new_df[list(expected_columns.values())]
         
             logger.debug(f"Final DataFrame columns: {new_df.columns}")
     
