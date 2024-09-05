@@ -579,23 +579,43 @@ with gr.Blocks() as app:
         try:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
-        
+    
             analysis_result = asyncio.run(core.analyze_script(script, director_style))
             logger.info("Script analysis completed")
-        
+    
             if 'shot_list' not in analysis_result:
                 logger.error("Shot list not found in analysis result")
                 return None, update_feedback("Error: Shot list not found in analysis result")
-        
+    
             shot_list = analysis_result['shot_list']
             logger.info(f"Generated shot list with {len(shot_list)} shots")
-        
+    
             df = pd.DataFrame(shot_list)
-            df = df[["scene", "shot", "scene_description", "shot_description", "characters", "camera_work", "completed"]]
-            df.columns = ["Scene", "Shot", "Scene Description", "Shot Description", "Characters", "Camera Work", "Completed"]
-            logger.debug(f"DataFrame created with columns: {df.columns}")
+            logger.debug(f"Original DataFrame columns: {df.columns}")
         
-            return df, update_feedback("Shot list generated successfully")
+            # Define the expected columns and their mappings
+            expected_columns = {
+                "scene_number": "Scene",
+                "shot_number": "Shot",
+                "scene_description": "Scene Description",
+                "shot_description": "Shot Description",
+                "characters": "Characters",
+                "camera_work": "Camera Work",
+                "completed": "Completed"
+            }
+        
+            # Create a new DataFrame with only the expected columns
+            new_df = pd.DataFrame()
+            for original_col, new_col in expected_columns.items():
+                if original_col in df.columns:
+                    new_df[new_col] = df[original_col]
+                else:
+                    new_df[new_col] = ""  # Add an empty column if the expected column is missing
+                    logger.warning(f"Expected column '{original_col}' not found in the shot list")
+        
+            logger.debug(f"Final DataFrame columns: {new_df.columns}")
+    
+            return new_df, update_feedback("Shot list generated successfully")
         except Exception as e:
             logger.exception("Error in generate_shot_list function")
             return None, update_feedback(f"Error generating shot list: {str(e)}")
