@@ -38,23 +38,23 @@ async def generate_prompt(self, style, prompt_type, **kwargs):
         result = await self.meta_chain.generate_prompt(
             style=style,
             prompt_type=prompt_type,
-                highlighted_text=highlighted_text,
-                shot_description=shot_description,
-                directors_notes=directors_notes,
-                script=script,
-                stick_to_script=stick_to_script,
-                active_subjects=active_subjects,
-                full_script=full_script,
-                end_parameters=end_parameters
-            )
-            formatted_prompt = self.format_prompt(result, style, end_parameters)
-            self.prompt_logger.log_prompt({prompt_type: formatted_prompt})
-            return {prompt_type: formatted_prompt}
-        except Exception as e:
-            raise PromptGenerationError(str(e))
+            highlighted_text=kwargs.get('highlighted_text'),
+            shot_description=kwargs.get('shot_description'),
+            directors_notes=kwargs.get('directors_notes'),
+            script=kwargs.get('script'),
+            stick_to_script=kwargs.get('stick_to_script'),
+            active_subjects=kwargs.get('active_subjects'),
+            full_script=kwargs.get('full_script'),
+            end_parameters=kwargs.get('end_parameters')
+        )
+        formatted_prompt = self.format_prompt(result, style, kwargs.get('end_parameters'))
+        self.prompt_logger.log_prompt({prompt_type: formatted_prompt})
+        return {prompt_type: formatted_prompt}
+    except Exception as e:
+        raise PromptGenerationError(str(e))
 
-    def format_prompt(self, prompt: str, style: str, end_parameters: str) -> str:
-        return f"{style} {prompt} {end_parameters}"
+def format_prompt(self, prompt: str, style: str, end_parameters: str) -> str:
+    return f"{style} {prompt} {end_parameters}"
 
     async def analyze_script(self, script_content, director_style):
         try:
