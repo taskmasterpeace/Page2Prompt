@@ -336,7 +336,7 @@ class MetaChain:
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
-                Format the output as a JSON array of objects, where each object represents a shot with the following keys:
+                Format the output as a list of Python dictionaries, where each dictionary represents a shot with the following keys:
                 "Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"
 
                 Script:
@@ -359,13 +359,13 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
-            # Remove markdown formatting if present
+            # Remove any potential markdown formatting
             content = result.content.strip()
-            content = re.sub(r'^```json\s*', '', content)
+            content = re.sub(r'^```python\s*', '', content)
             content = re.sub(r'\s*```$', '', content)
         
-            # Parse the content as a JSON array
-            shot_list = json.loads(content)
+            # Safely evaluate the string as a Python expression
+            shot_list = ast.literal_eval(content)
         
             # Validate and convert types
             for shot in shot_list:
@@ -375,12 +375,9 @@ class MetaChain:
         
             return shot_list
 
-        except json.JSONDecodeError as e:
-            logger.exception(f"JSON decoding error in parsing LLM output: {str(e)}")
-            raise ScriptAnalysisError(f"Failed to parse LLM output as JSON: {str(e)}")
-        except ValueError as e:
-            logger.exception(f"Value error in analyze_script: {str(e)}")
-            raise ScriptAnalysisError(str(e))
+        except (SyntaxError, ValueError) as e:
+            logger.exception(f"Error parsing LLM output: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
         except Exception as e:
             logger.exception(f"Unexpected error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
