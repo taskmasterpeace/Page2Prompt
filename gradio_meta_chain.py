@@ -30,6 +30,22 @@ def clean_json_string(json_string: str) -> str:
     
     return json_string
 
+def clean_json_string(json_string: str) -> str:
+    """
+    Remove markdown formatting and clean the JSON string.
+    """
+    # Remove markdown code block indicators
+    json_string = re.sub(r'^```json\s*', '', json_string, flags=re.MULTILINE)
+    json_string = re.sub(r'\s*```$', '', json_string, flags=re.MULTILINE)
+    
+    # Remove any leading/trailing whitespace
+    json_string = json_string.strip()
+    
+    # Handle potential YAML-style start of the document
+    json_string = re.sub(r'^---\s*', '', json_string)
+    
+    return json_string
+
 class Shot(BaseModel):
     scene_number: int
     shot_number: int
