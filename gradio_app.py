@@ -919,3 +919,13 @@ if __name__ == "__main__":
         subject_displays = update_subject_displays()
         feedback = update_feedback("Active subjects updated")
         return subject_displays + (feedback,)
+import os
+import time
+
+def save_debug_output(content, filename="debug_output.txt"):
+    debug_dir = "debug_logs"
+    if not os.path.exists(debug_dir):
+        os.makedirs(debug_dir)
+    with open(os.path.join(debug_dir, filename), "w", encoding="utf-8") as f:
+        f.write(content)
+    logger.info(f"Debug output saved to {filename}")
