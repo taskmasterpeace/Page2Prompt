@@ -22,6 +22,9 @@ class PromptForgeCore:
     def set_meta_chain(self, meta_chain):
         self.meta_chain = meta_chain
 
+    def get_director_styles(self):
+        return list(self.meta_chain.director_styles.keys()) if self.meta_chain else ["Default"]
+
     async def generate_prompt(self, style: str, highlighted_text: str, shot_description: str, directors_notes: str, script: str, stick_to_script: bool, end_parameters: str, active_subjects: Optional[List[Dict[str, Any]]] = None, full_script: str = "", prompt_type: str = "normal", temperature: float = 0.7, camera_shot: str = "", camera_move: str = "") -> Dict[str, str]:
         # ... (rest of the method implementation)
         pass
