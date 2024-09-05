@@ -269,8 +269,8 @@ with gr.Blocks() as app:
             generate_shot_list_button = gr.Button("Generate Shot List")
 
             shot_list_display = gr.DataFrame(
-                headers=["Scene", "Shot", "Scene Description", "Shot Description", "Characters", "Camera Work", "Completed"],
-                datatype=["number", "number", "str", "str", "str", "str", "bool"],
+                headers=["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"],
+                datatype=["number", "number", "str", "str", "str", "str", "str", "bool"],
                 label="Shot List",
                 interactive=True
             )
@@ -282,20 +282,7 @@ with gr.Blocks() as app:
             selected_shot_description = gr.Textbox(label="Selected Shot Description", lines=3)
             transfer_to_prompt_button = gr.Button("Transfer to Prompt Generation")
 
-        with gr.TabItem("Script & Prompt Generation"):
-            # Existing prompt generation tab content...
-            shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
-    
-            # Add this function to handle the transfer
-            def transfer_shot_description(description):
-                return description
-
-            # Connect the transfer button
-            transfer_to_prompt_button.click(
-                transfer_shot_description,
-                inputs=[selected_shot_description],
-                outputs=[shot_description_input]
-            )
+        # Remove the duplicate "Script & Prompt Generation" tab
 
     # Event handlers and utility functions
     def update_feedback(message):
@@ -583,11 +570,11 @@ with gr.Blocks() as app:
             analysis_result = asyncio.run(core.analyze_script(script, director_style))
             logger.info("Script analysis completed")
     
-            if 'shot_list' not in analysis_result:
+            if 'shots' not in analysis_result:
                 logger.error("Shot list not found in analysis result")
                 return None, update_feedback("Error: Shot list not found in analysis result")
     
-            shot_list = analysis_result['shot_list']
+            shot_list = analysis_result['shots']
             logger.info(f"Generated shot list with {len(shot_list)} shots")
     
             df = pd.DataFrame(shot_list)
@@ -597,10 +584,11 @@ with gr.Blocks() as app:
             expected_columns = {
                 "scene_number": "Scene",
                 "shot_number": "Shot",
-                "scene_description": "Scene Description",
+                "script_content": "Script Content",
                 "shot_description": "Shot Description",
                 "characters": "Characters",
                 "camera_work": "Camera Work",
+                "shot_type": "Shot Type",
                 "completed": "Completed"
             }
         
@@ -612,6 +600,9 @@ with gr.Blocks() as app:
                 else:
                     new_df[new_col] = ""  # Add an empty column if the expected column is missing
                     logger.warning(f"Expected column '{original_col}' not found in the shot list")
+        
+            # Convert characters list to string
+            new_df['Characters'] = new_df['Characters'].apply(lambda x: ', '.join(x) if isinstance(x, list) else x)
         
             logger.debug(f"Final DataFrame columns: {new_df.columns}")
     
