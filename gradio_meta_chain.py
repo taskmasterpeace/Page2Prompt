@@ -3,6 +3,7 @@ import csv
 import logging
 import time
 import re
+import re
 from typing import Dict, List, Optional, Union, Any
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
@@ -363,8 +364,13 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
+            # Remove markdown formatting if present
+            content = result.content.strip()
+            content = re.sub(r'^```python\s*', '', content)
+            content = re.sub(r'\s*```$', '', content)
+        
             # Parse the content as a Python list of dictionaries
-            shot_list = eval(result.content.strip())
+            shot_list = eval(content)
         
             # Validate and convert types
             for shot in shot_list:
