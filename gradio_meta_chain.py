@@ -312,19 +312,9 @@ class MetaChain:
         
             # Parse the result into a structured format
             shot_list_dict = json.loads(result.content)
-            shot_list = ShotList(shots=[Shot(**shot) for shot in shot_list_dict['shots']])
-        
-            # Generate additional shots using the core's method
-            core_shots = self.core._generate_shot_list(
-                self.core._extract_scenes(script),
-                self.core._extract_characters(script),
-                director_style
-            )
-        
-            # Merge AI-generated shots with core-generated shots
-            merged_shots = self._merge_shot_lists(shot_list.shots, core_shots)
-        
-            return {"shots": [shot.dict() for shot in merged_shots]}
+            
+            # Directly return the shot list without additional processing
+            return shot_list_dict
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
