@@ -265,19 +265,37 @@ with gr.Blocks() as app:
             with gr.Row():
                 script_input_for_shot_list = gr.Textbox(label="Script for Shot List", lines=10)
                 director_style_for_shot_list = gr.Dropdown(label="Director's Style", choices=core.get_director_styles())
-    
+
             generate_shot_list_button = gr.Button("Generate Shot List")
-    
+
             shot_list_display = gr.DataFrame(
-                headers=["Scene", "Shot", "Description", "Characters", "Camera Work", "Completed"],
-                datatype=["number", "number", "str", "str", "str", "bool"],
+                headers=["Scene", "Shot", "Scene Description", "Shot Description", "Characters", "Camera Work", "Completed"],
+                datatype=["number", "number", "str", "str", "str", "str", "bool"],
                 label="Shot List",
                 interactive=True
             )
-    
+
             with gr.Row():
                 export_shot_list_button = gr.Button("Export Shot List")
                 import_shot_list_button = gr.UploadButton("Import Shot List", file_types=["csv", "json"])
+    
+            selected_shot_description = gr.Textbox(label="Selected Shot Description", lines=3)
+            transfer_to_prompt_button = gr.Button("Transfer to Prompt Generation")
+
+        with gr.TabItem("Script & Prompt Generation"):
+            # Existing prompt generation tab content...
+            shot_description_input = gr.Textbox(label="📸 Shot Description", lines=2)
+    
+            # Add this function to handle the transfer
+            def transfer_shot_description(description):
+                return description
+
+            # Connect the transfer button
+            transfer_to_prompt_button.click(
+                transfer_shot_description,
+                inputs=[selected_shot_description],
+                outputs=[shot_description_input]
+            )
 
     # Event handlers and utility functions
     def update_feedback(message):
@@ -573,6 +591,8 @@ with gr.Blocks() as app:
             logger.info(f"Generated shot list with {len(shot_list)} shots")
         
             df = pd.DataFrame(shot_list)
+            df = df[["scene", "shot", "scene_description", "shot_description", "characters", "camera_work", "completed"]]
+            df.columns = ["Scene", "Shot", "Scene Description", "Shot Description", "Characters", "Camera Work", "Completed"]
             logger.debug(f"DataFrame created with columns: {df.columns}")
         
             return df, update_feedback("Shot list generated successfully")
