@@ -372,6 +372,9 @@ class MetaChain:
             # Clean the JSON string
             cleaned_content = clean_json_string(result.content)
             
+            # Log the cleaned content and its type
+            logger.debug(f"Cleaned content type: {type(cleaned_content)}, content: {cleaned_content}")
+            
             # Attempt to parse the JSON
             try:
                 if isinstance(cleaned_content, list):
