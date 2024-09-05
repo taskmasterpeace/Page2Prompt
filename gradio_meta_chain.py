@@ -245,6 +245,22 @@ class MetaChain:
             logger.error(f"Error in generate_style_suffix: {str(e)}")
             return f"Error generating style suffix: {str(e)}"
 
+    from pydantic import BaseModel
+    from typing import List, Optional
+
+    class Shot(BaseModel):
+        scene_number: int
+        shot_number: int
+        script_content: str
+        shot_description: str
+        characters: List[str]
+        camera_work: str
+        shot_type: str
+        completed: bool = False
+
+    class ShotList(BaseModel):
+        shots: List[Shot]
+
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
             template = PromptTemplate(
@@ -257,17 +273,30 @@ class MetaChain:
 
                 1. Scene Number: Numerical identifier for the scene.
                 2. Shot Number: Numerical identifier for the shot within the scene.
-                3. Shot Description: Concise description of the visual elements, considering the director's style.
-                4. Characters: Main characters present in the shot.
-                5. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
-                6. Completed: Always set to False initially.
-
-                Also, provide:
-                7. Suggested Style: A concise description of the overall visual style.
-                8. Style Prefix: A brief phrase encapsulating the style's key visual characteristics.
-                9. Style Suffix: 3-5 distinct visual elements that define this style, separated by semicolons.
+                3. Script Content: The exact portion of the script this shot is based on.
+                4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
+                5. Characters: Main characters present in the shot (as a comma-separated list).
+                6. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
+                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
+
+                Provide the output in the following JSON format:
+                {{
+                    "shots": [
+                        {{
+                            "scene_number": 1,
+                            "shot_number": 1,
+                            "script_content": "Exact portion of the script for this shot",
+                            "shot_description": "Detailed description of the shot",
+                            "characters": ["Character1", "Character2"],
+                            "camera_work": "Description of camera work",
+                            "shot_type": "Establishing shot/Insert/Close-up/etc.",
+                            "completed": false
+                        }},
+                        // ... more shots ...
+                    ]
+                }}
 
                 Script:
                 {script}
@@ -275,24 +304,24 @@ class MetaChain:
                 Shot List:
                 """
             )
-            
+        
             chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"script": script, "director_style": director_style})
-            
+        
             # Parse the result into a structured format
-            shot_list = self._parse_shot_list(result.content)
-            
+            shot_list = ShotList.parse_raw(result.content)
+        
             # Generate additional shots using the core's method
             core_shots = self.core._generate_shot_list(
                 self.core._extract_scenes(script),
                 self.core._extract_characters(script),
                 director_style
             )
-            
+        
             # Merge AI-generated shots with core-generated shots
-            shot_list['shots'] = self._merge_shot_lists(shot_list.get('shots', []), core_shots)
-            
-            return shot_list
+            merged_shots = self._merge_shot_lists(shot_list.shots, core_shots)
+        
+            return {"shots": [shot.dict() for shot in merged_shots]}
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
