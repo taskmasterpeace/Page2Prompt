@@ -360,8 +360,10 @@ class MetaChain:
             try:
                 if isinstance(cleaned_content, list):
                     shot_list_dict = {"shots": cleaned_content}
-                else:
+                elif isinstance(cleaned_content, str):
                     shot_list_dict = json.loads(cleaned_content)
+                else:
+                    raise TypeError(f"Unexpected data type: {type(cleaned_content)}")
             except json.JSONDecodeError as e:
                 logger.error(f"JSON parsing error: {str(e)}")
                 logger.error(f"Problematic content: {cleaned_content}")
@@ -369,7 +371,7 @@ class MetaChain:
             except TypeError as e:
                 logger.error(f"Type error: {str(e)}")
                 logger.error(f"Problematic content type: {type(cleaned_content)}")
-                raise ScriptAnalysisError(f"Unexpected data type: {str(e)}")
+                raise ScriptAnalysisError(str(e))
         
             # Validate the structure of the parsed JSON
             if not isinstance(shot_list_dict, dict) or 'shots' not in shot_list_dict:
