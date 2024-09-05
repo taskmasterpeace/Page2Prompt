@@ -83,9 +83,9 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
                 end_parameters=end_parameters,
                 active_subjects=active_subjects_list,
                 full_script=script,
-                camera_shot=camera_shot,
-                camera_move=camera_move,
-                camera_size=camera_size
+                camera_shot=shot_type,
+                camera_move=camera_movement,
+                camera_size=camera_angle
             )
             logger.info(f"meta_chain.generate_prompt took {time.time() - meta_chain_start:.2f} seconds")
 
