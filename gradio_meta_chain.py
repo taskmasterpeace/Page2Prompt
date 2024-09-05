@@ -1,5 +1,5 @@
 import asyncio
-import json
+import csv
 import logging
 import time
 import re
@@ -312,7 +312,7 @@ class MetaChain:
     class ShotList(BaseModel):
         shots: List[Shot]
 
-    async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
+    async def analyze_script(self, script: str, director_style: str) -> List[Dict[str, Any]]:
         try:
             template = PromptTemplate(
                 input_variables=["script", "director_style"],
@@ -329,25 +329,12 @@ class MetaChain:
                 5. Characters: Main characters present in the shot (as a comma-separated list).
                 6. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
                 7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
+                8. Completed: Always set to "False" for new shots.
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
-                Provide the output in the following JSON format:
-                {{
-                    "shots": [
-                        {{
-                            "scene_number": 1,
-                            "shot_number": 1,
-                            "script_content": "Exact portion of the script for this shot",
-                            "shot_description": "Detailed description of the shot",
-                            "characters": ["Character1", "Character2"],
-                            "camera_work": "Description of camera work",
-                            "shot_type": "Establishing shot/Insert/Close-up/etc.",
-                            "completed": false
-                        }},
-                        // ... more shots ...
-                    ]
-                }}
+                Provide the output in the following CSV format:
+                Scene Number,Shot Number,Script Content,Shot Description,Characters,Camera Work,Shot Type,Completed
 
                 Script:
                 {script}
@@ -369,49 +356,22 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
-            # Clean the JSON string
-            cleaned_content = clean_json_string(result.content)
-            
-            # Log the cleaned content and its type
-            logger.debug(f"Cleaned content type: {type(cleaned_content)}, content: {cleaned_content}")
-            
-            # Attempt to parse the JSON
-            try:
-                if isinstance(cleaned_content, list):
-                    shot_list_dict = {"shots": cleaned_content}
-                elif isinstance(cleaned_content, str):
-                    shot_list_dict = json.loads(cleaned_content)
-                else:
-                    raise TypeError(f"Unexpected data type: {type(cleaned_content)}")
-            except json.JSONDecodeError as e:
-                logger.error(f"JSON parsing error: {str(e)}")
-                logger.error(f"Problematic content: {cleaned_content}")
-                raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
-            except TypeError as e:
-                logger.error(f"Type error: {str(e)}")
-                logger.error(f"Problematic content type: {type(cleaned_content)}")
-                raise ScriptAnalysisError(str(e))
+            # Parse the CSV content
+            csv_content = result.content.strip()
+            reader = csv.DictReader(csv_content.splitlines())
+            shot_list = list(reader)
         
-            # Validate the structure of the parsed JSON
-            if not isinstance(shot_list_dict, dict) or 'shots' not in shot_list_dict:
-                raise ValueError("Parsed JSON does not have the expected structure")
+            # Convert numeric fields and booleans
+            for shot in shot_list:
+                shot['Scene'] = int(shot['Scene Number'])
+                shot['Shot'] = int(shot['Shot Number'])
+                shot['Completed'] = shot['Completed'].lower() == 'true'
         
-            # Convert the shot list to the required format
-            shot_list = []
-            for shot in shot_list_dict['shots']:
-                shot_list.append({
-                    'Scene': shot.get('scene_number', ''),
-                    'Shot': shot.get('shot_number', ''),
-                    'Script Content': shot.get('script_content', ''),
-                    'Shot Description': shot.get('shot_description', ''),
-                    'Characters': ', '.join(shot.get('characters', [])),
-                    'Camera Work': shot.get('camera_work', ''),
-                    'Shot Type': shot.get('shot_type', ''),
-                    'Completed': shot.get('completed', False)
-                })
-
             return shot_list
 
+        except csv.Error as e:
+            logger.exception(f"CSV parsing error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse CSV: {str(e)}")
         except ValueError as e:
             logger.exception(f"Value error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
