@@ -333,8 +333,15 @@ class MetaChain:
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
-                Provide the output in the following CSV format:
-                Scene Number,Shot Number,Script Content,Shot Description,Characters,Camera Work,Shot Type,Completed
+                Format the output as a list of Python dictionaries, where each dictionary represents a shot with the following keys:
+                "Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"
+
+                Example format:
+                [
+                    {{"Scene Number": 1, "Shot Number": 1, "Script Content": "...", "Shot Description": "...", "Characters": "...", "Camera Work": "...", "Shot Type": "...", "Completed": False}},
+                    {{"Scene Number": 1, "Shot Number": 2, "Script Content": "...", "Shot Description": "...", "Characters": "...", "Camera Work": "...", "Shot Type": "...", "Completed": False}},
+                    ...
+                ]
 
                 Script:
                 {script}
@@ -356,22 +363,20 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
-            # Parse the CSV content
-            csv_content = result.content.strip()
-            reader = csv.DictReader(csv_content.splitlines())
-            shot_list = list(reader)
+            # Parse the content as a Python list of dictionaries
+            shot_list = eval(result.content.strip())
         
-            # Convert numeric fields and booleans
+            # Validate and convert types
             for shot in shot_list:
-                shot['Scene'] = int(shot['Scene Number'])
-                shot['Shot'] = int(shot['Shot Number'])
-                shot['Completed'] = shot['Completed'].lower() == 'true'
+                shot['Scene Number'] = int(shot['Scene Number'])
+                shot['Shot Number'] = int(shot['Shot Number'])
+                shot['Completed'] = bool(shot['Completed'])
         
             return shot_list
 
-        except csv.Error as e:
-            logger.exception(f"CSV parsing error in analyze_script: {str(e)}")
-            raise ScriptAnalysisError(f"Failed to parse CSV: {str(e)}")
+        except SyntaxError as e:
+            logger.exception(f"Syntax error in parsing LLM output: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
         except ValueError as e:
             logger.exception(f"Value error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
