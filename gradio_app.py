@@ -196,12 +196,39 @@ with gr.Blocks() as app:
                     stick_to_script_input = gr.Checkbox(label="📌 Stick to Script")
                     highlighted_text_input = gr.Textbox(label="🖍️ Highlighted Text", lines=3)
                     
+                    from gradio_shot_library import get_all_options, get_description
+
                     with gr.Group():
-                        gr.Markdown("## 📷 Camera Settings")
+                        gr.Markdown("## 📷 Shot Configuration")
+                        shot_options = get_all_options()
+    
                         with gr.Row():
-                            camera_shot_input = gr.Dropdown(label="🎥 Camera Shot", choices=[shot['display'] for shot in camera_work['shot']])
-                            camera_move_input = gr.Dropdown(label="🎬 Camera Move", choices=[move['display'] for move in camera_work['move']])
-                            camera_size_input = gr.Dropdown(label="📏 Camera Size", choices=[size['display'] for size in camera_work['size']])
+                            shot_type = gr.Dropdown(label="Shot Type", choices=["AI Suggest"] + shot_options["Shot Types"])
+                            camera_angle = gr.Dropdown(label="Camera Angle", choices=["AI Suggest"] + shot_options["Camera Angles"])
+    
+                        with gr.Row():
+                            camera_movement = gr.Dropdown(label="Camera Movement", choices=["AI Suggest"] + shot_options["Camera Movements"])
+                            framing = gr.Dropdown(label="Framing", choices=["AI Suggest"] + shot_options["Framing"])
+    
+                        with gr.Row():
+                            depth_of_field = gr.Dropdown(label="Depth of Field", choices=["AI Suggest"] + shot_options["Depth of Field"])
+        
+                        shot_description = gr.Textbox(label="Shot Description", lines=3, interactive=False)
+    
+                        def update_shot_description(*args):
+                            categories = ["Shot Types", "Camera Angles", "Camera Movements", "Framing", "Depth of Field"]
+                            description = ""
+                            for category, value in zip(categories, args):
+                                if value != "AI Suggest":
+                                    description += f"{category}: {value} - {get_description(category, value)}\n"
+                            return description if description else "Select options to see the shot description."
+
+                        for component in [shot_type, camera_angle, camera_movement, framing, depth_of_field]:
+                            component.change(
+                                update_shot_description,
+                                inputs=[shot_type, camera_angle, camera_movement, framing, depth_of_field],
+                                outputs=[shot_description]
+                            )
                     
                     end_parameters_input = gr.Textbox(label="🔧 End Parameters")
 
@@ -562,24 +589,32 @@ with gr.Blocks() as app:
         sorted_subjects = subject_manager.get_subjects_by_character()
         return json.dumps(sorted_subjects, indent=2)
 
-    def generate_shot_list(script, director_style):
+    def generate_shot_list(script, director_style, shot_type, camera_angle, camera_movement, framing, depth_of_field):
         try:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
-    
+
             analysis_result = asyncio.run(core.analyze_script(script, director_style))
             logger.info("Script analysis completed")
-    
+
             if 'shots' not in analysis_result:
                 logger.error("Shot list not found in analysis result")
                 return None, update_feedback("Error: Shot list not found in analysis result")
-    
+
             shot_list = analysis_result['shots']
             logger.info(f"Generated shot list with {len(shot_list)} shots")
-    
+
+            # Incorporate user-selected shot configuration
+            for shot in shot_list:
+                shot['shot_type'] = shot_type if shot_type != "AI Suggest" else shot.get('shot_type', '')
+                shot['camera_angle'] = camera_angle if camera_angle != "AI Suggest" else shot.get('camera_angle', '')
+                shot['camera_movement'] = camera_movement if camera_movement != "AI Suggest" else shot.get('camera_movement', '')
+                shot['framing'] = framing if framing != "AI Suggest" else shot.get('framing', '')
+                shot['depth_of_field'] = depth_of_field if depth_of_field != "AI Suggest" else shot.get('depth_of_field', '')
+
             df = pd.DataFrame(shot_list)
             logger.debug(f"Original DataFrame columns: {df.columns}")
-        
+    
             # Define the expected columns and their mappings
             expected_columns = {
                 "scene_number": "Scene",
@@ -587,11 +622,14 @@ with gr.Blocks() as app:
                 "script_content": "Script Content",
                 "shot_description": "Shot Description",
                 "characters": "Characters",
-                "camera_work": "Camera Work",
                 "shot_type": "Shot Type",
+                "camera_angle": "Camera Angle",
+                "camera_movement": "Camera Movement",
+                "framing": "Framing",
+                "depth_of_field": "Depth of Field",
                 "completed": "Completed"
             }
-        
+    
             # Create a new DataFrame with only the expected columns
             new_df = pd.DataFrame()
             for original_col, new_col in expected_columns.items():
@@ -600,18 +638,18 @@ with gr.Blocks() as app:
                 else:
                     new_df[new_col] = ""  # Add an empty column if the expected column is missing
                     logger.warning(f"Expected column '{original_col}' not found in the shot list")
-        
+    
             # Convert characters list to string
             new_df['Characters'] = new_df['Characters'].apply(lambda x: ', '.join(x) if isinstance(x, list) else str(x))
-        
+    
             # Ensure all columns are present and in the correct order
             for col in expected_columns.values():
                 if col not in new_df.columns:
                     new_df[col] = ""
             new_df = new_df[list(expected_columns.values())]
-        
-            logger.debug(f"Final DataFrame columns: {new_df.columns}")
     
+            logger.debug(f"Final DataFrame columns: {new_df.columns}")
+
             return new_df, update_feedback("Shot list generated successfully")
         except Exception as e:
             logger.exception("Error in generate_shot_list function")
@@ -808,7 +846,7 @@ with gr.Blocks() as app:
 
     generate_shot_list_button.click(
         generate_shot_list,
-        inputs=[script_input_for_shot_list, director_style_for_shot_list],
+        inputs=[script_input_for_shot_list, director_style_for_shot_list, shot_type, camera_angle, camera_movement, framing, depth_of_field],
         outputs=[shot_list_display, feedback_area]
     )
 
