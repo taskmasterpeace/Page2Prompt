@@ -246,7 +246,7 @@ class MetaChain:
             return f"Error generating style suffix: {str(e)}"
 
     from pydantic import BaseModel
-    from typing import List, Optional
+    from typing import List, Optional, Dict, Any
 
     class Shot(BaseModel):
         scene_number: int
@@ -258,8 +258,8 @@ class MetaChain:
         shot_type: str
         completed: bool = False
 
-    class ShotList(BaseModel):
-        shots: List[Shot]
+class ShotList(BaseModel):
+    shots: List[Shot]
 
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
