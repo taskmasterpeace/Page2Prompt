@@ -364,8 +364,12 @@ class MetaChain:
             content = re.sub(r'^```python\s*', '', content)
             content = re.sub(r'\s*```$', '', content)
         
+            # Remove the 'shot_list = ' prefix and any trailing comments
+            content = re.sub(r'^shot_list\s*=\s*', '', content)
+            content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)
+            
             # Safely evaluate the string as a Python expression
-            shot_list = ast.literal_eval(content)
+            shot_list = ast.literal_eval(content.strip())
         
             # Validate and convert types
             for shot in shot_list:
