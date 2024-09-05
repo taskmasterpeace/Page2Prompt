@@ -44,7 +44,7 @@ def load_camera_work():
 camera_work = load_camera_work()
 
 @debug_func
-def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, camera_shot, camera_move, camera_size, existing_prompts, style_prefix, style_suffix, director_style):
+def generate_prompt_wrapper(style, highlighted_text, shot_description, directors_notes, script, stick_to_script, end_parameters, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects, shot_type, camera_angle, camera_movement, framing, depth_of_field, existing_prompts, style_prefix, style_suffix, director_style):
     async def async_generate():
         start_time = time.time()
         try:
@@ -53,20 +53,24 @@ def generate_prompt_wrapper(style, highlighted_text, shot_description, directors
             active_subjects = person_subjects + animal_subjects + place_subjects + thing_subjects + other_subjects
             active_subjects_list = subject_manager.get_active_subjects()
 
-            def format_camera_work(shot, move, size):
+            def format_camera_work(shot_type, camera_angle, camera_movement, framing, depth_of_field):
                 camera_descriptions = []
-                if shot:
-                    camera_descriptions.append(f"In a {shot},")
-                if move:
-                    camera_descriptions.append(f"with a {move},")
-                if size:
-                    camera_descriptions.append(f"framed as a {size},")
-                    
+                if shot_type and shot_type != "AI Suggest":
+                    camera_descriptions.append(f"Using a {shot_type},")
+                if camera_angle and camera_angle != "AI Suggest":
+                    camera_descriptions.append(f"with a {camera_angle} angle,")
+                if camera_movement and camera_movement != "AI Suggest":
+                    camera_descriptions.append(f"using {camera_movement},")
+                if framing and framing != "AI Suggest":
+                    camera_descriptions.append(f"framed with {framing},")
+                if depth_of_field and depth_of_field != "AI Suggest":
+                    camera_descriptions.append(f"with {depth_of_field},")
+                
                 if camera_descriptions:
                     return " ".join(camera_descriptions) + " we see"
                 return ""
 
-            camera_work_description = format_camera_work(camera_shot, camera_move, camera_size)
+            camera_work_description = format_camera_work(shot_type, camera_angle, camera_movement, framing, depth_of_field)
 
             meta_chain_start = time.time()
             result = await core.meta_chain.generate_prompt(
@@ -708,7 +712,7 @@ with gr.Blocks() as app:
         inputs=[style_input, highlighted_text_input, shot_description_input,
                 directors_notes_input, script_input, stick_to_script_input,
                 end_parameters_input, person_subjects, animal_subjects, place_subjects, thing_subjects, other_subjects,
-                camera_shot_input, camera_move_input, camera_size_input, 
+                shot_type, camera_angle, camera_movement, framing, depth_of_field,
                 concise_prompt, style_prefix_input, style_suffix_input, director_style_input],
         outputs=[concise_prompt, normal_prompt, detailed_prompt, structured_prompt, generation_message, active_subjects_display]
     )
