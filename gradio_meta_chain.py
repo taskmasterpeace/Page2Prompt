@@ -6,6 +6,7 @@ from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisError
 from gradio_config import get_openai_api_key
+from pydantic import BaseModel
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
