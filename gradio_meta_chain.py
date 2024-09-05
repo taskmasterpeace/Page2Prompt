@@ -3,7 +3,8 @@ import csv
 import logging
 import time
 import re
-import re
+import json
+import ast
 from typing import Dict, List, Optional, Union, Any
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
@@ -11,6 +12,7 @@ from gradio_meta_chain_exceptions import PromptGenerationError, ScriptAnalysisEr
 from gradio_config import get_openai_api_key
 from pydantic import BaseModel
 from gradio_core import save_debug_output
+import pandas as pd
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -334,15 +336,8 @@ class MetaChain:
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
-                Format the output as a list of Python dictionaries, where each dictionary represents a shot with the following keys:
+                Format the output as a JSON array of objects, where each object represents a shot with the following keys:
                 "Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"
-
-                Example format:
-                [
-                    {{"Scene Number": 1, "Shot Number": 1, "Script Content": "...", "Shot Description": "...", "Characters": "...", "Camera Work": "...", "Shot Type": "...", "Completed": False}},
-                    {{"Scene Number": 1, "Shot Number": 2, "Script Content": "...", "Shot Description": "...", "Characters": "...", "Camera Work": "...", "Shot Type": "...", "Completed": False}},
-                    ...
-                ]
 
                 Script:
                 {script}
@@ -366,23 +361,23 @@ class MetaChain:
         
             # Remove markdown formatting if present
             content = result.content.strip()
-            content = re.sub(r'^```python\s*', '', content)
+            content = re.sub(r'^```json\s*', '', content)
             content = re.sub(r'\s*```$', '', content)
         
-            # Parse the content as a Python list of dictionaries
-            shot_list = eval(content)
+            # Parse the content as a JSON array
+            shot_list = json.loads(content)
         
             # Validate and convert types
             for shot in shot_list:
                 shot['Scene Number'] = int(shot['Scene Number'])
                 shot['Shot Number'] = int(shot['Shot Number'])
-                shot['Completed'] = bool(shot['Completed'])
+                shot['Completed'] = False  # Always set to False for new shots
         
             return shot_list
 
-        except SyntaxError as e:
-            logger.exception(f"Syntax error in parsing LLM output: {str(e)}")
-            raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
+        except json.JSONDecodeError as e:
+            logger.exception(f"JSON decoding error in parsing LLM output: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse LLM output as JSON: {str(e)}")
         except ValueError as e:
             logger.exception(f"Value error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))

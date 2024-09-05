@@ -627,8 +627,15 @@ with gr.Blocks() as app:
 
     def export_shot_list(shot_list):
         try:
-            csv_content = shot_list.to_csv(index=False)
-            return gr.File.update(value=csv_content, visible=True), update_feedback("Shot list exported successfully")
+            # Export to CSV
+            csv_filename = f'shot_list_{int(time.time())}.csv'
+            shot_list.to_csv(csv_filename, index=False)
+            
+            # Export to JSON
+            json_filename = f'shot_list_{int(time.time())}.json'
+            shot_list.to_json(json_filename, orient='records', indent=2)
+            
+            return gr.File.update(value=[csv_filename, json_filename], visible=True), update_feedback("Shot list exported successfully as CSV and JSON")
         except Exception as e:
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
 
