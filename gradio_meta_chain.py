@@ -326,20 +326,20 @@ class MetaChain:
                 shot_list["style_prefix"] = line.split(":")[1].strip()
             elif line.startswith("Style Suffix:"):
                 shot_list["style_suffix"] = line.split(":")[1].strip()
-            elif line.startswith("Shot Description:"):
+            elif line.startswith("Scene Number:"):
                 if current_shot:
                     shot_list["shots"].append(current_shot)
-                current_shot = {"shot_description": line.split(":")[1].strip()}
-            elif line.startswith("Director's Notes:"):
-                current_shot["directors_notes"] = line.split(":")[1].strip()
-            elif line.startswith("Camera Shot:"):
-                current_shot["camera_shot"] = line.split(":")[1].strip()
-            elif line.startswith("Camera Move:"):
-                current_shot["camera_move"] = line.split(":")[1].strip()
-            elif line.startswith("Camera Size:"):
-                current_shot["camera_size"] = line.split(":")[1].strip()
-            elif line.startswith("Active Subject:"):
-                current_shot["active_subject"] = line.split(":")[1].strip()
+                current_shot = {"scene_number": line.split(":")[1].strip()}
+            elif line.startswith("Shot Number:"):
+                current_shot["shot_number"] = line.split(":")[1].strip()
+            elif line.startswith("Shot Description:"):
+                current_shot["shot_description"] = line.split(":")[1].strip()
+            elif line.startswith("Characters:"):
+                current_shot["characters"] = line.split(":")[1].strip()
+            elif line.startswith("Camera Work:"):
+                current_shot["camera_work"] = line.split(":")[1].strip()
+            elif line.startswith("Completed:"):
+                current_shot["completed"] = line.split(":")[1].strip().lower() == "true"
         
         if current_shot:
             shot_list["shots"].append(current_shot)
