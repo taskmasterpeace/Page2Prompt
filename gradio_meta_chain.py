@@ -261,7 +261,7 @@ class MetaChain:
         completed: bool = False
 
     class ShotList(BaseModel):
-        shots: List[Shot]
+        shots: List['Shot']
 
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
