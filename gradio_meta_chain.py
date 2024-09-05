@@ -274,53 +274,13 @@ class MetaChain:
 
     async def analyze_script(self, script: str, director_style: str) -> Dict[str, Any]:
         try:
-            template = PromptTemplate(
-                input_variables=["script", "director_style"],
-                template="""
-                As an expert prompt engineer and cinematographer, analyze the following script using the directorial style of {director_style}. 
-                Generate a comprehensive shot list that aligns with the Page2Prompt application's functionality and the director's unique approach.
+            # ... (keep the existing code for template and chain)
 
-                For each significant moment or scene, provide:
-
-                1. Scene Number: Numerical identifier for the scene.
-                2. Shot Number: Numerical identifier for the shot within the scene.
-                3. Script Content: The exact portion of the script this shot is based on.
-                4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
-                5. Characters: Main characters present in the shot (as a comma-separated list).
-                6. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
-                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
-
-                Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
-
-                Provide the output in the following JSON format:
-                {{
-                    "shots": [
-                        {{
-                            "scene_number": 1,
-                            "shot_number": 1,
-                            "script_content": "Exact portion of the script for this shot",
-                            "shot_description": "Detailed description of the shot",
-                            "characters": ["Character1", "Character2"],
-                            "camera_work": "Description of camera work",
-                            "shot_type": "Establishing shot/Insert/Close-up/etc.",
-                            "completed": false
-                        }},
-                        // ... more shots ...
-                    ]
-                }}
-
-                Script:
-                {script}
-
-                Shot List:
-                """
-            )
-        
-            chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"script": script, "director_style": director_style})
         
             # Parse the result into a structured format
-            shot_list = ShotList.parse_raw(result.content)
+            shot_list_dict = json.loads(result.content)
+            shot_list = ShotList(shots=[Shot(**shot) for shot in shot_list_dict['shots']])
         
             # Generate additional shots using the core's method
             core_shots = self.core._generate_shot_list(
