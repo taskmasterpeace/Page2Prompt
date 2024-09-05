@@ -327,11 +327,18 @@ class MetaChain:
             chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"script": script, "director_style": director_style})
         
+            # Save raw output for debugging
+            save_debug_output(result.content, f"raw_llm_output_{int(time.time())}.txt")
+        
             # Parse the result into a structured format
-            shot_list_dict = json.loads(result.content)
+            shot_list_dict = json.loads(result.content.strip())
             
             # Directly return the shot list without additional processing
             return shot_list_dict
+        except json.JSONDecodeError as e:
+            logger.exception(f"JSON parsing error in analyze_script: {str(e)}")
+            logger.debug(f"Raw content causing JSON error: {result.content}")
+            raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))

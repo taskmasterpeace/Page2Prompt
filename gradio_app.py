@@ -600,12 +600,17 @@ with gr.Blocks() as app:
 
             analysis_result = asyncio.run(core.analyze_script(script, director_style))
             logger.info("Script analysis completed")
+            logger.debug(f"Raw analysis result: {analysis_result}")  # Log the raw result for debugging
 
-            if 'shots' not in analysis_result:
-                logger.error("Shot list not found in analysis result")
-                return None, update_feedback("Error: Shot list not found in analysis result")
+            if not isinstance(analysis_result, dict) or 'shots' not in analysis_result:
+                logger.error("Invalid analysis result structure")
+                return None, update_feedback("Error: Invalid analysis result structure")
 
             shot_list = analysis_result['shots']
+            if not isinstance(shot_list, list):
+                logger.error("Shot list is not a valid list")
+                return None, update_feedback("Error: Shot list is not a valid list")
+
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
@@ -626,11 +631,8 @@ with gr.Blocks() as app:
                 "script_content": "Script Content",
                 "shot_description": "Shot Description",
                 "characters": "Characters",
+                "camera_work": "Camera Work",
                 "shot_type": "Shot Type",
-                "camera_angle": "Camera Angle",
-                "camera_movement": "Camera Movement",
-                "framing": "Framing",
-                "depth_of_field": "Depth of Field",
                 "completed": "Completed"
             }
     

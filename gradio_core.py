@@ -125,3 +125,12 @@ class PromptForgeCore:
 
     def get_director_styles(self):
         return list(self.meta_chain.director_styles.keys())
+import os
+
+def save_debug_output(content, filename="debug_output.txt"):
+    debug_dir = "debug_logs"
+    if not os.path.exists(debug_dir):
+        os.makedirs(debug_dir)
+    with open(os.path.join(debug_dir, filename), "w", encoding="utf-8") as f:
+        f.write(content)
+    logger.info(f"Debug output saved to {filename}")
