@@ -359,17 +359,24 @@ class MetaChain:
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
         
-            # Remove any potential markdown formatting
+            # Remove any potential markdown formatting and clean the content
             content = result.content.strip()
-            content = re.sub(r'^```python\s*', '', content)
-            content = re.sub(r'\s*```$', '', content)
-        
-            # Remove the 'shot_list = ' prefix and any trailing comments
-            content = re.sub(r'^shot_list\s*=\s*', '', content)
-            content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)
+            content = re.sub(r'^```[\w\s]*\n', '', content)  # Remove opening code block
+            content = re.sub(r'\n```$', '', content)  # Remove closing code block
+            content = re.sub(r'^shot_list\s*=\s*', '', content)  # Remove 'shot_list = ' prefix
+            content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)  # Remove comments
             
-            # Safely evaluate the string as a Python expression
-            shot_list = ast.literal_eval(content.strip())
+            # Split the content into lines and process each line
+            lines = content.split('\n')
+            cleaned_lines = []
+            for line in lines:
+                line = line.strip()
+                if line and not line.startswith(('```', '"""')):  # Skip markdown artifacts
+                    cleaned_lines.append(line)
+            
+            # Join the cleaned lines and safely evaluate as a Python expression
+            cleaned_content = '[' + ','.join(cleaned_lines) + ']'
+            shot_list = ast.literal_eval(cleaned_content)
         
             # Validate and convert types
             for shot in shot_list:
