@@ -313,6 +313,21 @@ with gr.Blocks() as app:
             selected_shot_description = gr.Textbox(label="Selected Shot Description", lines=3)
             transfer_to_prompt_button = gr.Button("Transfer to Prompt Generation")
 
+            with gr.Row():
+                add_shot_button = gr.Button("Add Shot")
+                delete_shot_button = gr.Button("Delete Selected Shot")
+                move_up_button = gr.Button("Move Shot Up")
+                move_down_button = gr.Button("Move Shot Down")
+
+            with gr.Row():
+                scene_input = gr.Number(label="Scene")
+                shot_input = gr.Number(label="Shot")
+                script_content_input = gr.Textbox(label="Script Content", lines=2)
+                shot_description_input = gr.Textbox(label="Shot Description", lines=2)
+                characters_input = gr.Textbox(label="Characters")
+                camera_work_input = gr.Textbox(label="Camera Work")
+                shot_type_input = gr.Textbox(label="Shot Type")
+
         # Remove the duplicate "Script & Prompt Generation" tab
 
     # Event handlers and utility functions
@@ -652,7 +667,11 @@ with gr.Blocks() as app:
             csv_filename = f'shot_list_{int(time.time())}.csv'
             shot_list.to_csv(csv_filename, index=False)
         
-            return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
+            # Export to JSON
+            json_filename = f'shot_list_{int(time.time())}.json'
+            shot_list.to_json(json_filename, orient='records', indent=2)
+    
+            return gr.File.update(value=[csv_filename, json_filename], visible=True), update_feedback("Shot list exported successfully as CSV and JSON")
         except Exception as e:
             logger.exception("Error in export_shot_list function")
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
@@ -678,6 +697,37 @@ with gr.Blocks() as app:
 
     def update_shot_list(shot_list):
         return shot_list, update_feedback("Shot list updated successfully")
+
+    def add_shot(shot_list, scene, shot, script_content, shot_description, characters, camera_work, shot_type):
+        new_row = pd.DataFrame({
+            'Scene': [scene],
+            'Shot': [shot],
+            'Script Content': [script_content],
+            'Shot Description': [shot_description],
+            'Characters': [characters],
+            'Camera Work': [camera_work],
+            'Shot Type': [shot_type],
+            'Completed': [False]
+        })
+        updated_shot_list = pd.concat([shot_list, new_row], ignore_index=True)
+        return updated_shot_list, update_feedback("New shot added successfully")
+
+    def delete_selected_shot(shot_list, selected_index):
+        if selected_index is not None and 0 <= selected_index < len(shot_list):
+            updated_shot_list = shot_list.drop(selected_index).reset_index(drop=True)
+            return updated_shot_list, update_feedback("Selected shot deleted successfully")
+        else:
+            return shot_list, update_feedback("No valid shot selected for deletion")
+
+    def move_shot(shot_list, selected_index, direction):
+        if selected_index is not None and 0 <= selected_index < len(shot_list):
+            if direction == "up" and selected_index > 0:
+                shot_list.iloc[selected_index-1:selected_index+1] = shot_list.iloc[selected_index-1:selected_index+1].iloc[::-1].values
+            elif direction == "down" and selected_index < len(shot_list) - 1:
+                shot_list.iloc[selected_index:selected_index+2] = shot_list.iloc[selected_index:selected_index+2].iloc[::-1].values
+            return shot_list.reset_index(drop=True), update_feedback(f"Shot moved {direction} successfully")
+        else:
+            return shot_list, update_feedback("No valid shot selected for moving")
 
     # Connect event handlers
     save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
@@ -855,7 +905,7 @@ with gr.Blocks() as app:
     export_shot_list_button.click(
         export_shot_list,
         inputs=[shot_list_display],
-        outputs=[gr.File(label="Download CSV"), feedback_area]
+        outputs=[gr.File(label="Download Files", file_count="multiple"), feedback_area]
     )
 
     import_shot_list_button.upload(
@@ -874,6 +924,30 @@ with gr.Blocks() as app:
         transfer_to_prompt_generation,
         inputs=[shot_list_display],
         outputs=[shot_description_input, feedback_area]
+    )
+
+    add_shot_button.click(
+        add_shot,
+        inputs=[shot_list_display, scene_input, shot_input, script_content_input, shot_description_input, characters_input, camera_work_input, shot_type_input],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    delete_shot_button.click(
+        delete_selected_shot,
+        inputs=[shot_list_display, shot_list_display.select],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    move_up_button.click(
+        move_shot,
+        inputs=[shot_list_display, shot_list_display.select, gr.Textbox(value="up", visible=False)],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    move_down_button.click(
+        move_shot,
+        inputs=[shot_list_display, shot_list_display.select, gr.Textbox(value="down", visible=False)],
+        outputs=[shot_list_display, feedback_area]
     )
 
     # Debug information section
