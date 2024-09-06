@@ -598,40 +598,41 @@ with gr.Blocks() as app:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
-            result = await core.analyze_script(script, director_style)
-            shot_list = result.get('shots', [])  # Ensure we're working with a list of dictionaries
+            shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
-                if isinstance(shot, dict):  # Ensure each shot is a dictionary
-                    if shot_type != "AI Suggest":
-                        shot['Shot Type'] = shot_type
-                    camera_work = []
-                    if camera_angle != "AI Suggest":
-                        camera_work.append(camera_angle)
-                    if camera_movement != "AI Suggest":
-                        camera_work.append(camera_movement)
-                    if framing != "AI Suggest":
-                        camera_work.append(framing)
-                    if depth_of_field != "AI Suggest":
-                        camera_work.append(depth_of_field)
-                    if camera_work:
-                        shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
-                    else:
-                        shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
+                if shot_type != "AI Suggest":
+                    shot['shot_type'] = shot_type
+                camera_work = []
+                if camera_angle != "AI Suggest":
+                    camera_work.append(camera_angle)
+                if camera_movement != "AI Suggest":
+                    camera_work.append(camera_movement)
+                if framing != "AI Suggest":
+                    camera_work.append(framing)
+                if depth_of_field != "AI Suggest":
+                    camera_work.append(depth_of_field)
+                if camera_work:
+                    shot['camera_work'] = ', '.join(filter(None, camera_work))  # Filter out None values
+                else:
+                    shot['camera_work'] = shot.get('camera_work', 'Not specified')  # Keep existing value or set to 'Not specified'
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure the DataFrame has all required columns
-            required_columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            required_columns = ["scene_number", "shot_number", "script_content", "shot_description", "characters", "camera_work", "shot_type", "completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"  # Add column with default value if missing
 
             # Reorder columns to match the required order
             df = df[required_columns]
+
+            # Rename columns for display
+            df.columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
 
             return df, update_feedback("Shot list generated successfully")
         except Exception as e:

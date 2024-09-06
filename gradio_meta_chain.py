@@ -475,6 +475,15 @@ class MetaChain:
                 # Ensure Camera Work and Shot Type are not empty
                 shot['Camera Work'] = shot.get('Camera Work', 'Not specified')
                 shot['Shot Type'] = shot.get('Shot Type', 'Not specified')
+                # Convert keys to match the expected format
+                shot['scene_number'] = shot.pop('Scene Number')
+                shot['shot_number'] = shot.pop('Shot Number')
+                shot['script_content'] = shot.pop('Script Content')
+                shot['shot_description'] = shot.pop('Shot Description')
+                shot['characters'] = shot.pop('Characters')
+                shot['camera_work'] = shot.pop('Camera Work')
+                shot['shot_type'] = shot.pop('Shot Type')
+                shot['completed'] = shot.pop('Completed')
         
             return shot_list
 
