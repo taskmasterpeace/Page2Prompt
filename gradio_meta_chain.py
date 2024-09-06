@@ -469,12 +469,22 @@ class MetaChain:
         
             # Validate and convert types
             for shot in shot_list:
-                shot['scene_number'] = int(shot['scene_number'])
-                shot['shot_number'] = int(shot['shot_number'])
-                shot['completed'] = False  # Always set to False for new shots
-                # Ensure camera_work and shot_type are not empty
-                shot['camera_work'] = shot.get('camera_work', 'Not specified')
-                shot['shot_type'] = shot.get('shot_type', 'Not specified')
+                shot['Scene'] = int(shot['scene_number'])
+                shot['Shot'] = int(shot['shot_number'])
+                shot['Script Content'] = shot['script_content']
+                shot['Shot Description'] = shot['shot_description']
+                shot['Characters'] = shot['characters']
+                shot['Camera Work'] = shot.get('camera_work', 'Not specified')
+                shot['Shot Type'] = shot.get('shot_type', 'Not specified')
+                shot['Completed'] = False  # Always set to False for new shots
+                
+                # Remove old keys
+                del shot['scene_number']
+                del shot['shot_number']
+                del shot['script_content']
+                del shot['shot_description']
+                del shot['characters']
+                del shot['completed']
         
             logger.info(f"Processed shot list: {shot_list}")
             return shot_list

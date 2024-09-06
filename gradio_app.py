@@ -613,7 +613,7 @@ with gr.Blocks() as app:
                     raise ValueError(f"Expected each shot to be a dict, but got {type(shot)}")
             
                 if shot_type != "AI Suggest":
-                    shot['shot_type'] = shot_type
+                    shot['Shot Type'] = shot_type
                 camera_work = []
                 if camera_angle != "AI Suggest":
                     camera_work.append(camera_angle)
@@ -624,24 +624,21 @@ with gr.Blocks() as app:
                 if depth_of_field != "AI Suggest":
                     camera_work.append(depth_of_field)
                 if camera_work:
-                    shot['camera_work'] = ', '.join(filter(None, camera_work))  # Filter out None values
+                    shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
                 else:
-                    shot['camera_work'] = shot.get('camera_work', 'Not specified')  # Keep existing value or set to 'Not specified'
+                    shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure the DataFrame has all required columns
-            required_columns = ["scene_number", "shot_number", "script_content", "shot_description", "characters", "camera_work", "shot_type", "completed"]
+            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"  # Add column with default value if missing
 
             # Reorder columns to match the required order
             df = df[required_columns]
-
-            # Rename columns for display
-            df.columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
 
             logger.info(f"Final DataFrame: {df.to_string()}")  # Log the final DataFrame
 
