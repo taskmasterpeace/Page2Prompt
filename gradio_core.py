@@ -56,9 +56,6 @@ class PromptForgeCore:
                 formatted_shots.append(formatted_shot)
             
             return {"shots": formatted_shots}
-        except json.JSONDecodeError as e:
-            logger.exception(f"JSON parsing error in analyze_script: {str(e)}")
-            raise ScriptAnalysisError(f"Failed to parse JSON: {str(e)}")
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
