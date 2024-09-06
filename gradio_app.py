@@ -599,10 +599,19 @@ with gr.Blocks() as app:
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
             shot_list = await core.analyze_script(script, director_style)
-            logger.info(f"Generated shot list with {len(shot_list)} shots")
+            logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
+
+            if not isinstance(shot_list, list):
+                raise ValueError(f"Expected shot_list to be a list, but got {type(shot_list)}")
+
+            if not shot_list:
+                raise ValueError("Generated shot list is empty")
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
+                if not isinstance(shot, dict):
+                    raise ValueError(f"Expected each shot to be a dict, but got {type(shot)}")
+            
                 if shot_type != "AI Suggest":
                     shot['shot_type'] = shot_type
                 camera_work = []
@@ -633,6 +642,8 @@ with gr.Blocks() as app:
 
             # Rename columns for display
             df.columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+
+            logger.info(f"Final DataFrame: {df.to_string()}")  # Log the final DataFrame
 
             return df, update_feedback("Shot list generated successfully")
         except Exception as e:

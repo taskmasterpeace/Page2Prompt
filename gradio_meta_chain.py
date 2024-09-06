@@ -427,7 +427,7 @@ class MetaChain:
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
                 Format the output as a valid Python list of dictionaries, where each dictionary represents a shot with the following keys:
-                "Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"
+                "scene_number", "shot_number", "script_content", "shot_description", "characters", "camera_work", "shot_type", "completed"
 
                 Script:
                 {script}
@@ -469,22 +469,14 @@ class MetaChain:
         
             # Validate and convert types
             for shot in shot_list:
-                shot['Scene Number'] = int(shot['Scene Number'])
-                shot['Shot Number'] = int(shot['Shot Number'])
-                shot['Completed'] = False  # Always set to False for new shots
-                # Ensure Camera Work and Shot Type are not empty
-                shot['Camera Work'] = shot.get('Camera Work', 'Not specified')
-                shot['Shot Type'] = shot.get('Shot Type', 'Not specified')
-                # Convert keys to match the expected format
-                shot['scene_number'] = shot.pop('Scene Number')
-                shot['shot_number'] = shot.pop('Shot Number')
-                shot['script_content'] = shot.pop('Script Content')
-                shot['shot_description'] = shot.pop('Shot Description')
-                shot['characters'] = shot.pop('Characters')
-                shot['camera_work'] = shot.pop('Camera Work')
-                shot['shot_type'] = shot.pop('Shot Type')
-                shot['completed'] = shot.pop('Completed')
+                shot['scene_number'] = int(shot['scene_number'])
+                shot['shot_number'] = int(shot['shot_number'])
+                shot['completed'] = False  # Always set to False for new shots
+                # Ensure camera_work and shot_type are not empty
+                shot['camera_work'] = shot.get('camera_work', 'Not specified')
+                shot['shot_type'] = shot.get('shot_type', 'Not specified')
         
+            logger.info(f"Processed shot list: {shot_list}")
             return shot_list
 
         except Exception as e:
