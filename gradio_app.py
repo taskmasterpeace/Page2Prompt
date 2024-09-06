@@ -601,14 +601,15 @@ with gr.Blocks() as app:
             shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
 
-            if not isinstance(shot_list, list) or not shot_list:
-                raise ValueError("Invalid or empty shot list generated")
+            if not isinstance(shot_list, dict) or 'shots' not in shot_list:
+                raise ValueError("Invalid shot list structure")
+
+            shots = shot_list['shots']
+            if not shots:
+                raise ValueError("Empty shot list generated")
 
             # Incorporate user-selected shot configuration
-            for shot in shot_list:
-                if not isinstance(shot, dict):
-                    raise ValueError(f"Expected each shot to be a dict, but got {type(shot)}")
-            
+            for shot in shots:
                 if shot_type != "AI Suggest":
                     shot['Shot Type'] = shot_type
                 camera_work = []
@@ -625,16 +626,17 @@ with gr.Blocks() as app:
                 elif 'Camera Work' not in shot:
                     shot['Camera Work'] = 'Not specified'
 
-            df = pd.DataFrame(shot_list)
+            # Create DataFrame
+            df = pd.DataFrame(shots)
             logger.debug(f"DataFrame columns: {df.columns}")
 
-            # Ensure the DataFrame has all required columns
+            # Ensure all required columns are present
             required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"
 
-            # Reorder columns to match the required order
+            # Reorder columns
             df = df[required_columns]
 
             logger.info(f"Final DataFrame: {df.to_string()}")  # Log the final DataFrame
