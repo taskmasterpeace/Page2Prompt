@@ -44,8 +44,8 @@ class PromptForgeCore:
             formatted_shots = []
             for shot in shot_list:
                 formatted_shot = {
-                    "Scene": shot['Scene Number'],
-                    "Shot": shot['Shot Number'],
+                    "Scene": shot['Scene'],  # Changed from 'Scene Number'
+                    "Shot": shot['Shot'],    # Changed from 'Shot Number'
                     "Script Content": shot['Script Content'],
                     "Shot Description": shot['Shot Description'],
                     "Characters": shot['Characters'],
