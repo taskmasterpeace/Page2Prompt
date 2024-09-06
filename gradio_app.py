@@ -723,15 +723,20 @@ with gr.Blocks() as app:
         else:
             return shot_list, update_feedback("Shot list is empty or not initialized")
 
-    def move_shot(shot_list, selected_index, direction):
-        if selected_index is not None and 0 <= selected_index < len(shot_list):
-            if direction == "up" and selected_index > 0:
-                shot_list.iloc[selected_index-1:selected_index+1] = shot_list.iloc[selected_index-1:selected_index+1].iloc[::-1].values
-            elif direction == "down" and selected_index < len(shot_list) - 1:
-                shot_list.iloc[selected_index:selected_index+2] = shot_list.iloc[selected_index:selected_index+2].iloc[::-1].values
-            return shot_list.reset_index(drop=True), update_feedback(f"Shot moved {direction} successfully")
+    def move_shot(shot_list, direction):
+        if shot_list is not None and not shot_list.empty:
+            selected_indices = shot_list.index[shot_list['Selected'] == True].tolist()
+            if selected_indices:
+                selected_index = selected_indices[0]
+                if direction == "up" and selected_index > 0:
+                    shot_list.iloc[selected_index-1:selected_index+1] = shot_list.iloc[selected_index-1:selected_index+1].iloc[::-1].values
+                elif direction == "down" and selected_index < len(shot_list) - 1:
+                    shot_list.iloc[selected_index:selected_index+2] = shot_list.iloc[selected_index:selected_index+2].iloc[::-1].values
+                return shot_list.reset_index(drop=True), update_feedback(f"Shot moved {direction} successfully")
+            else:
+                return shot_list, update_feedback("No shot selected for moving")
         else:
-            return shot_list, update_feedback("No valid shot selected for moving")
+            return shot_list, update_feedback("Shot list is empty or not initialized")
 
     # Connect event handlers
     save_style_button.click(save_style, inputs=[style_input, style_prefix_input, style_suffix_input], outputs=[feedback_area])
@@ -944,13 +949,13 @@ with gr.Blocks() as app:
 
     move_up_button.click(
         move_shot,
-        inputs=[shot_list_display, shot_list_display.select, gr.Textbox(value="up", visible=False)],
+        inputs=[shot_list_display, gr.Textbox(value="up", visible=False)],
         outputs=[shot_list_display, feedback_area]
     )
 
     move_down_button.click(
         move_shot,
-        inputs=[shot_list_display, shot_list_display.select, gr.Textbox(value="down", visible=False)],
+        inputs=[shot_list_display, gr.Textbox(value="down", visible=False)],
         outputs=[shot_list_display, feedback_area]
     )
 
