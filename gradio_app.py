@@ -648,6 +648,13 @@ with gr.Blocks() as app:
             logger.exception("Error in export_shot_list function")
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
 
+    def transfer_to_prompt_generation(selected_row):
+        if selected_row is not None and len(selected_row) > 0:
+            shot_description = selected_row.iloc[0]['Shot Description']
+            return gr.update(value=shot_description), update_feedback("Shot description transferred to prompt generation")
+        else:
+            return gr.update(), update_feedback("No row selected. Please select a row from the shot list.")
+
     def import_shot_list(file):
         try:
             if file.name.endswith('.csv'):
