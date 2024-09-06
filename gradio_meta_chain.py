@@ -461,10 +461,9 @@ class MetaChain:
                 shot_list = ast.literal_eval(content)
             except (SyntaxError, ValueError):
                 # If literal_eval fails, try to extract the list using regex
-                import re
                 list_content = re.search(r'\[(.*?)\]', content, re.DOTALL)
                 if list_content:
-                    shot_list = eval(list_content.group(0))
+                    shot_list = ast.literal_eval(list_content.group(0))
                 else:
                     raise ValueError("Could not extract shot list from LLM output")
         
