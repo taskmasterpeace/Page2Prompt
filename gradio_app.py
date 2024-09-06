@@ -599,7 +599,7 @@ with gr.Blocks() as app:
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
             result = await core.analyze_script(script, director_style)
-            shot_list = result['shots']
+            shot_list = result
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
@@ -618,16 +618,16 @@ with gr.Blocks() as app:
                 if camera_work:
                     shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
                 else:
-                    shot['Camera Work'] = shot.get('Camera Work', '')  # Keep existing value or set to empty string
+                    shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure the DataFrame has all required columns
-            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            required_columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
-                    df[col] = ""  # Add empty column if missing
+                    df[col] = "Not specified"  # Add column with default value if missing
 
             # Reorder columns to match the required order
             df = df[required_columns]
@@ -643,8 +643,9 @@ with gr.Blocks() as app:
             csv_filename = f'shot_list_{int(time.time())}.csv'
             shot_list.to_csv(csv_filename, index=False)
         
-            return gr.File.update(value=[csv_filename], visible=True), update_feedback("Shot list exported successfully as CSV")
+            return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
         except Exception as e:
+            logger.exception("Error in export_shot_list function")
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
 
     def import_shot_list(file):
@@ -853,6 +854,12 @@ with gr.Blocks() as app:
         outputs=[shot_list_display, feedback_area]
     )
 
+    transfer_to_prompt_button.click(
+        transfer_to_prompt_generation,
+        inputs=[shot_list_display],
+        outputs=[shot_description_input, feedback_area]
+    )
+
     # Debug information section
     with gr.Accordion("🐛 Debug Information", open=False):
         debug_output = gr.Textbox(label="Debug Information", lines=10)
@@ -908,3 +915,9 @@ def save_debug_output(content, filename="debug_output.txt"):
     with open(os.path.join(debug_dir, filename), "w", encoding="utf-8") as f:
         f.write(content)
     logger.info(f"Debug output saved to {filename}")
+    def transfer_to_prompt_generation(selected_row):
+        if selected_row is not None and len(selected_row) > 0:
+            shot_description = selected_row.iloc[0]['Shot Description']
+            return gr.update(value=shot_description), update_feedback("Shot description transferred to prompt generation")
+        else:
+            return gr.update(), update_feedback("No row selected. Please select a row from the shot list.")

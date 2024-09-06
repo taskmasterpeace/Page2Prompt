@@ -420,7 +420,7 @@ class MetaChain:
                 3. Script Content: The exact portion of the script this shot is based on.
                 4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
                 5. Characters: Main characters present in the shot (as a comma-separated list).
-                6. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
+                6. Camera Work: Specify the camera movement and any special techniques typical of the director.
                 7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
                 8. Completed: Always set to "False" for new shots.
 
@@ -457,19 +457,28 @@ class MetaChain:
             content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)  # Remove comments
             
             # Safely evaluate the cleaned content as a Python expression
-            shot_list = ast.literal_eval(content)
+            try:
+                shot_list = ast.literal_eval(content)
+            except (SyntaxError, ValueError):
+                # If literal_eval fails, try to extract the list using regex
+                import re
+                list_content = re.search(r'\[(.*?)\]', content, re.DOTALL)
+                if list_content:
+                    shot_list = eval(list_content.group(0))
+                else:
+                    raise ValueError("Could not extract shot list from LLM output")
         
             # Validate and convert types
             for shot in shot_list:
                 shot['Scene Number'] = int(shot['Scene Number'])
                 shot['Shot Number'] = int(shot['Shot Number'])
                 shot['Completed'] = False  # Always set to False for new shots
+                # Ensure Camera Work and Shot Type are not empty
+                shot['Camera Work'] = shot.get('Camera Work', 'Not specified')
+                shot['Shot Type'] = shot.get('Shot Type', 'Not specified')
         
             return shot_list
 
-        except (SyntaxError, ValueError) as e:
-            logger.exception(f"Error parsing LLM output: {str(e)}")
-            raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
         except Exception as e:
-            logger.exception(f"Unexpected error in analyze_script: {str(e)}")
-            raise ScriptAnalysisError(str(e))
+            logger.exception(f"Error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to analyze script: {str(e)}")
