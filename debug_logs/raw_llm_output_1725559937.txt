@@ -1,0 +1,116 @@
+```json
+{
+    "shots": [
+        {
+            "scene_number": 1,
+            "shot_number": 1,
+            "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating the dawn of his 26th year.",
+            "shot_description": "An aerial view of Tampa at midnight, the city illuminated with neon lights, capturing the vibrant nightlife. The camera slowly descends towards a crowded Airbnb, pulsating with energy.",
+            "characters": [],
+            "camera_work": "Drone shot descending, transitioning to a wide shot of the Airbnb with party lights flickering.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 2,
+            "script_content": "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.",
+            "shot_description": "A wide shot inside the Airbnb, capturing Julio Foolio surrounded by friends, laughter echoing as drinks are raised in celebration. The warm lighting highlights the joy of the moment.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Steadicam movement around the room, focusing on interactions and laughter, creating an intimate, immersive feel.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 3,
+            "script_content": "But as the night wore on, the celebration grew rowdier, eventually catching the attention of local authorities.",
+            "shot_description": "A medium shot of a police car pulling up outside the Airbnb, flashing lights reflecting off the windows. The atmosphere shifts, tension starts to build.",
+            "characters": ["Police Officers"],
+            "camera_work": "Slow zoom into the police car, capturing the officers stepping out, creating a sense of foreboding.",
+            "shot_type": "Medium shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 1,
+            "script_content": "Undeterred, Foolio took to Instagram once more.",
+            "shot_description": "Close-up of Foolio's phone screen as he types a message on Instagram, the light from the phone illuminating his face in the dim surroundings.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Close-up, with a slight shake to emphasize urgency, transitioning to a reaction shot of Foolio grinning.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 2,
+            "script_content": "As the first light of dawn began to break over Tampa at 4:40 a.m., the crack of gunfire shattered the morning calm.",
+            "shot_description": "A wide shot capturing the Holiday Inn parking lot at dawn, the tranquility of the early morning abruptly disturbed by silhouettes of figures in the foreground.",
+            "characters": [],
+            "camera_work": "Static wide shot, followed by a quick pan to reveal the chaos as gunfire erupts, capturing the confusion.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 3,
+            "script_content": "When the echo of the last shot faded, Julio Foolio lay dead, his promising career cut tragically short.",
+            "shot_description": "Close-up of Julio Foolio on the ground, surrounded by chaos, his expression serene amidst the turmoil, capturing the stark contrast of his life and death.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Dolly in slowly to emphasize the gravity of the moment, shallow depth of field to isolate Foolio from the chaos.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 1,
+            "script_content": "To understand Foolio's tragic end, one must delve into the violent world he navigated daily.",
+            "shot_description": "Montage of quick cuts showcasing Jacksonville's streets: graffiti, rival gang symbols, and brief clips of past concerts, creating a visual history of the conflict.",
+            "characters": [],
+            "camera_work": "Fast-paced editing with varying angles, capturing the energy and tension of the environment.",
+            "shot_type": "Montage",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 2,
+            "script_content": "Foolio was no stranger to close calls.",
+            "shot_description": "A flashback sequence showing Foolio in various past scenarios of danger: a drive-by shooting, the aftermath of a concert gone wrong, each moment emphasizing the constant threat he faced.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Slow-motion effects on moments of tension, with quick cuts back to present-day reactions.",
+            "shot_type": "Flashback",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 1,
+            "script_content": "As news of Foolio's death spread, the hip-hop community reeled.",
+            "shot_description": "Wide shot of a candlelight vigil, fans gathered in mourning, holding candles and posters of Foolio, the warm glow contrasting with the sadness of the scene.",
+            "characters": [],
+            "camera_work": "Aerial shot moving down to ground level, capturing the collective grief of the community.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 2,
+            "script_content": "But even as candles were lit and tears shed, the cycle of violence showed no signs of abating.",
+            "shot_description": "Close-up of a fan's face, tears streaming down, holding a poster of Foolio, with the background blurred to focus on their emotion.",
+            "characters": ["Fan"],
+            "camera_work": "Static close-up, emphasizing the emotional weight of the moment, soft focus on the background.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 3,
+            "script_content": "Julio Foolio's story stands as a stark reminder of the real-world consequences when music and street life intertwine.",
+            "shot_description": "A powerful shot of the sun rising over Tampa, symbolizing hope amidst the tragedy, with a silhouette of Foolio's figure in the foreground.",
+            "characters": ["Julio Foolio (silhouette)"],
+            "camera_work": "Slow pan up from the ground to the rising sun, creating a sense of reflection and hope.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        }
+    ]
+}
+```

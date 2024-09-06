@@ -1,0 +1,86 @@
+```json
+{
+    "shots": [
+        {
+            "scene_number": 1,
+            "shot_number": 1,
+            "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating the dawn of his 26th year.",
+            "shot_description": "A wide shot capturing the vibrant cityscape of Tampa at midnight, with neon lights reflecting off the buildings. The camera pans slowly to reveal a clock tower striking midnight.",
+            "characters": [],
+            "camera_work": "Wide shot with a slow pan, capturing the urban energy of Tampa.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 2,
+            "script_content": "Foolio, riding high on the success of his recent tracks and a growing fanbase of nearly one million monthly Spotify listeners, took to Instagram with an invitation that would prove fateful.",
+            "shot_description": "Close-up of Julio Foolio's face, illuminated by the glow of his phone screen, displaying excitement yet an underlying tension. The background is softly blurred.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Close-up with a slight slow zoom-in, focusing on his expression.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 3,
+            "script_content": "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.",
+            "shot_description": "A medium shot of Foolio surrounded by friends, laughter, and music, with colorful lights and decorations in the Airbnb setting.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Medium shot with a steady handheld camera, capturing the lively atmosphere.",
+            "shot_type": "Medium shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 4,
+            "script_content": "But as the night wore on, the celebration grew rowdier, eventually catching the attention of local authorities.",
+            "shot_description": "A series of quick cuts showing the party escalating in intensity, with drinks spilling, laughter, and a hint of chaos as police lights flash outside.",
+            "characters": ["Julio Foolio", "Entourage", "Police"],
+            "camera_work": "Fast-paced editing with close-ups and wide shots, using a shaky handheld style to emphasize chaos.",
+            "shot_type": "Montage",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 1,
+            "script_content": "The Holiday Inn parking lot became a war zone in seconds.",
+            "shot_description": "Aerial shot of the Holiday Inn parking lot, showing a crowd dispersing in panic, police cars arriving, and flashing lights illuminating the scene.",
+            "characters": [],
+            "camera_work": "Aerial shot, descending slowly to immerse the audience in the chaos.",
+            "shot_type": "Aerial shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 2,
+            "script_content": "When the echo of the last shot faded, Julio Foolio lay dead, his promising career cut tragically short.",
+            "shot_description": "Close-up of Foolio lying on the ground, surrounded by blurred figures of his friends and police, with a focus on his face, evoking a tragic stillness.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Close-up with a slow pull-back to reveal the surrounding chaos.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 1,
+            "script_content": "As news of Foolio's death spread, the hip-hop community reeled.",
+            "shot_description": "A montage of social media posts and fan reactions, interspersed with close-ups of mourning fans and candlelight vigils.",
+            "characters": ["Fans", "Girlfriend (Blanco Mani)"],
+            "camera_work": "Fast cuts between social media shots and emotional close-ups, utilizing a soft focus on the mourning crowd.",
+            "shot_type": "Montage",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 2,
+            "script_content": "His girlfriend, Blanco Mani, shared a poignant photo from earlier that night, a last glimpse of a life cut short.",
+            "shot_description": "Close-up of a phone screen displaying a candid photo of Foolio smiling, with Blanco's hand holding the phone, tears in the background.",
+            "characters": ["Blanco Mani"],
+            "camera_work": "Close-up on the phone screen, then a slow zoom-out to capture Blanco's emotional expression.",
+            "shot_type": "Close-up",
+            "completed": false
+        }
+    ]
+}
+```

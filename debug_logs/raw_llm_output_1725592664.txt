@@ -1,0 +1,96 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+        "Shot Description": "A wide shot of Tampa at night, showcasing the vibrant city lights with a focus on the clock striking midnight. The atmosphere is lively, filled with energy.",
+        "Characters": "",
+        "Camera Work": "Static shot, slight zoom-in to emphasize the clock striking midnight.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "Foolio, riding high on the success of his recent tracks...",
+        "Shot Description": "A close-up of Foolio on his phone, a smile on his face as he types the Instagram post. The background shows his entourage celebrating.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Close-up with a shallow depth of field to blur the background, highlighting Foolio's expression.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 3,
+        "Script Content": "The Airbnb they'd rented buzzed with energy...",
+        "Shot Description": "A medium shot capturing the lively atmosphere of the party, with friends dancing and laughing around the pool area.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Handheld camera for a dynamic feel, moving through the crowd to capture different interactions.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 4,
+        "Script Content": "But as the night wore on, the celebration grew rowdier...",
+        "Shot Description": "A wider angle showing the party getting out of hand, with drinks spilling and people shouting, capturing the chaos.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Wide shot with a slight tilt to convey disorientation; the frame is slightly shaky to reflect the wild atmosphere.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "As the first light of dawn began to break over Tampa at 4:40 a.m...",
+        "Shot Description": "A haunting dawn shot of the Holiday Inn parking lot, bathed in the soft light of early morning, with an eerie stillness.",
+        "Characters": "",
+        "Camera Work": "Static shot with a slow pull focus from the parking lot to the rising sun.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "The crack of gunfire shattered the morning calm.",
+        "Shot Description": "A close-up of a gun being fired, with the background blurring in an abstract manner to heighten tension.",
+        "Characters": "",
+        "Camera Work": "Extreme close-up on the gun, quick motion blur effect to simulate the sound of gunfire.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 3,
+        "Script Content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+        "Shot Description": "A wide shot capturing the aftermath in the parking lot, focusing on the chaos as first responders arrive.",
+        "Characters": "Julio Foolio, police, paramedics",
+        "Camera Work": "Wide shot with slow-motion effect to emphasize the gravity of the moment.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "As news of Foolio's death spread, the hip-hop community reeled.",
+        "Shot Description": "A medium shot of Blanco Mani looking at her phone, tears in her eyes, surrounded by candles and flowers.",
+        "Characters": "Blanco Mani",
+        "Camera Work": "Static shot with a slight dolly-in to create intimacy in the moment.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 2,
+        "Script Content": "Fans flooded social media with tributes...",
+        "Shot Description": "A montage of social media posts and tributes, with quick cuts between different screens showing heartfelt messages.",
+        "Characters": "",
+        "Camera Work": "Fast-paced editing with overlays of social media graphics for a modern touch.",
+        "Shot Type": "Insert shots",
+        "Completed": False
+    }
+]
+``` 
+
+This shot list captures the essence of the script while adhering to the directorial style of None, emphasizing key visual storytelling elements, character emotions, and the thematic weight of the narrative. Each shot is designed to enhance the viewer's engagement with the story, while also reflecting the tone and atmosphere described in the script.

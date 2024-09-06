@@ -1,0 +1,125 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+        "Shot Description": "A wide establishing shot of Tampa's skyline at midnight, city lights glowing against the dark sky. The camera slowly pans down to reveal the vibrant nightlife below.",
+        "Characters": "",
+        "Camera Work": "Wide shot, slow pan downwards.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "The night began with promise and excitement...",
+        "Shot Description": "Close-up of Julio Foolio's face illuminated by the glow of his phone as he films a live Instagram video, excitement and energy radiating from him.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Close-up, handheld camera for intimacy.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 3,
+        "Script Content": "...the Airbnb they'd rented buzzed with energy...",
+        "Shot Description": "A medium shot of the packed Airbnb, people dancing, laughter echoing, colorful lights flashing, capturing the chaos and joy of the party.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Medium shot with a slight tilt to enhance energy.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "...the police shut down the party...",
+        "Shot Description": "A tense shot of police lights flashing outside the Airbnb, casting blue and red hues into the party, faces turning from joy to concern.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Wide shot, static camera to capture the chaos as people react.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "...he took to Instagram once more...",
+        "Shot Description": "Over-the-shoulder shot of Julio posting on Instagram, the glow of the screen reflecting in his eyes, showing a moment of hope amidst chaos.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Over-the-shoulder, static to focus on the screen.",
+        "Shot Type": "Over-the-Shoulder",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "As the first light of dawn began to break over Tampa...",
+        "Shot Description": "A haunting early morning shot of the Holiday Inn, the first light creeping in, juxtaposed against the dark events that will unfold.",
+        "Characters": "",
+        "Camera Work": "Wide shot with a slow dolly in, creating an ominous feel.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 2,
+        "Script Content": "...the crack of gunfire shattered the morning calm.",
+        "Shot Description": "A chaotic handheld shot capturing the immediate aftermath of gunfire, people running, fear in their faces, with the sound of gunfire echoing.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Handheld, quick cuts to emphasize chaos.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 3,
+        "Script Content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+        "Shot Description": "A somber close-up of Julio lying on the ground, surrounded by a chaotic scene, the vibrant colors of the night now dulled.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Close-up, slow zoom out to reveal the surrounding chaos.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "As news of Foolio's death spread, the hip-hop community reeled.",
+        "Shot Description": "A montage of social media reactions, quick cuts of posts from fans mourning his loss, faces expressing shock and grief.",
+        "Characters": "",
+        "Camera Work": "Montage editing with fast cuts, overlaying text of social media posts.",
+        "Shot Type": "Montage",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "...Yungeen Ace, Foolio's longtime rival, released a new track...",
+        "Shot Description": "Close-up of Yungeen Ace in a dimly lit room, smirking as he records a new track, contrasting the somber mood of the community.",
+        "Characters": "Yungeen Ace",
+        "Camera Work": "Close-up with dramatic low lighting to emphasize his demeanor.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "A town hall meeting was convened to address the escalating violence...",
+        "Shot Description": "Wide shot of a crowded town hall meeting, faces filled with determination but also despair, capturing a community seeking answers.",
+        "Characters": "",
+        "Camera Work": "Wide shot with a slow pan across the crowd, capturing emotions.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 2,
+        "Script Content": "...a stark reminder of the real-world consequences...",
+        "Shot Description": "A poignant close-up of a candle being lit in memory of Julio, the flickering flame representing hope amidst darkness.",
+        "Characters": "",
+        "Camera Work": "Close-up, shallow depth of field to focus on the candle.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    }
+]
+```
+This shot list is designed to reflect the narrative's emotional beats, visual motifs, and pacing that could be expected in a project directed by None, capturing the tension, excitement, and tragedy of Julio Foolio's story.

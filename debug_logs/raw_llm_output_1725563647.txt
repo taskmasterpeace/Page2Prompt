@@ -1,0 +1,118 @@
+```json
+{
+    "shots": [
+        {
+            "scene_number": 1,
+            "shot_number": 1,
+            "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+            "shot_description": "A wide establishing shot of the vibrant Tampa skyline at midnight, with the clock tower chiming. Neon lights flicker, casting colorful reflections in the water below, capturing the energy of the city.",
+            "characters": [],
+            "camera_work": "Static shot, slowly zooming in on the skyline. Soft focus on the foreground with a bokeh effect on the city lights.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 2,
+            "script_content": "Foolio, riding high on the success of his recent tracks and a growing fanbase...",
+            "shot_description": "Close-up of Julio Foolio, smiling confidently as he prepares for the party. The camera captures his excitement and the details of his stylish outfit.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Dolly in on Foolio's face, with a shallow depth of field to emphasize his expression. The background blurs to focus on his charisma.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 3,
+            "script_content": "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success...",
+            "shot_description": "A medium shot of Foolio surrounded by his entourage, laughter and cheers fill the air. Colorful lights illuminate the scene, creating a festive atmosphere.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Handheld camera for a dynamic feel, capturing the movement and energy of the moment. Slightly shaky to enhance realism.",
+            "shot_type": "Medium shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 1,
+            "script_content": "Citing overcrowding concerns, the police shut down the party...",
+            "shot_description": "Wide shot of police cars arriving at the Airbnb, lights flashing. The partygoers look surprised and confused.",
+            "characters": ["Police Officers", "Julio Foolio", "Entourage"],
+            "camera_work": "Static wide shot, capturing the chaos as the police approach. Slow pan to follow the officers.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 2,
+            "script_content": "Undeterred, Foolio took to Instagram once more...",
+            "shot_description": "Close-up of Foolio's phone screen as he types a post on Instagram, his fingers moving quickly. His face is partially visible, showing determination.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Over-the-shoulder shot, focusing on the phone. A slight tilt to suggest urgency.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 1,
+            "script_content": "As the first light of dawn began to break over Tampa at 4:40 a.m...",
+            "shot_description": "A haunting shot of the Holiday Inn parking lot at dawn, the sky painted with soft orange hues. A sense of foreboding hangs in the air.",
+            "characters": [],
+            "camera_work": "Static shot, slowly panning across the empty parking lot, capturing the stillness before chaos.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 2,
+            "script_content": "The crack of gunfire shattered the morning calm...",
+            "shot_description": "A rapid montage of close-ups: a hand gripping a gun, the flash of gunfire, and terrified reactions from bystanders, creating a chaotic atmosphere.",
+            "characters": ["Julio Foolio", "Entourage", "Assailants"],
+            "camera_work": "Fast cuts and shaky cam for intensity. Quick zoom-ins on critical moments.",
+            "shot_type": "Insert shots",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 3,
+            "script_content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+            "shot_description": "A somber close-up of Julio Foolio lying on the ground, surrounded by chaos. The camera lingers on his face, capturing the tragedy.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Slow push-in on Foolio's face, with a shallow depth of field to emphasize the gravity of the moment.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 1,
+            "script_content": "As news of Foolio's death spread, the hip-hop community reeled...",
+            "shot_description": "A montage of social media posts and news headlines scrolling across the screen, depicting the community's reaction to Foolio's death.",
+            "characters": [],
+            "camera_work": "Static shots with a digital overlay, creating a sense of modern media consumption.",
+            "shot_type": "Montage",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 2,
+            "script_content": "His girlfriend, Blanco Mani, shared a poignant photo from earlier that night...",
+            "shot_description": "Close-up of Blanco Mani, tears in her eyes as she looks at her phone, reflecting on the lost moments.",
+            "characters": ["Blanco Mani"],
+            "camera_work": "Tight close-up with a soft focus background, capturing her raw emotion.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 3,
+            "script_content": "In a move that shocked many, Yungeen Ace released a new track...",
+            "shot_description": "A dramatic close-up of Yungeen Ace in the studio, smirking as he listens to his recording, with a dark, moody lighting that reflects his controversial attitude.",
+            "characters": ["Yungeen Ace"],
+            "camera_work": "Slow dolly in to create tension, with stark contrast lighting emphasizing the mood.",
+            "shot_type": "Close-up",
+            "completed": false
+        }
+    ]
+}
+``` 
+
+This shot list captures the essence of None's directorial style, focusing on emotional depth, vibrant visuals, and a gritty realism that reflects the narrative's themes. The use of camera work, lighting, and shot types is designed to enhance the storytelling while remaining true to the script's emotional core.

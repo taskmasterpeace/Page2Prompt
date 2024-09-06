@@ -1,0 +1,96 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+        "Shot Description": "Wide shot of the vibrant Tampa skyline at midnight, neon lights reflecting off the water, the city alive with energy.",
+        "Characters": "",
+        "Camera Work": "Static shot, slow zoom in on the cityscape to establish the setting.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "Foolio, riding high on the success of his recent tracks...",
+        "Shot Description": "Medium shot of Julio Foolio laughing with his entourage at the Airbnb, the atmosphere lively and colorful.",
+        "Characters": "Julio Foolio, Entourage",
+        "Camera Work": "Handheld camera for a dynamic feel, slight push-in to capture Foolio's expressions.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "The party relocated to the Holiday Inn Tampa North...",
+        "Shot Description": "Wide shot of the Holiday Inn, party lights flickering as guests enter, creating an anticipation of the night ahead.",
+        "Characters": "",
+        "Camera Work": "Static shot with a slight pan to follow guests entering, showcasing the excitement.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "As the first light of dawn began to break over Tampa...",
+        "Shot Description": "Close-up of Julio Foolio's face, illuminated by the dim light of dawn, revealing a mix of joy and tension.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Close-up shot with a slow dolly out to reveal the surrounding chaos.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "the crack of gunfire shattered the morning calm.",
+        "Shot Description": "Wide shot of the Holiday Inn parking lot, chaos erupts with people running and seeking cover, the aftermath of gunfire evident.",
+        "Characters": "",
+        "Camera Work": "Wide shot with rapid cuts to emphasize panic and confusion, possibly using quick zooms.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 2,
+        "Script Content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+        "Shot Description": "Close-up of Julio Foolio lying on the ground, expression peaceful yet tragic, surrounded by police and chaos.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Dramatic close-up with a slow pull back to reveal the scene, using shallow depth of field to focus solely on Foolio.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "As news of Foolio's death spread, the hip-hop community reeled.",
+        "Shot Description": "Montage of social media reactions, fans posting tributes, emotional responses flooding the screen.",
+        "Characters": "",
+        "Camera Work": "Quick cuts between different social media posts, utilizing screen overlays to highlight comments.",
+        "Shot Type": "Insert Shots",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "But even as candles were lit and tears shed...",
+        "Shot Description": "Close-up of a candle being lit, tears streaming down a fan's face, capturing the emotional weight of the loss.",
+        "Characters": "Fan",
+        "Camera Work": "Handheld, intimate framing to convey raw emotion, with a slight focus shift to the candle flame.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 3,
+        "Script Content": "Yet, undeterred, Ace doubled down, releasing another track...",
+        "Shot Description": "Medium shot of Yungeen Ace in a dark room, recording the new track with an intense focus, contrasting Foolio's demise.",
+        "Characters": "Yungeen Ace",
+        "Camera Work": "Low-angle shot to portray dominance, with dramatic lighting casting shadows across Ace's face.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    }
+]
+``` 
+
+This shot list encapsulates the essence of the script while reflecting the director's unique style, focusing on emotional depth, dynamic camera work, and poignant moments that highlight the tragedy of Julio Foolio's life and death.

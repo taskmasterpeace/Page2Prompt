@@ -1,0 +1,106 @@
+```json
+{
+    "shots": [
+        {
+            "scene_number": 1,
+            "shot_number": 1,
+            "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+            "shot_description": "A wide shot of the vibrant Tampa skyline at midnight, lights flickering against the dark sky. The camera slowly pans down to reveal a lively street scene filled with partygoers.",
+            "characters": [],
+            "camera_work": "Wide shot with slow pan, capturing the atmosphere of the city at night.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 2,
+            "script_content": "Foolio, riding high on the success of his recent tracks...",
+            "shot_description": "Close-up of Foolio's face illuminated by his phone screen as he types the invitation for the party. The background is blurred, emphasizing his expression and excitement.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Close-up, static shot focusing on Foolio's face, with a shallow depth of field.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 3,
+            "script_content": "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.",
+            "shot_description": "Medium shot of Foolio and his entourage celebrating in the Airbnb, laughter and music filling the air. Colorful lights from the party create a vibrant atmosphere.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Medium shot with slight handheld movement to convey the energy of the party.",
+            "shot_type": "Medium shot",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 4,
+            "script_content": "Citing overcrowding concerns, the police shut down the party...",
+            "shot_description": "A tense shot of police officers outside the Airbnb as they approach the gathering. The camera captures the contrast between the festive atmosphere inside and the stern presence of the police outside.",
+            "characters": ["Police Officers", "Partygoers"],
+            "camera_work": "Wide shot with a slow zoom in on the police, highlighting the tension.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 5,
+            "script_content": "The party relocated to the Holiday Inn Tampa North...",
+            "shot_description": "Over-the-shoulder shot of Foolio looking at his phone, composing a new Instagram post. The Holiday Inn sign is faintly visible in the background.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Over-the-shoulder shot, focusing on Foolio's phone screen with the Holiday Inn in soft focus behind him.",
+            "shot_type": "Over-the-shoulder shot",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 6,
+            "script_content": "As the first light of dawn began to break over Tampa at 4:40 a.m...",
+            "shot_description": "A haunting wide shot of the Holiday Inn parking lot at dawn, the first light casting a blue hue over the scene. The camera slowly pushes in toward the empty parking lot.",
+            "characters": [],
+            "camera_work": "Wide shot with a slow dolly in, emphasizing the eerie calm before the chaos.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 7,
+            "script_content": "The crack of gunfire shattered the morning calm.",
+            "shot_description": "Quick cuts of close-ups showing the reactions of individuals in the parking lot, faces filled with shock and fear as the sound of gunfire rings out.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Close-ups with quick cuts, hand-held camera work to create a sense of chaos.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 5,
+            "shot_number": 8,
+            "script_content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+            "shot_description": "A somber close-up of Foolio lying on the ground, the early morning light casting shadows on his face, emphasizing the finality of his fate.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Static close-up, using natural light to create a melancholic mood.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 6,
+            "shot_number": 9,
+            "script_content": "As news of Foolio's death spread, the hip-hop community reeled.",
+            "shot_description": "Montage of social media reactions: fans posting tributes, news headlines flashing across the screen. The screen is split, showing various reactions in real-time.",
+            "characters": [],
+            "camera_work": "Montage style, rapid cuts between different screens and reactions.",
+            "shot_type": "Insert shots",
+            "completed": false
+        },
+        {
+            "scene_number": 6,
+            "shot_number": 10,
+            "script_content": "But even as candles were lit and tears shed, the cycle of violence showed no signs of abating.",
+            "shot_description": "A poignant shot of a candlelight vigil, flickering flames reflecting in the eyes of grieving fans. The camera slowly pans across the crowd.",
+            "characters": ["Fans", "Community Members"],
+            "camera_work": "Slow pan, using a gentle focus to create an intimate and emotional connection.",
+            "shot_type": "Medium shot",
+            "completed": false
+        }
+    ]
+}
+```

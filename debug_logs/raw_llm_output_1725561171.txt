@@ -1,0 +1,116 @@
+```json
+{
+    "shots": [
+        {
+            "scene_number": 1,
+            "shot_number": 1,
+            "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024...",
+            "shot_description": "An aerial view of Tampa at midnight, the city lights twinkling like stars against the dark sky. The camera slowly pans down to street level, capturing the vibrant nightlife.",
+            "characters": [],
+            "camera_work": "Aerial shot, slow pan downwards to establish setting.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 2,
+            "script_content": "The Airbnb they'd rented buzzed with energy...",
+            "shot_description": "Inside the Airbnb, a wide shot captures Foolio and his entourage dancing, laughing, and enjoying the party atmosphere. Neon lights create a colorful backdrop.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Wide shot, static camera to capture the energy of the moment.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 1,
+            "shot_number": 3,
+            "script_content": "But as the night wore on, the celebration grew rowdier...",
+            "shot_description": "Close-up shots of drinks being poured, laughter, and close interactions among friends, emphasizing the festivity and camaraderie.",
+            "characters": ["Julio Foolio", "Entourage"],
+            "camera_work": "Close-ups with shallow depth of field to focus on expressions and emotions.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 4,
+            "script_content": "Citing overcrowding concerns, the police shut down the party...",
+            "shot_description": "A tense moment as police officers enter the Airbnb, the camera capturing shocked faces and the sudden shift in atmosphere.",
+            "characters": ["Julio Foolio", "Police Officers", "Entourage"],
+            "camera_work": "Medium shot with a slight handheld shake to convey tension.",
+            "shot_type": "Medium shot",
+            "completed": false
+        },
+        {
+            "scene_number": 2,
+            "shot_number": 5,
+            "script_content": "Undeterred, Foolio took to Instagram once more...",
+            "shot_description": "Close-up of Foolio's face as he records a video message on his phone, his expression a mix of determination and irony.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Close-up with a slight zoom in to emphasize his emotions.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 6,
+            "script_content": "As the first light of dawn began to break over Tampa at 4:40 a.m...",
+            "shot_description": "A beautiful sunrise over the Holiday Inn, contrasting the serenity of dawn with the impending violence. The camera slowly tilts down to the parking lot.",
+            "characters": [],
+            "camera_work": "Time-lapse of sunrise transitioning to a slow tilt down.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 7,
+            "script_content": "The Holiday Inn parking lot became a war zone in seconds...",
+            "shot_description": "A chaotic scene in the parking lot, with panicked people running and flashes of gunfire illuminating the darkness.",
+            "characters": ["Julio Foolio", "Entourage", "Assailants"],
+            "camera_work": "Handheld camera movements to create urgency and chaos.",
+            "shot_type": "Wide shot",
+            "completed": false
+        },
+        {
+            "scene_number": 3,
+            "shot_number": 8,
+            "script_content": "When the echo of the last shot faded, Julio Foolio lay dead...",
+            "shot_description": "A close-up shot of Foolio on the ground, the stark contrast of blood against the asphalt, capturing the tragedy of the moment.",
+            "characters": ["Julio Foolio"],
+            "camera_work": "Static close-up shot to create a haunting stillness.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 9,
+            "script_content": "As news of Foolio's death spread, the hip-hop community reeled...",
+            "shot_description": "Montage of social media reactions, with quick cuts of tweets, Instagram posts, and news headlines, showcasing the community's grief.",
+            "characters": [],
+            "camera_work": "Fast-paced montage with various angles focusing on screens.",
+            "shot_type": "Insert",
+            "completed": false
+        },
+        {
+            "scene_number": 4,
+            "shot_number": 10,
+            "script_content": "But even as candles were lit and tears shed...",
+            "shot_description": "A somber candlelight vigil, with close-ups of lit candles and grieving fans, capturing the sorrow and sense of loss.",
+            "characters": ["Fans", "Blanco Mani"],
+            "camera_work": "Close-ups with soft focus on candles, creating a warm yet melancholic atmosphere.",
+            "shot_type": "Close-up",
+            "completed": false
+        },
+        {
+            "scene_number": 5,
+            "shot_number": 11,
+            "script_content": "Julio Foolio's story stands as a stark reminder of the real-world consequences...",
+            "shot_description": "A final wide shot of the Tampa skyline at dusk, embodying both beauty and the shadows of violence, leaving the audience with a sense of reflection.",
+            "characters": [],
+            "camera_work": "Wide shot, slowly pulling back to symbolize the broader implications of Foolio's story.",
+            "shot_type": "Establishing shot",
+            "completed": false
+        }
+    ]
+}
+```
