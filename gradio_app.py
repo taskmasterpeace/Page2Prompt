@@ -663,15 +663,11 @@ with gr.Blocks() as app:
 
     def export_shot_list(shot_list):
         try:
-            # Export to CSV
+            # Create a temporary CSV file
             csv_filename = f'shot_list_{int(time.time())}.csv'
             shot_list.to_csv(csv_filename, index=False)
         
-            # Export to JSON
-            json_filename = f'shot_list_{int(time.time())}.json'
-            shot_list.to_json(json_filename, orient='records', indent=2)
-    
-            return gr.File.update(value=[csv_filename, json_filename], visible=True), update_feedback("Shot list exported successfully as CSV and JSON")
+            return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully. Click to download.")
         except Exception as e:
             logger.exception("Error in export_shot_list function")
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
@@ -685,14 +681,26 @@ with gr.Blocks() as app:
 
     def import_shot_list(file):
         try:
-            if file.name.endswith('.csv'):
+            file_extension = os.path.splitext(file.name)[1].lower()
+            if file_extension == '.csv':
                 df = pd.read_csv(file.name)
-            elif file.name.endswith('.json'):
+            elif file_extension == '.json':
                 df = pd.read_json(file.name)
             else:
                 return None, update_feedback("Unsupported file format. Please use CSV or JSON.")
+        
+            # Ensure all required columns are present
+            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            for col in required_columns:
+                if col not in df.columns:
+                    df[col] = "Not specified"
+        
+            # Reorder columns
+            df = df[required_columns]
+        
             return df, update_feedback("Shot list imported successfully")
         except Exception as e:
+            logger.exception("Error in import_shot_list function")
             return None, update_feedback(f"Error importing shot list: {str(e)}")
 
     def update_shot_list(shot_list):
@@ -914,7 +922,7 @@ with gr.Blocks() as app:
     export_shot_list_button.click(
         export_shot_list,
         inputs=[shot_list_display],
-        outputs=[gr.File(label="Download Files", file_count="multiple"), feedback_area]
+        outputs=[gr.File(label="Download Shot List", file_count="single"), feedback_area]
     )
 
     import_shot_list_button.upload(
