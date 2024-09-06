@@ -599,26 +599,27 @@ with gr.Blocks() as app:
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
             result = await core.analyze_script(script, director_style)
-            shot_list = result
+            shot_list = result.get('shots', [])  # Ensure we're working with a list of dictionaries
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
-                if shot_type != "AI Suggest":
-                    shot['Shot Type'] = shot_type
-                camera_work = []
-                if camera_angle != "AI Suggest":
-                    camera_work.append(camera_angle)
-                if camera_movement != "AI Suggest":
-                    camera_work.append(camera_movement)
-                if framing != "AI Suggest":
-                    camera_work.append(framing)
-                if depth_of_field != "AI Suggest":
-                    camera_work.append(depth_of_field)
-                if camera_work:
-                    shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
-                else:
-                    shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
+                if isinstance(shot, dict):  # Ensure each shot is a dictionary
+                    if shot_type != "AI Suggest":
+                        shot['Shot Type'] = shot_type
+                    camera_work = []
+                    if camera_angle != "AI Suggest":
+                        camera_work.append(camera_angle)
+                    if camera_movement != "AI Suggest":
+                        camera_work.append(camera_movement)
+                    if framing != "AI Suggest":
+                        camera_work.append(framing)
+                    if depth_of_field != "AI Suggest":
+                        camera_work.append(depth_of_field)
+                    if camera_work:
+                        shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
+                    else:
+                        shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
