@@ -3070,3 +3070,431 @@ Traceback (most recent call last):
     debug_dir = "debug_logs"
             ^^^^^^^^^^^^^^^^^
 gradio_meta_chain_exceptions.ScriptAnalysisError: the JSON object must be str, bytes or bytearray, not list
+2024-09-06 01:11:06,029 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 01:11:06,030 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 01:11:19,366 - gradio_app - INFO - Generated shot list with 15 shots
+2024-09-06 01:11:19,367 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 619, in generate_shot_list
+    shot['Camera Work'] = ', '.join(camera_work)
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, NoneType found
+2024-09-06 09:21:41,643 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 09:21:41,643 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:21:54,837 - gradio_app - INFO - Generated shot list with 13 shots
+2024-09-06 09:21:54,838 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 09:38:12,444 - gradio_app - INFO - Generating shot list for director style: Quentin Tarantino
+2024-09-06 09:38:12,444 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:38:41,301 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_meta_chain.py", line 460, in analyze_script
+    shot_list = ast.literal_eval(content)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\ast.py", line 66, in literal_eval
+    node_or_string = parse(node_or_string.lstrip(" \t"), mode='eval')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<unknown>", line 173
+    ``` 
+    ^
+SyntaxError: invalid syntax
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 38, in analyze_script
+    result = await self.meta_chain.analyze_script(script, director_style)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_meta_chain.py", line 472, in analyze_script
+    raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
+gradio_meta_chain_exceptions.ScriptAnalysisError: Failed to parse LLM output: invalid syntax (<unknown>, line 173)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    result = await core.analyze_script(script, director_style)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: Failed to parse LLM output: invalid syntax (<unknown>, line 173)
+2024-09-06 09:39:26,028 - gradio_app - INFO - Generating shot list for director style: Default
+2024-09-06 09:39:26,029 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:39:44,141 - gradio_app - INFO - Generated shot list with 17 shots
+2024-09-06 09:39:44,142 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 09:41:57,264 - gradio_app - INFO - Generating shot list for director style: Alfred Hitchcock
+2024-09-06 09:41:57,264 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:42:12,388 - gradio_app - INFO - Generated shot list with 13 shots
+2024-09-06 09:42:12,390 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 09:42:22,833 - gradio_app - INFO - Generating shot list for director style: Alfred Hitchcock
+2024-09-06 09:42:22,833 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:42:37,482 - gradio_app - INFO - Generated shot list with 11 shots
+2024-09-06 09:42:37,484 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 09:57:00,452 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 09:57:00,452 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 09:57:24,103 - gradio_app - INFO - Generated shot list with 18 shots
+2024-09-06 09:57:24,103 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 11:29:14,208 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 11:29:14,208 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 11:29:38,021 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_meta_chain.py", line 454, in analyze_script
+    content = re.sub(r'^```[\w\s]*\n', '', content)  # Remove opening code block
+              ^^
+UnboundLocalError: cannot access local variable 're' where it is not associated with a value
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 38, in analyze_script
+    result = await self.meta_chain.analyze_script(script, director_style)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_meta_chain.py", line 484, in analyze_script
+    raise ScriptAnalysisError(f"Failed to analyze script: {str(e)}")
+gradio_meta_chain_exceptions.ScriptAnalysisError: Failed to analyze script: cannot access local variable 're' where it is not associated with a value
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    result = await core.analyze_script(script, director_style)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: Failed to analyze script: cannot access local variable 're' where it is not associated with a value
+2024-09-06 11:32:58,110 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 11:32:58,111 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 11:33:21,020 - gradio_app - INFO - Generated shot list with 1 shots
+2024-09-06 11:33:21,021 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 608, in generate_shot_list
+    shot['Shot Type'] = shot_type
+    ~~~~^^^^^^^^^^^^^
+TypeError: 'str' object does not support item assignment
+2024-09-06 12:14:18,079 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 12:14:18,080 - gradio_app - DEBUG - Script content: ...
+2024-09-06 12:14:25,629 - gradio_app - INFO - Generated shot list with 6 shots
+2024-09-06 12:14:25,630 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 12:14:43,322 - gradio_app - ERROR - Error in export_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 647, in export_shot_list
+    return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
+           ^^^^^^^^^^^^^^
+AttributeError: type object 'File' has no attribute 'update'
+2024-09-06 12:17:24,321 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 12:17:24,322 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 12:17:43,539 - gradio_app - INFO - Generated shot list with 15 shots
+2024-09-06 12:17:43,542 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 15:00:04,516 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 15:00:04,518 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 15:00:21,523 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 47, in analyze_script
+    "Scene": shot['Scene Number'],
+             ~~~~^^^^^^^^^^^^^^^^
+KeyError: 'Scene Number'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    shot_list = await core.analyze_script(script, director_style)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: 'Scene Number'
+2024-09-06 15:11:01,529 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 15:11:01,530 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 15:11:18,172 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 47, in analyze_script
+    "Scene": shot['Scene Number'],
+             ~~~~^^^^^^^^^^^^^^^^
+KeyError: 'Scene Number'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    shot_list = await core.analyze_script(script, director_style)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: 'Scene Number'
+2024-09-06 15:33:49,905 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 15:33:49,906 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 15:34:07,172 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 47, in analyze_script
+    "Scene": shot['Scene Number'],
+             ~~~~^^^^^^^^^^^^^^^^
+KeyError: 'Scene Number'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    shot_list = await core.analyze_script(script, director_style)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: 'Scene Number'
+2024-09-06 16:14:10,292 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 16:14:10,292 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 16:14:27,805 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 47, in analyze_script
+    "Scene": shot['Scene Number'],
+             ~~~~^^^^^^^^^^^^^^^^
+KeyError: 'Scene Number'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    shot_list = await core.analyze_script(script, director_style)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 61, in analyze_script
+    raise ScriptAnalysisError(str(e))
+gradio_meta_chain_exceptions.ScriptAnalysisError: 'Scene Number'
+2024-09-06 16:24:09,787 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 16:24:09,787 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 16:24:28,701 - gradio_app - INFO - Generated shot list: {'shots': [{'Scene': 1, 'Shot': 1, 'Script Content': 'St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.', 'Shot Description': 'Wide shot of the St. Louis skyline at night, with the city lights twinkling, setting the tone for a legendary night.', 'Characters': '', 'Camera Work': 'Slow dolly in to create a sense of intimacy with the location.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 1, 'Shot': 2, 'Script Content': 'O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.', 'Shot Description': "Close-up of O-Red's face, glistening with sweat and triumph, reflecting a mix of exhaustion and pride.", 'Characters': 'O-Red', 'Camera Work': 'Static shot with a slight push-in as he absorbs the moment.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 1, 'Shot': 3, 'Script Content': "The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent: Calico, Hitman Holla, Conceited, Hollow Da Don, and Big T, among others.", 'Shot Description': 'Medium shot of the crowded venue, capturing the energy and excitement of the audience and battlers.', 'Characters': 'Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T', 'Camera Work': 'Pan across the crowd to introduce key characters with quick cuts to their reactions.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 2, 'Shot': 1, 'Script Content': 'The dimly lit club pulsed with heavy bass and anticipation.', 'Shot Description': 'Establishing shot of the club interior, low lighting and vibrant colors creating a moody atmosphere filled with energy.', 'Characters': '', 'Camera Work': 'Steadicam movement through the crowd, following the rhythm of the music.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 2, 'Shot': 2, 'Script Content': 'O-Red, still riding the high of his battle, scanned the crowd.', 'Shot Description': 'Over-the-shoulder shot of O-Red looking out into the crowd, focusing on a beautiful woman.', 'Characters': 'O-Red', 'Camera Work': 'Tilt down from O-Red’s face to the girl he is watching, emphasizing his desire.', 'Shot Type': 'Over-the-shoulder', 'Completed': False}, {'Scene': 2, 'Shot': 3, 'Script Content': 'Conceited, the compact firecracker from New York, had also spotted the girl.', 'Shot Description': "Close-up on Conceited's face, eyes darting between the girl and O-Red, showcasing his calculating demeanor.", 'Characters': 'Conceited', 'Camera Work': 'Quick cuts to emphasize his internal conflict and competitive nature.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 3, 'Shot': 1, 'Script Content': "As the club began to empty, O-Red's world tilted on its axis.", 'Shot Description': "Medium shot of O-Red's shocked expression as he watches Calico approach his girl.", 'Characters': 'O-Red, Calico', 'Camera Work': 'Slow zoom-in on O-Red’s face to capture his growing disbelief.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 3, 'Shot': 2, 'Script Content': "O-Red, left in the dust, felt the first pangs of what would become a legendary night of L's.", 'Shot Description': 'Wide shot of O-Red standing alone as Calico and the girls drive away, emphasizing his isolation.', 'Characters': 'O-Red', 'Camera Work': "Static shot with a slight pull back, symbolizing O-Red's emotional retreat.", 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 4, 'Shot': 1, 'Script Content': 'The townhouse on Kings Highway looked unassuming from the outside...', 'Shot Description': 'Wide shot of the townhouse, contrasting its mundane exterior with the chaos inside.', 'Characters': '', 'Camera Work': 'Establishing shot with a slow pan around the building.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 4, 'Shot': 2, 'Script Content': "O-Red, trying to salvage his pride, positioned himself on the couch next to the girl he'd been pursuing.", 'Shot Description': 'Medium shot of O-Red on the couch, visibly tense as he tries to engage with the girl.', 'Characters': 'O-Red, girl', 'Camera Work': 'Two-shot with a shallow depth of field, focusing on their interaction.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 4, 'Shot': 3, 'Script Content': 'It was then that Hitman Holla, riding high on his local celebrity status, decided to make his presence known.', 'Shot Description': 'Close-up on Hitman Holla as he boasts, showcasing his confidence and bravado.', 'Characters': 'Hitman Holla', 'Camera Work': 'Quick zoom-in for emphasis on his boastful demeanor.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 5, 'Shot': 1, 'Script Content': "As the night wore on, O-Red watched helplessly as Calico whispered something in his girl's ear.", 'Shot Description': "Close-up of Calico whispering in the girl's ear, capturing the moment's intimacy.", 'Characters': 'O-Red, Calico, girl', 'Camera Work': 'Dolly in on the two, creating a sense of tension and anticipation.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 5, 'Shot': 2, 'Script Content': 'Calico answered, slightly out of breath and grinning like the cat that got the cream.', 'Shot Description': 'Medium shot of Calico at the door, looking smug while opening it.', 'Characters': 'Calico, group', 'Camera Work': 'Static shot to capture his confident demeanor.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 5, 'Shot': 3, 'Script Content': 'What happened next is a blur of action and reaction.', 'Shot Description': 'Fast-paced montage of shocked faces as the group bursts into the room, with quick cuts for dramatic effect.', 'Characters': 'O-Red, group', 'Camera Work': 'Rapid cuts and shaky camera to evoke chaos.', 'Shot Type': 'Montage', 'Completed': False}, {'Scene': 6, 'Shot': 1, 'Script Content': 'O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.', 'Shot Description': 'Medium shot of O-Red stepping outside, the night air thick with tension.', 'Characters': 'O-Red, girl', 'Camera Work': 'Tracking shot following O-Red as he walks outside.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 6, 'Shot': 2, 'Script Content': 'O-Red tried to console the distraught girl.', 'Shot Description': 'Close-up of O-Red reaching out to the girl, his expression earnest and regretful.', 'Characters': 'O-Red, girl', 'Camera Work': 'Slow push-in to emphasize the emotional weight of the moment.', 'Shot Type': 'Close-up', 'Completed': False}]}
+2024-09-06 16:24:28,707 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 16:24:28,716 - gradio_app - INFO - Final DataFrame:     Scene  Shot                                                                                                                                                     Script Content                                                                                                         Shot Description                                                       Characters Camera Work Shot Type  Completed
+0       1     1                                      St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.     Wide shot of the St. Louis skyline at night, with the city lights twinkling, setting the tone for a legendary night.                                                                                   None      False
+1       1     2                                           O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.                   Close-up of O-Red's face, glistening with sweat and triumph, reflecting a mix of exhaustion and pride.                                                            O-Red                  None      False
+2       1     3  The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent: Calico, Hitman Holla, Conceited, Hollow Da Don, and Big T, among others.                      Medium shot of the crowded venue, capturing the energy and excitement of the audience and battlers.  Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T                  None      False
+3       2     1                                                                                                        The dimly lit club pulsed with heavy bass and anticipation.  Establishing shot of the club interior, low lighting and vibrant colors creating a moody atmosphere filled with energy.                                                                                   None      False
+4       2     2                                                                                                     O-Red, still riding the high of his battle, scanned the crowd.                               Over-the-shoulder shot of O-Red looking out into the crowd, focusing on a beautiful woman.                                                            O-Red                  None      False
+5       2     3                                                                                       Conceited, the compact firecracker from New York, had also spotted the girl.              Close-up on Conceited's face, eyes darting between the girl and O-Red, showcasing his calculating demeanor.                                                        Conceited                  None      False
+6       3     1                                                                                                      As the club began to empty, O-Red's world tilted on its axis.                                        Medium shot of O-Red's shocked expression as he watches Calico approach his girl.                                                    O-Red, Calico                  None      False
+7       3     2                                                                       O-Red, left in the dust, felt the first pangs of what would become a legendary night of L's.                         Wide shot of O-Red standing alone as Calico and the girls drive away, emphasizing his isolation.                                                            O-Red                  None      False
+8       4     1                                                                                               The townhouse on Kings Highway looked unassuming from the outside...                                      Wide shot of the townhouse, contrasting its mundane exterior with the chaos inside.                                                                                   None      False
+9       4     2                                                           O-Red, trying to salvage his pride, positioned himself on the couch next to the girl he'd been pursuing.                                    Medium shot of O-Red on the couch, visibly tense as he tries to engage with the girl.                                                      O-Red, girl                  None      False
+10      4     3                                                      It was then that Hitman Holla, riding high on his local celebrity status, decided to make his presence known.                                            Close-up on Hitman Holla as he boasts, showcasing his confidence and bravado.                                                     Hitman Holla                  None      False
+11      5     1                                                                    As the night wore on, O-Red watched helplessly as Calico whispered something in his girl's ear.                                        Close-up of Calico whispering in the girl's ear, capturing the moment's intimacy.                                              O-Red, Calico, girl                  None      False
+12      5     2                                                                              Calico answered, slightly out of breath and grinning like the cat that got the cream.                                                        Medium shot of Calico at the door, looking smug while opening it.                                                    Calico, group                  None      False
+13      5     3                                                                                                               What happened next is a blur of action and reaction.              Fast-paced montage of shocked faces as the group bursts into the room, with quick cuts for dramatic effect.                                                     O-Red, group                  None      False
+14      6     1                                                            O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.                                                 Medium shot of O-Red stepping outside, the night air thick with tension.                                                      O-Red, girl                  None      False
+15      6     2                                                                                                                        O-Red tried to console the distraught girl.                                        Close-up of O-Red reaching out to the girl, his expression earnest and regretful.                                                      O-Red, girl                  None      False
+2024-09-06 16:24:43,611 - gradio_app - ERROR - Error in export_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 655, in export_shot_list
+    return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
+           ^^^^^^^^^^^^^^
+AttributeError: type object 'File' has no attribute 'update'
+2024-09-06 16:56:48,749 - gradio_app - ERROR - Error in export_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 655, in export_shot_list
+    return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
+           ^^^^^^^^^^^^^^
+AttributeError: type object 'File' has no attribute 'update'
+2024-09-06 16:56:52,788 - gradio_app - ERROR - Error in export_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 655, in export_shot_list
+    return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully as CSV")
+           ^^^^^^^^^^^^^^
+AttributeError: type object 'File' has no attribute 'update'
+2024-09-06 17:05:22,766 - gradio_app - DEBUG - Calling generate_prompt_wrapper with args: ('HBO', '', 'Wide shot of the St. Louis skyline at night, with the city lights twinkling, setting the tone for a legendary night.', '', '', False, '', [], [], [], [], [], None, None, None, None, None, '', "1980's Horror Film still", 'Gritty;High contrast;Neon colors;Foggy atmosphere;Vintage film grain', None), kwargs: {}
+2024-09-06 17:05:22,770 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-09-06 17:05:24,378 - gradio_app - INFO - meta_chain.generate_prompt took 1.61 seconds
+2024-09-06 17:05:24,379 - gradio_app - INFO - Prompts generated - Concise: 1980's Horror Film still HBO film stilll A wide sh..., Normal: 1980's Horror Film still HBO film stilll The vibra..., Detailed: 1980's Horror Film still HBO film stilll In a stun...
+2024-09-06 17:05:24,379 - gradio_app - INFO - generate_prompt_wrapper took 1.61 seconds total
+2024-09-06 17:05:24,380 - gradio_app - DEBUG - generate_prompt_wrapper returned: ("1980's Horror Film still HBO film stilll A wide shot captures the St. Louis skyline at night, with twinkling city lights creating an enchanting atmosphere for an unforgettable evening. Gritty;High contrast;Neon colors;Foggy atmosphere;Vintage film grain", "1980's Horror Film still HBO film stilll The vibrant St. Louis skyline unfolds in a wide shot, illuminated by countless twinkling lights. The scene radiates energy and excitement, setting the perfect backdrop for a legendary night in the city, where dreams meet reality under the starry sky. Gritty;High contrast;Neon colors;Foggy atmosphere;Vintage film grain", "1980's Horror Film still HBO film stilll In a stunning wide shot, the St. Louis skyline stretches majestically against the night sky, its twinkling lights reflecting the heartbeat of the city. The scene invites viewers into the vibrant nightlife, where the shimmering lights symbolize the endless possibilities of the evening. Each glimmer tells a story, evoking a sense of wonder and anticipation, as the atmosphere buzzes with energy, hinting at the legendary adventures that await beneath the vast expanse of stars. This captivating view sets a perfect tone for a night filled with unforgettable moments and cherished memories. Gritty;High contrast;Neon colors;Foggy atmosphere;Vintage film grain", '{\n  "Concise Prompt": "HBO film stilll A wide shot captures the St. Louis skyline at night, with twinkling city lights creating an enchanting atmosphere for an unforgettable evening.",\n  "Normal Prompt": "HBO film stilll The vibrant St. Louis skyline unfolds in a wide shot, illuminated by countless twinkling lights. The scene radiates energy and excitement, setting the perfect backdrop for a legendary night in the city, where dreams meet reality under the starry sky.",\n  "Detailed Prompt": "HBO film stilll In a stunning wide shot, the St. Louis skyline stretches majestically against the night sky, its twinkling lights reflecting the heartbeat of the city. The scene invites viewers into the vibrant nightlife, where the shimmering lights symbolize the endless possibilities of the evening. Each glimmer tells a story, evoking a sense of wonder and anticipation, as the atmosphere buzzes with energy, hinting at the legendary adventures that await beneath the vast expanse of stars. This captivating view sets a perfect tone for a night filled with unforgettable moments and cherished memories."\n}', 'Prompts generated successfully', '[]')
+2024-09-06 17:12:26,583 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 17:12:26,584 - gradio_app - DEBUG - Script content: # The Night Julio Foolio's Music Fell Silent
+
+In the pulsating heart of Tampa, Florida, as the clock...
+2024-09-06 17:12:41,844 - gradio_app - INFO - Generated shot list: {'shots': [{'Scene': 1, 'Shot': 1, 'Script Content': 'In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating the dawn of his 26th year.', 'Shot Description': "Wide shot of Tampa's skyline at midnight, city lights twinkling. The atmosphere is vibrant, yet a sense of foreboding lingers in the air.", 'Characters': '', 'Camera Work': 'Static shot that slowly zooms in on the skyline, capturing the pulse of the city.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 1, 'Shot': 2, 'Script Content': "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.", 'Shot Description': 'Medium shot of the interior of the Airbnb, filled with people dancing and celebrating. Colorful lights and decorations add to the festive atmosphere.', 'Characters': 'Julio Foolio, entourage', 'Camera Work': 'Handheld camera work to create a sense of intimacy and movement, weaving in and out of the crowd.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 1, 'Shot': 3, 'Script Content': 'But as the night wore on, the celebration grew rowdier, eventually catching the attention of local authorities.', 'Shot Description': "Close-up of Julio Foolio laughing with friends, then cut to a police car's flashing lights outside the window, cutting through the party's energy.", 'Characters': 'Julio Foolio, entourage, police', 'Camera Work': 'Quick cuts between the close-ups and the police lights to heighten tension.', 'Shot Type': 'Close-up, insert', 'Completed': False}, {'Scene': 2, 'Shot': 1, 'Script Content': 'Undeterred, Foolio took to Instagram once more.', 'Shot Description': 'Over-the-shoulder shot of Foolio on his phone, typing a post. The screen glows in the dark, illuminating his focused face.', 'Characters': 'Julio Foolio', 'Camera Work': 'Slow push-in to emphasize his determination and the importance of his message.', 'Shot Type': 'Over-the-shoulder shot', 'Completed': False}, {'Scene': 2, 'Shot': 2, 'Script Content': 'As the first light of dawn began to break over Tampa at 4:40 a.m., the crack of gunfire shattered the morning calm.', 'Shot Description': 'Wide shot of the Holiday Inn parking lot at dawn, peaceful with soft light, suddenly disrupted by the sound of gunfire.', 'Characters': '', 'Camera Work': 'Static shot with a sudden whip pan to the sound of gunfire, followed by a shaky handheld response as chaos ensues.', 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 2, 'Shot': 3, 'Script Content': 'When the echo of the last shot faded, Julio Foolio lay dead, his promising career cut tragically short.', 'Shot Description': 'Close-up of Julio Foolio’s lifeless body on the ground, surrounded by chaos, with a shallow depth of field focusing on his face.', 'Characters': 'Julio Foolio', 'Camera Work': 'Slow zoom out to reveal the surrounding chaos, enhancing the impact of the moment.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 3, 'Shot': 1, 'Script Content': "To understand Foolio's tragic end, one must delve into the violent world he navigated daily.", 'Shot Description': 'Montage of archival footage and images of Jacksonville’s streets, gang graffiti, and past concert footage.', 'Characters': '', 'Camera Work': "Fast-paced cuts interwoven with slow-motion shots to contrast the violence with Foolio's artistry.", 'Shot Type': 'Montage', 'Completed': False}, {'Scene': 3, 'Shot': 2, 'Script Content': 'Foolio was no stranger to close calls.', 'Shot Description': 'Medium shot of Foolio reflecting in a dimly lit room, with shadows creating a somber mood around him.', 'Characters': 'Julio Foolio', 'Camera Work': 'Dolly in slowly to capture his introspection, with a focus on his facial expressions.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 4, 'Shot': 1, 'Script Content': "As news of Foolio's death spread, the hip-hop community reeled.", 'Shot Description': 'Wide shot of a mural of Foolio being painted by fans, with candles and flowers laid at the base.', 'Characters': '', 'Camera Work': 'Pan across the mural, capturing the emotional responses of fans gathered around.', 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 4, 'Shot': 2, 'Script Content': 'His girlfriend, Blanco Mani, shared a poignant photo from earlier that night.', 'Shot Description': 'Close-up of Blanco Mani looking at her phone, tears in her eyes, with a blurred background of the gathering.', 'Characters': 'Blanco Mani', 'Camera Work': 'Focus pull from her face to the phone screen to emphasize her heartache.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 4, 'Shot': 3, 'Script Content': 'But even as candles were lit and tears shed, the cycle of violence showed no signs of abating.', 'Shot Description': 'Wide shot of a candlelight vigil, with a darkened street illuminated by flickering flames and somber faces.', 'Characters': '', 'Camera Work': "Slow dolly back to reveal the scale of the gathering, emphasizing the community's grief.", 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 5, 'Shot': 1, 'Script Content': "Julio Foolio's story stands as a stark reminder of the real-world consequences when music and street life intertwine.", 'Shot Description': "Fade to black with text overlay summarizing Foolio's impact on music and culture.", 'Characters': '', 'Camera Work': 'Static text overlay with a somber background score.', 'Shot Type': 'Text overlay', 'Completed': False}]}
+2024-09-06 17:12:41,849 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 17:12:41,852 - gradio_app - INFO - Final DataFrame:     Scene  Shot                                                                                                                                                 Script Content                                                                                                                                       Shot Description                       Characters Camera Work Shot Type  Completed
+0       1     1  In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating the dawn of his 26th year.              Wide shot of Tampa's skyline at midnight, city lights twinkling. The atmosphere is vibrant, yet a sense of foreboding lingers in the air.                                                   None      False
+1       1     2                                          The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.  Medium shot of the interior of the Airbnb, filled with people dancing and celebrating. Colorful lights and decorations add to the festive atmosphere.          Julio Foolio, entourage                  None      False
+2       1     3                                                But as the night wore on, the celebration grew rowdier, eventually catching the attention of local authorities.     Close-up of Julio Foolio laughing with friends, then cut to a police car's flashing lights outside the window, cutting through the party's energy.  Julio Foolio, entourage, police                  None      False
+3       2     1                                                                                                                Undeterred, Foolio took to Instagram once more.                             Over-the-shoulder shot of Foolio on his phone, typing a post. The screen glows in the dark, illuminating his focused face.                     Julio Foolio                  None      False
+4       2     2                                            As the first light of dawn began to break over Tampa at 4:40 a.m., the crack of gunfire shattered the morning calm.                                Wide shot of the Holiday Inn parking lot at dawn, peaceful with soft light, suddenly disrupted by the sound of gunfire.                                                   None      False
+5       2     3                                                        When the echo of the last shot faded, Julio Foolio lay dead, his promising career cut tragically short.                       Close-up of Julio Foolio’s lifeless body on the ground, surrounded by chaos, with a shallow depth of field focusing on his face.                     Julio Foolio                  None      False
+6       3     1                                                                   To understand Foolio's tragic end, one must delve into the violent world he navigated daily.                                             Montage of archival footage and images of Jacksonville’s streets, gang graffiti, and past concert footage.                                                   None      False
+7       3     2                                                                                                                         Foolio was no stranger to close calls.                                                  Medium shot of Foolio reflecting in a dimly lit room, with shadows creating a somber mood around him.                     Julio Foolio                  None      False
+8       4     1                                                                                                As news of Foolio's death spread, the hip-hop community reeled.                                                       Wide shot of a mural of Foolio being painted by fans, with candles and flowers laid at the base.                                                   None      False
+9       4     2                                                                                  His girlfriend, Blanco Mani, shared a poignant photo from earlier that night.                                           Close-up of Blanco Mani looking at her phone, tears in her eyes, with a blurred background of the gathering.                      Blanco Mani                  None      False
+10      4     3                                                                 But even as candles were lit and tears shed, the cycle of violence showed no signs of abating.                                            Wide shot of a candlelight vigil, with a darkened street illuminated by flickering flames and somber faces.                                                   None      False
+11      5     1                                          Julio Foolio's story stands as a stark reminder of the real-world consequences when music and street life intertwine.                                                                      Fade to black with text overlay summarizing Foolio's impact on music and culture.                                                   None      False
+2024-09-06 17:13:52,456 - gradio_app - DEBUG - Calling generate_prompt_wrapper with args: ('Pixar', '', "Wide shot of Tampa's skyline at midnight, city lights twinkling. The atmosphere is vibrant, yet a sense of foreboding lingers in the air.", '', '', False, '', [], [], [], [], [], None, None, None, None, None, '', 'Pixar film still', 'Renderman, Whimsical, Expressive Characters,Expressive, Lifelike, Detailed', None), kwargs: {}
+2024-09-06 17:13:52,457 - gradio_app - INFO - Starting generate_prompt_wrapper
+2024-09-06 17:13:54,513 - gradio_app - INFO - meta_chain.generate_prompt took 2.05 seconds
+2024-09-06 17:13:54,514 - gradio_app - INFO - Prompts generated - Concise: Pixar film still Pixar film still A wide shot capt..., Normal: Pixar film still Pixar film still The camera frame..., Detailed: Pixar film still Pixar film still In a breathtakin...
+2024-09-06 17:13:54,514 - gradio_app - INFO - generate_prompt_wrapper took 2.06 seconds total
+2024-09-06 17:13:54,515 - gradio_app - DEBUG - generate_prompt_wrapper returned: ("Pixar film still Pixar film still A wide shot captures Tampa's vibrant skyline at midnight, with city lights sparkling against the dark sky, evoking a mix of excitement and intrigue. Renderman, Whimsical, Expressive Characters,Expressive, Lifelike, Detailed", "Pixar film still Pixar film still The camera frames a stunning wide shot of Tampa's skyline, illuminated by twinkling city lights at midnight. The scene is alive with color and energy, while a subtle sense of foreboding hangs in the air, inviting viewers to explore the city's hidden stories. Renderman, Whimsical, Expressive Characters,Expressive, Lifelike, Detailed", 'Pixar film still Pixar film still In a breathtaking wide shot, the vibrant skyline of Tampa emerges at midnight, where city lights twinkle like stars against the deep indigo sky. The scene captures the bustling energy of the city, with silhouettes of palm trees gently swaying in the foreground. The twinkling lights reflect off the water, creating a mesmerizing effect, while the air carries a faint whisper of mystery, hinting at untold tales waiting to unfold in this enchanting urban landscape. Renderman, Whimsical, Expressive Characters,Expressive, Lifelike, Detailed', '{\n  "Concise Prompt": "Pixar film still A wide shot captures Tampa\'s vibrant skyline at midnight, with city lights sparkling against the dark sky, evoking a mix of excitement and intrigue.",\n  "Normal Prompt": "Pixar film still The camera frames a stunning wide shot of Tampa\'s skyline, illuminated by twinkling city lights at midnight. The scene is alive with color and energy, while a subtle sense of foreboding hangs in the air, inviting viewers to explore the city\'s hidden stories.",\n  "Detailed Prompt": "Pixar film still In a breathtaking wide shot, the vibrant skyline of Tampa emerges at midnight, where city lights twinkle like stars against the deep indigo sky. The scene captures the bustling energy of the city, with silhouettes of palm trees gently swaying in the foreground. The twinkling lights reflect off the water, creating a mesmerizing effect, while the air carries a faint whisper of mystery, hinting at untold tales waiting to unfold in this enchanting urban landscape."\n}', 'Prompts generated successfully', '[]')
+2024-09-06 17:33:43,651 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 17:33:43,652 - gradio_app - DEBUG - Script content: The O-Red Story: A Night of Battle Rap and Chaos 
+
+ 
+
+The Battle and The Build-Up 
+
+ 
+
+St. Louis, 20...
+2024-09-06 17:34:02,142 - gradio_app - INFO - Generated shot list: {'shots': [{'Scene': 1, 'Shot': 1, 'Script Content': 'St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.', 'Shot Description': 'Wide shot of the St. Louis skyline at dusk, capturing the essence of the city as the sun sets, casting a golden hue. The atmosphere is nostalgic, hinting at the legendary night to come.', 'Characters': '', 'Camera Work': 'Static shot with a slow zoom in towards the city, fading into the next scene.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 1, 'Shot': 2, 'Script Content': 'O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.', 'Shot Description': 'Close-up on O-Red’s face, a mix of exhaustion and exhilaration as he wipes sweat from his brow, with the crowd cheering in the background.', 'Characters': 'O-Red', 'Camera Work': 'Handheld camera for a more intimate and gritty feel, slight shake to capture the energy of the moment.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 1, 'Shot': 3, 'Script Content': "The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent: Calico, Hitman Holla, Conceited, Hollow Da Don, and Big T, among others.", 'Shot Description': 'Medium shot of Aye Verb addressing the crowd with a confident stance, surrounded by the notable battlers, showcasing camaraderie and competition.', 'Characters': 'Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T', 'Camera Work': 'Dolly in towards Aye Verb as he speaks, creating a sense of importance around him.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 2, 'Shot': 1, 'Script Content': 'The dimly lit club pulsed with heavy bass and anticipation.', 'Shot Description': 'Establishing shot of the club interior, lights flashing, shadows dancing as people groove to the music, creating an electric atmosphere.', 'Characters': '', 'Camera Work': "Wide shot with slow pan to capture the crowd's energy and movement.", 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 2, 'Shot': 2, 'Script Content': 'O-Red, still riding the high of his battle, scanned the crowd.', 'Shot Description': "Close-up on O-Red's eyes darting across the room, revealing his focus and excitement, with the pulsing lights reflecting in his gaze.", 'Characters': 'O-Red', 'Camera Work': 'Zoom in on O-Red’s eyes, followed by a quick cut to the crowd.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 2, 'Shot': 3, 'Script Content': 'His eyes landed on a curvaceous chocolate-skinned beauty that made his heart skip a beat.', 'Shot Description': 'Dramatic close-up on the woman O-Red is admiring, highlighting her beauty in a soft light, creating a sense of allure.', 'Characters': 'O-Red, Woman', 'Camera Work': "Slow motion effect as O-Red's gaze fixates on her, emphasizing the moment.", 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 3, 'Shot': 1, 'Script Content': "O-Red and Calico hatched a plan. 'Yo, I'll approach my joint, you take her friend,' O-Red suggested.", 'Shot Description': 'Two-shot of O-Red and Calico in a dimly lit corner of the club, their expressions serious yet playful as they strategize.', 'Characters': 'O-Red, Calico', 'Camera Work': 'Over-the-shoulder shot to show their perspective while maintaining intimacy.', 'Shot Type': 'Two-shot', 'Completed': False}, {'Scene': 4, 'Shot': 1, 'Script Content': 'O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl.', 'Shot Description': 'Wide shot of the parking lot as Calico opens the door, O-Red’s expression in the foreground, capturing his disbelief.', 'Characters': 'O-Red, Calico, Women', 'Camera Work': 'Static shot, with a slight push in on O-Red’s face as he processes the betrayal.', 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 5, 'Shot': 1, 'Script Content': 'The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.', 'Shot Description': 'Exterior shot of the townhouse, night time, with a mysterious vibe; shadows loom as the camera slowly approaches the door.', 'Characters': '', 'Camera Work': 'Tracking shot moving toward the door, building tension.', 'Shot Type': 'Establishing shot', 'Completed': False}, {'Scene': 5, 'Shot': 2, 'Script Content': 'Hitman Holla, riding high on his local celebrity status, decided to make his presence known.', 'Shot Description': 'Medium close-up of Hitman Holla as he boasts to the group, his swagger evident in his stance and expression.', 'Characters': 'Hitman Holla', 'Camera Work': 'Steadicam circling around Hitman as he speaks, capturing his confidence.', 'Shot Type': 'Medium close-up', 'Completed': False}, {'Scene': 6, 'Shot': 1, 'Script Content': "Calico whispered something in his girl's ear.", 'Shot Description': 'Close-up of Calico leaning in to whisper, the girl’s intrigued expression captured in the background.', 'Characters': 'Calico, Girl', 'Camera Work': 'Focus pull from Calico to the girl, enhancing the secrecy of the moment.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 6, 'Shot': 2, 'Script Content': 'Without so much as a backward glance, they headed upstairs.', 'Shot Description': 'Wide shot of the staircase as Calico and the girl ascend, leaving O-Red behind, highlighting his isolation.', 'Characters': 'Calico, Girl, O-Red', 'Camera Work': 'Static shot with a slow zoom out to emphasize O-Red’s disappointment.', 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 7, 'Shot': 1, 'Script Content': "I ain't got no condoms, but I'm trying to get this shit popping.", 'Shot Description': 'Medium shot of Calico in the doorway, slightly disheveled yet smug, with a playful grin. The tension in the room is palpable.', 'Characters': 'Calico', 'Camera Work': 'Quick cut to focus on Calico, capturing his boldness and the reaction of the others in the room.', 'Shot Type': 'Medium shot', 'Completed': False}, {'Scene': 7, 'Shot': 2, 'Script Content': 'The group burst into the room, finding Calico and the girl in a compromising position.', 'Shot Description': 'Dynamic shot of the group entering the room, faces filled with shock and disbelief, capturing the chaos of the moment.', 'Characters': 'O-Red, Calico, Girl, Friends', 'Camera Work': 'Handheld camera following the group, adding to the frantic energy.', 'Shot Type': 'Wide shot', 'Completed': False}, {'Scene': 8, 'Shot': 1, 'Script Content': 'O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.', 'Shot Description': "Close-up of O-Red's face, revealing a blend of emotions as he steps outside into the night.", 'Characters': 'O-Red, Girl', 'Camera Work': 'Slow dolly out as O-Red walks toward the door, capturing his conflicted emotions.', 'Shot Type': 'Close-up', 'Completed': False}, {'Scene': 8, 'Shot': 2, 'Script Content': 'As he reached for the door, he turned to Calico and uttered the words that would become battle rap legend.', 'Shot Description': "Two-shot of O-Red and Calico, with O-Red's determined expression contrasting Calico's cocky demeanor.", 'Characters': 'O-Red, Calico', 'Camera Work': "Over-the-shoulder shot from O-Red's perspective, emphasizing the confrontation.", 'Shot Type': 'Two-shot', 'Completed': False}]}
+2024-09-06 17:34:02,148 - gradio_app - DEBUG - DataFrame columns: Index(['Scene', 'Shot', 'Script Content', 'Shot Description', 'Characters',
+       'Camera Work', 'Shot Type', 'Completed'],
+      dtype='object')
+2024-09-06 17:34:02,156 - gradio_app - INFO - Final DataFrame:     Scene  Shot                                                                                                                                                     Script Content                                                                                                                                                                           Shot Description                                                       Characters Camera Work Shot Type  Completed
+0       1     1                                      St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.  Wide shot of the St. Louis skyline at dusk, capturing the essence of the city as the sun sets, casting a golden hue. The atmosphere is nostalgic, hinting at the legendary night to come.                                                                                   None      False
+1       1     2                                           O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.                                                 Close-up on O-Red’s face, a mix of exhaustion and exhilaration as he wipes sweat from his brow, with the crowd cheering in the background.                                                            O-Red                  None      False
+2       1     3  The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent: Calico, Hitman Holla, Conceited, Hollow Da Don, and Big T, among others.                                          Medium shot of Aye Verb addressing the crowd with a confident stance, surrounded by the notable battlers, showcasing camaraderie and competition.  Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T                  None      False
+3       2     1                                                                                                        The dimly lit club pulsed with heavy bass and anticipation.                                                   Establishing shot of the club interior, lights flashing, shadows dancing as people groove to the music, creating an electric atmosphere.                                                                                   None      False
+4       2     2                                                                                                     O-Red, still riding the high of his battle, scanned the crowd.                                                      Close-up on O-Red's eyes darting across the room, revealing his focus and excitement, with the pulsing lights reflecting in his gaze.                                                            O-Red                  None      False
+5       2     3                                                                          His eyes landed on a curvaceous chocolate-skinned beauty that made his heart skip a beat.                                                                     Dramatic close-up on the woman O-Red is admiring, highlighting her beauty in a soft light, creating a sense of allure.                                                     O-Red, Woman                  None      False
+6       3     1                                                               O-Red and Calico hatched a plan. 'Yo, I'll approach my joint, you take her friend,' O-Red suggested.                                                                  Two-shot of O-Red and Calico in a dimly lit corner of the club, their expressions serious yet playful as they strategize.                                                    O-Red, Calico                  None      False
+7       4     1                                                                                 O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl.                                                                      Wide shot of the parking lot as Calico opens the door, O-Red’s expression in the foreground, capturing his disbelief.                                             O-Red, Calico, Women                  None      False
+8       5     1                                             The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.                                                                 Exterior shot of the townhouse, night time, with a mysterious vibe; shadows loom as the camera slowly approaches the door.                                                                                   None      False
+9       5     2                                                                       Hitman Holla, riding high on his local celebrity status, decided to make his presence known.                                                                               Medium close-up of Hitman Holla as he boasts to the group, his swagger evident in his stance and expression.                                                     Hitman Holla                  None      False
+10      6     1                                                                                                                      Calico whispered something in his girl's ear.                                                                                      Close-up of Calico leaning in to whisper, the girl’s intrigued expression captured in the background.                                                     Calico, Girl                  None      False
+11      6     2                                                                                                        Without so much as a backward glance, they headed upstairs.                                                                                Wide shot of the staircase as Calico and the girl ascend, leaving O-Red behind, highlighting his isolation.                                              Calico, Girl, O-Red                  None      False
+12      7     1                                                                                                   I ain't got no condoms, but I'm trying to get this shit popping.                                                              Medium shot of Calico in the doorway, slightly disheveled yet smug, with a playful grin. The tension in the room is palpable.                                                           Calico                  None      False
+13      7     2                                                                             The group burst into the room, finding Calico and the girl in a compromising position.                                                                     Dynamic shot of the group entering the room, faces filled with shock and disbelief, capturing the chaos of the moment.                                     O-Red, Calico, Girl, Friends                  None      False
+14      8     1                                                            O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.                                                                                                Close-up of O-Red's face, revealing a blend of emotions as he steps outside into the night.                                                      O-Red, Girl                  None      False
+15      8     2                                                         As he reached for the door, he turned to Calico and uttered the words that would become battle rap legend.                                                                                      Two-shot of O-Red and Calico, with O-Red's determined expression contrasting Calico's cocky demeanor.                                                    O-Red, Calico                  None      False

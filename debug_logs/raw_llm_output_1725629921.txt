@@ -1,0 +1,176 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.",
+        "Shot Description": "An aerial view of St. Louis at night, the city lights twinkling beneath a starry sky, with an emphasis on the vibrant nightlife. The camera slowly zooms in on the venue where the battle rap event is taking place.",
+        "Characters": "",
+        "Camera Work": "Aerial shot, slow zoom-in, establishing the setting.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.",
+        "Shot Description": "Close-up on O-Red, sweat glistening on his forehead, a mix of exhaustion and exhilaration on his face as he exits the stage. The crowd is blurred in the background, emphasizing his solitary moment of triumph.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up, handheld camera for an intimate feel.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 3,
+        "Script Content": "The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent.",
+        "Shot Description": "Wide shot of the venue filled with notable battle rappers and fans, showcasing the energy and excitement in the air. Aye Verb stands in the foreground, smiling, with a distinct lighting that highlights his importance.",
+        "Characters": "Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T",
+        "Camera Work": "Wide shot, steady camera to capture the environment.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "Shot Description": "Low-angle shot inside the club, vibrant colors flashing from lights dancing across the crowd. The camera shakes slightly to the beat, immersing the viewer in the atmosphere.",
+        "Characters": "",
+        "Camera Work": "Low-angle shot with slight camera shake, dynamic framing.",
+        "Shot Type": "Insert shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "O-Red, still riding the high of his battle, scanned the crowd.",
+        "Shot Description": "Close-up of O-Red's eyes scanning the club, the lighting casting dramatic shadows, capturing his intensity and focus.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up, shallow depth of field to isolate his expression.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 3,
+        "Script Content": "His eyes landed on a curvaceous chocolate-skinned beauty that made his heart skip a beat.",
+        "Shot Description": "Slow dolly shot towards the beauty in the crowd, accentuating her allure with soft focus and warm lighting, while O-Red's gaze is reflected in the background.",
+        "Characters": "O-Red, beauty",
+        "Camera Work": "Dolly shot, slow movement to create a dreamy effect.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "O-Red and Calico hatched a plan.",
+        "Shot Description": "Two-shot of O-Red and Calico leaning in close, conspiratorial whispers. The lighting is dim, creating a sense of intimacy and secrecy.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Two-shot, slight push-in for emphasis.",
+        "Shot Type": "Two-shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "As the club began to empty, O-Red's world tilted on its axis.",
+        "Shot Description": "Wide shot of the nearly empty club with O-Red in the foreground, his expression shifting from joy to disbelief as he watches Calico approach the girl.",
+        "Characters": "O-Red, Calico, girl",
+        "Camera Work": "Wide shot, static camera for dramatic effect.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "Calico smoothly opened the car door for his girl - the very one O-Red had been chatting up all night.",
+        "Shot Description": "Close-up of Calico’s confident smile as he opens the car door, contrasted with O-Red's shocked expression in the background, emphasizing the betrayal.",
+        "Characters": "Calico, O-Red, girl",
+        "Camera Work": "Close-up on Calico, with O-Red's reaction in the background.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.",
+        "Shot Description": "Exterior shot of the townhouse at night, the camera slowly zooming in to create suspense, juxtaposed with the sounds of laughter and music from inside.",
+        "Characters": "",
+        "Camera Work": "Wide shot, slow zoom-in, sound design to build tension.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 2,
+        "Script Content": "O-Red, trying to salvage his pride, positioned himself on the couch next to the girl he'd been pursuing.",
+        "Shot Description": "Medium shot of O-Red on the couch, visibly tense, with the girl beside him looking disinterested. The lighting is dim, creating a heavy atmosphere.",
+        "Characters": "O-Red, girl",
+        "Camera Work": "Medium shot, slight rack focus to emphasize emotional distance.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 3,
+        "Script Content": "Hitman Holla, riding high on his local celebrity status, decided to make his presence known.",
+        "Shot Description": "Close-up of Hitman Holla boasting, with exaggerated lighting highlighting his bravado, while the girls in the background react with varying degrees of interest.",
+        "Characters": "Hitman Holla, girls",
+        "Camera Work": "Close-up with dramatic lighting, handheld for dynamic feel.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 1,
+        "Script Content": "As the night wore on, O-Red watched helplessly as Calico whispered something in his girl's ear.",
+        "Shot Description": "Over-the-shoulder shot from O-Red's perspective, capturing Calico leaning in close, with the girl laughing, creating a sense of betrayal.",
+        "Characters": "O-Red, Calico, girl",
+        "Camera Work": "Over-the-shoulder shot, focus on Calico and the girl.",
+        "Shot Type": "Over-the-shoulder shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 2,
+        "Script Content": "Someone - later revealed to be the girl's friend - picked the lock.",
+        "Shot Description": "Quick cut to a close-up of a hand fumbling with the lock, the tension palpable as the camera shakes slightly to heighten suspense.",
+        "Characters": "girl's friend",
+        "Camera Work": "Close-up, shaky cam for urgency.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 3,
+        "Script Content": "The group burst into the room, finding Calico and the girl in a compromising position.",
+        "Shot Description": "Wide shot of the chaotic scene as the group enters, capturing the shock and embarrassment on everyone’s faces, with a focus on the comforter being hastily grabbed.",
+        "Characters": "O-Red, Calico, girl, group",
+        "Camera Work": "Wide shot, dynamic movement as the group rushes in.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 7,
+        "Shot Number": 1,
+        "Script Content": "O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.",
+        "Shot Description": "Close-up of O-Red's conflicted expression as he steps outside, the cold night air contrasting with the warmth of the indoor chaos.",
+        "Characters": "O-Red, girl",
+        "Camera Work": "Close-up, slow dolly out to reveal the outside environment.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 7,
+        "Shot Number": 2,
+        "Script Content": "As he reached for the door, he turned to Calico and uttered the words that would become battle rap legend.",
+        "Shot Description": "Medium shot of O-Red standing in front of the door, with Calico in the background, the tension palpable as he delivers his iconic line.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Medium shot, static with a slight zoom-in on O-Red for emphasis.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    }
+]
+``` 
+
+This shot list captures the essence of Tarantino's cinematic style by utilizing dynamic camera movements, intense close-ups, and a focus on dialogue delivery and character expressions, all while emphasizing the chaotic and raw nature of the scenes depicted in the script. Each shot is designed to enhance the storytelling while paying homage to the unique rhythm and pacing characteristic of Tarantino's films.

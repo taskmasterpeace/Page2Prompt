@@ -1,0 +1,114 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.",
+        "Shot Description": "A sweeping aerial shot of St. Louis at dusk, highlighting the iconic skyline. The camera slowly descends, setting the tone of nostalgia and legend.",
+        "Characters": "",
+        "Camera Work": "Aerial shot, slow descent, establishing atmosphere.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.",
+        "Shot Description": "Close-up of O-Red's face, his expression a mix of satisfaction and tension, sweat glistening in the low light. The audience's blurred faces in the background embody the chaotic energy of the battle.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up, slight zoom in to emphasize emotion.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "Shot Description": "Wide shot of the club interior, showcasing the vibrant energy of the crowd. Strobe lights flash intermittently, casting dramatic shadows and creating an intense atmosphere.",
+        "Characters": "",
+        "Camera Work": "Wide shot with a slight pan across the crowd, capturing the pulsating energy.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "His eyes landed on a curvaceous chocolate-skinned beauty that made his heart skip a beat.",
+        "Shot Description": "Close-up of O-Red's eyes as they widen in surprise and desire, with a shallow depth of field focusing on the woman in the background, creating an ethereal quality.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up, rack focus to the woman as O-Red gazes.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl.",
+        "Shot Description": "Medium shot of Calico opening the car door, with O-Red in the foreground, his expression a mix of shock and disbelief. The lighting is low, enhancing the tension.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Medium shot, static camera, emphasizing O-Red's reaction.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.",
+        "Shot Description": "Exterior shot of the townhouse, with ominous shadows cast by the porch light. The camera slowly zooms in, building tension.",
+        "Characters": "",
+        "Camera Work": "Exterior shot, slow zoom in, creating a sense of foreboding.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "Hitman Holla, riding high on his local celebrity status, decided to make his presence known.",
+        "Shot Description": "Close-up on Hitman Holla as he boasts, his face illuminated by a harsh light, reflecting his arrogance. The background is dark, isolating him.",
+        "Characters": "Hitman Holla",
+        "Camera Work": "Close-up, static shot, emphasizing the tension.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "As the night wore on, O-Red watched helplessly as Calico whispered something in his girl's ear.",
+        "Shot Description": "Over-the-shoulder shot from O-Red's perspective, capturing Calico and the girl in the foreground, with O-Red's silhouette in the background, enhancing his feelings of exclusion.",
+        "Characters": "O-Red, Calico, girl",
+        "Camera Work": "Over-the-shoulder shot, slight dolly in to emphasize O-Red's perspective.",
+        "Shot Type": "Over-the-shoulder Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 2,
+        "Script Content": "Calico answered, slightly out of breath and grinning like the cat that got the cream.",
+        "Shot Description": "Medium shot of Calico at the door, his grin wide and mischievous, showcasing his triumph. The lighting is warm, contrasting the tension of the previous moments.",
+        "Characters": "Calico",
+        "Camera Work": "Medium shot, static, focusing on Calico's expression.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 1,
+        "Script Content": "O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.",
+        "Shot Description": "Wide shot of O-Red and the girl outside the townhouse, the moonlight casting long shadows, symbolizing his internal conflict.",
+        "Characters": "O-Red, girl",
+        "Camera Work": "Wide shot, slow push in to capture the emotional intensity.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 2,
+        "Script Content": "Outside, O-Red tried to console the distraught girl.",
+        "Shot Description": "Close-up of O-Red's face, showing genuine concern, with the girl partially in the frame, her expression hidden from the viewer, creating suspense.",
+        "Characters": "O-Red, girl",
+        "Camera Work": "Close-up, slight lateral movement to enhance intimacy.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    }
+]
+```

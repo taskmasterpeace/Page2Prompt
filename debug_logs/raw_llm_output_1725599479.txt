@@ -1,0 +1,154 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "St. Louis, 2011 or 2012. The exact year has faded into legend...",
+        "Shot Description": "Wide establishing shot of the city skyline at dusk, the lights beginning to flicker on. The atmosphere is thick with anticipation.",
+        "Characters": "",
+        "Camera Work": "Static shot, slight zoom in to emphasize the tension in the air.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "O-Red had just faced off against Jay Huggins...",
+        "Shot Description": "Close-up of O-Red's face, sweat glistening on his brow, eyes filled with determination and adrenaline.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up with a shallow depth of field to isolate O-Red's emotions.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 3,
+        "Script Content": "The event, organized by local hero Aye Verb...",
+        "Shot Description": "Medium shot of Aye Verb on stage, addressing the crowd, the energy palpable in the room.",
+        "Characters": "Aye Verb",
+        "Camera Work": "Tracking shot that circles around Aye Verb, enhancing his charisma and importance.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "The dimly lit club pulsed with heavy bass and anticipation...",
+        "Shot Description": "Wide shot of the club interior, lights flashing, people dancing, capturing the vibrant nightlife.",
+        "Characters": "",
+        "Camera Work": "Handheld camera to create a sense of immersion in the chaotic environment.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "O-Red, still riding the high of his battle, scanned the crowd...",
+        "Shot Description": "Close-up of O-Red's eyes scanning the crowd, reflecting the neon lights and the emotions around him.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up with a slight rack focus to emphasize what he’s looking at.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 3,
+        "Script Content": "Conceited, the compact firecracker from New York, had also spotted the girl...",
+        "Shot Description": "Over-the-shoulder shot of Conceited as he observes O-Red and the girl, a competitive glint in his eye.",
+        "Characters": "Conceited",
+        "Camera Work": "Over-the-shoulder shot with a focus on his expression.",
+        "Shot Type": "Over-the-shoulder shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl...",
+        "Shot Description": "Medium shot of O-Red's shocked expression as he sees Calico with the girl, the car door framing the moment.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Static shot with a slow zoom to emphasize O-Red's reaction.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "The townhouse on Kings Highway looked unassuming from the outside...",
+        "Shot Description": "Wide shot of the townhouse exterior, contrasting its calm appearance with the chaos inside.",
+        "Characters": "",
+        "Camera Work": "Static shot with a slight push-in to create suspense.",
+        "Shot Type": "Establishing shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "O-Red, trying to salvage his pride, positioned himself on the couch...",
+        "Shot Description": "Medium shot of O-Red on the couch with the girl, tension visible on his face.",
+        "Characters": "O-Red, girl",
+        "Camera Work": "Two-shot with a slow dolly to enhance the intimacy and discomfort of the situation.",
+        "Shot Type": "Two-shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "Hitman Holla, riding high on his local celebrity status, decided to make his presence known...",
+        "Shot Description": "Close-up of Hitman Holla as he boasts, his confidence oozing, with a group of girls in the background.",
+        "Characters": "Hitman Holla",
+        "Camera Work": "Close-up with a slight tilt up and down to emphasize his bravado.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 2,
+        "Script Content": "The girl, realizing she'd struck a nerve, tried to backpedal...",
+        "Shot Description": "Medium shot of the girl reacting to Hitman, her expression a mix of surprise and regret.",
+        "Characters": "girl",
+        "Camera Work": "Medium shot with a quick pan to capture the shift in mood.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 1,
+        "Script Content": "As the night wore on, O-Red watched helplessly as Calico whispered something in his girl's ear...",
+        "Shot Description": "Close-up of Calico whispering in the girl's ear, O-Red's silhouette visible in the background.",
+        "Characters": "O-Red, Calico, girl",
+        "Camera Work": "Close-up with a slow zoom out to reveal O-Red's growing frustration.",
+        "Shot Type": "Close-up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 7,
+        "Shot Number": 1,
+        "Script Content": "Someone - later revealed to be the girl's friend - picked the lock...",
+        "Shot Description": "Wide shot of the group bursting into the room, expressions of shock and disbelief on their faces.",
+        "Characters": "O-Red, group",
+        "Camera Work": "Wide shot with a quick whip pan to enhance the chaos of the moment.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 8,
+        "Shot Number": 1,
+        "Script Content": "O-Red, feeling a potent mix of vindication and regret...",
+        "Shot Description": "Medium shot of O-Red outside, his silhouette framed against the streetlights, reflecting on the night's events.",
+        "Characters": "O-Red",
+        "Camera Work": "Medium shot with a slow pull back to signify his emotional distance.",
+        "Shot Type": "Medium shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 8,
+        "Shot Number": 2,
+        "Script Content": "As the night came to a chaotic close...",
+        "Shot Description": "Wide shot of the group dispersing into the night, each character's body language telling their own story.",
+        "Characters": "",
+        "Camera Work": "Wide shot with a steady cam movement to capture the disarray and emotion.",
+        "Shot Type": "Wide shot",
+        "Completed": False
+    }
+]
+```

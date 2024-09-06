@@ -1,0 +1,134 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "The O-Red Story: A Night of Battle Rap and Chaos",
+        "Shot Description": "An aerial shot of St. Louis at night, showcasing the vibrant city lights contrasted with the darkness of the night, setting the tone for the legendary evening.",
+        "Characters": "",
+        "Camera Work": "Static shot, slowly zooming in on the club's entrance.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "O-Red had just faced off against Jay Huggins...",
+        "Shot Description": "A close-up of O-Red's face, sweat glistening, eyes filled with adrenaline and pride after his battle.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up, with a slight dolly-in to emphasize his emotions.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "The event, organized by local hero Aye Verb...",
+        "Shot Description": "A mid-shot of Aye Verb interacting with the crowd, exuding charisma and energy, as he gestures toward the stage.",
+        "Characters": "Aye Verb",
+        "Camera Work": "Medium shot with a slight pan to capture the crowd's engagement.",
+        "Shot Type": "Mid-Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "Shot Description": "A wide shot of the bustling club, filled with energy, showcasing the crowd dancing, lights flashing, and the DJ at the turntables.",
+        "Characters": "",
+        "Camera Work": "Wide shot, with a slow-motion effect to enhance the atmosphere.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 2,
+        "Script Content": "O-Red, still riding the high of his battle, scanned the crowd.",
+        "Shot Description": "A tracking shot following O-Red's gaze as he scans the room, landing on the woman that catches his eye.",
+        "Characters": "O-Red",
+        "Camera Work": "Tracking shot, using a shallow depth of field to keep the focus on O-Red.",
+        "Shot Type": "Tracking Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "O-Red and Calico hatched a plan.",
+        "Shot Description": "A two-shot of O-Red and Calico leaning closer together, whispering and smiling, plotting their approach to the women.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Close-up on their faces, with a slight push-in to capture the conspiratorial vibe.",
+        "Shot Type": "Two-Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door for his girl.",
+        "Shot Description": "A dramatic angle from behind O-Red, capturing his expression of shock and disbelief as he sees Calico with the girl.",
+        "Characters": "O-Red, Calico",
+        "Camera Work": "Over-the-shoulder shot, focusing on O-Red's reaction.",
+        "Shot Type": "Over-the-Shoulder Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 1,
+        "Script Content": "The townhouse on Kings Highway looked unassuming from the outside...",
+        "Shot Description": "An exterior shot of the townhouse, looking cozy yet foreboding, as the atmosphere shifts to a more intense vibe.",
+        "Characters": "",
+        "Camera Work": "Static shot with a slow zoom to create a sense of anticipation.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 2,
+        "Script Content": "O-Red, trying to salvage his pride...",
+        "Shot Description": "A medium close-up of O-Red on the couch, looking determined yet vulnerable, as he glances over at the girl.",
+        "Characters": "O-Red",
+        "Camera Work": "Medium close-up, slight tilt to emphasize his emotional state.",
+        "Shot Type": "Medium Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 7,
+        "Shot Number": 1,
+        "Script Content": "Hitman Holla, riding high on his local celebrity status...",
+        "Shot Description": "A low-angle shot of Hitman Holla, confidently addressing the crowd, his posture exuding authority.",
+        "Characters": "Hitman Holla",
+        "Camera Work": "Low-angle shot to amplify his presence.",
+        "Shot Type": "Low-Angle Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 8,
+        "Shot Number": 1,
+        "Script Content": "Calico whispered something in his girl's ear.",
+        "Shot Description": "A close-up of Calico and the girl, with a focus on their intimate interaction, creating a sense of secrecy.",
+        "Characters": "Calico, Girl",
+        "Camera Work": "Close-up with a gentle push-in to add intimacy.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 9,
+        "Shot Number": 1,
+        "Script Content": "Someone - later revealed to be the girl's friend - picked the lock.",
+        "Shot Description": "A dramatic shot of the group bursting through the door, surprise written on their faces as they invade the scene.",
+        "Characters": "O-Red, Group",
+        "Camera Work": "Wide shot with a quick zoom to emphasize the chaos.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 10,
+        "Shot Number": 1,
+        "Script Content": "O-Red, feeling a potent mix of vindication and regret...",
+        "Shot Description": "A somber close-up of O-Red outside the townhouse, his expression reflecting both regret and determination.",
+        "Characters": "O-Red",
+        "Camera Work": "Close-up with natural lighting to enhance the emotional weight.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    }
+]
+```
