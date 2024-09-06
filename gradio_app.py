@@ -643,7 +643,7 @@ with gr.Blocks() as app:
                     camera_work.append(depth_of_field)
                 if camera_work:
                     shot['Camera Work'] = ', '.join(filter(None, camera_work))
-            
+        
                 # Ensure Camera Work and Shot Type are always filled
                 if 'Camera Work' not in shot or not shot['Camera Work']:
                     shot['Camera Work'] = 'Standard shot'
@@ -662,6 +662,9 @@ with gr.Blocks() as app:
 
             # Reorder columns
             df = df[required_columns]
+
+            # Add a 'Selected' column for row selection
+            df['Selected'] = False
 
             logger.info(f"Final DataFrame: {df.to_string()}")  # Log the final DataFrame
 
@@ -705,8 +708,14 @@ with gr.Blocks() as app:
             return None, update_feedback(f"Error importing shot list: {str(e)}")
 
     def update_shot_list(shot_list, row, col, value):
-        shot_list.iloc[row, col] = value
-        return shot_list, update_feedback("Shot list updated successfully")
+        if shot_list is None or shot_list.empty:
+            return None, update_feedback("Error: Shot list is empty or not initialized")
+        try:
+            shot_list.iloc[row, col] = value
+            return shot_list, update_feedback("Shot list updated successfully")
+        except Exception as e:
+            logger.exception("Error in update_shot_list function")
+            return shot_list, update_feedback(f"Error updating shot list: {str(e)}")
 
     def edit_camera_work_shot_type(shot_list, row, camera_work, shot_type):
         if not shot_list.empty and 0 <= row < len(shot_list):
