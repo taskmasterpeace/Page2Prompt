@@ -405,45 +405,71 @@ class MetaChain:
                 unique_shots.append(shot)
         return sorted(unique_shots, key=lambda x: (x['scene_number'], x['shot_number']))
 
-    def _parse_shot_list(self, content: str) -> Dict[str, Any]:
-        lines = content.split('\n')
-        shot_list = {
-            "suggested_style": "",
-            "style_prefix": "",
-            "style_suffix": "",
-            "shots": []
-        }
-        current_shot = {}
-        current_scene = ""
+    async def analyze_script(self, script: str, director_style: str) -> List[Dict[str, Any]]:
+        try:
+            template = PromptTemplate(
+                input_variables=["script", "director_style"],
+                template="""
+                As an expert prompt engineer and cinematographer, analyze the following script using the directorial style of {director_style}. 
+                Generate a comprehensive shot list that aligns with the Page2Prompt application's functionality and the director's unique approach.
+
+                For each significant moment or scene, provide:
+
+                1. Scene Number: Numerical identifier for the scene.
+                2. Shot Number: Numerical identifier for the shot within the scene.
+                3. Script Content: The exact portion of the script this shot is based on.
+                4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
+                5. Characters: Main characters present in the shot (as a comma-separated list).
+                6. Camera Work: Specify the shot type, camera movement, and any special techniques typical of the director.
+                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
+                8. Completed: Always set to "False" for new shots.
+
+                Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
+
+                Format the output as a valid Python list of dictionaries, where each dictionary represents a shot with the following keys:
+                "Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"
+
+                Script:
+                {script}
+
+                Shot List:
+                """
+            )
         
-        for line in lines:
-            line = line.strip()
-            if line.startswith("Suggested Style:"):
-                shot_list["suggested_style"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Style Prefix:"):
-                shot_list["style_prefix"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Style Suffix:"):
-                shot_list["style_suffix"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Scene"):
-                current_scene = line
-            elif line.startswith("Scene Number:"):
-                if current_shot:
-                    shot_list["shots"].append(current_shot)
-                current_shot = {"scene_number": line.split(":", 1)[1].strip()}
-            elif line.startswith("Shot Number:"):
-                current_shot["shot_number"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Shot Description:"):
-                current_shot["shot_description"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Characters:"):
-                current_shot["characters"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Camera Work:"):
-                current_shot["camera_work"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Completed:"):
-                current_shot["completed"] = line.split(":", 1)[1].strip().lower() == "true"
-            elif current_scene and not line.startswith(("Scene Number:", "Shot Number:", "Shot Description:", "Characters:", "Camera Work:", "Completed:")):
-                current_shot["scene_description"] = current_scene
+            chain = RunnableSequence(template | self.llm)
+            result = await chain.ainvoke({"script": script, "director_style": director_style})
         
-        if current_shot:
-            shot_list["shots"].append(current_shot)
+            # Save raw output for debugging
+            save_debug_output(result.content, f"raw_llm_output_{int(time.time())}.txt")
         
-        return shot_list
+            # Log the raw content and its type
+            logger.debug(f"Result type: {type(result.content)}, content: {result.content}")
+        
+            # Check if content is empty
+            if not result.content.strip():
+                raise ValueError("Received empty content from LLM")
+        
+            # Remove any potential markdown formatting and clean the content
+            content = result.content.strip()
+            content = re.sub(r'^```[\w\s]*\n', '', content)  # Remove opening code block
+            content = re.sub(r'\n```$', '', content)  # Remove closing code block
+            content = re.sub(r'^shot_list\s*=\s*', '', content)  # Remove 'shot_list = ' prefix
+            content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)  # Remove comments
+            
+            # Safely evaluate the cleaned content as a Python expression
+            shot_list = ast.literal_eval(content)
+        
+            # Validate and convert types
+            for shot in shot_list:
+                shot['Scene Number'] = int(shot['Scene Number'])
+                shot['Shot Number'] = int(shot['Shot Number'])
+                shot['Completed'] = False  # Always set to False for new shots
+        
+            return shot_list
+
+        except (SyntaxError, ValueError) as e:
+            logger.exception(f"Error parsing LLM output: {str(e)}")
+            raise ScriptAnalysisError(f"Failed to parse LLM output: {str(e)}")
+        except Exception as e:
+            logger.exception(f"Unexpected error in analyze_script: {str(e)}")
+            raise ScriptAnalysisError(str(e))
