@@ -616,7 +616,9 @@ with gr.Blocks() as app:
                 if depth_of_field != "AI Suggest":
                     camera_work.append(depth_of_field)
                 if camera_work:
-                    shot['Camera Work'] = ', '.join(camera_work)
+                    shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
+                else:
+                    shot['Camera Work'] = shot.get('Camera Work', '')  # Keep existing value or set to empty string
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
@@ -640,12 +642,8 @@ with gr.Blocks() as app:
             # Export to CSV
             csv_filename = f'shot_list_{int(time.time())}.csv'
             shot_list.to_csv(csv_filename, index=False)
-            
-            # Export to JSON
-            json_filename = f'shot_list_{int(time.time())}.json'
-            shot_list.to_json(json_filename, orient='records', indent=2)
-            
-            return gr.File.update(value=[csv_filename, json_filename], visible=True), update_feedback("Shot list exported successfully as CSV and JSON")
+        
+            return gr.File.update(value=[csv_filename], visible=True), update_feedback("Shot list exported successfully as CSV")
         except Exception as e:
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
 
