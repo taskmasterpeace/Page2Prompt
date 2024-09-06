@@ -420,8 +420,8 @@ class MetaChain:
                 3. Script Content: The exact portion of the script this shot is based on.
                 4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
                 5. Characters: Main characters present in the shot (as a comma-separated list).
-                6. Camera Work: Specify the camera movement and any special techniques typical of the director.
-                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
+                6. Camera Work: Specify the camera movement and any special techniques typical of the director. This is crucial and must be provided for every shot.
+                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc. This is essential and must be included for each shot.
                 8. Completed: Always set to "False" for new shots.
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
@@ -481,6 +481,14 @@ class MetaChain:
                 # Remove old keys
                 for key in ['scene_number', 'shot_number', 'script_content', 'shot_description', 'characters', 'completed']:
                     shot.pop(key, None)
+                
+                # Validate Camera Work and Shot Type
+                if not shot['Camera Work'] or shot['Camera Work'] == 'Not specified':
+                    shot['Camera Work'] = 'Standard shot'
+                if not shot['Shot Type'] or shot['Shot Type'] == 'Not specified':
+                    shot['Shot Type'] = 'Medium shot'
+                
+                logger.debug(f"Shot details: Camera Work: {shot['Camera Work']}, Shot Type: {shot['Shot Type']}")
         
             logger.info(f"Processed shot list: {shot_list}")
             return shot_list
@@ -488,3 +496,9 @@ class MetaChain:
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(f"Failed to analyze script: {str(e)}")
+
+    def assign_default_shot_details(self, shot):
+        if 'Camera Work' not in shot or not shot['Camera Work']:
+            shot['Camera Work'] = 'Standard shot'
+        if 'Shot Type' not in shot or not shot['Shot Type']:
+            shot['Shot Type'] = 'Medium shot'

@@ -328,6 +328,12 @@ with gr.Blocks() as app:
                 camera_work_input = gr.Textbox(label="Camera Work")
                 shot_type_input = gr.Textbox(label="Shot Type")
 
+            with gr.Row():
+                edit_row_input = gr.Number(label="Edit Row", precision=0)
+                edit_camera_work_input = gr.Textbox(label="Edit Camera Work")
+                edit_shot_type_input = gr.Textbox(label="Edit Shot Type")
+                edit_shot_button = gr.Button("Edit Shot")
+
         # Remove the duplicate "Script & Prompt Generation" tab
 
     # Event handlers and utility functions
@@ -616,15 +622,14 @@ with gr.Blocks() as app:
             shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
 
-            if not isinstance(shot_list, dict) or 'shots' not in shot_list:
+            if not isinstance(shot_list, list):
                 raise ValueError("Invalid shot list structure")
 
-            shots = shot_list['shots']
-            if not shots:
+            if not shot_list:
                 raise ValueError("Empty shot list generated")
 
             # Incorporate user-selected shot configuration
-            for shot in shots:
+            for shot in shot_list:
                 if shot_type != "AI Suggest":
                     shot['Shot Type'] = shot_type
                 camera_work = []
@@ -638,11 +643,15 @@ with gr.Blocks() as app:
                     camera_work.append(depth_of_field)
                 if camera_work:
                     shot['Camera Work'] = ', '.join(filter(None, camera_work))
-                elif 'Camera Work' not in shot:
-                    shot['Camera Work'] = 'Not specified'
+            
+                # Ensure Camera Work and Shot Type are always filled
+                if 'Camera Work' not in shot or not shot['Camera Work']:
+                    shot['Camera Work'] = 'Standard shot'
+                if 'Shot Type' not in shot or not shot['Shot Type']:
+                    shot['Shot Type'] = 'Medium shot'
 
             # Create DataFrame
-            df = pd.DataFrame(shots)
+            df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure all required columns are present
@@ -695,8 +704,16 @@ with gr.Blocks() as app:
         except Exception as e:
             return None, update_feedback(f"Error importing shot list: {str(e)}")
 
-    def update_shot_list(shot_list):
+    def update_shot_list(shot_list, row, col, value):
+        shot_list.iloc[row, col] = value
         return shot_list, update_feedback("Shot list updated successfully")
+
+    def edit_camera_work_shot_type(shot_list, row, camera_work, shot_type):
+        if not shot_list.empty and 0 <= row < len(shot_list):
+            shot_list.at[row, 'Camera Work'] = camera_work
+            shot_list.at[row, 'Shot Type'] = shot_type
+            return shot_list, update_feedback(f"Updated shot {row+1}")
+        return shot_list, update_feedback("Invalid row selected")
 
     def add_shot(shot_list, scene, shot, script_content, shot_description, characters, camera_work, shot_type):
         new_row = pd.DataFrame({
@@ -926,6 +943,12 @@ with gr.Blocks() as app:
     shot_list_display.change(
         update_shot_list,
         inputs=[shot_list_display],
+        outputs=[shot_list_display, feedback_area]
+    )
+
+    edit_shot_button.click(
+        edit_camera_work_shot_type,
+        inputs=[shot_list_display, edit_row_input, edit_camera_work_input, edit_shot_type_input],
         outputs=[shot_list_display, feedback_area]
     )
 
