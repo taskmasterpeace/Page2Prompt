@@ -3047,3 +3047,26 @@ Traceback (most recent call last):
   File "D:\github\promptforge2\gradio_core.py", line 64, in analyze_script
     raise ScriptAnalysisError(str(e))
 gradio_meta_chain_exceptions.ScriptAnalysisError: the JSON object must be str, bytes or bytearray, not list
+2024-09-06 00:10:39,916 - gradio_app - INFO - Generating shot list for director style: None
+2024-09-06 00:10:39,916 - gradio_app - DEBUG - Script content: # The Night Julio Foolio's Music Fell Silent
+
+In the pulsating heart of Tampa, Florida, as the clock...
+2024-09-06 00:10:50,454 - gradio_app - ERROR - Error in generate_shot_list function
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_core.py", line 41, in analyze_script
+    shot_list = result
+                ^^^^^^^
+  File "C:\Users\taskm\anaconda3\Lib\json\__init__.py", line 339, in loads
+    raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+TypeError: the JSON object must be str, bytes or bytearray, not list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\github\promptforge2\gradio_app.py", line 601, in generate_shot_list
+    result = await core.analyze_script(script, director_style)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\github\promptforge2\gradio_core.py", line 64, in analyze_script
+    debug_dir = "debug_logs"
+            ^^^^^^^^^^^^^^^^^
+gradio_meta_chain_exceptions.ScriptAnalysisError: the JSON object must be str, bytes or bytearray, not list

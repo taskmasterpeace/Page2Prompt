@@ -1,0 +1,134 @@
+```python
+shot_list = [
+    {
+        "Scene Number": 1,
+        "Shot Number": 1,
+        "Script Content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating the dawn of his 26th year.",
+        "Shot Description": "Wide shot of Tampa at midnight, showcasing the vibrant city lights and nightlife, with the clock striking midnight, creating a sense of anticipation.",
+        "Characters": "",
+        "Camera Work": "Static wide shot, no camera movement, emphasizing the cityscape.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 2,
+        "Script Content": "The night began with promise and excitement.",
+        "Shot Description": "Close-up of Julio Foolio smiling, holding his phone while looking at messages from fans, radiating joy and excitement.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Slow dolly in towards Julio's face to capture his emotions, with a soft focus on the background.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 1,
+        "Shot Number": 3,
+        "Script Content": "The Airbnb they'd rented buzzed with energy as Foolio and his entourage basked in the glow of success and friendship.",
+        "Shot Description": "Medium shot of the party inside the Airbnb, showing Foolio and his friends laughing and dancing, with colorful lights creating a festive atmosphere.",
+        "Characters": "Julio Foolio, entourage",
+        "Camera Work": "Handheld camera movement to convey the energy and liveliness of the party.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 1,
+        "Script Content": "But as the night wore on, the celebration grew rowdier, eventually catching the attention of local authorities.",
+        "Shot Description": "Wide shot of the outside of the Airbnb with flashing police lights in the background, capturing the tension of the moment.",
+        "Characters": "",
+        "Camera Work": "Static shot with a slow zoom on the police lights, creating a sense of impending doom.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 2,
+        "Shot Number": 2,
+        "Script Content": "Citing overcrowding concerns, the police shut down the party.",
+        "Shot Description": "Close-up of a police officer speaking to Julio, capturing the seriousness of the situation.",
+        "Characters": "Julio Foolio, police officer",
+        "Camera Work": "Over-the-shoulder shot of the police officer from Julio's perspective, emphasizing the confrontation.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 1,
+        "Script Content": "Undeterred, Foolio took to Instagram once more.",
+        "Shot Description": "Close-up of Julio's phone screen showing his Instagram post, with his face slightly blurred in the background.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Focus pull from Julio's face to the phone screen, highlighting his determination.",
+        "Shot Type": "Insert",
+        "Completed": False
+    },
+    {
+        "Scene Number": 3,
+        "Shot Number": 2,
+        "Script Content": "The party relocated to the Holiday Inn Tampa North, near the University of South Florida.",
+        "Shot Description": "Wide shot of the Holiday Inn, with a crowd of people entering, illuminated by neon lights, creating a sense of chaos.",
+        "Characters": "",
+        "Camera Work": "Tracking shot following the crowd as they enter the hotel, emphasizing the movement and energy.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 1,
+        "Script Content": "As the first light of dawn began to break over Tampa at 4:40 a.m., the crack of gunfire shattered the morning calm.",
+        "Shot Description": "Establishing shot of the Holiday Inn parking lot at dawn, peaceful at first, then sudden flashes of gunfire.",
+        "Characters": "",
+        "Camera Work": "Static shot with slow motion on the gunfire, contrasting the serene dawn with the violence.",
+        "Shot Type": "Establishing Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 4,
+        "Shot Number": 2,
+        "Script Content": "When the echo of the last shot faded, Julio Foolio lay dead, his promising career cut tragically short.",
+        "Shot Description": "Close-up of Julio Foolio on the ground, surrounded by chaos, capturing the tragic aftermath.",
+        "Characters": "Julio Foolio",
+        "Camera Work": "Slow zoom out to reveal the surrounding chaos, highlighting the gravity of the moment.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 1,
+        "Script Content": "As news of Foolio's death spread, the hip-hop community reeled.",
+        "Shot Description": "Medium shot of fans and community members gathering, expressing their grief and shock, with candles and flowers.",
+        "Characters": "",
+        "Camera Work": "Handheld camera to create an intimate feel, capturing genuine reactions.",
+        "Shot Type": "Medium Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 5,
+        "Shot Number": 2,
+        "Script Content": "His girlfriend, Blanco Mani, shared a poignant photo from earlier that night.",
+        "Shot Description": "Close-up of Blanco Mani holding her phone, tears in her eyes as she looks at a photo of Julio.",
+        "Characters": "Blanco Mani",
+        "Camera Work": "Dolly in on her face to capture emotion, with a shallow depth of field on the phone.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 1,
+        "Script Content": "But even as candles were lit and tears shed, the cycle of violence showed no signs of abating.",
+        "Shot Description": "Wide shot of a town hall meeting, with community members in discussion, showcasing a sense of urgency.",
+        "Characters": "",
+        "Camera Work": "Static wide shot with a slight tilt to create a dramatic effect.",
+        "Shot Type": "Wide Shot",
+        "Completed": False
+    },
+    {
+        "Scene Number": 6,
+        "Shot Number": 2,
+        "Script Content": "Julio Foolio's story stands as a stark reminder of the real-world consequences when music and street life intertwine.",
+        "Shot Description": "Close-up of a mural of Julio Foolio being painted by a fan, symbolizing his legacy.",
+        "Characters": "",
+        "Camera Work": "Slow pan across the mural, capturing the artist's dedication and emotional weight.",
+        "Shot Type": "Close-Up",
+        "Completed": False
+    }
+]
+```
