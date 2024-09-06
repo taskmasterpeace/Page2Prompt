@@ -712,12 +712,16 @@ with gr.Blocks() as app:
         updated_shot_list = pd.concat([shot_list, new_row], ignore_index=True)
         return updated_shot_list, update_feedback("New shot added successfully")
 
-    def delete_selected_shot(shot_list, selected_index):
-        if selected_index is not None and 0 <= selected_index < len(shot_list):
-            updated_shot_list = shot_list.drop(selected_index).reset_index(drop=True)
-            return updated_shot_list, update_feedback("Selected shot deleted successfully")
+    def delete_selected_shot(shot_list):
+        if shot_list is not None and not shot_list.empty:
+            selected_indices = shot_list.index[shot_list['Selected'] == True].tolist()
+            if selected_indices:
+                updated_shot_list = shot_list.drop(selected_indices).reset_index(drop=True)
+                return updated_shot_list, update_feedback("Selected shot(s) deleted successfully")
+            else:
+                return shot_list, update_feedback("No shot selected for deletion")
         else:
-            return shot_list, update_feedback("No valid shot selected for deletion")
+            return shot_list, update_feedback("Shot list is empty or not initialized")
 
     def move_shot(shot_list, selected_index, direction):
         if selected_index is not None and 0 <= selected_index < len(shot_list):
@@ -934,7 +938,7 @@ with gr.Blocks() as app:
 
     delete_shot_button.click(
         delete_selected_shot,
-        inputs=[shot_list_display, shot_list_display.select],
+        inputs=[shot_list_display],
         outputs=[shot_list_display, feedback_area]
     )
 
