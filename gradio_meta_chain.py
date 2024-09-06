@@ -479,12 +479,8 @@ class MetaChain:
                 shot['Completed'] = False  # Always set to False for new shots
                 
                 # Remove old keys
-                del shot['scene_number']
-                del shot['shot_number']
-                del shot['script_content']
-                del shot['shot_description']
-                del shot['characters']
-                del shot['completed']
+                for key in ['scene_number', 'shot_number', 'script_content', 'shot_description', 'characters', 'completed']:
+                    shot.pop(key, None)
         
             logger.info(f"Processed shot list: {shot_list}")
             return shot_list

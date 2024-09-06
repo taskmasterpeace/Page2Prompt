@@ -601,11 +601,8 @@ with gr.Blocks() as app:
             shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
 
-            if not isinstance(shot_list, list):
-                raise ValueError(f"Expected shot_list to be a list, but got {type(shot_list)}")
-
-            if not shot_list:
-                raise ValueError("Generated shot list is empty")
+            if not isinstance(shot_list, list) or not shot_list:
+                raise ValueError("Invalid or empty shot list generated")
 
             # Incorporate user-selected shot configuration
             for shot in shot_list:
@@ -624,9 +621,9 @@ with gr.Blocks() as app:
                 if depth_of_field != "AI Suggest":
                     camera_work.append(depth_of_field)
                 if camera_work:
-                    shot['Camera Work'] = ', '.join(filter(None, camera_work))  # Filter out None values
-                else:
-                    shot['Camera Work'] = shot.get('Camera Work', 'Not specified')  # Keep existing value or set to 'Not specified'
+                    shot['Camera Work'] = ', '.join(filter(None, camera_work))
+                elif 'Camera Work' not in shot:
+                    shot['Camera Work'] = 'Not specified'
 
             df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
@@ -635,7 +632,7 @@ with gr.Blocks() as app:
             required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
-                    df[col] = "Not specified"  # Add column with default value if missing
+                    df[col] = "Not specified"
 
             # Reorder columns to match the required order
             df = df[required_columns]
