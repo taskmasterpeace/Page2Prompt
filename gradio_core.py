@@ -37,21 +37,21 @@ class PromptForgeCore:
             
             result = await self.meta_chain.analyze_script(script, director_style)
             
-            # Parse the JSON result
-            shot_list = json.loads(result)
+            # The result is already a Python list, no need to parse JSON
+            shot_list = result
             
             # Convert the shot list to the format expected by the DataFrame
             formatted_shots = []
-            for shot in shot_list['shots']:
+            for shot in shot_list:
                 formatted_shot = {
-                    "Scene": shot['scene_number'],
-                    "Shot": shot['shot_number'],
-                    "Script Content": shot['script_content'],
-                    "Shot Description": shot['shot_description'],
-                    "Characters": ', '.join(shot['characters']),
-                    "Camera Work": shot['camera_work'],
-                    "Shot Type": shot['shot_type'],
-                    "Completed": shot['completed']
+                    "Scene": shot['Scene Number'],
+                    "Shot": shot['Shot Number'],
+                    "Script Content": shot['Script Content'],
+                    "Shot Description": shot['Shot Description'],
+                    "Characters": shot['Characters'],
+                    "Camera Work": shot['Camera Work'],
+                    "Shot Type": shot['Shot Type'],
+                    "Completed": shot['Completed']
                 }
                 formatted_shots.append(formatted_shot)
             

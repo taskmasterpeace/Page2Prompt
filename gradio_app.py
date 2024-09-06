@@ -598,7 +598,8 @@ with gr.Blocks() as app:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
-            shot_list = await core.analyze_script(script, director_style)
+            result = await core.analyze_script(script, director_style)
+            shot_list = result['shots']
             logger.info(f"Generated shot list with {len(shot_list)} shots")
 
             # Incorporate user-selected shot configuration
@@ -621,7 +622,7 @@ with gr.Blocks() as app:
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure the DataFrame has all required columns
-            required_columns = ["Scene Number", "Shot Number", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
+            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = ""  # Add empty column if missing
