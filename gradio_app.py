@@ -628,7 +628,7 @@ with gr.Blocks() as app:
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure all required columns are present
-            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Setting", "Completed"]
+            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Setting", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"
