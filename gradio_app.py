@@ -301,7 +301,7 @@ with gr.Blocks() as app:
             generate_shot_list_button = gr.Button("Generate Shot List")
 
             shot_list_display = gr.DataFrame(
-                headers=["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Setting", "Shot Type", "Completed"],
+                headers=["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Setting", "Completed"],
                 datatype=["number", "number", "str", "str", "str", "str", "str", "bool"],
                 label="Shot List",
                 interactive=True
@@ -617,26 +617,18 @@ with gr.Blocks() as app:
             shot_list = await core.analyze_script(script, director_style)
             logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
 
-            if not isinstance(shot_list, dict) or 'shots' not in shot_list:
+            if not isinstance(shot_list, list):
                 raise ValueError("Invalid shot list structure")
 
-            shots = shot_list['shots']
-            if not shots:
+            if not shot_list:
                 raise ValueError("Empty shot list generated")
 
-            # Incorporate user-selected shot configuration
-            for shot in shots:
-                if shot_type != "AI Suggest":
-                    shot['Shot Type'] = shot_type
-                if 'Setting' not in shot:
-                    shot['Setting'] = 'Not specified'
-
             # Create DataFrame
-            df = pd.DataFrame(shots)
+            df = pd.DataFrame(shot_list)
             logger.debug(f"DataFrame columns: {df.columns}")
 
             # Ensure all required columns are present
-            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Setting", "Shot Type", "Completed"]
+            required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Setting", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"
