@@ -418,16 +418,16 @@ class MetaChain:
                 1. Scene Number: Numerical identifier for the scene.
                 2. Shot Number: Numerical identifier for the shot within the scene.
                 3. Script Content: The exact portion of the script this shot is based on.
-                4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions, setting, and any important details.
+                4. Shot Description: Concise description of the visual elements, considering the director's style. Include actions and any important details.
                 5. Characters: Main characters present in the shot (as a comma-separated list).
                 6. Camera Work: Specify the camera movement and any special techniques typical of the director.
-                7. Shot Type: Specify if it's an establishing shot, insert, close-up, etc.
+                7. Setting: Describe the location and time of day for the shot.
                 8. Completed: Always set to "False" for new shots.
 
                 Ensure that the shot list reflects {director_style}'s signature elements such as composition, lighting, pacing, color palette, recurring motifs, and typical shot choices.
 
                 Format the output as a valid Python list of dictionaries, where each dictionary represents a shot with the following keys:
-                "scene_number", "shot_number", "script_content", "shot_description", "characters", "camera_work", "shot_type", "completed"
+                "scene_number", "shot_number", "script_content", "shot_description", "characters", "camera_work", "setting", "completed"
 
                 Script:
                 {script}
@@ -435,27 +435,27 @@ class MetaChain:
                 Shot List:
                 """
             )
-        
+    
             chain = RunnableSequence(template | self.llm)
             result = await chain.ainvoke({"script": script, "director_style": director_style})
-        
+    
             # Save raw output for debugging
             save_debug_output(result.content, f"raw_llm_output_{int(time.time())}.txt")
-        
+    
             # Log the raw content and its type
             logger.debug(f"Result type: {type(result.content)}, content: {result.content}")
-        
+    
             # Check if content is empty
             if not result.content.strip():
                 raise ValueError("Received empty content from LLM")
-        
+    
             # Remove any potential markdown formatting and clean the content
             content = result.content.strip()
             content = re.sub(r'^```[\w\s]*\n', '', content)  # Remove opening code block
             content = re.sub(r'\n```$', '', content)  # Remove closing code block
             content = re.sub(r'^shot_list\s*=\s*', '', content)  # Remove 'shot_list = ' prefix
             content = re.sub(r'#.*$', '', content, flags=re.MULTILINE)  # Remove comments
-            
+        
             # Safely evaluate the cleaned content as a Python expression
             try:
                 shot_list = ast.literal_eval(content)
@@ -466,7 +466,7 @@ class MetaChain:
                     shot_list = ast.literal_eval(list_content.group(0))
                 else:
                     raise ValueError("Could not extract shot list from LLM output")
-        
+    
             # Validate and convert types
             for shot in shot_list:
                 shot['Scene'] = int(shot['scene_number'])
@@ -475,13 +475,13 @@ class MetaChain:
                 shot['Shot Description'] = shot['shot_description']
                 shot['Characters'] = shot['characters']
                 shot['Camera Work'] = shot.get('camera_work', 'Not specified')
-                shot['Shot Type'] = shot.get('shot_type', 'Not specified')
+                shot['Setting'] = shot.get('setting', 'Not specified')
                 shot['Completed'] = False  # Always set to False for new shots
-                
+            
                 # Remove old keys
                 for key in ['scene_number', 'shot_number', 'script_content', 'shot_description', 'characters', 'completed']:
                     shot.pop(key, None)
-        
+    
             logger.info(f"Processed shot list: {shot_list}")
             return shot_list
 
