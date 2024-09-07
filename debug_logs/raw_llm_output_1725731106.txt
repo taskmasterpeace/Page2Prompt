@@ -1,0 +1,144 @@
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "The events of that night remain etched in battle rap lore.",
+        "shot_description": "A sweeping aerial shot of the St. Louis skyline at dusk, gradually zooming in on the venue with the sounds of distant rap battling echoing.",
+        "characters": "",
+        "camera_work": "Droning aerial shot, slow zoom-in.",
+        "setting": "St. Louis, 2011/2012, evening.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "The air crackled with post-battle energy.",
+        "shot_description": "Close-up of O-Red's face, sweat glistening, with the crowd blurred in the background, capturing his exhilaration.",
+        "characters": "O-Red",
+        "camera_work": "Static close-up, shallow depth of field.",
+        "setting": "Inside the venue, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "The event, organized by local hero Aye Verb...",
+        "shot_description": "Wide shot of Aye Verb interacting with the crowd, showcasing the energy and excitement of the event.",
+        "characters": "Aye Verb",
+        "camera_work": "Handheld camera, slight shake to create an immersive feel.",
+        "setting": "Inside the venue, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "shot_description": "Low-angle shot of the club entrance, lights flashing, bodies moving, capturing the vibrant nightlife.",
+        "characters": "",
+        "camera_work": "Low-angle static shot, quick cuts to the beat of the music.",
+        "setting": "The club, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 2,
+        "script_content": "His eyes landed on a curvaceous chocolate-skinned beauty...",
+        "shot_description": "Close-up of O-Red's gaze, following the woman through the crowd.",
+        "characters": "O-Red",
+        "camera_work": "Focus pull from O-Red to the woman, emphasizing his attraction.",
+        "setting": "The club, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "Calico, smooth as ever, was eyeing the girl's friend...",
+        "shot_description": "Over-the-shoulder shot of Calico watching the girl, with a sly smile on his face.",
+        "characters": "Calico",
+        "camera_work": "Over-the-shoulder shot, then a slow pan to the girl.",
+        "setting": "The club, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door...",
+        "shot_description": "Wide shot of the car as Calico opens the door, showing O-Red's shocked expression in the foreground.",
+        "characters": "O-Red, Calico",
+        "camera_work": "Static shot with a slight zoom to capture O-Red's reaction.",
+        "setting": "Outside the club, late night.",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "The townhouse on Kings Highway looked unassuming from the outside...",
+        "shot_description": "Establishing shot of the townhouse, dimly lit, creating a sense of foreboding.",
+        "characters": "",
+        "camera_work": "Wide shot, slow dolly in towards the entrance.",
+        "setting": "Kings Highway townhouse, late night.",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "Hitman Holla, riding high on his local celebrity status...",
+        "shot_description": "Medium shot of Hitman Holla boasting to the group with an air of confidence.",
+        "characters": "Hitman Holla",
+        "camera_work": "Static medium shot, slight shake during his boast.",
+        "setting": "Inside the townhouse, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 8,
+        "shot_number": 1,
+        "script_content": "The room fell silent.",
+        "shot_description": "Close-up of the girl’s face, showing her disbelief, followed by a wide shot capturing the tension in the room.",
+        "characters": "Hitman Holla, the girl",
+        "camera_work": "Quick cut from close-up to wide shot to heighten the intensity.",
+        "setting": "Inside the townhouse, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 9,
+        "shot_number": 1,
+        "script_content": "Calico whispered something in his girl's ear.",
+        "shot_description": "Close shot of Calico leaning in to whisper, with a mischievous grin.",
+        "characters": "Calico, the girl",
+        "camera_work": "Close-up with slow motion to emphasize the moment.",
+        "setting": "Inside the townhouse, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 10,
+        "shot_number": 1,
+        "script_content": "I ain't got no condoms, but I'm trying to get this shit popping.",
+        "shot_description": "Medium shot of Calico in the bedroom doorway, smirking, with the group behind him looking shocked.",
+        "characters": "Calico, O-Red, group of friends",
+        "camera_work": "Quick pan from Calico to the group, then back to Calico for reaction shot.",
+        "setting": "Bedroom in the townhouse, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 11,
+        "shot_number": 1,
+        "script_content": "O-Red, feeling a potent mix of vindication and regret...",
+        "shot_description": "Close-up of O-Red’s face outside, reflecting his inner turmoil as he watches the girl leave.",
+        "characters": "O-Red",
+        "camera_work": "Static close-up, focusing on his emotional expression.",
+        "setting": "Outside the townhouse, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 12,
+        "shot_number": 1,
+        "script_content": "Calico! You've done enough.",
+        "shot_description": "Wide shot of O-Red confronting Calico, with the chaos of the night behind them.",
+        "characters": "O-Red, Calico",
+        "camera_work": "Dolly back to reveal the aftermath of the night's events.",
+        "setting": "Outside the townhouse, early morning.",
+        "completed": False
+    }
+]
+```

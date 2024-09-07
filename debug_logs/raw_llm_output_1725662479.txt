@@ -1,0 +1,154 @@
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.",
+        "shot_description": "A wide shot of the St. Louis skyline at dusk, the sun setting behind the buildings, casting a warm glow. The camera slowly pans down to reveal the venue bustling with excited crowds.",
+        "characters": "",
+        "camera_work": "Slow pan down from skyline to venue, steady cam for smoothness.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 2,
+        "script_content": "O-Red had just faced off against Jay Huggins, a match that earned him a mere forty dollars but immeasurable street cred.",
+        "shot_description": "Close-up on O-Red's face, a mix of exhaustion and exhilaration after the battle, sweat glistening on his skin.",
+        "characters": "O-Red",
+        "camera_work": "Static close-up, soft focus on the background to emphasize O-Red's expression.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 3,
+        "script_content": "The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent.",
+        "shot_description": "Wide shot of the venue interior filled with the crowd, showcasing the various battle rappers socializing, highlighting the vibrant atmosphere.",
+        "characters": "Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T",
+        "camera_work": "Steadicam moving through the crowd, capturing snippets of conversations and laughter.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "shot_description": "Establishing shot of the club exterior, neon lights flickering as patrons enter. The beat of music can be felt through the visual.",
+        "characters": "",
+        "camera_work": "Static shot with a slight zoom towards the entrance.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "O-Red, still riding the high of his battle, scanned the crowd.",
+        "shot_description": "Over-the-shoulder shot of O-Red looking out over the crowded dance floor, his eyes scanning for the girl.",
+        "characters": "O-Red",
+        "camera_work": "Slow dolly-in on O-Red's shoulder as he looks out, creating a sense of longing.",
+        "shot_type": "Over-the-shoulder",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 3,
+        "script_content": "Conceited, the compact firecracker from New York, had also spotted the girl.",
+        "shot_description": "Close-up of Conceited's face, his eyes narrowed and focused on the girl, a sly grin forming as he assesses the competition.",
+        "characters": "Conceited",
+        "camera_work": "Static close-up with a slight push-in to intensify the moment.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl.",
+        "shot_description": "Medium shot of Calico opening the car door with a confident smile, while O-Red stands a few steps away, shocked.",
+        "characters": "O-Red, Calico",
+        "camera_work": "Tracking shot that follows O-Red's gaze to Calico, emphasizing the betrayal.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.",
+        "shot_description": "Wide shot of the townhouse exterior, the calm before the storm as guests begin to filter inside.",
+        "characters": "",
+        "camera_work": "Static wide shot with a slow zoom in on the door as people enter.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 2,
+        "script_content": "O-Red, trying to salvage his pride, positioned himself on the couch next to the girl he'd been pursuing.",
+        "shot_description": "Medium shot of O-Red sitting on the couch, looking determined but slightly vulnerable, the girl beside him appearing disinterested.",
+        "characters": "O-Red, Girl",
+        "camera_work": "Slow dolly-in to O-Red to capture his emotional state.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "Hitman Holla, riding high on his local celebrity status, decided to make his presence known.",
+        "shot_description": "Close-up of Hitman Holla's face, brimming with confidence as he addresses the group, the party atmosphere surrounding him.",
+        "characters": "Hitman Holla",
+        "camera_work": "Static close-up, with a slight rack focus to the girls in the background.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 2,
+        "script_content": "The girl, realizing she'd struck a nerve, tried to backpedal, but the damage was done.",
+        "shot_description": "Medium shot of the girl looking sheepish as Hitman confronts her, tension palpable in the air.",
+        "characters": "Hitman Holla, Girl",
+        "camera_work": "Handheld for a more dynamic feel, capturing the tension in real-time.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "Calico whispered something in his girl's ear. Without so much as a backward glance, they headed upstairs.",
+        "shot_description": "Wide shot of the living room, capturing Calico leaning in towards the girl, with O-Red in the background looking frustrated.",
+        "characters": "Calico, Girl, O-Red",
+        "camera_work": "Slow zoom out to capture the distance between O-Red and the pair.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 2,
+        "script_content": "Calico answered, slightly out of breath and grinning like the cat that got the cream.",
+        "shot_description": "Close-up on Calico's face as he opens the door, his smile exuding confidence and mischief.",
+        "characters": "Calico",
+        "camera_work": "Static close-up with a subtle shake to convey excitement.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "O-Red, feeling a potent mix of vindication and regret, followed the girl outside to smooth things over.",
+        "shot_description": "Medium shot from behind O-Red as he walks outside, hands in his pockets, the night air thick with tension.",
+        "characters": "O-Red, Girl",
+        "camera_work": "Tracking shot following O-Red, highlighting his contemplative demeanor.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 2,
+        "script_content": "As he reached for the door, he turned to Calico and uttered the words that would become battle rap legend.",
+        "shot_description": "Close-up on O-Red's face as he delivers the line, a mix of frustration and determination.",
+        "characters": "O-Red, Calico",
+        "camera_work": "Static close-up with slow motion on the delivery of the iconic line.",
+        "shot_type": "Close-up",
+        "completed": False
+    }
+]
+```

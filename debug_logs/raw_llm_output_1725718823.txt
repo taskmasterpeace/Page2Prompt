@@ -1,0 +1,108 @@
+Here's a comprehensive shot list based on the provided script, considering the director's unique style and the elements of the Page2Prompt application.
+
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "i came up there i mean that [ __ ] battled in the streets i gave him hell he stopped...",
+        "shot_description": "Close-up of Kshine's face, intense and passionate as he recounts his past battles. The camera slowly pushes in to capture the emotion in his eyes.",
+        "characters": "Kshine",
+        "camera_work": "Slow push-in, with a slight handheld shake to convey raw energy.",
+        "setting": "Dimly lit room with graffiti on the walls, late afternoon.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 2,
+        "script_content": "see like even when we was in fight club...",
+        "shot_description": "Wide shot of Kshine animatedly gesturing, with the backdrop of a nostalgic fight club atmosphere, other characters partially visible in the background.",
+        "characters": "Kshine, other battle rappers",
+        "camera_work": "Static wide shot with a slow zoom out to reveal the environment.",
+        "setting": "A dimly lit underground fight club, late evening.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 3,
+        "script_content": "right now but that that that that battle was was classic...",
+        "shot_description": "Close-up of Kshine's hands as he emphasizes his points, revealing the passion and history in his gestures.",
+        "characters": "Kshine",
+        "camera_work": "Static close-up with a shallow depth of field to keep focus on hands.",
+        "setting": "Same dimly lit room, close-up on a table with props from battles.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 4,
+        "script_content": "i remember being in a going in the bronx seeing dan...",
+        "shot_description": "Cut to a flashback sequence with a grainy filter, showing a young Kshine at a crowded Bronx location, looking up at a battle.",
+        "characters": "Kshine, crowd",
+        "camera_work": "Handheld camera to create a sense of immediacy, quick cuts to different faces in the crowd.",
+        "setting": "Bronx, daytime crowd scene, nostalgic tone.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 5,
+        "script_content": "i used to go down the kingdom because they everybody that's trying to say no one was the best in the world...",
+        "shot_description": "Wide shot of a basketball court, where Kshine recalls the Kingdom event, capturing the lively atmosphere with people in cyphers.",
+        "characters": "Kshine, other rappers, crowd",
+        "camera_work": "Wide shot with a slow pan across the court, capturing the energy.",
+        "setting": "Outdoor basketball court in Harlem, vibrant and lively, late afternoon.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 6,
+        "script_content": "i get to the fight club i battle um somebody else...",
+        "shot_description": "Close-up of Kshine's face, filled with determination and excitement, as he recalls his battle.",
+        "characters": "Kshine",
+        "camera_work": "Dramatic close-up, with a slow dolly in to create tension.",
+        "setting": "Back to the dimly lit room, intimate setting.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 7,
+        "script_content": "yo listen i got the you know i got every lion's den dvd right everyone crazy...",
+        "shot_description": "Medium shot of Kshine holding a DVD, showcasing pride and nostalgia as he talks about his past.",
+        "characters": "Kshine",
+        "camera_work": "Static medium shot with a slight tilt to emphasize the DVD.",
+        "setting": "Dimly lit room, filled with memorabilia of battles.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 8,
+        "script_content": "before i can even come outside like so like i'm in the town but i can't leave...",
+        "shot_description": "Split-screen effect showing Kshine in a halfway house on one side and a bustling street on the other, emphasizing his confinement versus the vibrant life outside.",
+        "characters": "Kshine",
+        "camera_work": "Static split-screen with a slow transition between the two settings.",
+        "setting": "Halfway house and bustling city street, juxtaposed.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 9,
+        "script_content": "but that's up i mean the way i look at it is that's the only way you would pretty much lose a joint...",
+        "shot_description": "Close-up of Kshine's face, contemplative and serious, as he reflects on his losses.",
+        "characters": "Kshine",
+        "camera_work": "Close-up with a slow zoom-out to hint at a deeper narrative.",
+        "setting": "Intimate, dimly lit room, evening.",
+        "completed": "False"
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 10,
+        "script_content": "yo yo do you know what i hate i i hate when like you know we all got like haters...",
+        "shot_description": "Wide shot of Kshine gesturing passionately while talking about haters, with a lively backdrop of friends nodding in agreement.",
+        "characters": "Kshine, friends",
+        "camera_work": "Wide shot with a slight tracking motion to follow Kshine's gestures.",
+        "setting": "Same dimly lit room, now filled with friends, late night.",
+        "completed": "False"
+    }
+]
+```
+
+This shot list captures the essence of the script while considering visual storytelling techniques that would align with a director's unique style and thematic elements.

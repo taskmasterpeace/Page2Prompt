@@ -1,0 +1,104 @@
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "In the pulsating heart of Tampa, Florida, as the clock struck midnight on June 23, 2024, Julio Foolio should have been celebrating...",
+        "shot_description": "Wide shot of Tampa's skyline at midnight, with neon lights reflecting on wet pavement, creating a vibrant, electric atmosphere. The clock strikes midnight in the foreground.",
+        "characters": "",
+        "camera_work": "Static shot with a slow zoom in on the clock tower, capturing the essence of the city at night.",
+        "setting": "Tampa, Florida, midnight.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "The night began with promise and excitement...",
+        "shot_description": "Medium shot of Julio Foolio and his entourage at the Airbnb, laughter and music filling the air. Colorful lights and decorations set a celebratory mood.",
+        "characters": "Julio Foolio, entourage",
+        "camera_work": "Handheld camera for a dynamic feel, gently swaying to mimic the energy of the party.",
+        "setting": "Airbnb in Tampa, evening.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "But as the night wore on, the celebration grew rowdier...",
+        "shot_description": "Close-up shots of drinks being poured, friends dancing, and a birthday cake being brought out, highlighting the joy and excitement.",
+        "characters": "Julio Foolio, entourage",
+        "camera_work": "Rapid cuts between close-ups to enhance the chaotic energy of the party.",
+        "setting": "Airbnb in Tampa, late evening.",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "Citing overcrowding concerns, the police shut down the party...",
+        "shot_description": "Wide shot of police officers arriving at the Airbnb, their flashing lights cutting through the darkness, creating a stark contrast to the party's vibrancy.",
+        "characters": "Police officers, Julio Foolio, entourage",
+        "camera_work": "Static shot, wide lens to capture the full scene, emphasizing the sudden shift in mood.",
+        "setting": "Airbnb in Tampa, late night.",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "Undeterred, Foolio took to Instagram once more...",
+        "shot_description": "Over-the-shoulder shot of Julio Foolio typing on his phone, the screen reflecting his excited post about relocating the party.",
+        "characters": "Julio Foolio",
+        "camera_work": "Close-up of the phone screen with a focus pull to Julio's face, capturing his enthusiasm.",
+        "setting": "Inside the Airbnb, late night.",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "As the first light of dawn began to break over Tampa at 4:40 a.m...",
+        "shot_description": "Establishing shot of the Holiday Inn Tampa North, with the first rays of sunlight illuminating the parking lot, creating an eerie calm.",
+        "characters": "",
+        "camera_work": "Slow dolly in on the hotel, enhancing the tension as dawn approaches.",
+        "setting": "Holiday Inn Tampa North, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 2,
+        "script_content": "The crack of gunfire shattered the morning calm...",
+        "shot_description": "Quick cuts between close-ups of shocked faces, gunfire flashes, and chaotic movement in the parking lot, creating a sense of panic.",
+        "characters": "Julio Foolio, entourage",
+        "camera_work": "Handheld, erratic movements to convey chaos, interspersed with slow-motion moments of key events.",
+        "setting": "Holiday Inn parking lot, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "To understand Foolio's tragic end, one must delve into the violent world he navigated daily...",
+        "shot_description": "Montage of past performance clips and social media posts, intercut with dark alleyways and gang activity, illustrating the tension in his life.",
+        "characters": "Julio Foolio",
+        "camera_work": "Fast-paced editing with a mix of archival footage and stylized shots to create a sense of urgency.",
+        "setting": "Various locations in Jacksonville, past and present.",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "As news of Foolio's death spread, the hip-hop community reeled...",
+        "shot_description": "Close-up of Blanco Mani looking at her phone, tears welling in her eyes, reflecting heartbreak and disbelief.",
+        "characters": "Blanco Mani",
+        "camera_work": "Slow push-in to capture the emotion, with a soft focus on the background to emphasize her solitude.",
+        "setting": "Blanco Mani's home, day after the incident.",
+        "completed": False
+    },
+    {
+        "scene_number": 8,
+        "shot_number": 1,
+        "script_content": "In the end, Julio Foolio's music fell silent...",
+        "shot_description": "Final shot of a candlelight vigil, flickering flames against the night sky, with fans holding up photos of Foolio.",
+        "characters": "",
+        "camera_work": "Wide shot gradually tightening to close-ups of the candles and faces, creating an intimate atmosphere of mourning.",
+        "setting": "Vigil site in Tampa, night.",
+        "completed": False
+    }
+]
+```

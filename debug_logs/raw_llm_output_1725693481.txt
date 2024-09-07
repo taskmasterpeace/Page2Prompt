@@ -1,0 +1,148 @@
+Here’s a comprehensive shot list for the script provided, formatted as a valid Python list of dictionaries and reflecting None's directorial style:
+
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "Once upon a time, there were three little pigs who set out to build their own houses.",
+        "shot_description": "Wide shot of a picturesque countryside with rolling hills and a bright blue sky, three little pigs in the foreground, excitedly discussing their plans.",
+        "characters": "First Little Pig, Second Little Pig, Third Little Pig",
+        "camera_work": "Slow pan from left to right to reveal each pig's personality through their gestures.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "The First Little Pig built his house out of straw.",
+        "shot_description": "Close-up of the First Little Pig cheerfully stacking straw, with sunlight creating a warm glow around him.",
+        "characters": "First Little Pig",
+        "camera_work": "Static shot with a shallow depth of field to focus on the pig's expression.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "It was the quickest and easiest method, allowing him more time to play.",
+        "shot_description": "Medium shot of the First Little Pig finishing his straw house and running off to play, with a sense of carefree joy.",
+        "characters": "First Little Pig",
+        "camera_work": "Tracking shot following the pig as he runs off.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "The Second Little Pig decided to build his house with sticks.",
+        "shot_description": "Medium shot of the Second Little Pig gathering sticks, looking determined.",
+        "characters": "Second Little Pig",
+        "camera_work": "Tilt down from the sky to focus on the pig's efforts.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "The Third Little Pig took the time to build his house out of bricks.",
+        "shot_description": "Close-up of the Third Little Pig carefully laying bricks, sweat on his brow, showcasing his determination.",
+        "characters": "Third Little Pig",
+        "camera_work": "Zoom in to emphasize the pig's concentration and hard work.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "One day, a big bad wolf came along and saw the first little pig's straw house.",
+        "shot_description": "Wide shot of the wolf lurking in the shadows, eyeing the straw house with a menacing expression.",
+        "characters": "Big Bad Wolf",
+        "camera_work": "Dolly in slowly to create tension as the wolf approaches.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "The wolf huffed and puffed and blew the house down.",
+        "shot_description": "Dynamic shot of the wolf huffing and puffing, with the straw house in the foreground beginning to collapse.",
+        "characters": "Big Bad Wolf, First Little Pig",
+        "camera_work": "Quick cuts between the wolf and the house collapsing.",
+        "shot_type": "Action shot",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "The first little pig ran to his brother's stick house for safety.",
+        "shot_description": "Medium shot of the First Little Pig running frantically towards the stick house, looking back at the wolf.",
+        "characters": "First Little Pig, Second Little Pig",
+        "camera_work": "Handheld camera for a sense of urgency as the pig runs.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 8,
+        "shot_number": 1,
+        "script_content": "The wolf then went to the second little pig's stick house.",
+        "shot_description": "Wide shot of the wolf approaching the stick house, with the two pigs peering out from the windows.",
+        "characters": "Big Bad Wolf, First Little Pig, Second Little Pig",
+        "camera_work": "Slow zoom on the wolf to build suspense.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 9,
+        "shot_number": 1,
+        "script_content": "Finally, the wolf approached the brick house.",
+        "shot_description": "Wide shot of the sturdy brick house, contrasting with the previous houses, as the wolf stands in front looking frustrated.",
+        "characters": "Big Bad Wolf, Third Little Pig",
+        "camera_work": "Static shot to emphasize the strength of the brick house.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 10,
+        "shot_number": 1,
+        "script_content": "Frustrated, the wolf tried to enter the house through the chimney.",
+        "shot_description": "Close-up of the wolf, looking exasperated as he contemplates the chimney, with smoke rising ominously.",
+        "characters": "Big Bad Wolf",
+        "camera_work": "Over-the-shoulder shot from the wolf's perspective looking at the chimney.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 11,
+        "shot_number": 1,
+        "script_content": "The clever third little pig had a plan.",
+        "shot_description": "Close-up of the Third Little Pig, with a sly smile, as he prepares the pot of boiling water.",
+        "characters": "Third Little Pig",
+        "camera_work": "Tight close-up emphasizing the pig's cleverness and determination.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 12,
+        "shot_number": 1,
+        "script_content": "When the wolf came down the chimney, he fell into the pot and was defeated.",
+        "shot_description": "High-angle shot of the wolf falling into the pot, with steam rising dramatically.",
+        "characters": "Big Bad Wolf, Third Little Pig",
+        "camera_work": "Crane shot descending to capture the moment of the wolf's defeat.",
+        "shot_type": "High-angle shot",
+        "completed": False
+    },
+    {
+        "scene_number": 13,
+        "shot_number": 1,
+        "script_content": "The three little pigs lived happily ever after in the safety of the sturdy brick house.",
+        "shot_description": "Wide shot of the three pigs celebrating outside the brick house, with a rainbow in the background.",
+        "characters": "First Little Pig, Second Little Pig, Third Little Pig",
+        "camera_work": "Slow pull-back to reveal the joyful scene.",
+        "shot_type": "Wide shot",
+        "completed": False
+    }
+]
+```
+
+This shot list captures the essence of the story while incorporating the unique elements associated with None's directorial style, such as composition, lighting, and pacing.

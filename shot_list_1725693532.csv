@@ -1,0 +1,15 @@
+Scene,Shot,Script Content,Shot Description,Characters,Camera Work,Shot Type,Completed
+1,1,"Once upon a time, there were three little pigs who set out to build their own houses.","Wide shot of a picturesque countryside with rolling hills and a bright blue sky, three little pigs in the foreground, excitedly discussing their plans.","First Little Pig, Second Little Pig, Third Little Pig",,,False
+2,1,The First Little Pig built his house out of straw.,"Close-up of the First Little Pig cheerfully stacking straw, with sunlight creating a warm glow around him.",First Little Pig,,,False
+2,2,"It was the quickest and easiest method, allowing him more time to play.","Medium shot of the First Little Pig finishing his straw house and running off to play, with a sense of carefree joy.",First Little Pig,,,False
+3,1,The Second Little Pig decided to build his house with sticks.,"Medium shot of the Second Little Pig gathering sticks, looking determined.",Second Little Pig,,,False
+4,1,The Third Little Pig took the time to build his house out of bricks.,"Close-up of the Third Little Pig carefully laying bricks, sweat on his brow, showcasing his determination.",Third Little Pig,,,False
+5,1,"One day, a big bad wolf came along and saw the first little pig's straw house.","Wide shot of the wolf lurking in the shadows, eyeing the straw house with a menacing expression.",Big Bad Wolf,,,False
+6,1,The wolf huffed and puffed and blew the house down.,"Dynamic shot of the wolf huffing and puffing, with the straw house in the foreground beginning to collapse.","Big Bad Wolf, First Little Pig",,,False
+7,1,The first little pig ran to his brother's stick house for safety.,"Medium shot of the First Little Pig running frantically towards the stick house, looking back at the wolf.","First Little Pig, Second Little Pig",,,False
+8,1,The wolf then went to the second little pig's stick house.,"Wide shot of the wolf approaching the stick house, with the two pigs peering out from the windows.","Big Bad Wolf, First Little Pig, Second Little Pig",,,False
+9,1,"Finally, the wolf approached the brick house.","Wide shot of the sturdy brick house, contrasting with the previous houses, as the wolf stands in front looking frustrated.","Big Bad Wolf, Third Little Pig",,,False
+10,1,"Frustrated, the wolf tried to enter the house through the chimney.","Close-up of the wolf, looking exasperated as he contemplates the chimney, with smoke rising ominously.",Big Bad Wolf,,,False
+11,1,The clever third little pig had a plan.,"Close-up of the Third Little Pig, with a sly smile, as he prepares the pot of boiling water.",Third Little Pig,,,False
+12,1,"When the wolf came down the chimney, he fell into the pot and was defeated.","High-angle shot of the wolf falling into the pot, with steam rising dramatically.","Big Bad Wolf, Third Little Pig",,,False
+13,1,The three little pigs lived happily ever after in the safety of the sturdy brick house.,"Wide shot of the three pigs celebrating outside the brick house, with a rainbow in the background.","First Little Pig, Second Little Pig, Third Little Pig",,,False

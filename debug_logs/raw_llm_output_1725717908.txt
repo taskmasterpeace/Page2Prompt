@@ -1,0 +1,108 @@
+Here is a shot list reflecting None's directorial style based on the provided script transcript. The shots are crafted to capture the essence of the dialogue, character dynamics, and thematic elements.
+
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "i came up there i mean that [ __ ] battled in the streets i gave him hell he stopped he couldn't he can't keep going",
+        "shot_description": "Close-up of Kshine's face as he passionately recounts his battle experiences, with a gritty urban background blurred out behind him.",
+        "characters": "Kshine",
+        "camera_work": "Static shot with a slight push-in to emphasize intensity.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 2,
+        "script_content": "see like even when we was in fight club i mean we're using lions and they ain't even know",
+        "shot_description": "Medium shot of Kshine gesturing animatedly, with cutaways to flashbacks of battles in dimly lit underground venues.",
+        "characters": "Kshine",
+        "camera_work": "Handheld camera to add a sense of immediacy and rawness.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 3,
+        "script_content": "remember being in a going in the bronx seeing dan and all they got [ __ ] trying to peek over the crowd",
+        "shot_description": "Wide shot capturing a crowded Bronx street with Kshine narrating from the foreground; the hustle of the crowd creates a vibrant backdrop.",
+        "characters": "Kshine",
+        "camera_work": "Dolly out from Kshine to reveal the crowd, enhancing the atmosphere.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 4,
+        "script_content": "that's what made me do it watch i was being there on the scene watching this [ __ ]",
+        "shot_description": "Close-up of Kshine's eyes reflecting determination, with background blurred to maintain focus on his expression.",
+        "characters": "Kshine",
+        "camera_work": "Static close-up with a slight zoom to emphasize his resolve.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "i get to the fight club i battle um somebody else but i won this night",
+        "shot_description": "Medium shot of Kshine in a dimly lit fight club, surrounded by cheering fans, capturing the intensity of the moment.",
+        "characters": "Kshine, Crowd",
+        "camera_work": "Handheld camera capturing the energy of the crowd, with quick pans to follow the action.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "i started getting bread with the [ __ ] that's and that's how that [ __ ] went",
+        "shot_description": "Close-up of Kshine's face with a smirk, transitioning to a side shot of him counting cash, showcasing his success.",
+        "characters": "Kshine",
+        "camera_work": "Static close-up followed by a smooth pan to the side shot.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "i had to do my bid bro",
+        "shot_description": "Over-the-shoulder shot of Kshine looking out a window, symbolizing his reflection on past challenges.",
+        "characters": "Kshine",
+        "camera_work": "Slow zoom out to reveal the environment, creating a sense of isolation.",
+        "shot_type": "Over-the-shoulder shot",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 2,
+        "script_content": "my name on the cover of a dvd bro",
+        "shot_description": "Close-up of Kshine holding a DVD, with a nostalgic expression as he reminisces about his early success.",
+        "characters": "Kshine",
+        "camera_work": "Static close-up with a slight tilt to convey emotion.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "i went to oklahoma too but i was in oklahoma",
+        "shot_description": "Medium shot of Kshine in a brightly lit setting, reflecting on his travels and experiences.",
+        "characters": "Kshine",
+        "camera_work": "Steadicam shot moving around him to create a dynamic feel while he talks.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 2,
+        "script_content": "it's fine but listen i'm out of here man",
+        "shot_description": "Wide shot of Kshine walking away, fading into the background as he leaves the conversation, symbolizing closure.",
+        "characters": "Kshine",
+        "camera_work": "Tracking shot that follows him as he exits, blending with the environment.",
+        "shot_type": "Wide shot",
+        "completed": False
+    }
+]
+```
+
+This shot list captures the key moments in the script while incorporating None's directorial style, emphasizing composition, camera work, and the emotional undertones of the narrative.

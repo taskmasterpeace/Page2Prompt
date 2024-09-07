@@ -1,0 +1,164 @@
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "St. Louis, 2011 or 2012. The exact year has faded into legend, but the events of that night remain etched in battle rap lore.",
+        "shot_description": "An aerial shot of St. Louis at twilight, capturing the city skyline with a faded, nostalgic color palette that evokes a sense of legend and history.",
+        "characters": "",
+        "camera_work": "Slow pan across the skyline, transitioning from dusk to night.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "The event, organized by local hero Aye Verb, had drawn a who's who of battle rap talent.",
+        "shot_description": "A medium shot of the venue entrance, with crowds of people mingling and excitement in the air, emphasizing the significance of the event.",
+        "characters": "Aye Verb, Calico, Hitman Holla, Conceited, Hollow Da Don, Big T",
+        "camera_work": "Tracking shot following a group entering the venue, capturing their expressions full of anticipation.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "The dimly lit club pulsed with heavy bass and anticipation.",
+        "shot_description": "A close-up of the club's interior with pulsating lights and shadows dancing across the faces of the crowd, conveying the energy and atmosphere.",
+        "characters": "O-Red, Conceited, Calico",
+        "camera_work": "Steadicam movement weaving through the crowd, capturing various reactions to the music.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "O-Red, still riding the high of his battle, scanned the crowd.",
+        "shot_description": "A close-up of O-Red's face, reflecting determination and excitement as he surveys the crowd, with the club's lights casting dramatic shadows.",
+        "characters": "O-Red",
+        "camera_work": "Slow zoom into O-Red's eyes, focusing on his expressions and building tension.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "Conceited, the compact firecracker from New York, had also spotted the girl.",
+        "shot_description": "A two-shot of Conceited and O-Red, both eyeing the same woman from across the room, capturing the competitive energy between them.",
+        "characters": "Conceited, O-Red",
+        "camera_work": "Over-the-shoulder shot, shifting focus between the two characters.",
+        "shot_type": "Two-shot",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "O-Red and Calico hatched a plan.",
+        "shot_description": "A medium shot of O-Red and Calico leaning in together, their expressions serious but playful as they strategize.",
+        "characters": "O-Red, Calico",
+        "camera_work": "Static shot, with a slight push-in to emphasize the camaraderie and tension.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "O-Red watched, dumbfounded, as Calico smoothly opened the car door for *his* girl.",
+        "shot_description": "A wide shot of the parking lot, capturing O-Red's shocked expression as Calico approaches the car with the girl.",
+        "characters": "O-Red, Calico, girl",
+        "camera_work": "Slow dolly back to reveal the entire scene, highlighting O-Red's isolation.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 8,
+        "shot_number": 1,
+        "script_content": "The townhouse on Kings Highway looked unassuming from the outside, but inside, it was a powder keg waiting to explode.",
+        "shot_description": "An exterior shot of the townhouse, illuminated by dim streetlights, creating a sense of foreboding.",
+        "characters": "",
+        "camera_work": "Static shot with a slight tilt up to reveal the building's facade.",
+        "shot_type": "Establishing shot",
+        "completed": False
+    },
+    {
+        "scene_number": 9,
+        "shot_number": 1,
+        "script_content": "O-Red, trying to salvage his pride, positioned himself on the couch next to the girl he'd been pursuing.",
+        "shot_description": "A medium shot of O-Red on the couch, visibly tense and trying to engage the girl, while Calico smirks in the background.",
+        "characters": "O-Red, girl, Calico",
+        "camera_work": "Over-the-shoulder shot from behind Calico, highlighting the tension between the three.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 10,
+        "shot_number": 1,
+        "script_content": "Hitman Holla, riding high on his local celebrity status, decided to make his presence known.",
+        "shot_description": "A close-up of Hitman Holla as he boasts, his bravado shining through, with other partygoers reacting in the background.",
+        "characters": "Hitman Holla",
+        "camera_work": "Handheld camera to create a sense of intimacy and immediacy.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 11,
+        "shot_number": 1,
+        "script_content": "The girl, realizing she'd struck a nerve, tried to backpedal, but the damage was done.",
+        "shot_description": "A close-up of the girl’s face, shifting from confusion to discomfort as she realizes the fallout of her words.",
+        "characters": "girl",
+        "camera_work": "Slow zoom in to capture her emotional transition.",
+        "shot_type": "Close-up",
+        "completed": False
+    },
+    {
+        "scene_number": 12,
+        "shot_number": 1,
+        "script_content": "O-Red watched helplessly as Calico whispered something in his girl's ear.",
+        "shot_description": "A medium shot showing O-Red in the foreground, while Calico and the girl are blurred in the background, emphasizing O-Red's despair.",
+        "characters": "O-Red, Calico, girl",
+        "camera_work": "Shallow depth of field, with a slow focus pull from O-Red to the couple.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 13,
+        "shot_number": 1,
+        "script_content": "Calico answered, slightly out of breath and grinning like the cat that got the cream.",
+        "shot_description": "A medium shot of Calico at the door, a smirk on his face, with a chaotic scene behind him.",
+        "characters": "Calico",
+        "camera_work": "Static shot to capture the aftermath behind him with a slow pan.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 14,
+        "shot_number": 1,
+        "script_content": "What happened next is a blur of action and reaction.",
+        "shot_description": "A chaotic wide shot of the group bursting into the room, capturing the shock and surprise of the moment.",
+        "characters": "O-Red, Calico, girl, group",
+        "camera_work": "Handheld, quick cuts to enhance the chaotic nature of the scene.",
+        "shot_type": "Wide shot",
+        "completed": False
+    },
+    {
+        "scene_number": 15,
+        "shot_number": 1,
+        "script_content": "O-Red, feeling a potent mix of vindication and regret, followed the girl outside.",
+        "shot_description": "A medium shot of O-Red exiting the townhouse, his expression conflicted as he steps into the night.",
+        "characters": "O-Red, girl",
+        "camera_work": "Tracking shot following O-Red as he exits, capturing the ambiance of the night.",
+        "shot_type": "Medium shot",
+        "completed": False
+    },
+    {
+        "scene_number": 16,
+        "shot_number": 1,
+        "script_content": "As the night came to a chaotic close, the battlers dispersed, each carrying their own version of events.",
+        "shot_description": "A wide shot of the street outside the townhouse, capturing battlers leaving in different directions, illustrating the aftermath.",
+        "characters": "O-Red, Calico, Conceited, group",
+        "camera_work": "Static shot with a slow fade out to signify the end of the night.",
+        "shot_type": "Wide shot",
+        "completed": False
+    }
+]
+```

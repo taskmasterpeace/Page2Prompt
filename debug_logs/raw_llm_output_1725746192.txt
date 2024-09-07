@@ -1,0 +1,274 @@
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "February 2015, Chicago. The city was in the grip of one of its coldest winters in years, with temperatures plunging well below freezing.",
+        "shot_description": "A wide shot of the snowy Chicago streets, illuminated only by flickering streetlights, with heavy snowflakes falling against a darkened sky.",
+        "characters": "",
+        "camera_work": "Static shot, slow zoom in on the street to enhance the isolation of the setting.",
+        "setting": "Chicago, February 2015, night time.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "K-Shine stood victorious after his battle in Chicago.",
+        "shot_description": "Close-up of K-Shine's face, sweaty and exhilarated, with a slight smile as he basks in his victory, the crowd blurred in the background.",
+        "characters": "K-Shine",
+        "camera_work": "Dolly in to create intimacy and focus on K-Shine's expression.",
+        "setting": "Battle stage in Chicago, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "Big T, the Chicago giant, approached K-Shine. 'Yo, Shine, there’s a kickback tonight. We outside, what’s up?'",
+        "shot_description": "Medium shot of Big T approaching K-Shine, the two framed against the backdrop of the cheering crowd, capturing the camaraderie.",
+        "characters": "K-Shine, Big T",
+        "camera_work": "Handheld camera to emphasize the energy and movement of the scene.",
+        "setting": "Battle stage in Chicago, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "K-Shine, still buzzing from the win, couldn’t say no.",
+        "shot_description": "Close-up on K-Shine's face as he contemplates the invitation, a mix of excitement and caution evident in his expression.",
+        "characters": "K-Shine",
+        "camera_work": "Slow push-in to capture the internal conflict.",
+        "setting": "Outside the venue, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 2,
+        "script_content": "Big T and K-Shine arrived at a massive house, bigger than anything he expected.",
+        "shot_description": "Wide shot of the sprawling house, illuminated by party lights, contrasting the cold, dark winter outside.",
+        "characters": "K-Shine, Big T",
+        "camera_work": "Crane shot from above to establish the grandeur of the setting.",
+        "setting": "Chicago, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 1,
+        "script_content": "As soon as they walked in, K-Shine noticed something else: everyone was armed.",
+        "shot_description": "Over-the-shoulder shot of K-Shine as he surveys the room, revealing multiple party-goers casually holding firearms.",
+        "characters": "K-Shine",
+        "camera_work": "Slow pan across the room to capture the atmosphere, with a slight focus on the weapons.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 4,
+        "shot_number": 2,
+        "script_content": "The energy in the room shifted.",
+        "shot_description": "Medium shot of the crowd, energy palpable, with people laughing and engaging with K-Shine.",
+        "characters": "K-Shine, Big T, Party-goers",
+        "camera_work": "Handheld to create a sense of immediacy and immersion in the lively atmosphere.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 1,
+        "script_content": "But this was a party, and soon the tension melted away.",
+        "shot_description": "Wide shot of the dance battle kicking off, K-Shine at the center, surrounded by cheering party-goers.",
+        "characters": "K-Shine, Party-goers",
+        "camera_work": "360-degree pan to capture the excitement and energy of the dance battle.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 5,
+        "shot_number": 2,
+        "script_content": "K-Shine found himself in the middle of it.",
+        "shot_description": "Close-up of K-Shine's feet dancing, sweat glistening, as the crowd chants his name.",
+        "characters": "K-Shine",
+        "camera_work": "Low-angle shot to emphasize K-Shine's movements and the crowd's energy.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 1,
+        "script_content": "At some point, he realized he was too drunk. Way too drunk.",
+        "shot_description": "Extreme close-up of K-Shine's face, eyes glassy, capturing the moment of realization and concern.",
+        "characters": "K-Shine",
+        "camera_work": "Tight close-up, with a slight shake to represent his inebriation.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 6,
+        "shot_number": 2,
+        "script_content": "K-Shine started patting down his pockets.",
+        "shot_description": "Medium shot of K-Shine patting himself down, confusion and panic visible on his face.",
+        "characters": "K-Shine",
+        "camera_work": "Static shot with a slight zoom to heighten the tension of the moment.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 7,
+        "shot_number": 1,
+        "script_content": "Big T, noticing K-Shine’s growing concern, stepped in.",
+        "shot_description": "Two-shot of Big T and K-Shine, conveying the friendship and concern Big T has for K-Shine.",
+        "characters": "K-Shine, Big T",
+        "camera_work": "Medium shot with a slight dolly in to emphasize the interaction.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 8,
+        "shot_number": 1,
+        "script_content": "But before he could leave, something struck K-Shine.",
+        "shot_description": "Close-up of K-Shine’s face, realization dawning as he remembers he handed the gun back.",
+        "characters": "K-Shine",
+        "camera_work": "Slow zoom in on K-Shine’s expression to capture the humorous realization.",
+        "setting": "Inside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 9,
+        "shot_number": 1,
+        "script_content": "Big T called an Uber.",
+        "shot_description": "Wide shot of K-Shine and Big T standing together, K-Shine's posture relaxed as he prepares to leave.",
+        "characters": "K-Shine, Big T",
+        "camera_work": "Static wide shot to establish the scene before departure.",
+        "setting": "Outside the house, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 10,
+        "shot_number": 1,
+        "script_content": "For Shine, the Uber ride was a complete blur.",
+        "shot_description": "Close-up of K-Shine in the back seat, eyes closed, face illuminated by the glow of the phone screen.",
+        "characters": "K-Shine",
+        "camera_work": "Slow fade as the camera pulls away, transitioning into a dream-like blur.",
+        "setting": "Inside an Uber, night.",
+        "completed": False
+    },
+    {
+        "scene_number": 11,
+        "shot_number": 1,
+        "script_content": "His phone was dying, but he managed to FaceTime Big T one last time.",
+        "shot_description": "Close-up of K-Shine’s phone screen showing Big T’s face, with K-Shine’s anxious expression in the foreground.",
+        "characters": "K-Shine, Big T",
+        "camera_work": "Split-screen effect to emphasize the urgency of the call.",
+        "setting": "Outside, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 12,
+        "shot_number": 1,
+        "script_content": "K-Shine stands on the corner of 159th and Lawrence.",
+        "shot_description": "Wide shot of K-Shine standing alone on a desolate street corner, early morning light casting long shadows.",
+        "characters": "K-Shine",
+        "camera_work": "Static shot to capture the isolation and confusion of the moment.",
+        "setting": "159th and Lawrence, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 13,
+        "shot_number": 1,
+        "script_content": "K-Shine starts knocking on doors.",
+        "shot_description": "Medium shot of K-Shine knocking on a door, his expression a mix of determination and anxiety.",
+        "characters": "K-Shine",
+        "camera_work": "Tracking shot following him as he moves from door to door.",
+        "setting": "Residential area, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 14,
+        "shot_number": 1,
+        "script_content": "The man hesitates for a beat, clearly weighing the risks.",
+        "shot_description": "Close-up of the man's face as he considers letting K-Shine in, tension in the air palpable.",
+        "characters": "K-Shine, Stranger",
+        "camera_work": "Tight framing to emphasize the moment of decision.",
+        "setting": "Inside the stranger's house, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 15,
+        "shot_number": 1,
+        "script_content": "Big T sets up another Uber ride for him.",
+        "shot_description": "Close-up of Big T’s face, concern etched in his features as he talks to K-Shine over the phone.",
+        "characters": "Big T",
+        "camera_work": "Handheld camera to add an emotional weight to his concern.",
+        "setting": "Inside the stranger's house, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 16,
+        "shot_number": 1,
+        "script_content": "As he steps out of the car, K-Shine immediately notices the flashing lights of police cars.",
+        "shot_description": "Wide shot of K-Shine stepping out of the Uber, police lights flashing in the background, creating a sense of foreboding.",
+        "characters": "K-Shine",
+        "camera_work": "Static shot to capture the chaos of the moment.",
+        "setting": "Outside the hotel, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 17,
+        "shot_number": 1,
+        "script_content": "The officer narrows his eyes but seems to buy his story.",
+        "shot_description": "Close-up of the police officer's face, suspicion evident, as he questions K-Shine.",
+        "characters": "K-Shine, Officer",
+        "camera_work": "Tight framing to highlight the tension in the exchange.",
+        "setting": "Outside the hotel, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 18,
+        "shot_number": 1,
+        "script_content": "Eventually, things calm down.",
+        "shot_description": "Medium shot of K-Shine sitting on the curb, head in hands, the weight of the night apparent on his face.",
+        "characters": "K-Shine",
+        "camera_work": "Static shot with a slight push-in for emotional impact.",
+        "setting": "Outside the hotel, early morning.",
+        "completed": False
+    },
+    {
+        "scene_number": 19,
+        "shot_number": 1,
+        "script_content": "K-Shine’s frustration boils over.",
+        "shot_description": "Close-up of K-Shine's face, anger and determination clashing as he plots his escape.",
+        "characters": "K-Shine",
+        "camera_work": "Rapid cuts to emphasize his rising frustration.",
+        "setting": "Inside the hospital, day.",
+        "completed": False
+    },
+    {
+        "scene_number": 20,
+        "shot_number": 1,
+        "script_content": "K-Shine makes it out of the hospital.",
+        "shot_description": "Wide shot of K-Shine bursting through the hospital doors, determination in his stride.",
+        "characters": "K-Shine",
+        "camera_work": "Tracking shot following him as he escapes.",
+        "setting": "Outside the hospital, day.",
+        "completed": False
+    },
+    {
+        "scene_number": 21,
+        "shot_number": 1,
+        "script_content": "He stumbled out, walks up to DNA’s door, and knocks.",
+        "shot_description": "Medium shot of K-Shine leaning against the hotel door, exhaustion and relief on his face.",
+        "characters": "K-Shine, DNA",
+        "camera_work": "Static shot to emphasize the moment of arrival.",
+        "setting": "Outside DNA's hotel room, day.",
+        "completed": False
+    },
+    {
+        "scene_number": 22,
+        "shot_number": 1,
+        "script_content": "DNA opened up, bleary-eyed but concerned.",
+        "shot_description": "Close-up of DNA's shocked expression as he realizes K-Shine's state.",
+        "characters": "K-Shine, DNA",
+        "camera_work": "Tight framing on DNA's face, capturing his surprise and concern.",
+        "setting": "Inside DNA's hotel room, day.",
+        "completed": False
+    },
+]
+```

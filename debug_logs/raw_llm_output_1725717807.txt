@@ -1,0 +1,98 @@
+Sure! Given that the directorial style is labeled as "None," I will create a shot list that reflects a neutral yet effective cinematic approach, focusing on clarity and coherence in storytelling. Here's the comprehensive shot list based on the provided script:
+
+```python
+shot_list = [
+    {
+        "scene_number": 1,
+        "shot_number": 1,
+        "script_content": "The sun sets over the city skyline, casting a golden hue.",
+        "shot_description": "An establishing shot of the city skyline during sunset, the golden light reflecting off the buildings.",
+        "characters": "",
+        "camera_work": "Static shot, slowly zooming in to capture the vibrant colors.",
+        "shot_type": "Establishing Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 2,
+        "script_content": "John stands on the balcony, lost in thought.",
+        "shot_description": "A medium shot of John on the balcony, leaning against the railing, looking out at the city.",
+        "characters": "John",
+        "camera_work": "Slow dolly in towards John to create intimacy.",
+        "shot_type": "Medium Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 1,
+        "shot_number": 3,
+        "script_content": "A flashback of John's childhood plays in his mind.",
+        "shot_description": "A soft focus close-up of John's face, showing a tear as memories flood back.",
+        "characters": "John",
+        "camera_work": "Close-up with a slight tilt to emphasize emotion.",
+        "shot_type": "Close-Up",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 1,
+        "script_content": "Emma enters the room, brightening the atmosphere.",
+        "shot_description": "An over-the-shoulder shot of Emma entering the room, with soft lighting that contrasts John's somber mood.",
+        "characters": "John, Emma",
+        "camera_work": "Smooth tracking shot as Emma walks in.",
+        "shot_type": "Over-the-Shoulder Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 2,
+        "script_content": "John turns to face Emma, surprised.",
+        "shot_description": "A two-shot capturing both John and Emma, highlighting their expressions.",
+        "characters": "John, Emma",
+        "camera_work": "Medium shot with a slight push in to heighten tension.",
+        "shot_type": "Two-Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 2,
+        "shot_number": 3,
+        "script_content": "They share a moment of silence, understanding passing between them.",
+        "shot_description": "A close-up on their hands as they reach for each other, symbolizing connection.",
+        "characters": "John, Emma",
+        "camera_work": "Static close-up to emphasize the significance of the gesture.",
+        "shot_type": "Close-Up",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 1,
+        "script_content": "A storm begins to brew outside.",
+        "shot_description": "An exterior shot of dark clouds rolling in, creating an ominous atmosphere.",
+        "characters": "",
+        "camera_work": "Wide shot with a slow pan across the sky.",
+        "shot_type": "Wide Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 2,
+        "script_content": "John and Emma look out the window, concerned.",
+        "shot_description": "A medium shot of John and Emma by the window, their faces lit by the flickering lightning outside.",
+        "characters": "John, Emma",
+        "camera_work": "Handheld camera to create a sense of urgency.",
+        "shot_type": "Medium Shot",
+        "completed": False
+    },
+    {
+        "scene_number": 3,
+        "shot_number": 3,
+        "script_content": "They share a determined look.",
+        "shot_description": "A close-up of their eyes as they silently communicate their resolve.",
+        "characters": "John, Emma",
+        "camera_work": "Static close-up to capture the intensity of the moment.",
+        "shot_type": "Close-Up",
+        "completed": False
+    }
+]
+```
+
+In this shot list, I've ensured that each shot aligns with the narrative and emotional beats of the script while employing straightforward cinematographic techniques that enhance storytelling without overly stylizing it. The shots are crafted to maintain a balance between emotional depth and visual clarity, suitable for the director's neutral style.
