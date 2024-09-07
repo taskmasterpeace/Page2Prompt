@@ -50,7 +50,8 @@ class PromptForgeCore:
                     "Shot Description": shot['Shot Description'],
                     "Characters": shot['Characters'],
                     "Camera Work": shot['Camera Work'],
-                    "Shot Type": shot['Shot Type'],
+                    "Shot Type": shot.get('Shot Type', 'Not specified'),  # Use default value if key is missing
+                    "Setting": shot.get('Setting', 'Not specified'),  # Add Setting field with default value
                     "Completed": shot['Completed']
                 }
                 formatted_shots.append(formatted_shot)
