@@ -44,14 +44,14 @@ class PromptForgeCore:
             formatted_shots = []
             for shot in shot_list:
                 formatted_shot = {
-                    "Scene": shot['Scene'],  # Changed from 'Scene Number'
-                    "Shot": shot['Shot'],    # Changed from 'Shot Number'
+                    "Scene": shot['Scene'],
+                    "Shot": shot['Shot'],
                     "Script Content": shot['Script Content'],
                     "Shot Description": shot['Shot Description'],
                     "Characters": shot['Characters'],
                     "Camera Work": shot['Camera Work'],
-                    "Shot Type": shot.get('Shot Type', 'Not specified'),  # Use default value if key is missing
-                    "Setting": shot.get('Setting', 'Not specified'),  # Add Setting field with default value
+                    "Shot Type": shot.get('Shot Type', 'Not specified'),
+                    "Setting": shot.get('Setting', 'Not specified'),
                     "Completed": shot['Completed']
                 }
                 formatted_shots.append(formatted_shot)

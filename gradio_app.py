@@ -614,11 +614,13 @@ with gr.Blocks() as app:
             logger.info(f"Generating shot list for director style: {director_style}")
             logger.debug(f"Script content: {script[:100]}...")  # Log first 100 characters of script
 
-            shot_list = await core.analyze_script(script, director_style)
-            logger.info(f"Generated shot list: {shot_list}")  # Log the entire shot list for debugging
+            shot_list_result = await core.analyze_script(script, director_style)
+            logger.info(f"Generated shot list result: {shot_list_result}")  # Log the entire shot list result for debugging
 
-            if not isinstance(shot_list, list):
+            if not isinstance(shot_list_result, dict) or 'shots' not in shot_list_result:
                 raise ValueError("Invalid shot list structure")
+
+            shot_list = shot_list_result['shots']
 
             if not shot_list:
                 raise ValueError("Empty shot list generated")
