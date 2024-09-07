@@ -474,12 +474,12 @@ class MetaChain:
                 shot['Script Content'] = shot['script_content']
                 shot['Shot Description'] = shot['shot_description']
                 shot['Characters'] = shot['characters']
-                shot['Camera Work'] = shot.get('camera_work', 'Not specified')
-                shot['Setting'] = shot.get('setting', 'Not specified')
+                shot['Camera Work'] = shot['camera_work']
+                shot['Setting'] = shot['setting']
                 shot['Completed'] = False  # Always set to False for new shots
-            
+    
                 # Remove old keys
-                for key in ['scene_number', 'shot_number', 'script_content', 'shot_description', 'characters', 'completed']:
+                for key in ['scene_number', 'shot_number', 'script_content', 'shot_description', 'characters', 'camera_work', 'setting', 'completed']:
                     shot.pop(key, None)
     
             logger.info(f"Processed shot list: {shot_list}")

@@ -327,7 +327,7 @@ with gr.Blocks() as app:
                 shot_description_input = gr.Textbox(label="Shot Description", lines=2)
                 characters_input = gr.Textbox(label="Characters")
                 camera_work_input = gr.Textbox(label="Camera Work")
-                shot_type_input = gr.Textbox(label="Shot Type")
+                setting_input = gr.Textbox(label="Setting")
 
         # Remove the duplicate "Script & Prompt Generation" tab
 
@@ -691,7 +691,7 @@ with gr.Blocks() as app:
     def update_shot_list(shot_list):
         return shot_list, update_feedback("Shot list updated successfully")
 
-    def add_shot(shot_list, scene, shot, script_content, shot_description, characters, camera_work, shot_type):
+    def add_shot(shot_list, scene, shot, script_content, shot_description, characters, camera_work, setting):
         new_row = pd.DataFrame({
             'Scene': [scene],
             'Shot': [shot],
@@ -699,7 +699,7 @@ with gr.Blocks() as app:
             'Shot Description': [shot_description],
             'Characters': [characters],
             'Camera Work': [camera_work],
-            'Shot Type': [shot_type],
+            'Setting': [setting],
             'Completed': [False]
         })
         updated_shot_list = pd.concat([shot_list, new_row], ignore_index=True)
@@ -931,7 +931,7 @@ with gr.Blocks() as app:
 
     add_shot_button.click(
         add_shot,
-        inputs=[shot_list_display, scene_input, shot_input, script_content_input, shot_description_input, characters_input, camera_work_input, shot_type_input],
+        inputs=[shot_list_display, scene_input, shot_input, script_content_input, shot_description_input, characters_input, camera_work_input, setting_input],
         outputs=[shot_list_display, feedback_area]
     )
 
