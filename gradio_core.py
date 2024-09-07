@@ -43,6 +43,9 @@ class PromptForgeCore:
             # Convert the shot list to the format expected by the DataFrame
             formatted_shots = []
             for shot in shot_list:
+                # Determine the Shot Type based on the Camera Work description
+                shot_type = self.determine_shot_type(shot['Camera Work'])
+                
                 formatted_shot = {
                     "Scene": shot['Scene'],
                     "Shot": shot['Shot'],
@@ -50,7 +53,7 @@ class PromptForgeCore:
                     "Shot Description": shot['Shot Description'],
                     "Characters": shot['Characters'],
                     "Camera Work": shot['Camera Work'],
-                    "Shot Type": shot.get('Shot Type', 'Not specified'),
+                    "Shot Type": shot_type,
                     "Setting": shot.get('Setting', 'Not specified'),
                     "Completed": shot['Completed']
                 }
@@ -60,6 +63,33 @@ class PromptForgeCore:
         except Exception as e:
             logger.exception(f"Error in analyze_script: {str(e)}")
             raise ScriptAnalysisError(str(e))
+
+    def determine_shot_type(self, camera_work: str) -> str:
+        camera_work = camera_work.lower()
+        if "wide" in camera_work:
+            return "Wide Shot"
+        elif "medium" in camera_work:
+            return "Medium Shot"
+        elif "close-up" in camera_work or "close up" in camera_work:
+            return "Close-up"
+        elif "tracking" in camera_work:
+            return "Tracking Shot"
+        elif "dolly" in camera_work:
+            return "Dolly Shot"
+        elif "crane" in camera_work:
+            return "Crane Shot"
+        elif "handheld" in camera_work:
+            return "Handheld Shot"
+        elif "static" in camera_work:
+            return "Static Shot"
+        elif "low-angle" in camera_work or "low angle" in camera_work:
+            return "Low Angle Shot"
+        elif "high-angle" in camera_work or "high angle" in camera_work:
+            return "High Angle Shot"
+        elif "overhead" in camera_work:
+            return "Overhead Shot"
+        else:
+            return "Unspecified Shot Type"
 
 def save_debug_output(content, filename="debug_output.txt"):
     debug_dir = "debug_logs"
