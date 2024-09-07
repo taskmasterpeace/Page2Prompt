@@ -5,6 +5,7 @@ import time
 import csv
 import pyperclip
 import pandas as pd
+import os
 from gradio_config import Config
 from gradio_prompt_manager import PromptManager
 from gradio_styles import StyleManager
@@ -688,16 +689,19 @@ with gr.Blocks() as app:
                 df = pd.read_json(file.name)
             else:
                 return None, update_feedback("Unsupported file format. Please use CSV or JSON.")
-        
+    
             # Ensure all required columns are present
             required_columns = ["Scene", "Shot", "Script Content", "Shot Description", "Characters", "Camera Work", "Shot Type", "Completed"]
             for col in required_columns:
                 if col not in df.columns:
                     df[col] = "Not specified"
-        
+    
+            # Convert 'Completed' column to boolean
+            df['Completed'] = df['Completed'].astype(bool)
+    
             # Reorder columns
             df = df[required_columns]
-        
+    
             return df, update_feedback("Shot list imported successfully")
         except Exception as e:
             logger.exception("Error in import_shot_list function")
