@@ -667,7 +667,7 @@ with gr.Blocks() as app:
             csv_filename = f'shot_list_{int(time.time())}.csv'
             shot_list.to_csv(csv_filename, index=False)
         
-            return gr.File.update(value=csv_filename, visible=True), update_feedback("Shot list exported successfully. Click to download.")
+            return gr.File(value=csv_filename, visible=True), update_feedback("Shot list exported successfully. Click to download.")
         except Exception as e:
             logger.exception("Error in export_shot_list function")
             return None, update_feedback(f"Error exporting shot list: {str(e)}")
@@ -733,7 +733,8 @@ with gr.Blocks() as app:
 
     def move_shot(shot_list, direction):
         if shot_list is not None and not shot_list.empty:
-            selected_indices = shot_list.index[shot_list['Selected'] == True].tolist()
+            # Assuming the first column is used for selection
+            selected_indices = shot_list.index[shot_list.iloc[:, 0] == True].tolist()
             if selected_indices:
                 selected_index = selected_indices[0]
                 if direction == "up" and selected_index > 0:
